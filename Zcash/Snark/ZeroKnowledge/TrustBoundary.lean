@@ -17,6 +17,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkCapacitySimulation
 import Zcash.Snark.ZeroKnowledge.PlonkDegreeCertificate
 import Zcash.Snark.ZeroKnowledge.PlonkRowSimulation
 import Zcash.Snark.ZeroKnowledge.PlonkConsistency
+import Zcash.Snark.ZeroKnowledge.PlonkFresh
 import Zcash.Snark.ZeroKnowledge.Observation
 import Zcash.Meta.AxiomCheck
 
@@ -45,8 +46,11 @@ function. A public circuit-degree profile now supplies the numerator capacity, w
 kernel-checked certificates for the one- and two-Action captured keys. Row-wise constraint
 satisfaction supplies exact quotient divisibility. The newer consistency bound retains
 the ideal probability of row states that fail division as an explicit error term, so it
-does not assume correctness on every random state. Bounding that probability for the honest
-lookup and product row algorithms and integrating the full verifier's grouping remain open.
+does not assume correctness on every random state. The fresh-challenge comparison retains
+the entire verifier tape, adding its exceptional-challenge probability and the average
+invalid-row probability to the prover's sampling bias. Bounding those probabilities for
+the chosen challenge law and honest row algorithms, and integrating the full verifier's
+grouping, remain open.
 These results do not establish a whole-prover simulator, Fiat–Shamir zero-knowledge, or a
 Rust-to-Lean refinement.
 -/
@@ -533,6 +537,12 @@ assert_axioms Zcash.Snark.ZeroKnowledge.sampledPlonkJoint_sampling_error_bound
 assert_axioms Zcash.Snark.ZeroKnowledge.sampledPlonkJoint_exceptional_error_bound
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkInvalidRowMass_le_row_violation
 assert_axioms Zcash.Snark.ZeroKnowledge.sampledPlonkVerifier_consistency_error_bound
+
+-- The complete public tape is retained; exceptional challenges are charged, not excluded.
+assert_axioms Zcash.Snark.ZeroKnowledge.variableMixedLaws_error_bound
+assert_computable Zcash.Snark.ZeroKnowledge.plonkChallengesFromTape
+assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkChallenges_sampling_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.freshPlonkVerifier_simulation_error_bound
 
 -- At an unmasked row the disclosed evaluation is the original cell, for every mask law.
 assert_axioms Zcash.Snark.ZeroKnowledge.maskedRowPolynomial_eval_before

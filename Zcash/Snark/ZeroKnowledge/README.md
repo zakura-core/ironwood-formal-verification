@@ -374,6 +374,21 @@ probability of any violated row constraint. Bounding it numerically for the actu
 and product algorithms, including zero denominators, remains necessary. Public polynomial,
 degree-profile, generator, and supplied-challenge premises still apply.
 
+[PlonkChallenges.lean](PlonkChallenges.lean) records all `11 + k` verifier challenges in
+their squeeze order and defines both uniform and wide-reduced independent tape laws.
+Replacing this tape's field samples costs at most `(11 + k) × bias`.
+`freshPlonkVerifier_simulation_error_bound` in [PlonkFresh.lean](PlonkFresh.lean) retains
+the complete challenge tape alongside the existing `ProofString`. Its bound is:
+
+**`badChallengeMass + averageInvalidRowMass + (148m + 46) × bias`**.
+
+This result no longer assumes a good fixed challenge tape or correctness on every private
+row state. It samples the original challenge law without rejecting exceptional values,
+and averages row inconsistency over that law. The simulator uses only the public input
+and the same challenge law. Bounding the two exceptional probabilities numerically and
+relating this offline tape experiment to the actual interactive schedule remain open.
+Independent verifier coins do not establish Fiat–Shamir zero-knowledge.
+
 This is still a conditional algebraic simulation theorem. Completing the exact prover
 theorem requires the actual row algorithms and their correctness, the full verifier's
 grouping and commitment routing, failures and retries across the whole prover, the challenge
