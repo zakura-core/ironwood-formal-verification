@@ -433,8 +433,22 @@ and proves that every lookup constraint polynomial is divisible by the domain po
 [PlonkLookupRows.lean](PlonkLookupRows.lean) identifies these records with the actual
 proof string and each Action's entries in the honest constraint model.
 This replaces a lookup-constraint correctness premise with explicit row-construction
-facts. The concrete sorter and masked-column schedule still need to establish those facts,
-and gates and permutation constraints need their corresponding construction proofs.
+facts. The concrete sorter and masked-column schedule still need to establish those facts.
+
+[PermutationRowConstraints.lean](PermutationRowConstraints.lean) computes the
+permutation factors using the verifier's exact column-name stride and chains the three
+product scans. All seven existing permutation constraints follow from the scan, the full
+product identity, and nonzero active-row denominators. The terminal rotation is used only
+at row zero, and switched-off masked rows remain unrestricted. A separate lemma derives
+the product identity on named cells from copy-preserving permutation wiring.
+[PermutationPolynomialRows.lean](PermutationPolynomialRows.lean) transports these facts
+through the actual polynomial builder to exact domain division.
+[PlonkPermutationRows.lean](PlonkPermutationRows.lean) identifies the proof string's
+next/terminal rotations, with a kernel proof that the inverse-sixth-power rotation reads
+the retained row 2042 from row zero. Instantiating the named-cell identity at the actual
+packed factors, proving the masked-column schedule's scan correspondence, and preserving
+the gate constraints under row masking remain open. These results do not yet bound the
+joint `averageInvalidRowMass` term.
 
 This is still a conditional algebraic simulation theorem. Completing the exact prover
 theorem requires the actual row algorithms and their correctness, the full verifier's

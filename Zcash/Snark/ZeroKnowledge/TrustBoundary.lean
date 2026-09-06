@@ -22,6 +22,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkFreshBounds
 import Zcash.Snark.ZeroKnowledge.RunningProductRows
 import Zcash.Snark.ZeroKnowledge.ProductDenominators
 import Zcash.Snark.ZeroKnowledge.PlonkLookupRows
+import Zcash.Snark.ZeroKnowledge.PlonkPermutationRows
 import Zcash.Snark.ZeroKnowledge.Observation
 import Zcash.Meta.AxiomCheck
 
@@ -64,6 +65,11 @@ The computed lookup scan now supplies all five of the existing row constraints f
 the compression, permutation, and run-structure facts outside zero denominators.
 The actual polynomial selectors and rotations carry this result to domain division.
 The concrete sorter and masked-column construction must still supply those facts.
+The three chained permutation scans similarly supply the seven existing row constraints
+and their polynomial divisibility, given the full product identity. Copy-preserving
+wiring gives that identity on named cells; the actual packed factors and masked-column
+schedule still need to be connected to it. The proof string's terminal rotations are
+identified with the retained terminal row using the kernel root certificate.
 These results do not establish a whole-prover simulator, Fiat–Shamir zero-knowledge, or a
 Rust-to-Lean refinement.
 -/
@@ -612,6 +618,21 @@ assert_axioms Zcash.Snark.ZeroKnowledge.lookupExpressions_dvd_domain_of_scan
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkRotatedColumn_zero
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkPolynomialClaimProof_lookupEvals
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkConstraintModel_lookups
+
+-- The three permutation scans, their actual constraints, and terminal rotations.
+assert_axioms Zcash.Snark.ZeroKnowledge.copyPermutation_product_identity
+assert_computable Zcash.Snark.ZeroKnowledge.permutationRowNumerator +choice
+assert_computable Zcash.Snark.ZeroKnowledge.permutationRowDenominator +choice
+assert_computable Zcash.Snark.ZeroKnowledge.permutationScanRows +choice
+assert_computable Zcash.Snark.ZeroKnowledge.permutationRowEvaluations
+assert_axioms Zcash.Snark.ZeroKnowledge.permChunkExpression_zero_of_scan
+assert_axioms Zcash.Snark.ZeroKnowledge.permutationExpressions_zero_of_scan
+assert_computable Zcash.Snark.ZeroKnowledge.permutationTerminalPolynomials +choice
+assert_computable Zcash.Snark.ZeroKnowledge.permutationPairRows +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.permutationExpressions_eval_row_zero_of_scan
+assert_axioms Zcash.Snark.ZeroKnowledge.permutationExpressions_dvd_domain_of_scan
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkTerminalFactor
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPolynomialClaimProof_permutationSetEvals
 
 -- At an unmasked row the disclosed evaluation is the original cell, for every mask law.
 assert_axioms Zcash.Snark.ZeroKnowledge.maskedRowPolynomial_eval_before
