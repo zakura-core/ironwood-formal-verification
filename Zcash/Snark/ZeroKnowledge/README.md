@@ -350,6 +350,15 @@ to the complete algebraic proof simulation. Divisibility of the constraint numer
 each reachable row state remains the only private-state premise. The public polynomial,
 generator, and supplied-challenge conditions still apply.
 
+[DomainDivisibility.lean](DomainDivisibility.lean) proves that vanishing on every domain
+row is equivalent to divisibility by `X^n - 1`. It applies this to the actual constraint
+fold. `sampledPlonkVerifier_rows_simulation_error_bound` in
+[PlonkRowSimulation.lean](PlonkRowSimulation.lean) therefore derives both quotient
+premises from public degree bounds and row-wise satisfaction of the gate, permutation,
+and lookup constraints. Correctness of the lookup sorting and product-row constructors
+has not yet supplied that satisfaction premise. Satisfying advice columns are inputs
+in the pinned protocol; generating the underlying circuit witness is outside its scope.
+
 This is still a conditional algebraic simulation theorem. Completing the exact prover
 theorem requires the actual row algorithms and their correctness, the full verifier's
 grouping and commitment routing, failures and retries across the whole prover, the challenge
