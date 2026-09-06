@@ -402,6 +402,24 @@ The row term averages the ideal private row law over the wide-reduced verifier l
 Bounding it for the actual lookup and product constructors and relating the offline
 tape experiment to the actual interactive schedule remain open.
 
+[RunningProductRows.lean](RunningProductRows.lean) gives computable lookup and chained
+permutation ratio scans with `0` mapped to `0` on inversion. It proves the exact condition
+for a row recurrence to fail: its denominator is zero and its required right side is
+nonzero. Under the product identity, the terminal value satisfies `z²-z = 0` even when
+denominators vanish. For lookups, permutations of the input and table prefixes supply
+that identity. The concrete sorting algorithm and permutation-column identity still
+need to be connected. The zero-preserving fallback matches the available Bento source
+at `e32e61eb35b6e5b5e0600cb0903adcfe0cd617d8`, in `crates/sensei/src/native/prover.rs`;
+this does not establish correspondence with the still-unlocated Sensei pin.
+
+[ProductDenominators.lean](ProductDenominators.lean) bounds zero factors fixed before
+fresh `beta` and `gamma`, allowing a random private prefix independent of those draws.
+The wide-reduced bound is **`(b + g)/p + 2 × bias`**, where `b` counts beta-only factors
+and `g` counts gamma-linear factors. The dense declared dimensions—fifteen permutation
+and six lookup factors per usable row per Action—give **`42882m/p + 2 × bias`**.
+This is not yet a bound on `averageInvalidRowMass`: the actual factor construction,
+challenge independence, and row-to-constraint connection remain to be proved.
+
 This is still a conditional algebraic simulation theorem. Completing the exact prover
 theorem requires the actual row algorithms and their correctness, the full verifier's
 grouping and commitment routing, failures and retries across the whole prover, the challenge

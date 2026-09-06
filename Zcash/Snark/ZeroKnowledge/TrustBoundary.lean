@@ -19,6 +19,8 @@ import Zcash.Snark.ZeroKnowledge.PlonkRowSimulation
 import Zcash.Snark.ZeroKnowledge.PlonkConsistency
 import Zcash.Snark.ZeroKnowledge.PlonkFresh
 import Zcash.Snark.ZeroKnowledge.PlonkFreshBounds
+import Zcash.Snark.ZeroKnowledge.RunningProductRows
+import Zcash.Snark.ZeroKnowledge.ProductDenominators
 import Zcash.Snark.ZeroKnowledge.Observation
 import Zcash.Meta.AxiomCheck
 
@@ -53,6 +55,10 @@ invalid-row probability to the prover's sampling bias. With independent wide-red
 verifier coins, the challenge term is bounded by `4113/p + 22 × bias`. Bounding the
 remaining invalid-row probability for the honest algorithms and integrating the full
 verifier's grouping remain open.
+The product-row scan now has checked recurrence and terminal-value lemmas that retain
+zero-denominator cases. Separate factor-family bounds permit a random private prefix
+independent of the two product challenges; their connection to the row algorithm's
+actual state and the joint invalid-row event still requires proof.
 These results do not establish a whole-prover simulator, Fiat–Shamir zero-knowledge, or a
 Rust-to-Lean refinement.
 -/
@@ -559,6 +565,34 @@ assert_axioms Zcash.Snark.ZeroKnowledge.uniformPlonkChallengeBadEvent_le
 assert_axioms Zcash.Snark.ZeroKnowledge.uniformPlonkChallenges_bad_le
 assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkChallenges_bad_le
 assert_axioms Zcash.Snark.ZeroKnowledge.wideFreshPlonkVerifier_simulation_error_bound
+
+-- Computed product rows, with zero-preserving division and explicit exceptional factors.
+assert_computable Zcash.Snark.ZeroKnowledge.runningProductRows
+assert_axioms Zcash.Snark.ZeroKnowledge.runningProductRows_zero
+assert_axioms Zcash.Snark.ZeroKnowledge.runningProductRows_succ
+assert_axioms Zcash.Snark.ZeroKnowledge.runningProductRows_eq_ratio
+assert_axioms Zcash.Snark.ZeroKnowledge.runningProductRows_recurrence
+assert_axioms Zcash.Snark.ZeroKnowledge.runningProductRows_violation_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.runningProductRows_zero_after_den_zero
+assert_axioms Zcash.Snark.ZeroKnowledge.runningProductRows_end
+assert_axioms Zcash.Snark.ZeroKnowledge.runningProductRows_end_one
+assert_axioms Zcash.Snark.ZeroKnowledge.runningProductRows_terminal_constraint
+assert_computable Zcash.Snark.ZeroKnowledge.chainedProductInitial
+assert_computable Zcash.Snark.ZeroKnowledge.chainedProductRows
+assert_axioms Zcash.Snark.ZeroKnowledge.chainedProductRows_start
+assert_axioms Zcash.Snark.ZeroKnowledge.chainedProductRows_chain
+assert_axioms Zcash.Snark.ZeroKnowledge.chainedProductInitial_eq_running
+assert_axioms Zcash.Snark.ZeroKnowledge.chainedProductRows_recurrence
+assert_axioms Zcash.Snark.ZeroKnowledge.chainedProductRows_terminal_constraint
+assert_axioms Zcash.Snark.ZeroKnowledge.prefixPerm_prod_shift_eq
+assert_computable Zcash.Snark.ZeroKnowledge.lookupProductRows
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupProductRows_product_identity
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupProductRows_terminal_constraint
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupProductRows_recurrence
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformProductDenominator_bad_le
+assert_axioms Zcash.Snark.ZeroKnowledge.wideProductDenominator_bad_le
+assert_axioms Zcash.Snark.ZeroKnowledge.wideProductDenominator_mixture_bad_le
+assert_axioms Zcash.Snark.ZeroKnowledge.widePinnedProductDenominator_bad_le
 
 -- At an unmasked row the disclosed evaluation is the original cell, for every mask law.
 assert_axioms Zcash.Snark.ZeroKnowledge.maskedRowPolynomial_eval_before
