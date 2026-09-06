@@ -81,11 +81,15 @@ mask-commitment blind, then `k` left/right pairs. It proves the indexing and the
 `sampledIpa_simulation_error_bound` gives the two-sided bound `(3k+1) × bias` against the
 same simulator for the implemented reduction law: **34 × bias at k = 11**.
 
-These are results for supplied challenges and unencoded group elements. The modeled raw
-equation follows the pinned description; its formal correspondence to the existing
-[`ipaFold`](../Verifier/Ipa.lean) assembly is still open. They do not establish the preceding
-PLONK/multi-opening simulation, exceptional-event probabilities, a retry-conditioned law,
-Fiat–Shamir zero-knowledge, a verified concrete PRNG, or correspondence with the Rust prover.
+[IpaVerifier.lean](IpaVerifier.lean) proves that this transcript's equation is equivalent to
+zero evaluation of the existing [`ipaFold`](../Verifier/Ipa.lean) MSM. It connects the
+recursive folds to `computeS` and `computeB`, and extracts the IPA fields from `ProofString`
+to establish the same correspondence inside `assembleFinalMsm`.
+
+These are results for supplied challenges and unencoded group elements. They do not
+establish the preceding PLONK/multi-opening simulation, exceptional-event probabilities, a
+retry-conditioned law, Fiat–Shamir zero-knowledge, a verified concrete PRNG, or correspondence
+with the Rust prover. Identifying the final verifier equation does not discharge those gaps.
 
 ## Checks
 

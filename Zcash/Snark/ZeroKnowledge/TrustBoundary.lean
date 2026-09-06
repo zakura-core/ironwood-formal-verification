@@ -3,6 +3,7 @@ import Zcash.Snark.ZeroKnowledge.MaskPolynomials
 import Zcash.Snark.ZeroKnowledge.MaskSampling
 import Zcash.Snark.ZeroKnowledge.IpaSampling
 import Zcash.Snark.ZeroKnowledge.IpaSimulator
+import Zcash.Snark.ZeroKnowledge.IpaVerifier
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -108,3 +109,13 @@ assert_axioms Zcash.Snark.ZeroKnowledge.ipaTapeEquiv_maskBlind
 assert_axioms Zcash.Snark.ZeroKnowledge.ipaTapeEquiv_roundBlinds
 assert_axioms Zcash.Snark.ZeroKnowledge.uniformTapeIpa_eq_idealProver
 assert_axioms Zcash.Snark.ZeroKnowledge.sampledIpa_simulation_error_bound
+
+-- The simulated raw equation is the existing verifier's final IPA assembly.
+assert_computable Zcash.Snark.ZeroKnowledge.IpaPublic.ofMsm +choice
+assert_computable Zcash.Snark.ZeroKnowledge.IpaTranscript.ofProofString
+assert_axioms Zcash.Snark.ZeroKnowledge.publicFold_eq_foldAll
+assert_axioms Zcash.Snark.ZeroKnowledge.computeS_gterm_publicFold
+assert_axioms Zcash.Snark.ZeroKnowledge.publicFold_evalVector
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaMessageSum_eq_roundSum
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaTranscript_verifier_capstone
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaTranscript_assembleFinalMsm
