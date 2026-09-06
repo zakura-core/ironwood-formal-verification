@@ -127,9 +127,36 @@ emitted prefix, received challenges, status, and the verifier's entire tape, inc
 unused coins. The final scalars appear only after the rounds complete.
 
 The codecs are parameters; the theorem does not certify a Rust encoder. Its law is
-unconditioned and includes failed attempts. A caller's repeated retry loop and the law
-conditioned on success remain open. So do the preceding PLONK/multi-opening simulation,
-Fiat–Shamir zero-knowledge, a verified concrete PRNG, and correspondence with the Rust
+unconditioned and includes failed attempts. The following result handles normalization
+and independent retries of this IPA experiment.
+
+## Successful IPA attempts and independent retries
+
+[IpaPoints.lean](IpaPoints.lean) proves that all `2k+1` honest emitted points are jointly
+uniform under ideal commitment blinds, even at exceptional challenges. This is a point
+projection used to bound failures; the separate joint transcript theorem also retains
+`c` and `f`. [IpaFailures.lean](IpaFailures.lean) proves the exact success criterion when
+the point codec fails precisely on the identity: every point is nonidentity and every
+round challenge is nonzero. The honest wide-reduced attempt's failure probability is at
+most **34/p + 47 × bias** for eleven rounds.
+
+[Conditioning.lean](Conditioning.lean) accounts for the change in normalizers when both
+experiments discard failures. [IpaRetry.lean](IpaRetry.lean) proves that the honest and
+simulated success probabilities are positive for eleven rounds. Its
+`wideSuccessfulIpa_simulation_capstone` compares the complete successful encoded view,
+including the verifier tape, with a simulator that has no witness or commitment-blind
+argument. Writing `ε = 12/p + 47 × bias` and `B = 46/p + 94 × bias`, the two-sided bound
+is **2ε/(1−B)**. The kernel checks `B < 1`; success is not an assumed premise.
+
+[Retry.lean](Retry.lean) models independent fresh attempts with a finite budget. If one
+attempt fails with probability `f`, exhausting `N` attempts has exactly probability
+`f^N`; every event converges to its probability under the successful-attempt law.
+The IPA result uses the same fixed public opening on each attempt. A full prover that
+restarts PLONK too, carries state between retries, or exposes failed attempts requires
+its corresponding full execution model.
+
+These results do not establish the preceding PLONK/multi-opening simulation,
+Fiat–Shamir zero-knowledge, a verified concrete PRNG, or correspondence with the Rust
 prover. Identifying the final verifier equation does not discharge those gaps.
 
 ## Replacement-row masks

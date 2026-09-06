@@ -3,6 +3,7 @@ import Zcash.Snark.ZeroKnowledge.MaskPolynomials
 import Zcash.Snark.ZeroKnowledge.MaskSampling
 import Zcash.Snark.ZeroKnowledge.IpaSampling
 import Zcash.Snark.ZeroKnowledge.IpaAttempt
+import Zcash.Snark.ZeroKnowledge.IpaRetry
 import Zcash.Snark.ZeroKnowledge.IpaSimulator
 import Zcash.Snark.ZeroKnowledge.IpaVerifier
 import Zcash.Snark.ZeroKnowledge.LinearMaskTranscript
@@ -22,7 +23,8 @@ the checker still rejects noncomputable algorithmic content. No `+native` exempt
 The pinned results establish the field-sampling law, both masking constructions, joint
 simulation of the IPA stage with supplied or fresh interactive challenges, and joint hiding
 of masked columns. The interactive IPA comparison retains errors and emitted prefixes under
-supplied codecs. These results do not establish a whole-prover simulator, Fiat–Shamir
+supplied codecs; an identity-rejecting codec also gives a checked successful-attempt law and
+independent-retry limit. These results do not establish a whole-prover simulator, Fiat–Shamir
 zero-knowledge, or a Rust-to-Lean refinement.
 -/
 
@@ -155,6 +157,50 @@ assert_axioms Zcash.Snark.ZeroKnowledge.observeIpaRounds_right_failure
 assert_axioms Zcash.Snark.ZeroKnowledge.observeIpaRounds_zero_challenge
 assert_axioms Zcash.Snark.ZeroKnowledge.observedIpa_simulation_error_bound
 assert_axioms Zcash.Snark.ZeroKnowledge.wideObservedIpa_simulation_error_bound
+
+-- Success normalization is derived from the actual observer's failures and retry semantics.
+assert_computable Zcash.Snark.ZeroKnowledge.ipaPointFamily
+assert_computable Zcash.Snark.ZeroKnowledge.IpaTranscript.pointFamily
+assert_computable Zcash.Snark.ZeroKnowledge.ipaPointBlindsIndex
+assert_computable Zcash.Snark.ZeroKnowledge.ipaSuccessSet +choice
+assert_computable Zcash.Snark.ZeroKnowledge.ipaTranscriptEquiv
+assert_axioms Zcash.Snark.ZeroKnowledge.conditioning_mass_ne_zero
+assert_axioms Zcash.Snark.ZeroKnowledge.conditioned_event_mass
+assert_axioms Zcash.Snark.ZeroKnowledge.conditioned_event_mul_mass
+assert_axioms Zcash.Snark.ZeroKnowledge.conditioned_eventBias
+assert_axioms Zcash.Snark.ZeroKnowledge.conditioned_simulation_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.conditioned_common_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.event_mass_add_compl
+assert_axioms Zcash.Snark.ZeroKnowledge.success_mass_lower_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.retryStep_event_mass
+assert_axioms Zcash.Snark.ZeroKnowledge.conditioned_retry_fixedpoint
+assert_axioms Zcash.Snark.ZeroKnowledge.retryStep_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.boundedRetries_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.boundedRetries_exhausted
+assert_axioms Zcash.Snark.ZeroKnowledge.failure_mass_lt_one
+assert_axioms Zcash.Snark.ZeroKnowledge.boundedRetries_tendsto
+assert_axioms Zcash.Snark.ZeroKnowledge.exists_success_of_failure_lt_one
+assert_axioms Zcash.Snark.ZeroKnowledge.honestIpaPoints_fixed_mask
+assert_axioms Zcash.Snark.ZeroKnowledge.idealIpaPoints_uniform
+assert_axioms Zcash.Snark.ZeroKnowledge.idealIpaPoint_identity_mass
+assert_axioms Zcash.Snark.ZeroKnowledge.idealIpa_identity_le
+assert_axioms Zcash.Snark.ZeroKnowledge.observeIpaRounds_complete_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.observeIpaAttempt_complete_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaSuccess_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformIpaRounds_bad_le
+assert_axioms Zcash.Snark.ZeroKnowledge.wideIpaRounds_bad_le
+assert_axioms Zcash.Snark.ZeroKnowledge.freshIdealIpa_challenges
+assert_axioms Zcash.Snark.ZeroKnowledge.freshIdealIpa_identity_le
+assert_axioms Zcash.Snark.ZeroKnowledge.freshIdealIpa_failure_le
+assert_axioms Zcash.Snark.ZeroKnowledge.wideFreshIpa_failure_le
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaRetryFailureBound_eleven_lt_one
+assert_axioms Zcash.Snark.ZeroKnowledge.successfulIpa_simulation_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.wideIpa_retry_failure_le
+assert_axioms Zcash.Snark.ZeroKnowledge.wideIpa_eleven_success_support
+assert_axioms Zcash.Snark.ZeroKnowledge.IpaPublic.exists_opening
+assert_axioms Zcash.Snark.ZeroKnowledge.wideIpaSimulator_success_support
+assert_axioms Zcash.Snark.ZeroKnowledge.wideSuccessfulIpa_simulation_capstone
+assert_axioms Zcash.Snark.ZeroKnowledge.encodedIpa_retries_tendsto
 
 -- The simulated raw equation is the existing verifier's final IPA assembly.
 assert_computable Zcash.Snark.ZeroKnowledge.IpaPublic.ofMsm +choice
