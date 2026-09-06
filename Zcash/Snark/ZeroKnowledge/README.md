@@ -59,8 +59,9 @@ to the existing computable polynomial representation.
 field law: the sparse scalar costs at most `k × bias`, and the linear-mask pair at most
 `2 × bias`, in either direction. These are laws with **supplied public challenges**;
 they do not describe a Fiat–Shamir execution conditioned on its observed challenges.
-These component bounds alone do not establish a joint transcript law. Joint IPA and pre-IPA
-laws are covered below; their composition into a full execution remains a separate obligation.
+These component bounds alone do not establish a joint transcript law. The joint algebraic
+simulation below composes them with the pre-IPA messages under explicit quotient and
+challenge premises; a full execution including failures remains a separate obligation.
 
 ## Linear mask with its commitments
 
@@ -164,11 +165,11 @@ The IPA result uses the same fixed public opening on each attempt. A full prover
 restarts PLONK too, carries state between retries, or exposes failed attempts requires
 its corresponding full execution model.
 
-These IPA results start from a valid public opening. Joining them to the preceding
-PLONK/multi-opening stage requires proving that opening's validity and handling failures
-across the full computation. Fiat–Shamir zero-knowledge, a verified concrete PRNG, and
-correspondence with the Rust prover are also open. Identifying the final verifier equation
-does not discharge those gaps.
+These IPA results start from a valid public opening. The joint algebraic construction below
+derives that opening under explicit quotient-correctness premises and supplied challenges.
+Handling failures across the full computation, Fiat–Shamir zero-knowledge, a verified
+concrete PRNG, and correspondence with the Rust prover remain open. Identifying the final
+verifier equation does not discharge those gaps.
 
 ## Replacement-row masks
 
@@ -239,12 +240,11 @@ algebraic pre-IPA message view has two-sided event error at most
 **`(148m + 12) × bias`**, with supplied distinct points
 `x, xω, xω⁻¹, xω⁻⁶, q` outside the 2048-row domain.
 
-The retained-row algorithms, quotient-piece construction, and unblinded commitment cores
-are still supplied total functions. The hiding result quantifies over those functions;
-instantiating them with the complete prover, connecting the emitted transcript to the
-computed multi-opening below, composing with the IPA, and accounting for early failures
-and the actual challenge law remain open. This theorem neither conditions a Fiat–Shamir
-execution on its challenges nor claims that the whole prover is already statistically HVZK.
+That hiding result quantifies over supplied retained-row algorithms, quotient pieces, and
+unblinded commitment cores. The joint construction below instantiates the cores and
+composes with the IPA. The row and quotient algorithms, their constraint correspondence,
+early failures, and the actual challenge law still require integration. These results do
+not condition a Fiat–Shamir execution on its challenges or establish whole-prover HVZK.
 
 ## Computed multi-opening and IPA input
 
@@ -271,10 +271,51 @@ The resulting IPA transcript has an exact ideal simulation and a two-sided
 **`34 × bias`** bound with wide-reduced IPA coins, for nonzero `ξ` and round challenges.
 These results hold for every preceding private state and do not assume that the incoming
 blind is independent of earlier messages. They still start from the resulting public IPA
-opening. The full verifier must be shown to infer the actual `H_x(x)` from its constraints
-and route precisely these groups from the proof string before the joint pre-IPA and IPA
-simulation laws can be composed. The available Rust implementation's repeated synthetic
-division has not yet been related formally to this quotient computation.
+opening. The next construction rebuilds it from the public mask view, assuming agreement
+of the inferred `H_x(x)` with the honest quotient. The full verifier's constraint function
+and proof-string routing still require integration. The available Rust implementation's
+repeated synthetic division has not yet been related formally to this quotient computation.
+
+## Joint algebraic prover simulation
+
+[PlonkCommitments.lean](PlonkCommitments.lean) instantiates every pre-IPA commitment core
+with its actual coefficient polynomial: the private row columns, linear mask, eight
+quotient pieces, and computed `Q'`. It reads their blinds from the same commitment positions.
+The polynomial-only `Q'` construction is independent of every commitment blind.
+
+[PlonkPublicOpening.lean](PlonkPublicOpening.lean) reconstructs the five group commitments
+and all their node evaluations from the enriched public view. It proves that applying the
+existing `multiopenEval` and `multiopenCombine` operations gives the honest IPA input.
+The inferred `H_x(x)` comes from a supplied public function `expectedHx`. Agreement of that
+function with the honest quotient is an explicit premise; it must be instantiated with
+the verifier's actual constraint calculation.
+
+`idealPlonkJoint_simulation_capstone` in [PlonkComposition.lean](PlonkComposition.lean)
+proves exact equality of the **joint pre-IPA view and complete IPA transcript** with one
+public simulator under ideal field samples. The proof first simulates the IPA for each
+reachable private state, then replaces the preceding public-view distribution. It retains
+the actual dependence of the IPA polynomial and blind on all earlier private coins.
+Degree bounds and quotient agreement are required only for row states in the honest
+construction's support. They are not yet derived from an Orchard witness relation.
+
+[PlonkSampling.lean](PlonkSampling.lean) connects this joint computation to the batched
+pre-IPA tape and ordered IPA suffix. All `148m + 46` field draws feed one deterministic
+prover computation. `sampledPlonkJoint_simulation_error_bound` gives the two-sided event
+bound **`(148m + 46) × bias`** against the same simulator. Its premises remain: a blinding
+generator spanning the group; the quotient and degree obligations above; nonzero `ξ` and
+IPA round challenges; and five distinct observation points outside the 2048-row domain.
+The challenges are supplied inputs, not a conditioned Fiat–Shamir transcript.
+
+[PlonkSimulator.lean](PlonkSimulator.lean) implements the joint simulator from field coins.
+It samples points as multiples of `W`, samples the column observations directly, rebuilds
+the public IPA input, and runs the existing IPA simulator. Its field-coin law is proved
+equal to the simulator used by the joint theorem. No witness, private row or quotient
+constructor, or discrete-log inverse appears in this algorithm.
+
+This establishes a conditional joint algebraic simulation theorem. Completing the exact
+prover theorem still requires the actual row/quotient algorithms and constraint agreement,
+the verifier's proof-string routing, failures and retries across the whole prover, the
+challenge-generation model and Fiat–Shamir argument, and the Rust implementation connection.
 
 ## Checks
 

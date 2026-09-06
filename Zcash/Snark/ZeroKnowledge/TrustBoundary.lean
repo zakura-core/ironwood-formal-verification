@@ -10,6 +10,8 @@ import Zcash.Snark.ZeroKnowledge.LinearMaskTranscript
 import Zcash.Snark.ZeroKnowledge.RowMaskTranscript
 import Zcash.Snark.ZeroKnowledge.PlonkTranscript
 import Zcash.Snark.ZeroKnowledge.PlonkMultiopen
+import Zcash.Snark.ZeroKnowledge.PlonkSampling
+import Zcash.Snark.ZeroKnowledge.PlonkSimulator
 import Zcash.Snark.ZeroKnowledge.Observation
 import Zcash.Meta.AxiomCheck
 
@@ -28,9 +30,12 @@ of masked columns. The interactive IPA comparison retains errors and emitted pre
 supplied codecs; an identity-rejecting codec also gives a checked successful-attempt law and
 independent-retry limit. The pre-IPA comparison retains the joint column dependencies, exact
 opening groups and emitted scalar order, with supplied challenges and total private constructors.
-The computed multi-opening polynomial and folded blind supply a valid IPA input when the
-group claims are actual polynomial evaluations. The full verifier's inferred quotient value
-and routing from the proof string still need to be connected to that construction.
+The computed multi-opening polynomial and folded blind supply a valid IPA input. The joint
+pre-IPA/IPA simulation reconstructs that input from the enriched public view, given a public
+quotient-evaluation function that agrees with the actual quotient on every reachable row state.
+The full batched prover tape is connected to this joint law, and the joint simulator has a
+field-coin implementation. Instantiating the remaining row/quotient premises and routing the
+full verifier's proof string still need to be connected to that construction.
 These results do not establish a whole-prover simulator, Fiat–Shamir zero-knowledge, or a
 Rust-to-Lean refinement.
 -/
@@ -390,6 +395,65 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonkOpeningPolynomials_natDegree_lt
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkMultiopenIpa_validOpening
 assert_axioms Zcash.Snark.ZeroKnowledge.idealPlonkMultiopenIpa_simulation
 assert_axioms Zcash.Snark.ZeroKnowledge.sampledPlonkMultiopenIpa_simulation
+
+-- Actual commitment cores and public reconstruction of the IPA input.
+assert_computable Zcash.Snark.ZeroKnowledge.privateColumnIndex
+assert_computable Zcash.Snark.ZeroKnowledge.privateColumnAt
+assert_computable Zcash.Snark.ZeroKnowledge.plonkOpeningPointIndices
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPolynomialOpeningGroups +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkCommitmentPolynomials +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkColumnEntry
+assert_computable Zcash.Snark.ZeroKnowledge.plonkLinearEntry
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPieceEntry
+assert_computable Zcash.Snark.ZeroKnowledge.plonkQuotientPrimeEntry
+assert_computable Zcash.Snark.ZeroKnowledge.plonkCommitmentBlindsFromVector
+assert_computable Zcash.Snark.ZeroKnowledge.plonkCommitmentCores +choice
+assert_computable Zcash.Snark.ZeroKnowledge.honestPlonkMaskView +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkCollapsedQuotientPoint +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPublicCommitmentMembers +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPublicGroupCommitments +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkFirstGroupClaims +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPublicNodeValues +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPublicOpening +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPublicIpaInput +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.privateColumnOrder_mem
+assert_axioms Zcash.Snark.ZeroKnowledge.privateColumnAt_index
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkOpeningPointSets_eq_map
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkBlindedOpeningGroups_polynomials
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCommitmentPolynomials_column
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCommitmentPolynomials_linear
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCommitmentPolynomials_piece
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCommitmentPolynomials_quotientPrime
+assert_axioms Zcash.Snark.ZeroKnowledge.honestPlonkMaskView_points
+assert_axioms Zcash.Snark.ZeroKnowledge.honestPlonkMaskView_columns
+assert_axioms Zcash.Snark.ZeroKnowledge.honestPlonkMaskView_groupValues
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPublicCommitmentMembers_honest
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPublicGroupCommitments_honest
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPublicNodeValues_honest
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPublicOpening_honest
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPublicIpaInput_honest
+
+-- Joint simulation through the actual private state and complete batched field tape.
+assert_computable Zcash.Snark.ZeroKnowledge.plonkMaskViewFromMaterial +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkIpaData +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPreIpaCoinsEquiv +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkMaterialFromTape +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkJointSampleCount
+assert_computable Zcash.Snark.ZeroKnowledge.plonkJointViewFromTape +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkMaskSimulatorFromCoins +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkJointSimulatorFromCoins +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.idealPlonkMaterial_rows_mem
+assert_axioms Zcash.Snark.ZeroKnowledge.idealPlonkMaterial_maskView
+assert_axioms Zcash.Snark.ZeroKnowledge.idealPlonkMaterial_maskView_simulation
+assert_axioms Zcash.Snark.ZeroKnowledge.idealPlonkJoint_simulation_capstone
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformTapePlonkMaterial
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkJointSampleCount_eq
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformTapePlonkJoint
+assert_axioms Zcash.Snark.ZeroKnowledge.sampledPlonkJoint_simulation_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformColumnViews_ofFn
+assert_axioms Zcash.Snark.ZeroKnowledge.idealPlonkMaskSimulatorFromFieldCoins_eq
+assert_axioms Zcash.Snark.ZeroKnowledge.idealPlonkJointSimulatorFromFieldCoins_program
+assert_axioms Zcash.Snark.ZeroKnowledge.idealPlonkJointSimulatorFromFieldCoins_eq
 
 -- At an unmasked row the disclosed evaluation is the original cell, for every mask law.
 assert_axioms Zcash.Snark.ZeroKnowledge.maskedRowPolynomial_eval_before

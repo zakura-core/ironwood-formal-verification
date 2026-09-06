@@ -25,10 +25,12 @@ def plonkOpeningPointSets (omega x : Fp) : Fin 5 → List Fp :=
   ![[x], [x, x * omega], [x, x * omega, x * omega⁻¹],
     [x, x * omega, x * (omega ^ 6)⁻¹], [x, x * omega⁻¹]]
 
-private def plonkOpeningPointIndices : Fin 5 → List (Fin 5) :=
+/-- Each group's nodes as indices into the common five-point observation vector. -/
+def plonkOpeningPointIndices : Fin 5 → List (Fin 5) :=
   ![[0], [0, 1], [0, 1, 2], [0, 1, 3], [0, 2]]
 
-private theorem plonkOpeningPointSets_eq_map (omega x q : Fp) (i : Fin 5) :
+/-- The point indices route precisely the pinned nodes, independently of the fifth point. -/
+theorem plonkOpeningPointSets_eq_map (omega x q : Fp) (i : Fin 5) :
     plonkOpeningPointSets omega x i =
       (plonkOpeningPointIndices i).map (plonkObservationPoints omega x q) := by
   fin_cases i <;> rfl
@@ -109,6 +111,22 @@ def plonkBlindedOpeningGroups {actions : ℕ} (pub : PlonkPublicPolynomials acti
     (rows : ColumnHistory 2048) (x x1 : Fp) (pieces : Fin 8 → CPoly)
     (coefficients : Fp × Fp) (blinds : PlonkCommitmentBlinds actions) : List BlindedOpeningGroup :=
   List.ofFn (plonkBlindedOpeningGroup pub rows x x1 pieces coefficients blinds)
+
+/-- The polynomial-only groups do not depend on any commitment blind. -/
+def plonkPolynomialOpeningGroups {actions : ℕ} (pub : PlonkPublicPolynomials actions)
+    (rows : ColumnHistory 2048) (x x1 : Fp) (pieces : Fin 8 → CPoly)
+    (coefficients : Fp × Fp) : List PolynomialOpeningGroup :=
+  List.ofFn fun i => ⟨plonkOpeningPolynomials pub rows x x1 pieces coefficients i,
+    plonkOpeningPointSets (omegaOf 11) x i⟩
+
+/-- Erasing the inherited blinds gives exactly the polynomial-only construction. -/
+theorem plonkBlindedOpeningGroups_polynomials {actions : ℕ} (pub : PlonkPublicPolynomials actions)
+    (rows : ColumnHistory 2048) (x x1 : Fp) (pieces : Fin 8 → CPoly)
+    (coefficients : Fp × Fp) (blinds : PlonkCommitmentBlinds actions) :
+    (plonkBlindedOpeningGroups pub rows x x1 pieces coefficients blinds).map
+        BlindedOpeningGroup.toPolynomialOpeningGroup =
+      plonkPolynomialOpeningGroups pub rows x x1 pieces coefficients := by
+  simp [plonkBlindedOpeningGroups, plonkBlindedOpeningGroup, plonkPolynomialOpeningGroups]
 
 section Commitments
 

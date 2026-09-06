@@ -58,6 +58,25 @@ theorem privateColumnOrder_length (actions : ℕ) : (privateColumnOrder actions)
   simp [privateColumnOrder, List.length_flatMap, List.sum_replicate, Nat.mul_comm]
   omega
 
+/-- Every private column identity occurs in the declared commitment schedule. -/
+theorem privateColumnOrder_mem {actions : ℕ} (id : PrivateColumnId actions) :
+    id ∈ privateColumnOrder actions := by
+  cases id <;> simp [privateColumnOrder, List.mem_flatMap]
+
+/-- Locate a private commitment in the emitted point vector. -/
+def privateColumnIndex {actions : ℕ} (id : PrivateColumnId actions) : Fin (22 * actions) :=
+  ⟨(privateColumnOrder actions).idxOf id, by
+    simpa only [privateColumnOrder_length] using List.idxOf_lt_length_of_mem (privateColumnOrder_mem id)⟩
+
+/-- Read the identity of the private commitment at a given position. -/
+def privateColumnAt {actions : ℕ} (i : Fin (22 * actions)) : PrivateColumnId actions :=
+  (privateColumnOrder actions)[i.val]'(by simpa only [privateColumnOrder_length] using i.isLt)
+
+/-- Indexing the schedule by an identity recovers that identity. -/
+theorem privateColumnAt_index {actions : ℕ} (id : PrivateColumnId actions) :
+    privateColumnAt (privateColumnIndex id) = id := by
+  simp [privateColumnAt, privateColumnIndex, List.getElem_idxOf]
+
 /-- The executable column schedule has the same declared number of private columns. -/
 theorem plonkColumnSteps_length {actions : ℕ}
     (construct : PrivateColumnId actions → ColumnHistory 2048 → (Fin 2048 → Fp)) :
