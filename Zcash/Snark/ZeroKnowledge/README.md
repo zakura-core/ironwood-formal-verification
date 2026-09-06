@@ -208,6 +208,13 @@ from earlier disclosed evaluations. [PlonkColumns.lean](PlonkColumns.lean) insta
 ten advice, six lookup-permutation, and six product columns per Action, including their
 six-row and five-row suffix sizes.
 
+[ColumnAttempt.lean](ColumnAttempt.lean) adds partial constructors that stop at the first
+failure. The result retains the private prefix and a completion flag. Every produced
+column uses exactly its earlier masked history and preserves the constructor's retained
+rows. The prefix agrees with the corresponding prefix of the total comparison run;
+completed attempts agree with that entire run on the same tape. These are execution
+equalities, not distributional claims conditioned on successful construction.
+
 [PreIpaMask.lean](PreIpaMask.lean) jointly simulates all pre-IPA commitments, five common
 evaluations of every private column, `r(x)`, and the masked `Q₀(q)`. The unblinded commitment
 cores may depend on all private rows and both coefficients of `r`. Independent commitment
@@ -433,8 +440,9 @@ and proves that every lookup constraint polynomial is divisible by the domain po
 [PlonkLookupRows.lean](PlonkLookupRows.lean) identifies these records with the actual
 proof string and each Action's entries in the honest constraint model.
 This replaces a lookup-constraint correctness premise with explicit row-construction
-facts. The sorter below supplies its permutation and run-structure facts; the masked-column
-schedule must still establish the expression feeds and scan agreement.
+facts. The sorter below supplies its permutation and run-structure facts. The concrete
+constructor below supplies the expression feeds at each private prefix; their agreement
+with the final column state and the full trace's scan correspondence remain to be proved.
 
 [PermutationRowConstraints.lean](PermutationRowConstraints.lean) computes the
 permutation factors using the verifier's exact column-name stride and chains the three
@@ -461,13 +469,38 @@ prefixes always succeed; each input value only needs to occur somewhere in the t
 even if the input repeats it many times.
 [LookupSortRows.lean](LookupSortRows.lean) specializes to canonical `Fp.val` order and
 supplies these facts directly to the existing five lookup constraints. This closes the
-sorter's correctness premises. The masked-column schedule, its lookup membership and
-compression facts, and Rust control-flow correspondence remain separate obligations.
+sorter's correctness premises. Lookup membership after masking and Rust control-flow
+correspondence remain separate obligations.
 [LookupSortExamples.lean](LookupSortExamples.lean) kernel-checks small exact-order cases
 for reverse filling, duplicate table occurrences, and an absent required value.
 
+[PlonkRowConstruction.lean](PlonkRowConstruction.lean) supplies concrete advice,
+lookup-sort, and product-scan constructors. Compression reads the existing polynomial
+proof's query layout, including rotations of earlier masked advice. The permutation
+factors resolve the key's actual packed references; a checked equality identifies
+these pairs with the constraint model for a three-chunk key. Sorting failures remain
+explicit. Checked lemmas show that lookup sorting uses only `theta`, and that
+all row computations are independent of challenges after `theta`, `beta`, and `gamma`.
+
+[PlonkConstruction.lean](PlonkConstruction.lean) installs those constructors in the
+existing schedule and executes them from the empty history on `126m` row-mask samples.
+Completed attempts agree exactly with a concrete total constructor accepted by the
+joint simulation. Comparing wide-reduced and uniform field tapes costs `126m × bias`
+for the entire attempt, including its failure flag and private prefix. Both laws still
+use the same private witness; this comparison does not simulate construction failures.
+The total comparison constructor replaces a failed sort by zero rows and therefore
+cannot be identified unconditionally with the honest attempt.
+
+The remaining row obligations include agreement between prefix reads and final columns,
+matching the two computations of each lookup sort, matching inherited permutation seeds,
+lookup membership after advice masking, the packed copy-permutation product identity,
+and gate preservation. These results do not yet bound `averageInvalidRowMass` or the
+column-construction failure probability. Native-loop correspondence, including the
+available Rust implementation's cancellation of fixed permutation cells on zero factors,
+also remains open.
+
 This is still a conditional algebraic simulation theorem. Completing the exact prover
-theorem requires the actual row algorithms and their correctness, the full verifier's
+theorem requires row correctness for the instantiated schedule, the full verifier's
 grouping and commitment routing, failures and retries across the whole prover, the challenge
 model and Fiat–Shamir argument, and correspondence with the Rust implementation. The
 available Rust quotient implementations have not been proved equivalent to these polynomial

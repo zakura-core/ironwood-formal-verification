@@ -25,6 +25,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkLookupRows
 import Zcash.Snark.ZeroKnowledge.PlonkPermutationRows
 import Zcash.Snark.ZeroKnowledge.LookupSortRows
 import Zcash.Snark.ZeroKnowledge.LookupSortExamples
+import Zcash.Snark.ZeroKnowledge.PlonkConstruction
 import Zcash.Snark.ZeroKnowledge.Observation
 import Zcash.Meta.AxiomCheck
 
@@ -69,7 +70,15 @@ The actual polynomial selectors and rotations carry this result to domain divisi
 The specified canonical sorter now supplies the permutation and run-structure facts,
 and succeeds for equal-length prefixes whenever each input value occurs in the table.
 Its field-specific adapter feeds those facts directly to the existing lookup constraints.
-The masked-column schedule must still establish the expression feeds and scan agreement.
+The concrete retained-row constructor now evaluates lookup expressions and packed
+permutation factors through the existing polynomial query layout, then calls those
+sorts and scans. Its partial schedule preserves sorting failures and the private
+prefix. Completed attempts agree on the same tape with the total constructor used
+by the joint simulation, and every constructed column retains its computed usable
+rows with the actual preceding masked history. Lookup construction uses only theta;
+all row construction uses only theta, beta, and gamma. Relating prefix reads to the
+final columns, preserving membership under masking, and bounding construction failure
+remain open; the sampling comparison alone is not a simulator for failed attempts.
 The three chained permutation scans similarly supply the seven existing row constraints
 and their polynomial divisibility, given the full product identity. Copy-preserving
 wiring gives that identity on named cells; the actual packed factors and masked-column
@@ -669,6 +678,38 @@ assert_axioms Zcash.Snark.ZeroKnowledge.lookupExpressions_zero_of_sort
 assert_axioms Zcash.Snark.ZeroKnowledge.lookupSort_reverse_fill_example
 assert_axioms Zcash.Snark.ZeroKnowledge.lookupSort_duplicate_table_example
 assert_axioms Zcash.Snark.ZeroKnowledge.lookupSort_missing_value_example
+
+-- Partial column construction, exact earlier histories, and the concrete schedule.
+assert_computable Zcash.Snark.ZeroKnowledge.ColumnAttemptStep.totalize +choice
+assert_computable Zcash.Snark.ZeroKnowledge.columnAttemptFromTape +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.columnAttemptFromTape_length_le
+assert_axioms Zcash.Snark.ZeroKnowledge.columnAttemptFromTape_complete_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.columnAttemptFromTape_eq_take
+assert_axioms Zcash.Snark.ZeroKnowledge.columnAttemptFromTape_eq_of_complete
+assert_axioms Zcash.Snark.ZeroKnowledge.ColumnAttemptStep.retained
+assert_axioms Zcash.Snark.ZeroKnowledge.columnAttemptFromTape_retained
+assert_computable Zcash.Snark.ZeroKnowledge.plonkLookupCompressedRows +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPermutationPairPolynomials +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPermutationFactorRows +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkLookupSortedRows +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPermutationBaseRows +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkLookupBaseRows +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkConstructColumnResult +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkLookupCompressedRows_eq_model
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPermutationPairPolynomials_eq_model
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkLookupSortedRows_exists
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkConstructColumnResult_advice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkConstructColumnResult_eq_none
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkConstructColumnResult_challenges
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkConstructColumnResult_lookup_challenges
+assert_computable Zcash.Snark.ZeroKnowledge.plonkTotalColumnConstructor +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkColumnConstructionSteps +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkColumnAttempt +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkColumnConstructionSteps_totalize
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkColumnConstructionSteps_row_samples
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkColumnAttempt_complete_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkColumnAttempt_eq_of_complete
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkColumnAttempt_sampling_error_bound
 
 -- At an unmasked row the disclosed evaluation is the original cell, for every mask law.
 assert_axioms Zcash.Snark.ZeroKnowledge.maskedRowPolynomial_eval_before
