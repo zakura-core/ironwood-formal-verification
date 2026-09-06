@@ -10,9 +10,9 @@ agree only where the recurrence uses them. Values on masked rows remain arbitrar
 The proof derives every constraint from the scan, the input/table permutation laws,
 and the sorted columns' run structure, outside zero denominator factors.
 
-These premises still need to be supplied by the concrete lookup sorter and column
-schedule. They are stated as row-construction facts, rather than assuming the lookup
-constraint polynomials vanish.
+`LookupSortRows` supplies the sorting premises from the specified algorithm. The column
+schedule must still establish compression and scan agreement. These are row-construction
+facts; the theorem does not assume the lookup constraint polynomials vanish.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

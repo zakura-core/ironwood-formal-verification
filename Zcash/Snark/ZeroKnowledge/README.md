@@ -355,8 +355,8 @@ row is equivalent to divisibility by `X^n - 1`. It applies this to the actual co
 fold. `sampledPlonkVerifier_rows_simulation_error_bound` in
 [PlonkRowSimulation.lean](PlonkRowSimulation.lean) therefore derives both quotient
 premises from public degree bounds and row-wise satisfaction of the gate, permutation,
-and lookup constraints. Correctness of the lookup sorting and product-row constructors
-has not yet supplied that satisfaction premise. Satisfying advice columns are inputs
+and lookup constraints. The sorting and scan proofs below still need to be instantiated
+at the masked-column schedule to supply that satisfaction premise. Satisfying advice columns are inputs
 in the pinned protocol; generating the underlying circuit witness is outside its scope.
 
 [ExceptionalMixtures.lean](ExceptionalMixtures.lean) and
@@ -407,8 +407,8 @@ permutation ratio scans with `0` mapped to `0` on inversion. It proves the exact
 for a row recurrence to fail: its denominator is zero and its required right side is
 nonzero. Under the product identity, the terminal value satisfies `z²-z = 0` even when
 denominators vanish. For lookups, permutations of the input and table prefixes supply
-that identity. The concrete sorting algorithm and permutation-column identity still
-need to be connected. The zero-preserving fallback matches the available Bento source
+that identity. The sorter below supplies the lookup permutations; the permutation-column
+identity still needs to be connected. The zero-preserving fallback matches the available Bento source
 at `e32e61eb35b6e5b5e0600cb0903adcfe0cd617d8`, in `crates/sensei/src/native/prover.rs`;
 this does not establish correspondence with the still-unlocated Sensei pin.
 
@@ -433,7 +433,8 @@ and proves that every lookup constraint polynomial is divisible by the domain po
 [PlonkLookupRows.lean](PlonkLookupRows.lean) identifies these records with the actual
 proof string and each Action's entries in the honest constraint model.
 This replaces a lookup-constraint correctness premise with explicit row-construction
-facts. The concrete sorter and masked-column schedule still need to establish those facts.
+facts. The sorter below supplies its permutation and run-structure facts; the masked-column
+schedule must still establish the expression feeds and scan agreement.
 
 [PermutationRowConstraints.lean](PermutationRowConstraints.lean) computes the
 permutation factors using the verifier's exact column-name stride and chains the three
@@ -449,6 +450,21 @@ the retained row 2042 from row zero. Instantiating the named-cell identity at th
 packed factors, proving the masked-column schedule's scan correspondence, and preserving
 the gate constraints under row masking remain open. These results do not yet bound the
 joint `averageInvalidRowMass` term.
+
+[LookupSort.lean](LookupSort.lean) implements the sorting rule from step 2 of the pinned
+description: canonical integer sorting, one matching table occurrence reserved at each
+new input run, and ascending unused table values assigned to repeated-input positions
+from highest row to lowest. Successful output preserves both multisets and satisfies
+the first-row and run-structure rules.
+[LookupSortSuccess.lean](LookupSortSuccess.lean) proves that equal-length valid lookup
+prefixes always succeed; each input value only needs to occur somewhere in the table,
+even if the input repeats it many times.
+[LookupSortRows.lean](LookupSortRows.lean) specializes to canonical `Fp.val` order and
+supplies these facts directly to the existing five lookup constraints. This closes the
+sorter's correctness premises. The masked-column schedule, its lookup membership and
+compression facts, and Rust control-flow correspondence remain separate obligations.
+[LookupSortExamples.lean](LookupSortExamples.lean) kernel-checks small exact-order cases
+for reverse filling, duplicate table occurrences, and an absent required value.
 
 This is still a conditional algebraic simulation theorem. Completing the exact prover
 theorem requires the actual row algorithms and their correctness, the full verifier's

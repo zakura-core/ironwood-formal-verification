@@ -23,6 +23,8 @@ import Zcash.Snark.ZeroKnowledge.RunningProductRows
 import Zcash.Snark.ZeroKnowledge.ProductDenominators
 import Zcash.Snark.ZeroKnowledge.PlonkLookupRows
 import Zcash.Snark.ZeroKnowledge.PlonkPermutationRows
+import Zcash.Snark.ZeroKnowledge.LookupSortRows
+import Zcash.Snark.ZeroKnowledge.LookupSortExamples
 import Zcash.Snark.ZeroKnowledge.Observation
 import Zcash.Meta.AxiomCheck
 
@@ -64,7 +66,10 @@ actual state and the joint invalid-row event still requires proof.
 The computed lookup scan now supplies all five of the existing row constraints from
 the compression, permutation, and run-structure facts outside zero denominators.
 The actual polynomial selectors and rotations carry this result to domain division.
-The concrete sorter and masked-column construction must still supply those facts.
+The specified canonical sorter now supplies the permutation and run-structure facts,
+and succeeds for equal-length prefixes whenever each input value occurs in the table.
+Its field-specific adapter feeds those facts directly to the existing lookup constraints.
+The masked-column schedule must still establish the expression feeds and scan agreement.
 The three chained permutation scans similarly supply the seven existing row constraints
 and their polynomial divisibility, given the full product identity. Copy-preserving
 wiring gives that identity on named cells; the actual packed factors and masked-column
@@ -633,6 +638,37 @@ assert_axioms Zcash.Snark.ZeroKnowledge.permutationExpressions_eval_row_zero_of_
 assert_axioms Zcash.Snark.ZeroKnowledge.permutationExpressions_dvd_domain_of_scan
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkTerminalFactor
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkPolynomialClaimProof_permutationSetEvals
+
+-- The specified lookup sorter succeeds on valid prefixes and supplies the row premises.
+assert_computable Zcash.Snark.ZeroKnowledge.lookupRunPlan
+assert_computable Zcash.Snark.ZeroKnowledge.reserveLookupValues
+assert_computable Zcash.Snark.ZeroKnowledge.fillLookupPlan
+assert_computable Zcash.Snark.ZeroKnowledge.canonicalLookupSort
+assert_computable Zcash.Snark.ZeroKnowledge.lookupSortColumns
+assert_computable Zcash.Snark.ZeroKnowledge.lookupSortedPrefixes
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupRunPlan_length
+assert_axioms Zcash.Snark.ZeroKnowledge.canonicalLookupSort_perm
+assert_axioms Zcash.Snark.ZeroKnowledge.canonicalLookupSort_ordered
+assert_axioms Zcash.Snark.ZeroKnowledge.canonicalLookupSort_eq_of_ordered
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupRunPlan_getElem
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupRunPlan_matches
+assert_axioms Zcash.Snark.ZeroKnowledge.reserveLookupValues_perm
+assert_axioms Zcash.Snark.ZeroKnowledge.fillLookupPlan_correct
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupSortColumns_correct
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupSortColumns_first
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupSortColumns_run
+assert_axioms Zcash.Snark.ZeroKnowledge.ofFn_getD_eq
+assert_axioms Zcash.Snark.ZeroKnowledge.reserveLookupValues_exists
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupPlan_reserved_le_length
+assert_axioms Zcash.Snark.ZeroKnowledge.fillLookupPlan_exists
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupRunPlan_reservations
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupSortColumns_exists
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupSortedPrefixes_exists
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupSortedPrefixes_correct
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupExpressions_zero_of_sort
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupSort_reverse_fill_example
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupSort_duplicate_table_example
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupSort_missing_value_example
 
 -- At an unmasked row the disclosed evaluation is the original cell, for every mask law.
 assert_axioms Zcash.Snark.ZeroKnowledge.maskedRowPolynomial_eval_before
