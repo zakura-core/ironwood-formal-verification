@@ -16,6 +16,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkQuotientSimulation
 import Zcash.Snark.ZeroKnowledge.PlonkCapacitySimulation
 import Zcash.Snark.ZeroKnowledge.PlonkDegreeCertificate
 import Zcash.Snark.ZeroKnowledge.PlonkRowSimulation
+import Zcash.Snark.ZeroKnowledge.PlonkConsistency
 import Zcash.Snark.ZeroKnowledge.Observation
 import Zcash.Meta.AxiomCheck
 
@@ -42,8 +43,10 @@ field-coin implementation. The verifier-typed construction computes the constrai
 and quotient pieces, and derives quotient agreement using the existing verifier's constraint
 function. A public circuit-degree profile now supplies the numerator capacity, with
 kernel-checked certificates for the one- and two-Action captured keys. Row-wise constraint
-satisfaction supplies exact quotient divisibility. Correctness of the honest lookup and
-product row algorithms and the full verifier's grouping still require integration.
+satisfaction supplies exact quotient divisibility. The newer consistency bound retains
+the ideal probability of row states that fail division as an explicit error term, so it
+does not assume correctness on every random state. Bounding that probability for the honest
+lookup and product row algorithms and integrating the full verifier's grouping remain open.
 These results do not establish a whole-prover simulator, Fiat–Shamir zero-knowledge, or a
 Rust-to-Lean refinement.
 -/
@@ -521,6 +524,15 @@ assert_axioms Zcash.Snark.ZeroKnowledge.domainPolynomial_dvd_iff_rows
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkPolynomialFold_eval_zero
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkConstraintNumerator_dvd_of_rows
 assert_axioms Zcash.Snark.ZeroKnowledge.sampledPlonkVerifier_rows_simulation_error_bound
+
+-- Private exceptional states contribute their probability to the joint comparison.
+assert_axioms Zcash.Snark.ZeroKnowledge.arbitraryMixedLaws_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.idealPlonkMaterial_rows
+assert_axioms Zcash.Snark.ZeroKnowledge.idealPlonkJoint_exceptional_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.sampledPlonkJoint_sampling_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.sampledPlonkJoint_exceptional_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkInvalidRowMass_le_row_violation
+assert_axioms Zcash.Snark.ZeroKnowledge.sampledPlonkVerifier_consistency_error_bound
 
 -- At an unmasked row the disclosed evaluation is the original cell, for every mask law.
 assert_axioms Zcash.Snark.ZeroKnowledge.maskedRowPolynomial_eval_before

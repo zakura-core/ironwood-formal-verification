@@ -359,6 +359,21 @@ and lookup constraints. Correctness of the lookup sorting and product-row constr
 has not yet supplied that satisfaction premise. Satisfying advice columns are inputs
 in the pinned protocol; generating the underlying circuit witness is outside its scope.
 
+[ExceptionalMixtures.lean](ExceptionalMixtures.lean) and
+[PlonkExceptional.lean](PlonkExceptional.lean) remove the requirement that every random
+row state has a valid quotient. They retain the probability of exceptional private states
+under the ideal row law and add it to the complete sampling bound. The comparison uses
+the original, unconditioned row distribution and the inherited IPA blind.
+
+`sampledPlonkVerifier_consistency_error_bound` in
+[PlonkConsistency.lean](PlonkConsistency.lean) applies this to the computed numerator and
+existing proof type. Its bound is **`invalidRowMass + (148m + 46) × bias`**. The first term
+is the ideal probability that `X^2048 - 1` does not divide the actual numerator. The
+theorem no longer assumes row correctness; a separate result bounds that term by the
+probability of any violated row constraint. Bounding it numerically for the actual lookup
+and product algorithms, including zero denominators, remains necessary. Public polynomial,
+degree-profile, generator, and supplied-challenge premises still apply.
+
 This is still a conditional algebraic simulation theorem. Completing the exact prover
 theorem requires the actual row algorithms and their correctness, the full verifier's
 grouping and commitment routing, failures and retries across the whole prover, the challenge
