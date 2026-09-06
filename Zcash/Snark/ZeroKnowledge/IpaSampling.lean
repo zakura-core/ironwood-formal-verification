@@ -18,12 +18,6 @@ open Zcash.Arithmetic (Fp)
 open Zcash.Common
 open scoped ENNReal
 
-/-- Split a flat field tape into two consecutive blocks. -/
-def splitTapeEquiv (m n : ℕ) (F : Type*) :
-    (Fin (m + n) → F) ≃ ((Fin m → F) × (Fin n → F)) :=
-  (Equiv.arrowCongr finSumFinEquiv.symm (Equiv.refl F)).trans
-    (Equiv.sumArrowEquivProdArrow (Fin m) (Fin n) F)
-
 /-- Consecutive pairs in a flat tape supply the left and right blinds of each round. -/
 def roundPairTapeEquiv (k : ℕ) (F : Type*) :
     (Fin (k * 2) → F) ≃ (Fin k → F × F) :=

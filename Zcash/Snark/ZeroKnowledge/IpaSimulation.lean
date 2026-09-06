@@ -1,5 +1,5 @@
 import Zcash.Snark.ZeroKnowledge.IpaTranscript
-import Zcash.Common.RelationProbabilityCoins
+import Zcash.Snark.ZeroKnowledge.CommitmentMask
 
 /-!
 # Joint simulation of the sparse-mask IPA stage
@@ -18,23 +18,6 @@ the preceding PLONK and multi-opening messages.
 namespace Zcash.Snark.ZeroKnowledge
 
 variable {F G : Type*} [Field F] [AddCommGroup G] [Module F G]
-
-/-- A blinded point is a bijective reparameterization of its scalar blind. -/
-noncomputable def blindPointEquiv (W offset : G)
-    (hW : Function.Bijective (fun r : F => r • W)) : F ≃ G where
-  toFun := fun r => offset + r • W
-  invFun := fun point => (Equiv.ofBijective (fun r : F => r • W) hW).symm (point - offset)
-  left_inv := by
-    intro r
-    change (Equiv.ofBijective (fun r : F => r • W) hW).symm ((offset + r • W) - offset) = r
-    rw [add_sub_cancel_left]
-    exact (Equiv.ofBijective (fun r : F => r • W) hW).symm_apply_apply r
-  right_inv := by
-    intro point
-    change offset + (Equiv.ofBijective (fun r : F => r • W) hW)
-      ((Equiv.ofBijective (fun r : F => r • W) hW).symm (point - offset)) = point
-    rw [Equiv.apply_symm_apply]
-    abel
 
 /-- All independently blinded left/right points are reparameterized simultaneously. -/
 noncomputable def ipaMessageBlindsEquiv {k : ℕ} (W : G) (messages : Fin k → G × G)

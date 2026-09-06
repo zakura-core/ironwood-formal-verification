@@ -4,6 +4,7 @@ import Zcash.Snark.ZeroKnowledge.MaskSampling
 import Zcash.Snark.ZeroKnowledge.IpaSampling
 import Zcash.Snark.ZeroKnowledge.IpaSimulator
 import Zcash.Snark.ZeroKnowledge.IpaVerifier
+import Zcash.Snark.ZeroKnowledge.LinearMaskTranscript
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -23,6 +24,7 @@ whole-prover simulator, Fiat–Shamir zero-knowledge, or a Rust-to-Lean refineme
 assert_computable Zcash.Snark.ZeroKnowledge.fieldSampleCount
 assert_computable Zcash.Snark.ZeroKnowledge.wordSampleCount
 assert_computable Zcash.Snark.ZeroKnowledge.sampleFieldsWith
+assert_computable Zcash.Snark.ZeroKnowledge.splitTapeEquiv +choice
 
 assert_axioms Zcash.Snark.ZeroKnowledge.fieldSample
 assert_axioms Zcash.Snark.ZeroKnowledge.idealFieldSample
@@ -73,6 +75,22 @@ assert_axioms Zcash.Snark.ZeroKnowledge.linearMaskView_uniform
 assert_axioms Zcash.Snark.ZeroKnowledge.horner_last_unit_weight
 assert_axioms Zcash.Snark.ZeroKnowledge.horner_last_at_zero
 assert_axioms Zcash.Snark.ZeroKnowledge.actualLinearMaskView_error_bound
+
+-- Joint Common #267 projection: R, r(x), the Q' commitment, and the later group evaluation.
+assert_computable Zcash.Snark.ZeroKnowledge.blindedCommitments
+assert_computable Zcash.Snark.ZeroKnowledge.LinearMaskTranscript.ofParts
+assert_computable Zcash.Snark.ZeroKnowledge.linearMaskCommitmentCores
+assert_computable Zcash.Snark.ZeroKnowledge.honestLinearMaskTranscript
+assert_computable Zcash.Snark.ZeroKnowledge.linearMaskTapeEquiv +choice
+assert_computable Zcash.Snark.ZeroKnowledge.linearMaskTranscriptFromTape +choice
+assert_computable Zcash.Snark.ZeroKnowledge.linearMaskSimulatorFromTape +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.blindedCommitments_uniform
+assert_axioms Zcash.Snark.ZeroKnowledge.commitmentView_eq
+assert_axioms Zcash.Snark.ZeroKnowledge.idealLinearMask_simulation_capstone
+assert_axioms Zcash.Snark.ZeroKnowledge.linearMaskTapeEquiv_apply
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformTapeLinearMask_eq_idealProver
+assert_axioms Zcash.Snark.ZeroKnowledge.linearMaskSimulatorFromTape_uniform
+assert_axioms Zcash.Snark.ZeroKnowledge.sampledLinearMask_simulation_error_bound
 
 -- The joint IPA view includes the actual cross terms and the aggregate blind, not just `c`.
 assert_computable Zcash.Snark.ZeroKnowledge.publicFold

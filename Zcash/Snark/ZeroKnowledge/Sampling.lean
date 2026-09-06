@@ -20,6 +20,12 @@ open Zcash.Arithmetic (Fp)
 open Zcash.Common
 open scoped ENNReal
 
+/-- Split a flat tape into two consecutive blocks without changing its entries. -/
+def splitTapeEquiv (m n : ℕ) (F : Type*) :
+    (Fin (m + n) → F) ≃ ((Fin m → F) × (Fin n → F)) :=
+  (Equiv.arrowCongr finSumFinEquiv.symm (Equiv.refl F)).trans
+    (Equiv.sumArrowEquivProdArrow (Fin m) (Fin n) F)
+
 /-- Continuation-weighted bias between normalized finite laws is symmetric. -/
 theorem weightedBias_symm {F : Type*} [Fintype F] {actual ideal : PMF F} {ε : ℝ≥0∞}
     (h : PMFWeightedBiasLE actual ideal ε) : PMFWeightedBiasLE ideal actual ε := by

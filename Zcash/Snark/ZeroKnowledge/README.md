@@ -55,6 +55,25 @@ they do not describe a Fiat–Shamir execution conditioned on its observed chall
 These component bounds alone do not establish a joint transcript law. The IPA law is covered
 below; the earlier PLONK view, encoding failures, and retries remain separate obligations.
 
+## Linear mask with its commitments
+
+[LinearMaskTranscript.lean](LinearMaskTranscript.lean) extends the Common #267 result to a
+four-field projection: `R`, `r(x)`, the commitment to `Q'`, and the later masked group
+evaluation. The unblinded `Q'` commitment may depend on both coefficients of `r`. The additive
+offset in the later evaluation may depend on the disclosed `r(x)`.
+
+[CommitmentMask.lean](CommitmentMask.lean) proves that independent uniform commitment blinds
+make a whole family of points jointly uniform and independent of separately disclosed data.
+Combining that fact with the two-evaluation bijection proves the four-field simulation law.
+The implemented field law gives the two-sided bound **4 × bias**, accounting for the two
+coefficients and two commitment blinds. These are four selected draws; other draws intervene
+between them in the complete prover. A computable simulator uses four field coins and `W`.
+
+The result retains correlations within this projection. Connecting its additive offset and
+query ordering to the complete multi-opening construction, and simulating the other PLONK
+messages, remain open. The theorem has supplied distinct evaluation points and does not
+condition on a Fiat–Shamir execution's observed challenges.
+
 ## Joint IPA simulation
 
 `idealIpa_simulation_capstone` in [IpaSimulation.lean](IpaSimulation.lean) proves exact
