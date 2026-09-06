@@ -5,6 +5,8 @@ import Zcash.Snark.ZeroKnowledge.IpaSampling
 import Zcash.Snark.ZeroKnowledge.IpaSimulator
 import Zcash.Snark.ZeroKnowledge.IpaVerifier
 import Zcash.Snark.ZeroKnowledge.LinearMaskTranscript
+import Zcash.Snark.ZeroKnowledge.RowMaskTranscript
+import Zcash.Snark.ZeroKnowledge.Observation
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -16,9 +18,10 @@ the finite sampling program and its declared tape sizes are checked as computabl
 `+choice` permits classical choice only in erased proof fields of a plain computable definition;
 the checker still rejects noncomputable algorithmic content. No `+native` exemption is used.
 
-The pinned results establish the field-sampling law, both masking constructions, and joint
-simulation of the algebraic IPA stage under supplied challenges. They do not establish a
-whole-prover simulator, Fiat–Shamir zero-knowledge, or a Rust-to-Lean refinement.
+The pinned results establish the field-sampling law, both masking constructions, joint
+simulation of the algebraic IPA stage, and joint hiding of masked columns under supplied
+challenges. They do not establish a whole-prover simulator, Fiat–Shamir zero-knowledge,
+or a Rust-to-Lean refinement.
 -/
 
 assert_computable Zcash.Snark.ZeroKnowledge.fieldSampleCount
@@ -137,3 +140,42 @@ assert_axioms Zcash.Snark.ZeroKnowledge.publicFold_evalVector
 assert_axioms Zcash.Snark.ZeroKnowledge.ipaMessageSum_eq_roundSum
 assert_axioms Zcash.Snark.ZeroKnowledge.ipaTranscript_verifier_capstone
 assert_axioms Zcash.Snark.ZeroKnowledge.ipaTranscript_assembleFinalMsm
+
+-- Joint replacement-row rank, with the real domain constant certified without native axioms.
+assert_axioms Zcash.Snark.ZeroKnowledge.rootOfUnityFp_primitiveRoot
+assert_axioms Zcash.Snark.ZeroKnowledge.omegaOf_primitiveRoot
+assert_axioms Zcash.Snark.ZeroKnowledge.omegaOf_rows_injective
+assert_computable Zcash.Snark.ZeroKnowledge.maskedRows
+assert_computable Zcash.Snark.ZeroKnowledge.maskedRowPolynomial +choice
+assert_computable Zcash.Snark.ZeroKnowledge.advicePolynomial +choice
+assert_computable Zcash.Snark.ZeroKnowledge.maskRowsLinearMap +choice
+assert_computable Zcash.Snark.ZeroKnowledge.rowMaskIndexEquiv +choice
+assert_computable Zcash.Snark.ZeroKnowledge.rowMaskTapeEquiv +choice
+assert_computable Zcash.Snark.ZeroKnowledge.rowEvaluationsFromTape +choice
+assert_computable Zcash.Snark.ZeroKnowledge.maskedColumnCommitmentCore +choice
+assert_computable Zcash.Snark.ZeroKnowledge.columnTapeEquiv +choice
+assert_computable Zcash.Snark.ZeroKnowledge.maskedColumnFromTape +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.surjectiveAddMap_uniform
+assert_axioms Zcash.Snark.ZeroKnowledge.surjectiveAffineMap_uniform
+assert_axioms Zcash.Snark.ZeroKnowledge.rowMask_interpolationNodes_injective
+assert_axioms Zcash.Snark.ZeroKnowledge.rowMask_evaluations_surjective
+assert_axioms Zcash.Snark.ZeroKnowledge.rowEvaluationLinearMap_apply
+assert_axioms Zcash.Snark.ZeroKnowledge.maskedRows_decompose
+assert_axioms Zcash.Snark.ZeroKnowledge.maskedRowPolynomial_joint_uniform
+assert_axioms Zcash.Snark.ZeroKnowledge.rowMaskTapeEquiv_apply
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformTapeRowEvaluations
+assert_axioms Zcash.Snark.ZeroKnowledge.sampledRowEvaluations_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.advicePolynomial_joint_uniform
+assert_axioms Zcash.Snark.ZeroKnowledge.productRowPolynomial_joint_uniform
+assert_axioms Zcash.Snark.ZeroKnowledge.columnTapeEquiv_blind
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformTapeMaskedColumn
+assert_axioms Zcash.Snark.ZeroKnowledge.maskedColumn_joint_uniform
+assert_axioms Zcash.Snark.ZeroKnowledge.sampledMaskedColumn_error_bound
+
+-- At an unmasked row the disclosed evaluation is the original cell, for every mask law.
+assert_axioms Zcash.Snark.ZeroKnowledge.maskedRowPolynomial_eval_before
+assert_axioms Zcash.Snark.ZeroKnowledge.advicePolynomial_eval_usable
+assert_axioms Zcash.Snark.ZeroKnowledge.evaluationView_apply_at_point
+assert_axioms Zcash.Snark.ZeroKnowledge.evaluationView_ne_of_disclosed_cell
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceEvaluationView_ne_of_usable_cell
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceEvaluationView_ne_under_wide_reduction

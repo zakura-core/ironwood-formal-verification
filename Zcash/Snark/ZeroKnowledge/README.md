@@ -110,6 +110,37 @@ establish the preceding PLONK/multi-opening simulation, exceptional-event probab
 retry-conditioned law, Fiat–Shamir zero-knowledge, a verified concrete PRNG, or correspondence
 with the Rust prover. Identifying the final verifier equation does not discharge those gaps.
 
+## Replacement-row masks
+
+[RowMaskRank.lean](RowMaskRank.lean) proves joint uniformity of the evaluations of the
+existing `rowPolynomial` interpolation. With `n - firstMasked` random suffix values, any
+family of at most that many distinct observation points is hidden, provided it avoids the
+unmasked domain rows. The proof constructs an interpolating polynomial with arbitrary
+observation values and zeros at every unmasked row, establishing surjectivity of the whole
+evaluation map. [LinearImage.lean](LinearImage.lean) then proves uniformity through a kernel
+fiber equivalence.
+
+[RowMaskSampling.lean](RowMaskSampling.lean) verifies the increasing-row tape order and
+transfers that law to the wide-reduced sampler. The pinned advice size has six replacement
+rows; permutation/lookup product polynomials have five. [RowMaskTranscript.lean](RowMaskTranscript.lean)
+includes the coefficient commitment and its independent blind in the same joint view.
+The sampling bounds are **7 × bias** for a six-row column with its commitment and **6 × bias**
+for a five-row column with its commitment.
+
+[DomainCertificate.lean](DomainCertificate.lean) proves the existing root literal's order
+using binary modular exponentiation checked by Lean's kernel. The concrete 2048-row facts
+therefore do not depend on CompElliptic's native parameter certificate.
+
+At an unmasked domain point the polynomial instead reveals the original witness cell,
+for every mask. [Observation.lean](Observation.lean) proves the resulting difference between
+the joint challenge/evaluation views of different row vectors, including under the
+wide-reduction challenge law. This is a column-view result: an end-to-end impossibility
+claim still requires two satisfying witnesses for the same public statement and a proof
+that the full execution exposes the observation after accounting for aborts and retries.
+
+These column results do not establish the adaptive construction of all lookup/permutation
+polynomials, the full multi-opening simulation, or the actual challenge-generation law.
+
 ## Checks
 
 `lake build Zcash.Snark.ZeroKnowledge.TrustBoundary` checks the proofs and their transitive
