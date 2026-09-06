@@ -272,9 +272,10 @@ The resulting IPA transcript has an exact ideal simulation and a two-sided
 These results hold for every preceding private state and do not assume that the incoming
 blind is independent of earlier messages. They still start from the resulting public IPA
 opening. The next construction rebuilds it from the public mask view, assuming agreement
-of the inferred `H_x(x)` with the honest quotient. The full verifier's constraint function
-and proof-string routing still require integration. The available Rust implementation's
-repeated synthetic division has not yet been related formally to this quotient computation.
+of the inferred `H_x(x)` with the honest quotient. The verifier-typed construction below
+instantiates the constraint function; full proof-string routing remains open. The available
+Rust implementation's repeated synthetic division has not yet been related formally to
+this quotient computation.
 
 ## Joint algebraic prover simulation
 
@@ -287,8 +288,8 @@ The polynomial-only `Q'` construction is independent of every commitment blind.
 and all their node evaluations from the enriched public view. It proves that applying the
 existing `multiopenEval` and `multiopenCombine` operations gives the honest IPA input.
 The inferred `H_x(x)` comes from a supplied public function `expectedHx`. Agreement of that
-function with the honest quotient is an explicit premise; it must be instantiated with
-the verifier's actual constraint calculation.
+function with the honest quotient is an explicit premise. The construction below
+instantiates it with the verifier's actual constraint calculation.
 
 `idealPlonkJoint_simulation_capstone` in [PlonkComposition.lean](PlonkComposition.lean)
 proves exact equality of the **joint pre-IPA view and complete IPA transcript** with one
@@ -312,10 +313,36 @@ the public IPA input, and runs the existing IPA simulator. Its field-coin law is
 equal to the simulator used by the joint theorem. No witness, private row or quotient
 constructor, or discrete-log inverse appears in this algorithm.
 
-This establishes a conditional joint algebraic simulation theorem. Completing the exact
-prover theorem still requires the actual row/quotient algorithms and constraint agreement,
-the verifier's proof-string routing, failures and retries across the whole prover, the
-challenge-generation model and Fiat–Shamir argument, and the Rust implementation connection.
+## Computed quotient and verifier-typed proof
+
+[PlonkProofString.lean](PlonkProofString.lean) projects the joint view into the existing
+`ProofString` at the captured Orchard dimensions. Its `plonkVerifierHx` calls the existing
+`allExpressions` and `expectedHEval` functions. It proves that this public calculation
+is exactly the quotient value inferred from the projected proof. The calculation reads
+only the public key, statement polynomials, challenges, and column claims.
+
+[PlonkConstraints.lean](PlonkConstraints.lean) constructs the gate, permutation, and lookup
+numerator from the actual rotated row polynomials and canonical Lagrange selectors.
+`plonkConstraintNumerator_eval` proves that its evaluation is the verifier's precise
+constraint fold. [QuotientPieces.lean](QuotientPieces.lean) computes polynomial division by
+`X^2048 - 1` and cuts eight consecutive coefficient blocks. Recombination, per-piece degree
+bounds, and quotient agreement are proved from divisibility and numerator capacity.
+
+`sampledPlonkVerifier_simulation_error_bound` in
+[PlonkQuotientSimulation.lean](PlonkQuotientSimulation.lean) uses these computations to
+simulate the **complete algebraic `ProofString`**, with the same two-sided
+**`(148m + 46) × bias`** bound. An arbitrary quotient constructor and arbitrary inferred-value
+callback are no longer inputs. Instead, each reachable honest row state must produce a
+numerator divisible by `X^2048 - 1` and of degree below `9 × 2048`; public polynomial degree
+bounds and the earlier challenge/generator conditions remain explicit. Those row-correctness
+and capacity facts have not yet been derived for the complete honest Orchard construction.
+
+This is still a conditional algebraic simulation theorem. Completing the exact prover
+theorem requires the actual row algorithms and their correctness, the full verifier's
+grouping and commitment routing, failures and retries across the whole prover, the challenge
+model and Fiat–Shamir argument, and correspondence with the Rust implementation. The
+available Rust quotient implementations have not been proved equivalent to these polynomial
+computations, and byte encoding is outside the typed proof result.
 
 ## Checks
 
