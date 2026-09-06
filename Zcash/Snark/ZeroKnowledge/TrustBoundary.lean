@@ -13,6 +13,8 @@ import Zcash.Snark.ZeroKnowledge.PlonkMultiopen
 import Zcash.Snark.ZeroKnowledge.PlonkSampling
 import Zcash.Snark.ZeroKnowledge.PlonkSimulator
 import Zcash.Snark.ZeroKnowledge.PlonkQuotientSimulation
+import Zcash.Snark.ZeroKnowledge.PlonkCapacitySimulation
+import Zcash.Snark.ZeroKnowledge.PlonkDegreeCertificate
 import Zcash.Snark.ZeroKnowledge.Observation
 import Zcash.Meta.AxiomCheck
 
@@ -37,8 +39,10 @@ quotient-evaluation function that agrees with the actual quotient on every reach
 The full batched prover tape is connected to this joint law, and the joint simulator has a
 field-coin implementation. The verifier-typed construction computes the constraint numerator
 and quotient pieces, and derives quotient agreement using the existing verifier's constraint
-function. Divisibility and capacity of the numerator on reachable row states remain explicit
-premises. The honest row algorithms and the full verifier's grouping still require integration.
+function. A public circuit-degree profile now supplies the numerator capacity, with
+kernel-checked certificates for the one- and two-Action captured keys. Divisibility on
+reachable row states remains an explicit premise. The honest row algorithms and the full
+verifier's grouping still require integration.
 These results do not establish a whole-prover simulator, Fiat–Shamir zero-knowledge, or a
 Rust-to-Lean refinement.
 -/
@@ -495,6 +499,18 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonkQuotient_identity
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkQuotientPieces_eval
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkHonestQuotient_agrees
 assert_axioms Zcash.Snark.ZeroKnowledge.sampledPlonkVerifier_simulation_error_bound
+
+-- Quotient capacity follows from public syntax rather than a private-state degree premise.
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupExpressions_natDegree_le
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkRotatedColumn_natDegree_le
+assert_axioms Zcash.Snark.ZeroKnowledge.canonicalLagrangePolynomials_natDegree_lt
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkSelectors_natDegree_le
+assert_axioms Zcash.Snark.ZeroKnowledge.constraintModel_natDegree_le
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkConstraintNumerator_natDegree_le
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkConstraintNumerator_natDegree_lt
+assert_axioms Zcash.Snark.ZeroKnowledge.singleAction_plonkDegreeProfile
+assert_axioms Zcash.Snark.ZeroKnowledge.multiAction_plonkDegreeProfile
+assert_axioms Zcash.Snark.ZeroKnowledge.sampledPlonkVerifier_capacity_simulation_error_bound
 
 -- At an unmasked row the disclosed evaluation is the original cell, for every mask law.
 assert_axioms Zcash.Snark.ZeroKnowledge.maskedRowPolynomial_eval_before

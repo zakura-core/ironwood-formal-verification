@@ -334,8 +334,21 @@ simulate the **complete algebraic `ProofString`**, with the same two-sided
 **`(148m + 46) × bias`** bound. An arbitrary quotient constructor and arbitrary inferred-value
 callback are no longer inputs. Instead, each reachable honest row state must produce a
 numerator divisible by `X^2048 - 1` and of degree below `9 × 2048`; public polynomial degree
-bounds and the earlier challenge/generator conditions remain explicit. Those row-correctness
-and capacity facts have not yet been derived for the complete honest Orchard construction.
+bounds and the earlier challenge/generator conditions remain explicit. The next result
+derives the capacity requirement from public circuit syntax.
+
+[LookupDegree.lean](LookupDegree.lean) keeps the lookup input and table degree bounds
+separate. [PlonkDegree.lean](PlonkDegree.lean) then proves the full numerator has degree at
+most `9 × 2047`, for every row state, from a public profile: gate degree at most nine,
+permutation chunks of at most seven columns, lookup input degree at most four, and table
+degree at most one. [PlonkDegreeCertificate.lean](PlonkDegreeCertificate.lean) kernel-checks
+that profile for both captured keys without using their earlier native certificates.
+
+`sampledPlonkVerifier_capacity_simulation_error_bound` in
+[PlonkCapacitySimulation.lean](PlonkCapacitySimulation.lean) supplies that derived capacity
+to the complete algebraic proof simulation. Divisibility of the constraint numerator on
+each reachable row state remains the only private-state premise. The public polynomial,
+generator, and supplied-challenge conditions still apply.
 
 This is still a conditional algebraic simulation theorem. Completing the exact prover
 theorem requires the actual row algorithms and their correctness, the full verifier's
