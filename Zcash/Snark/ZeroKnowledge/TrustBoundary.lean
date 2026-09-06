@@ -18,6 +18,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkDegreeCertificate
 import Zcash.Snark.ZeroKnowledge.PlonkRowSimulation
 import Zcash.Snark.ZeroKnowledge.PlonkConsistency
 import Zcash.Snark.ZeroKnowledge.PlonkFresh
+import Zcash.Snark.ZeroKnowledge.PlonkFreshBounds
 import Zcash.Snark.ZeroKnowledge.Observation
 import Zcash.Meta.AxiomCheck
 
@@ -48,9 +49,10 @@ satisfaction supplies exact quotient divisibility. The newer consistency bound r
 the ideal probability of row states that fail division as an explicit error term, so it
 does not assume correctness on every random state. The fresh-challenge comparison retains
 the entire verifier tape, adding its exceptional-challenge probability and the average
-invalid-row probability to the prover's sampling bias. Bounding those probabilities for
-the chosen challenge law and honest row algorithms, and integrating the full verifier's
-grouping, remain open.
+invalid-row probability to the prover's sampling bias. With independent wide-reduced
+verifier coins, the challenge term is bounded by `4113/p + 22 × bias`. Bounding the
+remaining invalid-row probability for the honest algorithms and integrating the full
+verifier's grouping remain open.
 These results do not establish a whole-prover simulator, Fiat–Shamir zero-knowledge, or a
 Rust-to-Lean refinement.
 -/
@@ -543,6 +545,20 @@ assert_axioms Zcash.Snark.ZeroKnowledge.variableMixedLaws_error_bound
 assert_computable Zcash.Snark.ZeroKnowledge.plonkChallengesFromTape
 assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkChallenges_sampling_error_bound
 assert_axioms Zcash.Snark.ZeroKnowledge.freshPlonkVerifier_simulation_error_bound
+
+-- Concrete exceptional-challenge count for the full interactive tape.
+assert_computable Zcash.Snark.ZeroKnowledge.plonkRotationExponent
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkRotationExponent_injective
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkObservationPoints_prefix
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkObservationPoints_snoc
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkObservationPoints_injective
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkObservationPoints_away
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkChallengesGood_of_simple
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkChallenges_bad_cover
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformPlonkChallengeBadEvent_le
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformPlonkChallenges_bad_le
+assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkChallenges_bad_le
+assert_axioms Zcash.Snark.ZeroKnowledge.wideFreshPlonkVerifier_simulation_error_bound
 
 -- At an unmasked row the disclosed evaluation is the original cell, for every mask law.
 assert_axioms Zcash.Snark.ZeroKnowledge.maskedRowPolynomial_eval_before

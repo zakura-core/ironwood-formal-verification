@@ -385,9 +385,22 @@ the complete challenge tape alongside the existing `ProofString`. Its bound is:
 This result no longer assumes a good fixed challenge tape or correctness on every private
 row state. It samples the original challenge law without rejecting exceptional values,
 and averages row inconsistency over that law. The simulator uses only the public input
-and the same challenge law. Bounding the two exceptional probabilities numerically and
-relating this offline tape experiment to the actual interactive schedule remain open.
-Independent verifier coins do not establish Fiat–Shamir zero-knowledge.
+and the same challenge law. Independent verifier coins do not establish Fiat–Shamir
+zero-knowledge.
+
+[PlonkChallengePoints.lean](PlonkChallengePoints.lean) and
+[PlonkChallengeBounds.lean](PlonkChallengeBounds.lean) bound the public exceptional event
+by **`(k + 4102)/p`** for uniform coins, plus **`(k + 11) × bias`** for wide reduction.
+This counts `x = 0`, `xi = 0`, the `k` zero folding challenges, two size-2048 domain-hit
+events, and four collisions between the later point and a rotated first point.
+At `k = 11`, `wideFreshPlonkVerifier_simulation_error_bound` in
+[PlonkFreshBounds.lean](PlonkFreshBounds.lean) gives:
+
+**`averageInvalidRowMass + 4113/p + (148m + 68) × bias`**.
+
+The row term averages the ideal private row law over the wide-reduced verifier law.
+Bounding it for the actual lookup and product constructors and relating the offline
+tape experiment to the actual interactive schedule remain open.
 
 This is still a conditional algebraic simulation theorem. Completing the exact prover
 theorem requires the actual row algorithms and their correctness, the full verifier's
