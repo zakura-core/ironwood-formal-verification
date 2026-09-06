@@ -53,7 +53,8 @@ rev = "v4.30.0"
 # the incidental coverage described above.
 [[lean_lib]]
 name = "Zcash"
-globs = ["Zcash", "Zcash.Snark.Soundness.+", "Zcash.Snark.Contract.+"]
+globs = ["Zcash", "Zcash.Snark.Soundness.+", "Zcash.Snark.Contract.+",
+  "Zcash.Snark.ZeroKnowledge.+"]
 
 # Test-only adversarial declarations for `Zcash.Meta.AxiomCheck`. This is a separate library so
 # forged axioms used to exercise the rejection paths never enter the production `Zcash` import
