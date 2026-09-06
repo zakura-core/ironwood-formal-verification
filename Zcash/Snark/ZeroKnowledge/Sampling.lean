@@ -67,6 +67,23 @@ theorem sampleFieldsWith_queryBound {A : Type*} (count : ℕ)
   | zero => exact .pure _ 0
   | succ count ih => exact .query fun value => ih _
 
+/-- A deterministic observation of the result commutes with running the field sampler. -/
+theorem sampleFieldsWith_map {A B : Type*} (count : ℕ)
+    (finish : (Fin count → Fp) → A) (observe : A → B) (law : PMF Fp) :
+    (sampleFieldsWith count (observe ∘ finish)).runFreshPMF law =
+      ((sampleFieldsWith count finish).runFreshPMF law).map observe := by
+  induction count with
+  | zero => simp [sampleFieldsWith, OracleComp.runFreshPMF, PMF.map, Function.comp_def]
+  | succ count ih =>
+    change law.bind (fun value =>
+        (sampleFieldsWith count (fun rest => observe (finish (Fin.cons value rest)))).runFreshPMF law) =
+      (law.bind (fun value =>
+        (sampleFieldsWith count (fun rest => finish (Fin.cons value rest))).runFreshPMF law)).map observe
+    rw [PMF.map_bind]
+    congr 1
+    funext value
+    exact ih (fun rest => finish (Fin.cons value rest))
+
 /-- Independent ideal draws are the uniform law on the complete field tape. -/
 theorem sampleFieldsWith_uniform {A : Type*} (count : ℕ)
     (finish : (Fin count → Fp) → A) :

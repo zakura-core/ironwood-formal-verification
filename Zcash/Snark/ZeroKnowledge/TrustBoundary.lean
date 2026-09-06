@@ -8,6 +8,7 @@ import Zcash.Snark.ZeroKnowledge.IpaSimulator
 import Zcash.Snark.ZeroKnowledge.IpaVerifier
 import Zcash.Snark.ZeroKnowledge.LinearMaskTranscript
 import Zcash.Snark.ZeroKnowledge.RowMaskTranscript
+import Zcash.Snark.ZeroKnowledge.PlonkTranscript
 import Zcash.Snark.ZeroKnowledge.Observation
 import Zcash.Meta.AxiomCheck
 
@@ -24,8 +25,10 @@ The pinned results establish the field-sampling law, both masking constructions,
 simulation of the IPA stage with supplied or fresh interactive challenges, and joint hiding
 of masked columns. The interactive IPA comparison retains errors and emitted prefixes under
 supplied codecs; an identity-rejecting codec also gives a checked successful-attempt law and
-independent-retry limit. These results do not establish a whole-prover simulator, Fiat–Shamir
-zero-knowledge, or a Rust-to-Lean refinement.
+independent-retry limit. The pre-IPA comparison retains the joint column dependencies, exact
+opening groups and emitted scalar order, with supplied challenges and total private constructors.
+These results do not establish a whole-prover simulator, Fiat–Shamir zero-knowledge, or a
+Rust-to-Lean refinement.
 -/
 
 assert_computable Zcash.Snark.ZeroKnowledge.fieldSampleCount
@@ -46,6 +49,7 @@ assert_axioms Zcash.Snark.ZeroKnowledge.wordSampleCount_one
 assert_axioms Zcash.Snark.ZeroKnowledge.wordSampleCount_two
 assert_axioms Zcash.Snark.ZeroKnowledge.weightedBias_symm
 assert_axioms Zcash.Snark.ZeroKnowledge.sampleFieldsWith_queryBound
+assert_axioms Zcash.Snark.ZeroKnowledge.sampleFieldsWith_map
 assert_axioms Zcash.Snark.ZeroKnowledge.sampleFieldsWith_uniform
 assert_axioms Zcash.Snark.ZeroKnowledge.sampleFieldsWith_error_bound
 assert_axioms Zcash.Snark.ZeroKnowledge.sampledAttempt_error_bound
@@ -242,6 +246,90 @@ assert_axioms Zcash.Snark.ZeroKnowledge.columnTapeEquiv_blind
 assert_axioms Zcash.Snark.ZeroKnowledge.uniformTapeMaskedColumn
 assert_axioms Zcash.Snark.ZeroKnowledge.maskedColumn_joint_uniform
 assert_axioms Zcash.Snark.ZeroKnowledge.sampledMaskedColumn_error_bound
+
+-- Successive private columns and the source's batched field tape.
+assert_computable Zcash.Snark.ZeroKnowledge.columnRowSampleCount
+assert_computable Zcash.Snark.ZeroKnowledge.columnRowsFromCoins +choice
+assert_computable Zcash.Snark.ZeroKnowledge.columnRowsFromTape +choice
+assert_computable Zcash.Snark.ZeroKnowledge.observeColumnRows +choice
+assert_computable Zcash.Snark.ZeroKnowledge.firstTapeEquiv
+assert_computable Zcash.Snark.ZeroKnowledge.columnFullSampleCount
+assert_computable Zcash.Snark.ZeroKnowledge.columnCoinEquiv +choice
+assert_computable Zcash.Snark.ZeroKnowledge.columnMaterialFromTape +choice
+assert_computable Zcash.Snark.ZeroKnowledge.batchToColumnTape +choice
+assert_computable Zcash.Snark.ZeroKnowledge.batchedColumnSampleCount
+assert_computable Zcash.Snark.ZeroKnowledge.batchedToColumnTape +choice
+assert_computable Zcash.Snark.ZeroKnowledge.batchedPreIpaTapeEquiv +choice
+assert_computable Zcash.Snark.ZeroKnowledge.privateColumnOrder
+assert_computable Zcash.Snark.ZeroKnowledge.PrivateColumnId.firstMasked
+assert_computable Zcash.Snark.ZeroKnowledge.plonkColumnSteps
+assert_computable Zcash.Snark.ZeroKnowledge.privateColumnBatches
+assert_computable Zcash.Snark.ZeroKnowledge.plonkColumnBatches
+assert_axioms Zcash.Snark.ZeroKnowledge.columnRowSampleCount_eq_sum
+assert_axioms Zcash.Snark.ZeroKnowledge.columnRowsFromTape_length
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformTapeColumnRows
+assert_axioms Zcash.Snark.ZeroKnowledge.idealColumnRows_joint_uniform
+assert_axioms Zcash.Snark.ZeroKnowledge.sampledColumnRows_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.columnFullSampleCount_eq
+assert_axioms Zcash.Snark.ZeroKnowledge.columnCoinEquiv_cons_apply
+assert_axioms Zcash.Snark.ZeroKnowledge.columnMaterialFromTape_eq
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformTapeColumnMaterial
+assert_axioms Zcash.Snark.ZeroKnowledge.columnFullSampleCount_append
+assert_axioms Zcash.Snark.ZeroKnowledge.batchToColumnTape_fields
+assert_axioms Zcash.Snark.ZeroKnowledge.batchedColumnSampleCount_eq
+assert_axioms Zcash.Snark.ZeroKnowledge.privateColumnOrder_length
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkColumnSteps_length
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkColumnSteps_row_samples
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkColumns_joint_uniform
+assert_axioms Zcash.Snark.ZeroKnowledge.sampledPlonkColumns_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.privateColumnBatches_flatten
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkColumnBatches_flatten
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkColumnBatches_sample_count
+assert_axioms Zcash.Snark.ZeroKnowledge.plonk_and_ipa_sample_count
+
+-- Joint pre-IPA hiding, retaining all points and correlations among scalar disclosures.
+assert_computable Zcash.Snark.ZeroKnowledge.preIpaSampleCount
+assert_computable Zcash.Snark.ZeroKnowledge.preIpaCoinEquiv +choice
+assert_computable Zcash.Snark.ZeroKnowledge.honestPreIpaMaskView +choice
+assert_computable Zcash.Snark.ZeroKnowledge.preIpaMaskViewFromTape +choice
+assert_computable Zcash.Snark.ZeroKnowledge.batchedPreIpaViewFromTape +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.preIpaMaskViewFromTape_factor
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformTapePreIpaMaskView
+assert_axioms Zcash.Snark.ZeroKnowledge.preIpaScalarView_uniform
+assert_axioms Zcash.Snark.ZeroKnowledge.idealPreIpaMask_simulation_capstone
+assert_axioms Zcash.Snark.ZeroKnowledge.sampledPreIpaMask_simulation_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformTapeBatchedPreIpa
+assert_axioms Zcash.Snark.ZeroKnowledge.sampledBatchedPreIpa_simulation_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.sampledPlonkPreIpa_simulation_error_bound
+
+-- The pinned opening-polynomial groups and actual step-5/step-6 scalar computations.
+assert_computable Zcash.Snark.ZeroKnowledge.plonkObservationPoints +choice
+assert_computable Zcash.Snark.ZeroKnowledge.privateColumnPolynomial +choice
+assert_computable Zcash.Snark.ZeroKnowledge.privateColumnView +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkScalarFold +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPolynomialFold +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkFixedQueryOrder
+assert_computable Zcash.Snark.ZeroKnowledge.plonkAdviceQueryOrder
+assert_computable Zcash.Snark.ZeroKnowledge.plonkCollapsedQuotient +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkFirstGroupPrefix +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPrivateGroupMembers
+assert_computable Zcash.Snark.ZeroKnowledge.plonkOpeningGroups +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkOpeningPolynomials +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkFirstGroupOffset +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPrivateGroupValues +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkEvaluationScalars +choice
+assert_computable Zcash.Snark.ZeroKnowledge.PlonkPreIpaTranscript.messages
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPreIpaProjection +choice
+assert_computable Zcash.Snark.ZeroKnowledge.honestPlonkPreIpaTranscript +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPreIpaTranscriptFromTape +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.privateColumnView_observe
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPolynomialFold_eval
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkFirstGroup_eval
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkFirstGroup_linearMaskView
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPrivateGroupValues_observe
+assert_axioms Zcash.Snark.ZeroKnowledge.honestPlonkPreIpaTranscript_projection
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPreIpaTranscriptFromTape_factor
+assert_axioms Zcash.Snark.ZeroKnowledge.sampledPlonkPreIpaTranscript_simulation
 
 -- At an unmasked row the disclosed evaluation is the original cell, for every mask law.
 assert_axioms Zcash.Snark.ZeroKnowledge.maskedRowPolynomial_eval_before

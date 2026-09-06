@@ -8,6 +8,13 @@ specified constructions, not a verified correspondence with that Rust executable
 There is not yet a zero-knowledge theorem for the complete prover. The existing verifier and
 soundness formalization does not supply an honest-prover distribution or simulator.
 
+The implementation-facing interactive target is **statistical HVZK**. The
+[Halo2 book's perfect SHVZK model](https://zcash.github.io/halo2/design/protocol.html)
+restricts the verifier's challenge space, including excluding zero and evaluation-domain
+points. The pinned implementation does not enforce all those exclusions. Exact conditional
+simulation of a component is therefore not a perfect SHVZK theorem for this prover. Neither
+the nonuniform sampler nor an upper bound on simulation error alone disproves perfect ZK.
+
 ## Field sampling
 
 [Randomness.lean](Randomness.lean) models an independent uniform 512-bit integer reduced
@@ -52,8 +59,8 @@ to the existing computable polynomial representation.
 field law: the sparse scalar costs at most `k × bias`, and the linear-mask pair at most
 `2 × bias`, in either direction. These are laws with **supplied public challenges**;
 they do not describe a Fiat–Shamir execution conditioned on its observed challenges.
-These component bounds alone do not establish a joint transcript law. The IPA law is covered
-below; the earlier PLONK view remains a separate obligation.
+These component bounds alone do not establish a joint transcript law. Joint IPA and pre-IPA
+laws are covered below; their composition into a full execution remains a separate obligation.
 
 ## Linear mask with its commitments
 
@@ -69,10 +76,11 @@ The implemented field law gives the two-sided bound **4 × bias**, accounting fo
 coefficients and two commitment blinds. These are four selected draws; other draws intervene
 between them in the complete prover. A computable simulator uses four field coins and `W`.
 
-The result retains correlations within this projection. Connecting its additive offset and
-query ordering to the complete multi-opening construction, and simulating the other PLONK
-messages, remain open. The theorem has supplied distinct evaluation points and does not
-condition on a Fiat–Shamir execution's observed challenges.
+The result retains correlations within this projection. The pre-IPA development below
+connects the additive offset to the pinned opening groups and includes the other scalar
+messages. Validity of the resulting IPA input remains open. These theorems have supplied
+distinct evaluation points; they do not condition on a Fiat–Shamir execution's observed
+challenges.
 
 ## Joint IPA simulation
 
@@ -155,9 +163,11 @@ The IPA result uses the same fixed public opening on each attempt. A full prover
 restarts PLONK too, carries state between retries, or exposes failed attempts requires
 its corresponding full execution model.
 
-These results do not establish the preceding PLONK/multi-opening simulation,
-Fiat–Shamir zero-knowledge, a verified concrete PRNG, or correspondence with the Rust
-prover. Identifying the final verifier equation does not discharge those gaps.
+These IPA results start from a valid public opening. Joining them to the preceding
+PLONK/multi-opening stage requires proving that opening's validity and handling failures
+across the full computation. Fiat–Shamir zero-knowledge, a verified concrete PRNG, and
+correspondence with the Rust prover are also open. Identifying the final verifier equation
+does not discharge those gaps.
 
 ## Replacement-row masks
 
@@ -187,8 +197,53 @@ wide-reduction challenge law. This is a column-view result: an end-to-end imposs
 claim still requires two satisfying witnesses for the same public statement and a proof
 that the full execution exposes the observation after accounting for aborts and retries.
 
-These column results do not establish the adaptive construction of all lookup/permutation
-polynomials, the full multi-opening simulation, or the actual challenge-generation law.
+## Joint columns and pre-IPA messages
+
+[ColumnSequence.lean](ColumnSequence.lean) extends the column result to a sequence of
+retained-row constructors that may read **all earlier private masked rows**. The induction
+removes the future view for each private history, so it does not assume independence merely
+from earlier disclosed evaluations. [PlonkColumns.lean](PlonkColumns.lean) installs the
+ten advice, six lookup-permutation, and six product columns per Action, including their
+six-row and five-row suffix sizes.
+
+[PreIpaMask.lean](PreIpaMask.lean) jointly simulates all pre-IPA commitments, five common
+evaluations of every private column, `r(x)`, and the masked `Q₀(q)`. The unblinded commitment
+cores may depend on all private rows and both coefficients of `r`. Independent commitment
+blinds hide them jointly with the scalars. Under ideal field samples, the view has an exact
+public simulator law when the observation points are distinct, off the row domain, and
+`q ≠ x`.
+
+[ColumnTape.lean](ColumnTape.lean) first proves a canonical interleaved representation.
+[BatchedTape.lean](BatchedTape.lean) and [PlonkTape.lean](PlonkTape.lean) then convert the
+actual batch layout observed in the available Bento checkout
+`e32e61eb35b6e5b5e0600cb0903adcfe0cd617d8`, at
+`crates/sensei/src/native/randomness.rs`: ten advice tails before their ten blinds per
+Action; both lookup tails before their two blinds; singleton product batches. Each
+equivalence preserves the tail and blind subsequences. This establishes the model's
+`148m` private-column draws and `148m + 12` pre-IPA draws; adding the IPA's 34 gives
+`148m + 46`. The available checkout is distinct from the unlocated `56a7de7` pin, and these
+equivalences are not a proof of Rust execution correspondence.
+
+[PlonkOpening.lean](PlonkOpening.lean) constructs the pinned five opening-polynomial groups
+and their Horner folds. It proves that `Q₀(q)` is precisely the first group's weighted
+prefix plus `r(q)` at coefficient one, even for zero `x₁`. Each remaining group value is a
+fold of the column evaluations at `q`. The collapsed quotient `H_x` may depend on every
+private row; its value at `q` remains hidden inside `Q₀(q)`.
+
+[PlonkTranscript.lean](PlonkTranscript.lean) computes the emitted step-5 scalar sequence and
+the five step-6 group evaluations from those polynomials, and proves that together with the
+commitments they are a public projection of the joint mask view. The simulator receives
+only public polynomials and challenges. For the batched wide-reduction sampler, the entire
+algebraic pre-IPA message view has two-sided event error at most
+**`(148m + 12) × bias`**, with supplied distinct points
+`x, xω, xω⁻¹, xω⁻⁶, q` outside the 2048-row domain.
+
+The retained-row algorithms, quotient-piece construction, and unblinded commitment cores
+are still supplied total functions. The hiding result quantifies over those functions;
+instantiating them with the complete prover, proving the final multi-opening valid,
+composing with the IPA, and accounting for early failures and the actual challenge law
+remain open. This theorem neither conditions a Fiat–Shamir execution on its challenges
+nor claims that the whole prover is already statistically HVZK.
 
 ## Checks
 
