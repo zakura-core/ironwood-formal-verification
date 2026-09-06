@@ -78,9 +78,10 @@ between them in the complete prover. A computable simulator uses four field coin
 
 The result retains correlations within this projection. The pre-IPA development below
 connects the additive offset to the pinned opening groups and includes the other scalar
-messages. Validity of the resulting IPA input remains open. These theorems have supplied
-distinct evaluation points; they do not condition on a Fiat–Shamir execution's observed
-challenges.
+messages. The multi-opening construction below supplies valid IPA input from actual group
+evaluations; its connection to the full emitted transcript remains open. These theorems
+have supplied distinct evaluation points; they do not condition on a Fiat–Shamir
+execution's observed challenges.
 
 ## Joint IPA simulation
 
@@ -240,10 +241,40 @@ algebraic pre-IPA message view has two-sided event error at most
 
 The retained-row algorithms, quotient-piece construction, and unblinded commitment cores
 are still supplied total functions. The hiding result quantifies over those functions;
-instantiating them with the complete prover, proving the final multi-opening valid,
-composing with the IPA, and accounting for early failures and the actual challenge law
-remain open. This theorem neither conditions a Fiat–Shamir execution on its challenges
-nor claims that the whole prover is already statistically HVZK.
+instantiating them with the complete prover, connecting the emitted transcript to the
+computed multi-opening below, composing with the IPA, and accounting for early failures
+and the actual challenge law remain open. This theorem neither conditions a Fiat–Shamir
+execution on its challenges nor claims that the whole prover is already statistically HVZK.
+
+## Computed multi-opening and IPA input
+
+[MultiopenPolynomial.lean](MultiopenPolynomial.lean) computes each group's interpolant,
+vanishing polynomial, and quotient `(Q_i − R_i) / V_i`. For actual evaluations at distinct
+nodes, it proves exact divisibility and that the folded `Q'` evaluates to the scalar
+reconstructed by the existing `multiopenEval` verifier routine when `q` avoids those nodes.
+
+[PolynomialCommitment.lean](PolynomialCommitment.lean) connects the coefficient-vector
+commitment to both polynomial and blind folds. [MultiopenIpa.lean](MultiopenIpa.lean) uses
+those identities to derive both valid-opening premises of the IPA theorem: the existing
+`multiopenCombine` commitment opens to the computed `P` with the actually folded `ρ_P`,
+and its reconstructed value equals `P(q)`. Degree bounds prove that converting `P` to an
+IPA vector does not truncate any coefficients.
+
+[PlonkMultiopen.lean](PlonkMultiopen.lean) instantiates this with the exact five pinned
+groups and their point sets. It includes blind one for public instance, fixed, and `σ`
+polynomials, the weighted sum of the eight quotient-piece blinds in `H_x`, and each
+private column's blind. Private-row polynomials and the linear mask satisfy the degree
+bound by construction; bounds on the supplied public polynomials and quotient pieces
+remain explicit premises.
+
+The resulting IPA transcript has an exact ideal simulation and a two-sided
+**`34 × bias`** bound with wide-reduced IPA coins, for nonzero `ξ` and round challenges.
+These results hold for every preceding private state and do not assume that the incoming
+blind is independent of earlier messages. They still start from the resulting public IPA
+opening. The full verifier must be shown to infer the actual `H_x(x)` from its constraints
+and route precisely these groups from the proof string before the joint pre-IPA and IPA
+simulation laws can be composed. The available Rust implementation's repeated synthetic
+division has not yet been related formally to this quotient computation.
 
 ## Checks
 

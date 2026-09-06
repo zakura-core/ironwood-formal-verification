@@ -9,6 +9,7 @@ import Zcash.Snark.ZeroKnowledge.IpaVerifier
 import Zcash.Snark.ZeroKnowledge.LinearMaskTranscript
 import Zcash.Snark.ZeroKnowledge.RowMaskTranscript
 import Zcash.Snark.ZeroKnowledge.PlonkTranscript
+import Zcash.Snark.ZeroKnowledge.PlonkMultiopen
 import Zcash.Snark.ZeroKnowledge.Observation
 import Zcash.Meta.AxiomCheck
 
@@ -27,6 +28,9 @@ of masked columns. The interactive IPA comparison retains errors and emitted pre
 supplied codecs; an identity-rejecting codec also gives a checked successful-attempt law and
 independent-retry limit. The pre-IPA comparison retains the joint column dependencies, exact
 opening groups and emitted scalar order, with supplied challenges and total private constructors.
+The computed multi-opening polynomial and folded blind supply a valid IPA input when the
+group claims are actual polynomial evaluations. The full verifier's inferred quotient value
+and routing from the proof string still need to be connected to that construction.
 These results do not establish a whole-prover simulator, Fiat–Shamir zero-knowledge, or a
 Rust-to-Lean refinement.
 -/
@@ -330,6 +334,62 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonkPrivateGroupValues_observe
 assert_axioms Zcash.Snark.ZeroKnowledge.honestPlonkPreIpaTranscript_projection
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkPreIpaTranscriptFromTape_factor
 assert_axioms Zcash.Snark.ZeroKnowledge.sampledPlonkPreIpaTranscript_simulation
+
+-- Computed multi-opening quotients, polynomial commitments, and the actual incoming IPA blind.
+assert_computable Zcash.Snark.ZeroKnowledge.polynomialCoefficients +choice
+assert_computable Zcash.Snark.ZeroKnowledge.polynomialCommitment +choice
+assert_computable Zcash.Snark.ZeroKnowledge.commitmentHornerFold +choice
+assert_computable Zcash.Snark.ZeroKnowledge.PolynomialOpeningGroup.values +choice
+assert_computable Zcash.Snark.ZeroKnowledge.PolynomialOpeningGroup.interpolant +choice
+assert_computable Zcash.Snark.ZeroKnowledge.PolynomialOpeningGroup.vanishing +choice
+assert_computable Zcash.Snark.ZeroKnowledge.PolynomialOpeningGroup.quotient +choice
+assert_computable Zcash.Snark.ZeroKnowledge.PolynomialOpeningGroup.forVerifier +choice
+assert_computable Zcash.Snark.ZeroKnowledge.multiopenQuotientPolynomial +choice
+assert_computable Zcash.Snark.ZeroKnowledge.multiopenFinalPolynomial +choice
+assert_computable Zcash.Snark.ZeroKnowledge.multiopenFinalBlind +choice
+assert_computable Zcash.Snark.ZeroKnowledge.multiopenGroupMsm +choice
+assert_computable Zcash.Snark.ZeroKnowledge.computedMultiopenOpening +choice
+assert_computable Zcash.Snark.ZeroKnowledge.computedMultiopenIpaPublic +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkOpeningPointSets +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkCollapsedQuotientBlind +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkOpeningPairs +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkBlindedOpeningGroup +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkBlindedOpeningGroups +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.coeffsToPoly_polynomialCoefficients
+assert_axioms Zcash.Snark.ZeroKnowledge.coefficientEvaluation_polynomialCoefficients
+assert_axioms Zcash.Snark.ZeroKnowledge.polynomialCoefficients_horner
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPolynomialFold_natDegree_lt
+assert_axioms Zcash.Snark.ZeroKnowledge.polynomialCommitment_zero
+assert_axioms Zcash.Snark.ZeroKnowledge.polynomialCommitment_horner
+assert_axioms Zcash.Snark.ZeroKnowledge.polynomialCommitment_sum
+assert_axioms Zcash.Snark.ZeroKnowledge.polynomialCommitment_fold
+assert_axioms Zcash.Snark.ZeroKnowledge.PolynomialOpeningGroup.residual_eval
+assert_axioms Zcash.Snark.ZeroKnowledge.PolynomialOpeningGroup.vanishing_monic
+assert_axioms Zcash.Snark.ZeroKnowledge.PolynomialOpeningGroup.vanishing_dvd
+assert_axioms Zcash.Snark.ZeroKnowledge.PolynomialOpeningGroup.quotient_identity
+assert_axioms Zcash.Snark.ZeroKnowledge.opening_denominator_fold
+assert_axioms Zcash.Snark.ZeroKnowledge.PolynomialOpeningGroup.quotient_eval
+assert_axioms Zcash.Snark.ZeroKnowledge.PolynomialOpeningGroup.quotient_natDegree_lt
+assert_axioms Zcash.Snark.ZeroKnowledge.multiopenQuotientPolynomial_eval
+assert_axioms Zcash.Snark.ZeroKnowledge.multiopenQuotientPolynomial_natDegree_lt
+assert_axioms Zcash.Snark.ZeroKnowledge.computedMultiopenOpening_commitment
+assert_axioms Zcash.Snark.ZeroKnowledge.computedMultiopenOpening_value
+assert_axioms Zcash.Snark.ZeroKnowledge.multiopenFinalPolynomial_natDegree_lt
+assert_axioms Zcash.Snark.ZeroKnowledge.computedMultiopenIpaPublic_validOpening
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkOpeningPointSets_nodup
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkOpeningPointSets_away
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkOpeningPointSets_length
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkOpeningPairs_polynomials
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCollapsedQuotient_commitment
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkBlindedOpeningGroup_commitment
+assert_axioms Zcash.Snark.ZeroKnowledge.privateColumnPolynomial_natDegree_lt
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCollapsedQuotient_natDegree_lt
+assert_axioms Zcash.Snark.ZeroKnowledge.linearMaskPolynomial_natDegree_lt
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkOpeningGroups_natDegree_lt
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkOpeningPolynomials_natDegree_lt
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMultiopenIpa_validOpening
+assert_axioms Zcash.Snark.ZeroKnowledge.idealPlonkMultiopenIpa_simulation
+assert_axioms Zcash.Snark.ZeroKnowledge.sampledPlonkMultiopenIpa_simulation
 
 -- At an unmasked row the disclosed evaluation is the original cell, for every mask law.
 assert_axioms Zcash.Snark.ZeroKnowledge.maskedRowPolynomial_eval_before
