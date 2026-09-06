@@ -1,6 +1,8 @@
 import Zcash.Snark.ZeroKnowledge.Sampling
 import Zcash.Snark.ZeroKnowledge.MaskPolynomials
 import Zcash.Snark.ZeroKnowledge.MaskSampling
+import Zcash.Snark.ZeroKnowledge.IpaSampling
+import Zcash.Snark.ZeroKnowledge.IpaSimulator
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -12,9 +14,9 @@ the finite sampling program and its declared tape sizes are checked as computabl
 `+choice` permits classical choice only in erased proof fields of a plain computable definition;
 the checker still rejects noncomputable algorithmic content. No `+native` exemption is used.
 
-The pinned results establish the field-sampling law, the two masking constructions and their
-scalar/evaluation distribution bounds. They do not establish a whole-prover simulator or a
-Rust-to-Lean refinement.
+The pinned results establish the field-sampling law, both masking constructions, and joint
+simulation of the algebraic IPA stage under supplied challenges. They do not establish a
+whole-prover simulator, Fiat–Shamir zero-knowledge, or a Rust-to-Lean refinement.
 -/
 
 assert_computable Zcash.Snark.ZeroKnowledge.fieldSampleCount
@@ -70,3 +72,39 @@ assert_axioms Zcash.Snark.ZeroKnowledge.linearMaskView_uniform
 assert_axioms Zcash.Snark.ZeroKnowledge.horner_last_unit_weight
 assert_axioms Zcash.Snark.ZeroKnowledge.horner_last_at_zero
 assert_axioms Zcash.Snark.ZeroKnowledge.actualLinearMaskView_error_bound
+
+-- The joint IPA view includes the actual cross terms and the aggregate blind, not just `c`.
+assert_computable Zcash.Snark.ZeroKnowledge.publicFold
+assert_computable Zcash.Snark.ZeroKnowledge.ipaCrossTerms +choice
+assert_computable Zcash.Snark.ZeroKnowledge.ipaCoreMessages +choice
+assert_computable Zcash.Snark.ZeroKnowledge.ipaMessageSum +choice
+assert_computable Zcash.Snark.ZeroKnowledge.blindIpaMessages
+assert_computable Zcash.Snark.ZeroKnowledge.ipaFinalBlind +choice
+assert_computable Zcash.Snark.ZeroKnowledge.ipaMaskedVector +choice
+assert_computable Zcash.Snark.ZeroKnowledge.honestIpaTranscript +choice
+assert_computable Zcash.Snark.ZeroKnowledge.completeIpaTranscript +choice
+assert_computable Zcash.Snark.ZeroKnowledge.chooseIpaScalar +choice
+assert_computable Zcash.Snark.ZeroKnowledge.ipaSimulatorFromCoins +choice
+assert_computable Zcash.Snark.ZeroKnowledge.ipaSampleCount
+assert_computable Zcash.Snark.ZeroKnowledge.ipaTapeEquiv +choice
+assert_computable Zcash.Snark.ZeroKnowledge.ipaTranscriptFromTape +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaCrossTerms_equation
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaCoreMessages_equation
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaMessageSum_blind
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaMaskedVector_eval_zero
+assert_axioms Zcash.Snark.ZeroKnowledge.honestIpaTranscript_verifies
+assert_axioms Zcash.Snark.ZeroKnowledge.completeIpaTranscript_verifies
+assert_axioms Zcash.Snark.ZeroKnowledge.IpaTranscript.eq_complete_of_verifies
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaBlindsEquiv_apply
+assert_axioms Zcash.Snark.ZeroKnowledge.honestIpaTranscript_fixed_mask
+assert_axioms Zcash.Snark.ZeroKnowledge.idealIpa_simulation_capstone
+assert_axioms Zcash.Snark.ZeroKnowledge.blinding_bijective_of_card_eq
+assert_axioms Zcash.Snark.ZeroKnowledge.chooseIpaScalar_uniform
+assert_axioms Zcash.Snark.ZeroKnowledge.idealIpaSimulatorFromFieldCoins_eq
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaSampleCount_eq
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaSampleCount_eleven
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaTapeEquiv_alphas
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaTapeEquiv_maskBlind
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaTapeEquiv_roundBlinds
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformTapeIpa_eq_idealProver
+assert_axioms Zcash.Snark.ZeroKnowledge.sampledIpa_simulation_error_bound
