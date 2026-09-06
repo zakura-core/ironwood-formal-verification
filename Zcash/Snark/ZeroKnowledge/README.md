@@ -27,6 +27,34 @@ not condition on success. The description's declared count is `148m + 46` field 
 for `m` Actions, or 1,552 / 2,736 64-bit words for one / two Actions. Instantiating the
 continuation with a fully modeled prover and verifying that count against Rust remain open.
 
+## Masking optimizations
+
+The two constructions follow these pinned Common changes:
+
+| Change | Source merge | Checked result |
+| --- | --- | --- |
+| [#225: power-of-two IPA support](https://github.com/zakura-core/common/pull/225) | `b811257a0cedad053cedb6b3bf531107f8561b2a` | The complete folded scalar is uniform or publicly zero under ideal field masks, for `ξ ≠ 0`. |
+| [#267: linear evaluation mask](https://github.com/zakura-core/common/pull/267) | `b2f9ab127f9b5034697bbd15557c24b37e035fa4` | For `q ≠ x`, the pair `(r(x), offset(r(x)) + r(q))` is uniform under ideal field coefficients. |
+
+[IpaFold.lean](IpaFold.lean) derives the coefficient functional from the recursive update
+`a := a_lo + u⁻¹ a_hi`. [SparseIpa.lean](SparseIpa.lean) applies it to
+`s(X) = Σ_t α_t(X^(2^t) − q^(2^t))`. If any direction differs from evaluation at `q`,
+the scalar has a nonzero mask coefficient. If every direction agrees, the **entire fold**
+equals evaluation, and the valid opening vector `P + ξs − P(q)` gives `c = 0`. The latter
+case is simulatable; it is not a witness-dependent rank failure.
+
+[LinearMask.lean](LinearMask.lean) proves the two-evaluation bijection and its inverse.
+Appending `r` last in a Horner fold gives it coefficient one, including when the batching
+challenge is zero. [MaskPolynomials.lean](MaskPolynomials.lean) relates both constructions
+to the existing computable polynomial representation.
+
+[MaskSampling.lean](MaskSampling.lean) transfers these component results to the implemented
+field law: the sparse scalar costs at most `k × bias`, and the linear-mask pair at most
+`2 × bias`, in either direction. These are laws with **supplied public challenges**;
+they do not describe a Fiat–Shamir execution conditioned on its observed challenges.
+The component bounds do not yet establish the joint distribution with earlier commitments,
+the final aggregate blind, encoding failures, or retries.
+
 ## Checks
 
 `lake build Zcash.Snark.ZeroKnowledge.TrustBoundary` checks the proofs and their transitive
