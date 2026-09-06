@@ -418,7 +418,23 @@ The wide-reduced bound is **`(b + g)/p + 2 × bias`**, where `b` counts beta-onl
 and `g` counts gamma-linear factors. The dense declared dimensions—fifteen permutation
 and six lookup factors per usable row per Action—give **`42882m/p + 2 × bias`**.
 This is not yet a bound on `averageInvalidRowMass`: the actual factor construction,
-challenge independence, and row-to-constraint connection remain to be proved.
+challenge independence, and coverage of every constraint family remain to be proved.
+
+[LookupRowConstraints.lean](LookupRowConstraints.lean) proves that the computed lookup
+scan satisfies all five constraints emitted by the existing `lookupExpressions` builder.
+It uses the compression equations, permutations of the input and table prefixes, and
+the sorted columns' first-row and run-structure facts, outside zero denominator factors.
+The terminal and blinding rows keep their actual selector behavior; values switched off
+by selectors are unrestricted.
+[PlonkSelectorRows.lean](PlonkSelectorRows.lean) identifies those indicators with the
+actual 2048-row selector polynomials, using the kernel-checked root certificate.
+[LookupPolynomialRows.lean](LookupPolynomialRows.lean) supplies the rotated evaluations
+and proves that every lookup constraint polynomial is divisible by the domain polynomial.
+[PlonkLookupRows.lean](PlonkLookupRows.lean) identifies these records with the actual
+proof string and each Action's entries in the honest constraint model.
+This replaces a lookup-constraint correctness premise with explicit row-construction
+facts. The concrete sorter and masked-column schedule still need to establish those facts,
+and gates and permutation constraints need their corresponding construction proofs.
 
 This is still a conditional algebraic simulation theorem. Completing the exact prover
 theorem requires the actual row algorithms and their correctness, the full verifier's

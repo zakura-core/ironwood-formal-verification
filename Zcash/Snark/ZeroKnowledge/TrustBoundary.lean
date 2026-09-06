@@ -21,6 +21,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkFresh
 import Zcash.Snark.ZeroKnowledge.PlonkFreshBounds
 import Zcash.Snark.ZeroKnowledge.RunningProductRows
 import Zcash.Snark.ZeroKnowledge.ProductDenominators
+import Zcash.Snark.ZeroKnowledge.PlonkLookupRows
 import Zcash.Snark.ZeroKnowledge.Observation
 import Zcash.Meta.AxiomCheck
 
@@ -59,6 +60,10 @@ The product-row scan now has checked recurrence and terminal-value lemmas that r
 zero-denominator cases. Separate factor-family bounds permit a random private prefix
 independent of the two product challenges; their connection to the row algorithm's
 actual state and the joint invalid-row event still requires proof.
+The computed lookup scan now supplies all five of the existing row constraints from
+the compression, permutation, and run-structure facts outside zero denominators.
+The actual polynomial selectors and rotations carry this result to domain division.
+The concrete sorter and masked-column construction must still supply those facts.
 These results do not establish a whole-prover simulator, Fiat–Shamir zero-knowledge, or a
 Rust-to-Lean refinement.
 -/
@@ -593,6 +598,20 @@ assert_axioms Zcash.Snark.ZeroKnowledge.uniformProductDenominator_bad_le
 assert_axioms Zcash.Snark.ZeroKnowledge.wideProductDenominator_bad_le
 assert_axioms Zcash.Snark.ZeroKnowledge.wideProductDenominator_mixture_bad_le
 assert_axioms Zcash.Snark.ZeroKnowledge.widePinnedProductDenominator_bad_le
+
+-- The computed lookup scan satisfies the actual row and polynomial constraints.
+assert_computable Zcash.Snark.ZeroKnowledge.rowSelectorValues
+assert_computable Zcash.Snark.ZeroKnowledge.lookupRowEvaluations
+assert_axioms Zcash.Snark.ZeroKnowledge.rowSelectorValues_active
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupExpressions_zero_of_scan
+assert_axioms Zcash.Snark.ZeroKnowledge.canonicalLagrangePolynomials_eval_row
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkSelectors_eval_row
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupExpressions_polynomial_eval
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupExpressions_eval_row_zero_of_scan
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupExpressions_dvd_domain_of_scan
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkRotatedColumn_zero
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPolynomialClaimProof_lookupEvals
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkConstraintModel_lookups
 
 -- At an unmasked row the disclosed evaluation is the original cell, for every mask law.
 assert_axioms Zcash.Snark.ZeroKnowledge.maskedRowPolynomial_eval_before
