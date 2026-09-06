@@ -107,6 +107,21 @@ noncomputable def sampledIpaProver {k : ℕ} (pub : IpaPublic k Fp G)
   (sampleFieldsWith (ipaSampleCount k) (ipaTranscriptFromTape pub coefficients rho)).runFreshPMF
     fieldSample
 
+/-- Replacing all IPA samples is bounded even at zero challenges or an invalid opening.
+
+This only compares the same computation under two coin laws, before using any simulation
+theorem. In particular the challenge exceptions remain present on both sides. -/
+theorem sampledIpaProver_ideal_error_bound {k : ℕ} (pub : IpaPublic k Fp G)
+    (coefficients : Fin (2 ^ k) → Fp) (rho : Fp) :
+    PMFEventBiasLE (sampledIpaProver pub coefficients rho) (idealIpaProver pub coefficients rho)
+        (ipaSampleCount k * challenge255Bias) ∧
+      PMFEventBiasLE (idealIpaProver pub coefficients rho) (sampledIpaProver pub coefficients rho)
+        (ipaSampleCount k * challenge255Bias) := by
+  have h := sampleFieldsWith_error_bound (ipaSampleCount k)
+    (ipaTranscriptFromTape pub coefficients rho)
+  rw [uniformTapeIpa_eq_idealProver] at h
+  exact h
+
 /-- The entire IPA transcript is within `(3k+1) × bias` of its witness-free simulator.
 
 This accounts for every IPA mask and blind, including correlations with `f`. The premises

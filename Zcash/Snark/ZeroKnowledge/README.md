@@ -53,7 +53,7 @@ field law: the sparse scalar costs at most `k × bias`, and the linear-mask pair
 `2 × bias`, in either direction. These are laws with **supplied public challenges**;
 they do not describe a Fiat–Shamir execution conditioned on its observed challenges.
 These component bounds alone do not establish a joint transcript law. The IPA law is covered
-below; the earlier PLONK view, encoding failures, and retries remain separate obligations.
+below; the earlier PLONK view remains a separate obligation.
 
 ## Linear mask with its commitments
 
@@ -105,10 +105,32 @@ zero evaluation of the existing [`ipaFold`](../Verifier/Ipa.lean) MSM. It connec
 recursive folds to `computeS` and `computeB`, and extracts the IPA fields from `ProofString`
 to establish the same correspondence inside `assembleFinalMsm`.
 
-These are results for supplied challenges and unencoded group elements. They do not
-establish the preceding PLONK/multi-opening simulation, exceptional-event probabilities, a
-retry-conditioned law, Fiat–Shamir zero-knowledge, a verified concrete PRNG, or correspondence
-with the Rust prover. Identifying the final verifier equation does not discharge those gaps.
+## Fresh IPA challenges and failed attempts
+
+[IpaChallenges.lean](IpaChallenges.lean) supplies the verifier's independent tape in order:
+`ξ`, `z`, then the `k` round challenges. [IpaFresh.lean](IpaFresh.lean) retains that tape in
+the joint view and removes the nonzero-challenge premises by charging the probability that
+`ξ` or a round challenge is zero. No exclusion on `z` is needed. Zero `ξ` is included even
+though the specified implementation does not automatically retry it.
+
+For independent wide-reduced verifier coins and wide-reduced prover masks, the two-sided
+event bound is `(k+1)/p + (4k+3) × bias`: **12/p + 47 × bias at k = 11**. It covers the
+complete challenge/transcript pair, for every valid opening of the given public commitment.
+This is a statistical comparison of interactive experiments. It does not assume that
+Fiat–Shamir challenges are independent after conditioning on a proof transcript.
+
+[IpaAttempt.lean](IpaAttempt.lean) transports the bound through an explicit attempt observer.
+It writes `S`, receives `ξ,z`, then writes each `L` and `R` before receiving its round
+challenge. A failed point encoding stops before that point contributes bytes; a zero round
+challenge requests fresh randomness after both point writes. The observer retains the
+emitted prefix, received challenges, status, and the verifier's entire tape, including
+unused coins. The final scalars appear only after the rounds complete.
+
+The codecs are parameters; the theorem does not certify a Rust encoder. Its law is
+unconditioned and includes failed attempts. A caller's repeated retry loop and the law
+conditioned on success remain open. So do the preceding PLONK/multi-opening simulation,
+Fiat–Shamir zero-knowledge, a verified concrete PRNG, and correspondence with the Rust
+prover. Identifying the final verifier equation does not discharge those gaps.
 
 ## Replacement-row masks
 

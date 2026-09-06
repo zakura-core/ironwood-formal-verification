@@ -2,6 +2,7 @@ import Zcash.Snark.ZeroKnowledge.Sampling
 import Zcash.Snark.ZeroKnowledge.MaskPolynomials
 import Zcash.Snark.ZeroKnowledge.MaskSampling
 import Zcash.Snark.ZeroKnowledge.IpaSampling
+import Zcash.Snark.ZeroKnowledge.IpaAttempt
 import Zcash.Snark.ZeroKnowledge.IpaSimulator
 import Zcash.Snark.ZeroKnowledge.IpaVerifier
 import Zcash.Snark.ZeroKnowledge.LinearMaskTranscript
@@ -19,9 +20,10 @@ the finite sampling program and its declared tape sizes are checked as computabl
 the checker still rejects noncomputable algorithmic content. No `+native` exemption is used.
 
 The pinned results establish the field-sampling law, both masking constructions, joint
-simulation of the algebraic IPA stage, and joint hiding of masked columns under supplied
-challenges. They do not establish a whole-prover simulator, Fiat–Shamir zero-knowledge,
-or a Rust-to-Lean refinement.
+simulation of the IPA stage with supplied or fresh interactive challenges, and joint hiding
+of masked columns. The interactive IPA comparison retains errors and emitted prefixes under
+supplied codecs. These results do not establish a whole-prover simulator, Fiat–Shamir
+zero-knowledge, or a Rust-to-Lean refinement.
 -/
 
 assert_computable Zcash.Snark.ZeroKnowledge.fieldSampleCount
@@ -45,6 +47,9 @@ assert_axioms Zcash.Snark.ZeroKnowledge.sampleFieldsWith_queryBound
 assert_axioms Zcash.Snark.ZeroKnowledge.sampleFieldsWith_uniform
 assert_axioms Zcash.Snark.ZeroKnowledge.sampleFieldsWith_error_bound
 assert_axioms Zcash.Snark.ZeroKnowledge.sampledAttempt_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.eventBias_map
+assert_axioms Zcash.Snark.ZeroKnowledge.eventBias_le_one
+assert_axioms Zcash.Snark.ZeroKnowledge.mixedLaws_error_bound
 
 -- Common #225: derive the sparse polynomial and the full scalar from the recursive fold.
 assert_computable Zcash.Snark.ZeroKnowledge.coefficientFold +choice
@@ -129,7 +134,27 @@ assert_axioms Zcash.Snark.ZeroKnowledge.ipaTapeEquiv_alphas
 assert_axioms Zcash.Snark.ZeroKnowledge.ipaTapeEquiv_maskBlind
 assert_axioms Zcash.Snark.ZeroKnowledge.ipaTapeEquiv_roundBlinds
 assert_axioms Zcash.Snark.ZeroKnowledge.uniformTapeIpa_eq_idealProver
+assert_axioms Zcash.Snark.ZeroKnowledge.sampledIpaProver_ideal_error_bound
 assert_axioms Zcash.Snark.ZeroKnowledge.sampledIpa_simulation_error_bound
+
+-- Fresh interactive challenges, including zero challenges and partial output on errors.
+assert_computable Zcash.Snark.ZeroKnowledge.IpaPublic.withChallenges
+assert_computable Zcash.Snark.ZeroKnowledge.ipaNonzeroChallengeIndex
+assert_computable Zcash.Snark.ZeroKnowledge.observeIpaRounds +choice
+assert_computable Zcash.Snark.ZeroKnowledge.observeIpaAttempt +choice
+assert_computable Zcash.Snark.ZeroKnowledge.ipaAttemptObservation +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaChallenges_bad_le
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformIpaChallenges_bad_le
+assert_axioms Zcash.Snark.ZeroKnowledge.wideIpaChallenges_bad_le
+assert_axioms Zcash.Snark.ZeroKnowledge.freshIdealIpa_simulation_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.freshIpa_sampling_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.freshIpa_simulation_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.wideFreshIpa_simulation_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.observeIpaAttempt_mask_failure
+assert_axioms Zcash.Snark.ZeroKnowledge.observeIpaRounds_right_failure
+assert_axioms Zcash.Snark.ZeroKnowledge.observeIpaRounds_zero_challenge
+assert_axioms Zcash.Snark.ZeroKnowledge.observedIpa_simulation_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.wideObservedIpa_simulation_error_bound
 
 -- The simulated raw equation is the existing verifier's final IPA assembly.
 assert_computable Zcash.Snark.ZeroKnowledge.IpaPublic.ofMsm +choice
