@@ -24,9 +24,10 @@ points. The pinned implementation does not enforce all those exclusions. Exact c
 simulation of a component is therefore not a perfect SHVZK theorem for this prover. Neither
 the nonuniform sampler nor an upper bound on simulation error alone disproves perfect ZK.
 The domain-row disclosure result below separates complete reference-proof distributions.
-Under explicit compiler placement and copy-footprint conditions, a second valid reference
-witness can now be constructed from any first one. Turning that result into an implementation
-counterexample still requires Rust witness admissibility and execution correspondence.
+Under explicit compiler size and row bounds, a second valid reference witness can now be
+constructed from any first one, using the compiler's complete ordered copy list. Turning
+that result into an implementation counterexample still requires Rust witness admissibility
+and execution correspondence.
 
 ## Field sampling
 
@@ -245,11 +246,24 @@ valid inputs to this reference relation under those placement and copy condition
 [PlonkUnusedCertificate.lean](PlonkUnusedCertificate.lean) specializes the valid-witness
 construction to both captured keys, discharging their inactive-expression checks.
 
-This is still conditional on the declared reference relation. Connecting the typed copy
-list to compiler copies, establishing whether Rust admits the changed unused cell, and
-matching its execution, aborts, retries, and encoding remain necessary for an Ironwood
-implementation counterexample. The witness construction does not assume that arbitrary
-changes to padding survive the Rust witness-generation interface.
+[KeygenCopyRows.lean](KeygenCopyRows.lean) now takes the copy stream directly from the
+compiler's V1 extraction and deferred constant allocation. Existing structural extraction
+theorems prove its row and column bounds. [PlonkKeygenCopies.lean](PlonkKeygenCopies.lean)
+packs every copy into the reference prover's cell type. Re-encoding recovers the complete
+ordered source list, so the adapter drops no copies. Both captured keys have kernel-checked
+seven/seven/one widths in [PlonkCopyCertificate.lean](PlonkCopyCertificate.lean).
+
+[PlonkUnusedKeygen.lean](PlonkUnusedKeygen.lean) uses that computed list in the valid-witness
+construction and the no-perfect-simulator theorem. A compiler operation footprint ending
+by row 1999 supplies both selector placement and the unused-row copy condition. The theorem
+therefore needs no separately supplied copy list or assertion that it avoids row 2000.
+The public size and footprint bounds, original witness validity, and sigma coherence remain
+explicit. Matching the compiler's column meanings to the verifier key also remains open.
+
+An Ironwood implementation counterexample still requires establishing whether Rust admits
+the changed unused cell and matching its execution, aborts, retries, and encoding. The
+witness construction does not assume that arbitrary changes to padding survive the Rust
+witness-generation interface.
 
 ## Joint columns and pre-IPA messages
 

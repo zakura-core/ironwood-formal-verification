@@ -10,8 +10,8 @@ inactive-expression certificate, and copy footprint imply that this second witne
 is valid for the same key and public polynomials. Its complete reference-proof law
 differs from the first, so an exact simulator cannot match every valid witness.
 
-The public placement and copy conditions remain explicit. In particular, the typed
-copy list still needs its compiler correspondence. This does not assert that the
+The public placement and copy conditions remain explicit here. PlonkUnusedKeygen
+supplies them using the compiler's complete ordered copy list. This does not assert that the
 Rust witness interface admits the modified unused cell, or that its failure/retry
 behavior and encoded outputs match the total reference computation.
 -/

@@ -39,6 +39,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkSelectorSimulation
 import Zcash.Snark.ZeroKnowledge.Observation
 import Zcash.Snark.ZeroKnowledge.PlonkDisclosure
 import Zcash.Snark.ZeroKnowledge.PlonkUnusedCertificate
+import Zcash.Snark.ZeroKnowledge.PlonkUnusedKeygen
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -129,8 +130,9 @@ joint reference bound is `(42882m + 4113)/p + (148m + 70) × bias`, given those 
 witness conditions and the public masking/copy profiles. All interior rows pass the
 mask check automatically; both captured keys have kernel certificates for the eight
 remaining boundary rows with the stated captured fixed-query values. Matching those
-values to the supplied public polynomials, and connecting the usable-cell copy list
-and sigma labels to full Action keygen, remain explicit obligations. The
+values to the supplied public polynomials and connecting sigma labels and witness values
+to full Action keygen remain explicit obligations. The ordered compiler copy-list adapter
+is checked below. The
 public-row constructor now supplies all public polynomial degree bounds. For fixed
 rows produced by the circuit compiler, a structural proof derives zero throughout
 the masked suffix from the bounds on table, constant, selector, and region writes.
@@ -152,9 +154,14 @@ those two laws is impossible. The inactive-expression certificates for both capt
 keys now allow a second valid reference witness to be constructed from any first one:
 add one to an advice cell in row 2000, assuming placement ends by row 1999 and copies
 avoid the changed row. The gate, lookup, and copy relation is preserved for the same
-public statement. These public placement and copy conditions remain explicit. An
-implementation impossibility claim still requires compiler correspondence for the
-copy list, admissibility of the changed cell at the Rust witness interface, and
+public statement. The compiler refinement now computes the complete ordered V1 copy list,
+including deferred constants, and packs its endpoint coordinates into the prover's cell
+type. Re-encoding is the identity on the source list. With fifteen permutation columns,
+the checked seven/seven/one widths, and an operation footprint ending by row 1999, the
+compiler supplies both placement and the unused-row copy condition. Original validity,
+public size bounds, sigma coherence, and verifier-key column correspondence remain open
+premises. An implementation impossibility claim still requires admissibility of the
+changed cell at the Rust witness interface and
 execution correspondence that accounts for errors, retries, and codecs.
 These results do not establish a whole-prover simulator, Fiat–Shamir zero-knowledge, or a
 Rust-to-Lean refinement.
@@ -894,6 +901,8 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonkGateConstructionFailureMass
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkRowPrerequisiteFailureMass_eq_of_copy
 assert_axioms Zcash.Snark.ZeroKnowledge.singleAction_plonkCopyQueries
 assert_axioms Zcash.Snark.ZeroKnowledge.multiAction_plonkCopyQueries
+assert_axioms Zcash.Snark.ZeroKnowledge.singleAction_plonkCopyChunkWidths
+assert_axioms Zcash.Snark.ZeroKnowledge.multiAction_plonkCopyChunkWidths
 assert_axioms Zcash.Snark.ZeroKnowledge.wideCopyValidPlonkVerifier_simulation_error_bound
 
 -- Original gate and lookup validity, public mask safety, and completion of the actual row attempt.
@@ -1039,3 +1048,21 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygen_exists_distinct_valid_witnes
 assert_axioms Zcash.Snark.ZeroKnowledge.keygenPlonkReference_no_perfect_simulator
 assert_axioms Zcash.Snark.ZeroKnowledge.singleAction_plonkKeygen_distinct_valid_witness
 assert_axioms Zcash.Snark.ZeroKnowledge.multiAction_plonkKeygen_distinct_valid_witness
+
+-- The compiler's complete ordered copy stream is packed without dropping any endpoint.
+assert_computable Zcash.Snark.ZeroKnowledge.plonkKeygenCopyRaw +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygenConstantCopies_fit
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygenCopyRaw_rows_lt_usedRows
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygenCopyRaw_columns_lt
+assert_computable Zcash.Snark.ZeroKnowledge.plonkCopyChunkWidths
+assert_computable Zcash.Snark.ZeroKnowledge.plonkCopyCellRaw
+assert_computable Zcash.Snark.ZeroKnowledge.plonkCopyCellOfFlat
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCopyCellOfFlat_raw
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygenCopyRaw_bounds
+assert_computable Zcash.Snark.ZeroKnowledge.plonkKeygenFlatCopies +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkKeygenCopies +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygenCopies_encode
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygenCopies_rows_lt_usedRows
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygenCopies_avoid_unused
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompilerCopies_exists_distinct_valid_witness
+assert_axioms Zcash.Snark.ZeroKnowledge.compilerCopiesPlonkReference_no_perfect_simulator

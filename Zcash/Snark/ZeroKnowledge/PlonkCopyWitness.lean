@@ -7,7 +7,8 @@ These premises concern the supplied witness and public key, before any masks or
 challenges are sampled. The sigma premise relates public polynomial labels to the
 replay of an explicit usable-cell copy list. Masking preserves those copy equations,
 so the computed product identity holds on every tape, including zero denominators.
-Connecting this usable-cell list and its public labels to full Action keygen remains
+PlonkKeygenCopies supplies this usable-cell list from the compiler's ordered copy
+stream. Connecting the public labels and witness values to full Action keygen remains
 a separate refinement obligation.
 -/
 

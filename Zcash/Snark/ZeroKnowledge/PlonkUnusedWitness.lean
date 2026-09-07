@@ -11,8 +11,8 @@ for arbitrary advice. Original gate and lookup validity therefore survives this
 change when placement ends by row 1999.
 
 Copy validity is preserved when the declared copy list does not touch row 2000.
-That public footprint condition remains explicit until the typed copy list is
-connected to the compiler. These are witness vectors for the reference relation;
+This module keeps the public footprint condition explicit; PlonkUnusedKeygen derives
+it for the compiler's typed copy list. These are witness vectors for the reference relation;
 the implementation's permitted witness encoding is a separate boundary.
 -/
 
