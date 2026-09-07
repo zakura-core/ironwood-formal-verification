@@ -425,8 +425,9 @@ fresh `beta` and `gamma`, allowing a random private prefix independent of those 
 The wide-reduced bound is **`(b + g)/p + 2 × bias`**, where `b` counts beta-only factors
 and `g` counts gamma-linear factors. The dense declared dimensions—fifteen permutation
 and six lookup factors per usable row per Action—give **`42882m/p + 2 × bias`**.
-This is not yet a bound on `averageInvalidRowMass`: the actual factor construction,
-challenge independence, and coverage of every constraint family remain to be proved.
+The concrete factor coverage and pre-product challenge dependencies are now proved
+below. This is not yet a bound on `averageInvalidRowMass`: coverage of every constraint
+family and the connection to the full challenge experiment remain open.
 
 [LookupRowConstraints.lean](LookupRowConstraints.lean) proves that the computed lookup
 scan satisfies all five constraints emitted by the existing `lookupExpressions` builder.
@@ -516,11 +517,35 @@ copy-product identity.
 results with gate correctness to derive division of every constraint and of the
 actual numerator by `X^2048 - 1`.
 
+[ColumnPrefix.lean](ColumnPrefix.lean) proves that equal construction prefixes and
+matching tape entries produce equal column prefixes, even when the later steps and
+total tape lengths differ. [PlonkPrefix.lean](PlonkPrefix.lean) applies this to the
+computed first `16m` advice and lookup-permutation columns: on each fixed tape these
+columns depend only on `theta`, independently of `beta`, `gamma`, and later challenges.
+Their full polynomials and the packed permutation factors therefore agree. A uniform
+fixed-size tape gives exactly the sequential row law used by the joint simulation.
+
+[ProductDenominatorLists.lean](ProductDenominatorLists.lean) applies the finite-family
+bound to computed lists, retaining duplicate factors.
+[PlonkProductFactors.lean](PlonkProductFactors.lean) lists the actual lookup and packed
+permutation factors and proves that avoiding their zeros gives all nonzero usable-row
+denominators. The count is `(packedReferences + 6) × m × 2042`.
+
+[PlonkProductBounds.lean](PlonkProductBounds.lean) combines this coverage with the
+prefix theorem. Under two fresh independent wide-reduced product challenges, the
+computed reference denominators have bad-event probability at most
+**`42882m/p + 2 × bias`**, assuming the key has fifteen packed references. The theorem
+allows any independent prior private-state law, including arbitrary row-mask samples.
+It also bounds the event that a partial attempt completes with a zero denominator;
+this is an unconditional event bound, not conditioning the law on completion.
+[PlonkProductCertificate.lean](PlonkProductCertificate.lean) verifies in the kernel
+that both captured keys have three permutation chunks and fifteen packed references.
+
 The remaining row obligations are lookup membership after advice masking, gate
-preservation, the packed copy-permutation product identity, and the independence
-needed to apply the denominator probability bounds to the concrete prefix law.
-These results do not yet bound `averageInvalidRowMass` or the column-construction
-failure probability. Native-loop correspondence, including the
+preservation, and the packed copy-permutation product identity. These results do not
+yet bound `averageInvalidRowMass` or the entire column-construction failure probability.
+Relating the fresh product-coin experiment to the full challenge law is still required.
+Native-loop correspondence, including the
 available Rust implementation's cancellation of fixed permutation cells on zero factors,
 also remains open.
 

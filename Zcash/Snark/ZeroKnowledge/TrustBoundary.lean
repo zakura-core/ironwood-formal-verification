@@ -27,6 +27,8 @@ import Zcash.Snark.ZeroKnowledge.LookupSortRows
 import Zcash.Snark.ZeroKnowledge.LookupSortExamples
 import Zcash.Snark.ZeroKnowledge.PlonkConstruction
 import Zcash.Snark.ZeroKnowledge.PlonkConstructedConstraints
+import Zcash.Snark.ZeroKnowledge.PlonkProductBounds
+import Zcash.Snark.ZeroKnowledge.PlonkProductCertificate
 import Zcash.Snark.ZeroKnowledge.Observation
 import Zcash.Meta.AxiomCheck
 
@@ -63,8 +65,9 @@ remaining invalid-row probability for the honest algorithms and integrating the 
 verifier's grouping remain open.
 The product-row scan now has checked recurrence and terminal-value lemmas that retain
 zero-denominator cases. Separate factor-family bounds permit a random private prefix
-independent of the two product challenges; their application to the concrete prefix
-distribution and the joint invalid-row event still requires proof.
+independent of the two product challenges. The actual reference factor lists and their
+pre-product challenge independence now apply that bound to the computed denominators;
+their contribution to the joint invalid-row event still requires proof.
 The computed lookup scan now supplies all five of the existing row constraints from
 the compression, permutation, and run-structure facts outside zero denominators.
 The actual polynomial selectors and rotations carry this result to domain division.
@@ -85,8 +88,17 @@ constraint polynomials per Action, outside zero denominator factors and given th
 copy-product identity. Gate correctness then gives domain division for every constraint
 and for the actual numerator. The retained-row correspondence also covers produced
 columns in failed prefixes, without conditioning a probability law on success.
+The first sixteen columns per Action are pointwise independent of beta, gamma, and
+later challenges on a fixed tape. Every actual product denominator factor occurs in
+the computed lists. With fifteen packed key references, fresh independent wide-reduced
+product coins give a zero-denominator bound of `42882m/p + 2 × bias`, also under any
+independent prior private-state law. Both captured keys have kernel-checked three-chunk,
+fifteen-reference certificates. Completed partial attempts inherit the event
+bound without conditioning on success. The fixed-size uniform row tape realizes the
+sequential law already used by the joint simulation.
 Preserving gates and lookup membership under masking, deriving the packed product
-identity from actual copy wiring, and bounding construction failure remain open. The
+identity from actual copy wiring, bounding construction failure, and relating the
+fresh product-coin experiment to the full challenge law remain open. The
 sampling comparison alone is not a simulator for failed attempts. The proof string's
 terminal rotations use the kernel root certificate.
 These results do not establish a whole-prover simulator, Fiat–Shamir zero-knowledge, or a
@@ -740,6 +752,40 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonkColumnAttempt_lookupConstraints_dvd
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkConstraintModel_permutation_polynomials
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkColumnAttempt_permutationConstraints_dvd
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkColumnAttempt_domain_division
+
+-- Concrete pre-product causality and zero-denominator probabilities.
+assert_axioms Zcash.Snark.ZeroKnowledge.columnRowsFromTape_take_congr
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformTapeColumnRows_cast
+assert_computable Zcash.Snark.ZeroKnowledge.plonkTotalColumnRows +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkTotalColumnRows_length
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformTapePlonkTotalColumnRows
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkColumnAttempt_eq_totalRows_of_complete
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkTotalColumnConstructor_before_products
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkColumnSteps_take_challenges
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkTotalColumnRows_take_challenges
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkTotalColumnRows_polynomial_before_products
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkTotalColumnRows_permutation_factors
+assert_axioms Zcash.Snark.ZeroKnowledge.productDenominatorListBad
+assert_axioms Zcash.Snark.ZeroKnowledge.productDenominatorListBad_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.wideProductDenominatorList_bad_le
+assert_computable Zcash.Snark.ZeroKnowledge.plonkProductBetaOffsets +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkProductGammaForms +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProductDenominatorsNonzero
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProductBetaOffsets_length
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProductGammaForms_length
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProductBetaOffsets_mem
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProductGammaForms_lookup_mem
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProductGammaForms_permutation_mem
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProductDenominatorsNonzero_of_not_listBad
+assert_computable Zcash.Snark.ZeroKnowledge.withProductChallenges
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProductBetaOffsets_challenges
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProductGammaForms_challenges
+assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkProductDenominators_bad_le
+assert_axioms Zcash.Snark.ZeroKnowledge.widePinnedPlonkProductDenominators_bad_le
+assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkProductDenominators_mixture_bad_le
+assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkColumnAttempt_productDenominators_bad_le
+assert_axioms Zcash.Snark.ZeroKnowledge.singleAction_plonkProductShape
+assert_axioms Zcash.Snark.ZeroKnowledge.multiAction_plonkProductShape
 
 -- At an unmasked row the disclosed evaluation is the original cell, for every mask law.
 assert_axioms Zcash.Snark.ZeroKnowledge.maskedRowPolynomial_eval_before

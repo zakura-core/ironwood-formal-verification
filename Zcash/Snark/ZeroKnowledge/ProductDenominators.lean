@@ -10,8 +10,9 @@ before the two product challenges are drawn. A random private prefix is allowed,
 provided those challenge draws are independent of it.
 
 The finite-family bound is one uniform field atom per factor, plus the two wide-
-reduction biases. Relating these families to the concrete row constructors, and then
-to the joint prover's invalid-row event, remains a separate obligation.
+reduction biases. `PlonkProductBounds` applies it to the concrete reference column
+computation with fresh challenges. Connecting it to the joint prover's invalid-row
+event remains a separate obligation.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge
