@@ -45,7 +45,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkAttemptSimulation
 import Zcash.Snark.ZeroKnowledge.PlonkFailures
 import Zcash.Snark.ZeroKnowledge.PlonkCompilerSuccess
 import Zcash.Snark.ZeroKnowledge.PlonkCompilerRetry
-import Zcash.Snark.ZeroKnowledge.PlonkCommitmentCausality
+import Zcash.Snark.ZeroKnowledge.PlonkCausality
 import Zcash.Snark.ZeroKnowledge.IpaCausality
 import Zcash.Snark.ZeroKnowledge.PlonkSigmaCertificate
 import Zcash.Meta.AxiomCheck
@@ -220,8 +220,12 @@ fields satisfy their stage dependencies: advice ignores all challenges, lookup
 permutation points use only theta, product points use theta, beta, gamma, the linear
 mask ignores all challenges, and quotient pieces add only y. These facts establish
 the entire existing attempt prefix before x on the actual complete prover tape.
-The remaining evaluation and opening messages, the full IPA connection, and concrete
-codec instantiation still need their respective causality/correspondence arguments.
+The evaluation, multi-opening, and IPA stages now satisfy their dependencies on that
+same complete tape. The eleven-round adapter uses a challenge-independent `148m+46`
+sample count and has exactly the existing wide-reduced reference-prover law. Its
+entire message schedule is causal, including the encoded prefixes and actual abort
+checks, for every fixed tape and every challenge value. Concrete codec instantiation
+and the circuit/key and verifier correspondence remain separate obligations.
 Fiat–Shamir ZK needs its own argument;
 Rust execution correspondence is a separate claim, outside the protocol theorem's target.
 -/
@@ -1350,3 +1354,24 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaskViewFromMaterial_piece
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierProofFromTape_linear_causal
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierProofFromTape_quotient_causal
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkAttemptTrace_prefix_before_x
+
+-- Complete reference-prover causality, with the exact existing sampling law and observation.
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProofFromJointView_evaluations_congr
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaskViewFromMaterial_early_columns
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaskViewFromMaterial_linearEval
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaskViewFromMaterial_points_q
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaskViewFromMaterial_groupValues
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierProofFromTape_evaluations_causal
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierProofFromTape_qPrime_causal
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierProofFromTape_groupValues_causal
+assert_computable Zcash.Snark.ZeroKnowledge.plonkIpaTranscriptFromMaterial +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkJointViewFromTape_ipa
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkIpaTranscriptFromMaterial_mask_agrees
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkIpaTranscriptFromMaterial_messages_prefix
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierProofFromTape_mask_causal
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierProofFromTape_round_causal
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierProofFromTape_stage_causal
+assert_computable Zcash.Snark.ZeroKnowledge.plonkReferenceProofFromTape +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkReferenceProofFromTape_law
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkReferenceProofFromTape_causal
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkReferenceProofFromTape_observation_causal

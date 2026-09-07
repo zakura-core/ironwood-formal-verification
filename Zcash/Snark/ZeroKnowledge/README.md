@@ -536,12 +536,12 @@ The common public initialization is fixed separately and contributes no proof by
 The unconditioned bound holds for every supplied deterministic codec, so encoding adds
 no simulation error. The successful-output analysis below uses the specified codec's
 identity-failure property. The retained-history analysis below uses the observer's exact
-retry/error distinction. Proving causality of the complete staged reference construction
-remains open.
+retry/error distinction. The causality proof below connects this observation to the
+complete reference computation on a fixed private tape.
 
 ## Challenge causality
 
-[ProtocolCausality.lean](ProtocolCausality.lean) makes the remaining interactive-execution
+[ProtocolCausality.lean](ProtocolCausality.lean) makes the interactive-execution
 condition precise: after `n` received challenges, changing later challenges must leave
 every message before the next receive unchanged. Its prefix operation preserves message
 order and has exactly the claimed receive budget. The interpreter depends only on the
@@ -588,9 +588,26 @@ tape-based IPA computation. The sparse-mask commitment needs neither `xi`, `z`, 
 round challenge. The pair in round `j` depends only on challenges from rounds strictly
 before `j`; in particular it does not use the challenge received after that pair. These
 proofs include zero challenges and invalid openings, and assume no sampling law.
-The complete PLONK/IPA construction still needs the full message-prefix theorem:
-the remaining evaluation and opening messages and the complete IPA computation must
-be connected to these dependency facts and the checked stage composition.
+
+[PlonkOpeningCausality.lean](PlonkOpeningCausality.lean) proves the remaining pre-IPA
+dependencies on the complete private tape. The evaluation block uses the first four
+column observations and `r(x)`, ignoring the later observation point. The `Q'` commitment
+ignores `x3`, and the five group evaluations ignore `x4` and later challenges.
+[PlonkIpaCausality.lean](PlonkIpaCausality.lean) connects the IPA dependency proofs to
+the actual opening, coefficients, inherited blind, and suffix of that same private tape.
+The mask commitment uses only `x3` and its own private coins; each round pair uses only
+the preceding challenges. No valid-opening premise is needed for these dependencies.
+
+[PlonkCausality.lean](PlonkCausality.lean) assembles these results for every stage of the
+existing attempt trace. Its eleven-round `plonkReferenceProofFromTape` uses a fixed
+`148m+46`-sample private tape, and `plonkReferenceProofFromTape_law` proves that sampling
+this adapter gives exactly the existing wide-reduced reference-prover distribution.
+`plonkReferenceProofFromTape_causal` proves causality of its entire message schedule;
+`plonkReferenceProofFromTape_observation_causal` includes the encoded prefixes and actual
+abort checks. Both statements hold on every private tape and for all challenge values,
+without a randomness, witness-validity, or challenge-exclusion assumption. The supplied
+codecs and the concrete circuit/key and verifier correspondence retain their separate
+instantiation obligations.
 
 ## Full-attempt failure probability
 
@@ -675,8 +692,9 @@ The exhaustion probability is exactly the retry probability raised to `n`, hence
 most **`F(m)^n`** for the real law and **`B(m)^n`** for the simulator. Both tend to zero
 when `B(m) < 1`, with the same checked certificate for `m ≤ 65535`. These results do not
 yet construct a distribution for an unlimited retry loop. They also do not cover a
-caller which reuses transcript or prover state across attempts. Stage-by-stage causality
-and concrete circuit/key correspondence remain separate obligations.
+caller which reuses transcript or prover state across attempts. The complete reference
+prover's stage-by-stage causality is proved above; concrete circuit/key and verifier
+correspondence remain separate obligations.
 
 [RunningProductRows.lean](RunningProductRows.lean) gives computable lookup and chained
 permutation ratio scans with `0` mapped to `0` on inversion. It proves the exact condition
@@ -990,8 +1008,9 @@ the same public data in the unused-row witness argument.
 
 This is still a conditional algebraic simulation theorem. Completing the specified
 interactive protocol theorem requires discharging the remaining concrete circuit and
-public-key conditions, connecting the reference constructions to the existing Lean
-verifier's grouping and commitment routing, and proving stage-by-stage causality. The
+public-key conditions and connecting the reference constructions to the existing Lean
+verifier's grouping and commitment routing. The complete reference computation now has
+a checked stage-by-stage causality proof on the same private tape and sampling law. The
 successful single-attempt law is now normalized, and finite independent retry histories
 are compared with a uniform bound and vanishing exhaustion tails. An unlimited-run
 history distribution is not yet constructed.
