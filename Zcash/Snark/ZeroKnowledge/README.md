@@ -60,8 +60,11 @@ prove nor refute zero-knowledge of the joint proof distribution.
 [Sampling.lean](Sampling.lean) proves both directions of the event-probability comparison
 after any deterministic computation on `N` such samples, with bound `N × bias`. The
 continuation can return errors and can perform hashing and serialization; the theorem does
-not condition on success. The description's declared count is `148m + 46` field samples
-for `m` Actions, or 1,552 / 2,736 64-bit words for one / two Actions. Instantiating the
+not condition on success.
+
+`m` is the number of Actions. `148m + 46` counts the prover's private random field
+elements for one proof attempt—used to mask witness data and blind commitments.
+That is 1,552 / 2,736 64-bit words for one / two Actions. Instantiating the
 continuation with a fully modeled prover and verifying that count against Rust remain open.
 
 ## Masking optimizations
