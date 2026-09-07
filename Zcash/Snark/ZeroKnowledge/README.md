@@ -1,12 +1,19 @@
 # Zero-knowledge formalization
 
 This development starts from the [pinned prover description](https://gist.githubusercontent.com/ebfull/bf25819afa697e39b54bd5f1a1992a2c/raw/589528c0f752112fd83c42aeeea91b6958e67605/zk.md),
-on Ironwood base `ad4a6ad8f75a64368bae4186006480410a687cce`. The description names Sensei
-`56a7de7`; that implementation commit has not yet been located. These are proofs about the
-specified constructions, not a verified correspondence with that Rust executable.
+alongside the existing Lean protocol, on Ironwood base
+`ad4a6ad8f75a64368bae4186006480410a687cce`. The proof target is the specified honest-prover
+algorithm. Whole-program Rust equivalence is a separate claim, not a prerequisite for
+this protocol theorem.
 
-There is not yet a zero-knowledge theorem for the complete prover. The existing verifier and
-soundness formalization does not supply an honest-prover distribution or simulator.
+The description labels its source `sensei at 56a7de7`. That abbreviated revision has not
+been resolved in the local Bento checkout inspected for this development. This is a
+provenance limitation, not evidence that the source is unavailable, and does not block
+proving the protocol described by the pinned note and Lean definitions.
+
+There is not yet a zero-knowledge theorem covering the complete specified prover, including
+its failures and retries. The pre-existing verifier and soundness formalization does not
+itself supply an honest-prover distribution or simulator.
 
 The current [reference-prover theorem](PlonkCompilerSimulation.lean) gives a numerical
 joint simulation bound from original gate, lookup, and copy-value validity, plus explicit
@@ -15,9 +22,10 @@ copy list from the compiler, deriving sigma coherence and every public polynomia
 bound. It has no unbounded row-failure term under those premises.
 Selector-only certificates and compiler placement reduce the masking conditions to four
 initial packed-selector zeros, plus explicit public column and placement bounds.
-The remaining implementation and public-key correspondence obligations are listed below.
+The remaining protocol and public-key obligations, and the separate limitations on claims
+about a concrete implementation, are listed below.
 
-The implementation-facing interactive target is **statistical HVZK**. The
+The target for the specified interactive protocol is **statistical HVZK**. The
 [Halo2 book's perfect SHVZK model](https://zcash.github.io/halo2/design/protocol.html)
 restricts the verifier's challenge space, including excluding zero and evaluation-domain
 points. The pinned implementation does not enforce all those exclusions. Exact conditional
@@ -181,9 +189,10 @@ its corresponding full execution model.
 
 These IPA results start from a valid public opening. The joint algebraic construction below
 derives that opening under explicit quotient-correctness premises and supplied challenges.
-Handling failures across the full computation, Fiat–Shamir zero-knowledge, a verified
-concrete PRNG, and correspondence with the Rust prover remain open. Identifying the final
-verifier equation does not discharge those gaps.
+Handling failures across the full specified computation remains open. Fiat–Shamir
+zero-knowledge, concrete PRNG security, and correspondence with a Rust executable are
+separate claims. The interactive protocol theorem uses the independent random-bit tape
+law stated in the description; it does not require verifying a concrete PRNG.
 
 ## Replacement-row masks
 
@@ -299,8 +308,9 @@ actual batch layout observed in the available Bento checkout
 Action; both lookup tails before their two blinds; singleton product batches. Each
 equivalence preserves the tail and blind subsequences. This establishes the model's
 `148m` private-column draws and `148m + 12` pre-IPA draws; adding the IPA's 34 gives
-`148m + 46`. The available checkout is distinct from the unlocated `56a7de7` pin, and these
-equivalences are not a proof of Rust execution correspondence.
+`148m + 46`. The available checkout has not been identified with the description's
+`56a7de7` revision. These equivalences concern the Lean sampling programs; they do not
+establish the separate claim of Rust execution correspondence.
 
 [PlonkOpening.lean](PlonkOpening.lean) constructs the pinned five opening-polynomial groups
 and their Horner folds. It proves that `Q₀(q)` is precisely the first group's weighted
@@ -493,7 +503,7 @@ that identity. The sorter below supplies the lookup permutations; the copy theor
 supply the permutation-column identity from original copies and public sigma coherence.
 The zero-preserving fallback matches the available Bento source
 at `e32e61eb35b6e5b5e0600cb0903adcfe0cd617d8`, in `crates/sensei/src/native/prover.rs`;
-this does not establish correspondence with the still-unlocated Sensei pin.
+this does not identify that checkout with the Sensei revision named by the description.
 
 [ProductDenominators.lean](ProductDenominators.lean) bounds zero factors fixed before
 fresh `beta` and `gamma`, allowing a random private prefix independent of those draws.
@@ -794,13 +804,18 @@ public size and expression certificates, the four initial selector zeros, and th
 hiding condition remain explicit. The compiler-sigma no-perfect-simulator endpoint uses
 the same public data in the unused-row witness argument.
 
-This is still a conditional algebraic simulation theorem. Completing the exact prover
-theorem requires connecting the stated witness and public-key conditions to the actual
-circuit and key generation, the full verifier's grouping and commitment routing, failures
-and retries across the whole prover, the challenge model and Fiat–Shamir argument, and
-correspondence with the Rust implementation. The
-available Rust quotient implementations have not been proved equivalent to these polynomial
-computations, and byte encoding is outside the typed proof result.
+This is still a conditional algebraic simulation theorem. Completing the specified
+interactive protocol theorem requires discharging the remaining concrete circuit and
+public-key conditions, connecting the reference constructions to the existing Lean
+verifier's grouping and commitment routing, and accounting for encoding, failures, and
+retries across the whole specified prover. Its random-bit tape and independent verifier
+challenges are explicit assumptions of the interactive experiment.
+
+A Fiat–Shamir ZK claim requires a separate hash-model and simulation argument. A theorem
+about a particular executable would additionally require implementation correspondence;
+the available Rust quotient implementations have not been proved equivalent to these
+polynomial computations. Neither whole-program Rust parity nor a concrete PRNG proof is
+a prerequisite for the protocol-level statistical HVZK target.
 
 ## Checks
 

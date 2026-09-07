@@ -11,8 +11,9 @@ sigma coherence is derived. The joint statistical bound is unchanged. The unused
 counterexample also uses this compiler-produced public data.
 
 The concrete Action size and initial-selector facts, matching the verifier key's
-column meanings and public commitments, instance provenance, and Rust execution
-remain outside these generic reference endpoints.
+column meanings and public commitments, and instance provenance remain outside
+these generic reference endpoints. Rust execution correspondence is a separate
+claim, not a prerequisite for the specified protocol's simulation theorem.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge
