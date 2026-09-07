@@ -38,6 +38,11 @@ The [commitment-routing refinement](PlonkCommitmentRouting.lean) identifies the 
 private commitment slots and quotient weights with the reference construction. It proves
 that the verifier's compression agrees with the prover's Horner fold once the exact group
 ID order and public commitment agreement are established; those conditions remain explicit.
+The [query-layout refinement](PlonkQueryLayout.lean) now identifies the complete reference
+proof's flat query pattern and transfers its grouping, node order, and duplicate check to
+the actual verifier. [Disjoint Action blocks](PlonkQueryBlocks.lean) derive the full
+first-appearance commitment order and four-point table for arbitrary positive Action counts.
+The final five-group classification remains to be connected to the declared opening lists.
 The remaining protocol and public-key obligations, and the separate limitations on claims
 about a concrete implementation, are listed below.
 
@@ -1071,6 +1076,23 @@ for every batching challenge, including zero. Together these give
 commitment agreement (and the 2048-row quotient convention). Deriving those ID lists from
 the complete query layout, routing the node evaluations, and proving the concrete public
 key agreement remain open. These algebraic connectors introduce no native certificate.
+
+[PlonkQueryLayout.lean](PlonkQueryLayout.lean) proves the flat query stream for any Action
+count under `PlonkQueryLayout`, which records the key's instance, advice, and fixed query
+ordering and its five blinding rows. This stream equality includes exceptional challenge
+values. Under injective interpretation of the four rotation labels, the actual verifier's
+ID groups, node lists, and duplicate-query check agree with the finite pattern. The existing
+five-point distinctness premise implies that injectivity.
+[GroupingPattern.lean](GroupingPattern.lean) proves the transport without assumptions on
+commitment values or claimed evaluations.
+
+[PlonkQueryBlocks.lean](PlonkQueryBlocks.lean) derives the first-appearance commitment order
+by composing disjoint Action blocks with the shared suffix. Only the fixed local layout is
+kernel-evaluated; the theorem applies to arbitrary bundle sizes. Every positive Action count
+has the same four-point table. [GroupingSlots.lean](GroupingSlots.lean) projects the existing
+algorithm to slot order and point-index sets, including its reversal before routing. These
+results reduce the remaining five-group ordering proof to each slot's point-set classification;
+they do not yet discharge it or the concrete key layout conditions.
 
 ### Actual Action public data
 
