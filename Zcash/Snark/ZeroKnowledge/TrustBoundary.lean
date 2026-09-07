@@ -66,6 +66,8 @@ import Zcash.Snark.ZeroKnowledge.PlonkDerivedKey
 import Zcash.Snark.ZeroKnowledge.SelectorReplacementDegree
 import Zcash.Snark.ZeroKnowledge.KeygenExpressionMasking
 import Zcash.Snark.ZeroKnowledge.KeygenPartialMasking
+import Zcash.Snark.ZeroKnowledge.PlannerStarts
+import Zcash.Snark.ZeroKnowledge.SelectorCompressionCount
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -1691,3 +1693,14 @@ assert_axioms Zcash.Snark.ZeroKnowledge.selReplacement_sourcePartialMaskSafe
 assert_axioms Zcash.Snark.ZeroKnowledge.selReplacement_sourcePartialValue
 assert_axioms Zcash.Snark.ZeroKnowledge.exprPartialPublicValue_product
 assert_axioms Zcash.Snark.ZeroKnowledge.eraseExpr_partialMaskCertificates
+
+-- Complete start lists from declaratively certified V1 placement blocks.
+assert_computable Zcash.Snark.ZeroKnowledge.plannerRunStarts
+assert_axioms Zcash.Snark.ZeroKnowledge.slotShapeSummariesFrom_replicate_starts
+assert_computable Zcash.Snark.ZeroKnowledge.plannerTraceStarts
+assert_axioms Zcash.Snark.ZeroKnowledge.slotShapeSummariesFrom_trace_starts
+assert_axioms Zcash.Snark.ZeroKnowledge.slotShapeSummariesFrom_replicate_empty_starts
+
+assert_computable Zcash.Snark.ZeroKnowledge.selectorPackingCount
+assert_axioms Zcash.Snark.ZeroKnowledge.selectorPackingCount_def
+assert_axioms Zcash.Snark.ZeroKnowledge.deriveSelCompressMap_newFixedCols_eq_count

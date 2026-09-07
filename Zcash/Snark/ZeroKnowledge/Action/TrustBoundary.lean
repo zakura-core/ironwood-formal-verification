@@ -4,6 +4,8 @@ import Zcash.Snark.ZeroKnowledge.ActionSimulation
 import Zcash.Snark.ZeroKnowledge.ActionCommitments
 import Zcash.Snark.ZeroKnowledge.ActionCompilerSimulation
 import Zcash.Snark.ZeroKnowledge.ActionCompilerMasking
+import Zcash.Snark.ZeroKnowledge.ActionOrderedShapes
+import Zcash.Snark.ZeroKnowledge.ActionCompressionInput
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -408,4 +410,31 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_verifierLookupTable_maskBo
 assert_axioms Zcash.Snark.ZeroKnowledge.actionReferenceKey_maskBoundaryCheck_values +native(
   CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.actionReferenceKey_maskingProfile +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- The exact ordered source shapes, with kernel-checked stage certificates.
+assert_computable Zcash.Snark.ZeroKnowledge.actionRegionShapeTable
+assert_computable Zcash.Snark.ZeroKnowledge.actionWitnessRegionShapes
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessRegionShapes_eq_source
+assert_computable Zcash.Snark.ZeroKnowledge.actionChecksRegionShapes
+assert_axioms Zcash.Snark.ZeroKnowledge.actionChecksRegionShapes_eq_source
+assert_computable Zcash.Snark.ZeroKnowledge.actionNotesRegionShapes
+assert_axioms Zcash.Snark.ZeroKnowledge.actionNotesRegionShapes_eq_source
+assert_computable Zcash.Snark.ZeroKnowledge.actionCrossAddressRegionShapes
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCrossAddressRegionShapes_eq_source
+assert_computable Zcash.Snark.ZeroKnowledge.actionOrderedRegionShapes
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOrderedRegionShapes_eq_source
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOrderedRegionShapes_length
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOrderedRegionShapes_wellFormed
+
+-- The actual compiler count is the finite calculation on those certified inputs.
+assert_computable Zcash.Snark.ZeroKnowledge.actionOrderedRegionStarts
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOrderedRegionStarts_def
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_regionStarts_eq_ordered +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.actionOrderedSelectorActivations +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_selectorActivations_eq_ordered +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.actionOrderedSelectorCount +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_newFixedCols_eq_orderedCount +native(
   CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)

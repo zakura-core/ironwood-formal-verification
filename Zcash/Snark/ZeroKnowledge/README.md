@@ -55,6 +55,16 @@ writes and the packer's distinct root assignments. The
 into the complete masking profile and main simulation theorem. It removes the
 initial packed-column zeros and selector-routing premises. The compression count
 is the only remaining concrete selector premise.
+The [ordered shape certificate](ActionOrderedShapes.lean) reduces all 395 regions
+to 57 distinct source shapes, with separate kernel-checked equalities for the four
+Action stages. It retains selector columns, their order, and both empty regions.
+[Planner start reconstruction](PlannerStarts.lean) proves how a lawful compact
+placement trace supplies every individual V1 start. Certifying the concrete sorted
+placement and its resulting compression count remains in progress.
+The [compression-input refinement](ActionCompressionInput.lean) proves that the
+actual compiler's column count is exactly `actionOrderedSelectorCount`, a finite
+calculation using these certified source shapes, activations, and selector degrees.
+The remaining numerical certificate must show that this calculation returns fifteen.
 The [encoded-attempt theorem](PlonkAttemptSimulation.lean) preserves this bound while
 retaining partial output, the received challenges, and the specified failure status.
 The [full-attempt failure bound](PlonkFailures.lean) is now numerical too. These results
