@@ -57,6 +57,7 @@ import Zcash.Snark.ZeroKnowledge.GroupingSlots
 import Zcash.Snark.ZeroKnowledge.PlonkVerifierGrouping
 import Zcash.Snark.ZeroKnowledge.PlonkQueryCertificate
 import Zcash.Snark.ZeroKnowledge.PlonkEvaluationCompression
+import Zcash.Snark.ZeroKnowledge.PlonkVerifierOpening
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -249,8 +250,13 @@ removing the former compiler-domain and fixed-column-count mask premises. The ac
 Action specialization supplies canonical public-input rows and compiler fixed/sigma
 polynomials and copies. Its prefix, permutation count, and operation-footprint bounds
 follow from the existing Action compilation API. The four initial selector zeros and
-remaining key/verifier correspondence conditions are explicit. The concrete Action
-results have a separate census for their inherited Pallas order dependency.
+remaining key correspondence conditions are explicit. The actual query assembly, five
+opening groups, and both compression projections now feed the final opening assembly.
+Under the stated query layout, distinct rotation points, domain, and public commitment
+conditions, its evaluated commitment and scalar equal the reference reconstruction.
+The dynamic group-count check also succeeds; these equalities do not assert verifier
+acceptance. The concrete Action results have a separate census for their inherited
+Pallas order dependency.
 Fiat–Shamir ZK needs its own argument;
 Rust execution correspondence is a separate claim, outside the protocol theorem's target.
 -/
@@ -1547,3 +1553,16 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonkScalarFold_reverse
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierGroup_compressedClaim
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompressSet_evaluationLength
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierGroup_evaluations_from_layout
+
+-- The complete compressed table feeds the existing final opening assembly.
+assert_computable Zcash.Snark.ZeroKnowledge.plonkVerifierCompressedGroups +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierGroup_lengths
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierCompressedGroups_length
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierCompressedGroups_getD
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierCompressedGroups_commitments
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierCompressedGroups_evaluations
+assert_axioms Zcash.Snark.ZeroKnowledge.multiopenCombine_evaluated
+assert_axioms Zcash.Snark.ZeroKnowledge.multiopenCombine_evaluated_congr
+assert_computable Zcash.Snark.ZeroKnowledge.plonkVerifierOpening +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierOpening_shape
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierOpening_eq_public

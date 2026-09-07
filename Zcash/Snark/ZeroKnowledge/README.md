@@ -40,8 +40,10 @@ It proves that the verifier's compressed commitments agree with the reference co
 under the key layout, distinct rotation points, and public commitment agreement conditions.
 Both captured keys have [kernel-checked query-layout certificates](PlonkQueryCertificate.lean).
 The [scalar-routing refinement](PlonkEvaluationCompression.lean) also derives the duplicate
-guard, every member evaluation, and each complete compressed evaluation vector. Concrete
-public commitment agreement and the final opening-assembly connection remain to be discharged.
+guard, every member evaluation, and each complete compressed evaluation vector. The
+[final opening connection](PlonkVerifierOpening.lean) proves that the actual verifier's
+assembled commitment point and scalar equal the reference reconstruction under the stated
+key and point conditions. Concrete public commitment agreement remains to be discharged.
 The remaining protocol and public-key obligations, and the separate limitations on claims
 about a concrete implementation, are listed below.
 
@@ -383,7 +385,8 @@ These results hold for every preceding private state and do not assume that the 
 blind is independent of earlier messages. They still start from the resulting public IPA
 opening. The next construction rebuilds it from the public mask view, assuming agreement
 of the inferred `H_x(x)` with the honest quotient. The verifier-typed construction below
-instantiates the constraint function; full proof-string routing remains open. The available
+instantiates the constraint function; the later opening connector derives the actual
+proof's query routing and final assembly under explicit key and point conditions. The available
 Rust implementation's repeated synthetic division has not yet been related formally to
 this quotient computation.
 
@@ -1033,7 +1036,7 @@ theorems use the actual captured expressions with these compiler fixed rows.
 numerical joint simulation, keeping the same bound. Establishing the four initial selector
 zeros from the concrete Action compilation is still open; the captured row values alone
 do not discharge that obligation. The Action specialization below supplies canonical
-instance rows. Key/public-commitment correspondence and final opening assembly remain;
+instance rows. Key/public-commitment correspondence remains;
 sigma rows and copy-list provenance are derived below.
 
 [CopyReplayTransport.lean](CopyReplayTransport.lean) proves that an injective cell encoding
@@ -1113,9 +1116,19 @@ complete compressed evaluation vectors with `plonkPublicNodeValues`. The proof e
 their lengths, node indices, and the reversal between the verifier's ascending powers and
 the reference Horner fold. It applies to every batching challenge, including zero, under
 the same positive Action count, query-layout, and distinct rotation-point conditions.
-It does not require public commitment agreement for the scalar-vector equality. Connecting
-the final `assembleOpening` result remains a separate step; these grouping results do not
-assert verifier acceptance or alter the simulation bound.
+It does not require public commitment agreement for the scalar-vector equality.
+
+[PlonkCompressedGroups.lean](PlonkCompressedGroups.lean) assembles these results into the
+actual five-entry compression table: zipping retains every group, and both projections
+match the complete reference lists. [MultiopenAssembly.lean](MultiopenAssembly.lean) proves
+that the final combination depends on its input MSMs only through their evaluated points.
+`plonkVerifierOpening_eq_public` in [PlonkVerifierOpening.lean](PlonkVerifierOpening.lean)
+then connects the actual `assembleOpening` result to `plonkPublicOpening`. The commitment
+point and scalar agree, even though the intermediate MSM representations can differ.
+The theorem uses the key layout, a positive Action count, distinct rotation points,
+public commitment agreement, and the reference domain size and root. It imposes no
+nonzero batching-challenge condition. The dynamic group-count check is also proved to
+succeed. These connectors do not assert verifier acceptance or alter the simulation bound.
 
 ### Actual Action public data
 
@@ -1151,9 +1164,9 @@ Those last two costs do not add random draws to the prover tape.
 
 This is still a conditional algebraic simulation theorem. Completing the specified
 interactive protocol theorem requires discharging the remaining concrete circuit and
-public-key conditions and completing the final verifier opening-assembly connection.
-The group IDs, node order, duplicate guard, commitment compression, and complete evaluation
-vectors are now derived under the stated key and point conditions. The complete reference computation has
+public-key conditions. The group IDs, node order, duplicate guard, commitment compression,
+complete evaluation vectors, and final opening assembly are now derived under the stated
+key and point conditions. The complete reference computation has
 a checked stage-by-stage causality proof on the same private tape and sampling law. The
 successful single-attempt law is now normalized, and finite independent retry histories
 are compared with a uniform bound and vanishing exhaustion tails. An unlimited-run
