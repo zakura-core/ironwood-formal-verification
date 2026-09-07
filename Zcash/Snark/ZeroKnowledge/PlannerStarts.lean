@@ -107,4 +107,11 @@ theorem slotShapeSummariesFrom_replicate_empty_starts
         firstFit] using congrArg (fun result : List ℕ × CircuitAllocations =>
           (0 :: result.1, result.2)) ih
 
+/-- Recover the complete indexed placement from the index-free start computation. -/
+theorem slotIn_pairs_eq_zip (shapes : List RegionShape) :
+    (slotIn shapes).1 = (shapes.map RegionShape.index).zip
+      (slotShapeSummariesFrom (shapes.map RegionShape.toSummary) ∅).1 := by
+  exact List.zip_of_prod (slotIn_indices shapes)
+    (congrArg Prod.fst (slotInFrom_forgetIndices shapes ∅))
+
 end Zcash.Snark.ZeroKnowledge

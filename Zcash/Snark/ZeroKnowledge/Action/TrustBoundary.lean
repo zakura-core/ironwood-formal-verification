@@ -7,6 +7,9 @@ import Zcash.Snark.ZeroKnowledge.ActionCompilerMasking
 import Zcash.Snark.ZeroKnowledge.ActionOrderedShapes
 import Zcash.Snark.ZeroKnowledge.ActionCompressionInput
 import Zcash.Snark.ZeroKnowledge.ActionOrderedPlacement
+import Zcash.Snark.ZeroKnowledge.ActionOrderedSort
+import Zcash.Snark.ZeroKnowledge.ActionOrderedStarts
+import Zcash.Snark.ZeroKnowledge.ActionCompressionCertificate
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -19,11 +22,12 @@ point-order dependency. The encoded Vesta comparison additionally carries the
 existing Vesta point-order dependency. No new native certificate is introduced.
 
 The actual compiler's masking profile follows from the source classifications,
-activation trace, and evaluated replacement polynomials. It needs only the
-compression count. The older selector-only route still records initial packed-column
+activation trace, evaluated replacement polynomials, and checked compression count.
+The older selector-only route still records initial packed-column
 zeros and selector routing as premises; the main simulation no longer uses that route.
-The actual configure program now supplies the query order and all key dimensions
-except the selector-compression count. Given fifteen packed columns, the derived
+The actual configure program supplies the query order and all key dimensions.
+The exact legacy sort, V1 placement, complete activation fold, and greedy packing
+calculation certify fifteen packed columns. The derived
 key supplies the domain, sigma naming, exact copy layout, and complete opening
 connection. These facts also instantiate the encoded simulation bound. The
 entire compiled degree profile follows from the source and the packer's degree
@@ -447,3 +451,23 @@ assert_computable Zcash.Snark.ZeroKnowledge.actionSortedPlacementShapes
 assert_computable Zcash.Snark.ZeroKnowledge.actionSortedPlacementStarts
 assert_axioms Zcash.Snark.ZeroKnowledge.actionSortedPlacementStarts_eq_slot
 assert_axioms Zcash.Snark.ZeroKnowledge.actionSortedPlacementShapes_length
+
+-- The source's exact legacy-sort order and the corresponding source-indexed starts.
+assert_computable Zcash.Snark.ZeroKnowledge.actionSortedRegionShapes
+assert_computable Zcash.Snark.ZeroKnowledge.actionSortedRegionIndices
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOrderedRegionShapes_sorted
+assert_axioms Zcash.Snark.ZeroKnowledge.actionSortedRegionShapes_indices
+assert_axioms Zcash.Snark.ZeroKnowledge.actionSortedRegionShapes_length
+assert_computable Zcash.Snark.ZeroKnowledge.actionRegionStartsCertificate
+assert_axioms Zcash.Snark.ZeroKnowledge.actionSortedRegionShapes_summaries
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOrderedRegionStarts_eq_certificate
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_regionStarts_eq_certificate +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- The complete activation table and the closed fifteen-column compiler count.
+assert_computable Zcash.Snark.ZeroKnowledge.actionSelectorBitsCertificate
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOrderedSelectorActivations_length
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOrderedSelectorActivations_bits
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOrderedSelectorCount_eq_fifteen
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_newFixedCols_eq_fifteen +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)

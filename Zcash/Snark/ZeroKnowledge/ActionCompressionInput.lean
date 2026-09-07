@@ -8,8 +8,8 @@ import Zcash.Snark.ZeroKnowledge.SelectorCompressionCount
 
 The ordered shape table, source activation trace, and degree vector determine the
 actual Action compiler's compression count. This interface removes the full
-witness computation from the remaining numerical certificate. It proves the
-input correspondence; the value fifteen still needs a checked calculation.
+witness computation from the numerical certificate. It proves the input
+correspondence used by the closed count in `ActionCompressionCertificate`.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

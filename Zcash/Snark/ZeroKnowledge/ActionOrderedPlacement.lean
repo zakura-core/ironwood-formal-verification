@@ -6,9 +6,9 @@ import Zcash.Snark.ZeroKnowledge.PlannerStarts
 
 Each block certifies its least fitting start and the free run occupied by its
 repeated regions. All columns, including selectors, are retained. The two empty
-regions follow the trace with zero starts. The separate sorting certificate must
-connect this order to the actual legacy sorter before these starts describe the
-compiler's complete plan.
+regions follow the trace with zero starts. `ActionOrderedSort` certifies the exact
+legacy-sort order, and `ActionOrderedStarts` connects these starts to the compiler's
+complete plan in original region order.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

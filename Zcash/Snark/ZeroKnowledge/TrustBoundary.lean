@@ -1701,6 +1701,7 @@ assert_axioms Zcash.Snark.ZeroKnowledge.slotShapeSummariesFrom_replicate_starts
 assert_computable Zcash.Snark.ZeroKnowledge.plannerTraceStarts
 assert_axioms Zcash.Snark.ZeroKnowledge.slotShapeSummariesFrom_trace_starts
 assert_axioms Zcash.Snark.ZeroKnowledge.slotShapeSummariesFrom_replicate_empty_starts
+assert_axioms Zcash.Snark.ZeroKnowledge.slotIn_pairs_eq_zip
 
 assert_computable Zcash.Snark.ZeroKnowledge.selectorPackingCount
 assert_axioms Zcash.Snark.ZeroKnowledge.selectorPackingCount_def

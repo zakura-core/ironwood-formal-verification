@@ -2,20 +2,21 @@ import Zcash.Snark.ZeroKnowledge.ActionGateDegree
 import Zcash.Snark.ZeroKnowledge.ActionBoundaryProfile
 import Zcash.Snark.ZeroKnowledge.ActionSimulation
 import Zcash.Snark.ZeroKnowledge.ActionCommitments
+import Zcash.Snark.ZeroKnowledge.ActionCompressionCertificate
 
 /-!
 # Simulation with the actual Action compiler key
 
 The verifying key is constructed by Action key generation. Its shape, query order,
-domain, and permutation layout are supplied by `ActionDerivedKey`, given the
-remaining selector-compression count. This removes independent key-layout, sigma
+domain, and permutation layout follow from `ActionDerivedKey` and the checked
+fifteen-column compression certificate. This removes independent key-layout, sigma
 naming, copy-query, and product-dimension premises from the Action reference bound.
 
 The entire degree and masking profiles follow from the actual compiler and source
-activation trace. The remaining concrete selector condition is the compression count.
-Original row and copy equations remain the valid-witness premise;
-nonidentity of the URS blinding point remains the
-public-parameter condition. This theorem compares the encoded reference attempts.
+activation trace. Original row and copy equations remain the valid-witness premise;
+nonidentity of the URS blinding point remains the public-parameter condition. This
+theorem compares the complete encoded reference attempts on independent wide-reduced
+private and verifier tapes.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge
@@ -28,11 +29,12 @@ open Zcash.Common
 theorem actionReferenceKey_publicCommitmentsMatch {G : Type}
     [AddCommGroup G] [Module Fp G] [Inhabited G] {actions : ℕ}
     (urs : URS G) (hk : urs.k = 11)
-    (hpacked : actionCircuit.selectorMap.newFixedCols = 15)
     (inputs : Fin actions → PublicInputs Fp) :
-    PlonkPublicCommitmentsMatch urs (actionReferenceKey (actions := actions) urs hk hpacked)
-      (actionPublicPolynomials inputs) (actionCircuit.instanceCommitment urs inputs) :=
-  actionCompilerPublicCommitmentsMatch urs hk
+    PlonkPublicCommitmentsMatch urs
+      (actionReferenceKey (actions := actions) urs hk actionCircuit_newFixedCols_eq_fifteen)
+      (actionPublicPolynomials inputs) (actionCircuit.instanceCommitment urs inputs) := by
+  let hpacked := actionCircuit_newFixedCols_eq_fifteen
+  exact actionCompilerPublicCommitmentsMatch urs hk
     (actionCircuit_referenceShape actions urs.k hk hpacked)
     (actionReferenceKey_queryLayout (actions := actions) urs hk hpacked) inputs
 
@@ -40,35 +42,35 @@ theorem actionReferenceKey_publicCommitmentsMatch {G : Type}
 theorem actionReferenceKey_opening_eq_public {G : Type}
     [AddCommGroup G] [Module Fp G] [Inhabited G] [DecidableEq G] {actions : ℕ}
     (urs : URS G) (hk : urs.k = 11)
-    (hpacked : actionCircuit.selectorMap.newFixedCols = 15)
     (inputs : Fin actions → PublicInputs Fp) (ch : Challenges urs.k Fp)
     (view : PreIpaMaskView 5 (22 * actions + 10) G × IpaTranscript urs.k Fp G)
     (hpositive : 0 < actions)
     (hpoints : Function.Injective (plonkQueryPoint (omegaOf 11) ch.x)) :
-    let vk := actionReferenceKey (actions := actions) urs hk hpacked
+    let vk := actionReferenceKey (actions := actions) urs hk actionCircuit_newFixedCols_eq_fifteen
     let pub := actionPublicPolynomials inputs
     let actual := plonkVerifierOpening urs vk pub (actionCircuit.instanceCommitment urs inputs) ch view
     let reference := plonkPublicOpening urs pub ch.x ch.x1 ch.x2 ch.x4 ch.x3
       (plonkVerifierHx vk pub ch (privateColumnView view.1.2.1)) view.1
-    (actual.1.eval urs, actual.2) = (reference.1.eval urs, reference.2) :=
-  actionCompilerOpening_eq_public urs hk
+    (actual.1.eval urs, actual.2) = (reference.1.eval urs, reference.2) := by
+  let hpacked := actionCircuit_newFixedCols_eq_fifteen
+  exact actionCompilerOpening_eq_public urs hk
     (actionCircuit_referenceShape actions urs.k hk hpacked)
     (actionReferenceKey_queryLayout (actions := actions) urs hk hpacked) inputs ch view hpositive hpoints
 
-/-- The Action source and compiler instantiate encoded simulation, given the compression count and valid rows. -/
+/-- The concrete Action compiler instantiates encoded simulation for valid original rows and copies. -/
 theorem wideActionCompilerReference_simulation_error_bound {actions : ℕ} [Fintype VestaG]
     (urs : URS VestaG) (hk : urs.k = 11)
-    (hpacked : actionCircuit.selectorMap.newFixedCols = 15)
     (inputs : Fin actions → PublicInputs Fp)
     (witness : Fin actions → Fin 10 → Fin 2048 → Fp)
-    (hvalid : PlonkOriginalRowsValid (actionReferenceKey (actions := actions) urs hk hpacked)
+    (hvalid : PlonkOriginalRowsValid
+      (actionReferenceKey (actions := actions) urs hk actionCircuit_newFixedCols_eq_fifteen)
       (actionPublicPolynomials inputs) witness)
     (hW : urs.w ≠ 0) :
-    let vk := actionReferenceKey (actions := actions) urs hk hpacked
+    let vk := actionReferenceKey (actions := actions) urs hk actionCircuit_newFixedCols_eq_fifteen
     let pub := actionPublicPolynomials inputs
     let copies := plonkKeygenCopies actionCircuit actionCircuit_permutationColumnCount_eq
       (actionCircuit_operations_usedRows_eq_1779.le.trans (by decide)) vk.permutationChunks
-      (actionReferenceKey_copyChunkWidths (actions := actions) urs hk hpacked)
+      (actionReferenceKey_copyChunkWidths (actions := actions) urs hk actionCircuit_newFixedCols_eq_fifteen)
     (∀ a : Fin actions, ∀ pair ∈ copies,
       (plonkCopyCellPair pub (plonkUnmaskedAdviceRows witness) a vk.permutationChunks pair.1).1 =
         (plonkCopyCellPair pub (plonkUnmaskedAdviceRows witness) a vk.permutationChunks pair.2).1) →
@@ -78,6 +80,7 @@ theorem wideActionCompilerReference_simulation_error_bound {actions : ℕ} [Fint
       PMFEventBiasLE
         ((freshPlonkVerifierSimulator urs (widePlonkChallenges urs.k) vk pub).map encodedPlonkAttempt)
         (freshEncodedPlonkReferenceAttempt urs hk vk pub witness) (plonkSimulationErrorBound actions) := by
+  let hpacked := actionCircuit_newFixedCols_eq_fifteen
   intro vk pub copies hvalues
   have hdomain := actionReferenceKey_domain (actions := actions) urs hk hpacked
   have hnaming := actionReferenceKey_sigmaNaming (actions := actions) urs hk hpacked

@@ -11,23 +11,21 @@ been resolved in the local Bento checkout inspected for this development. This i
 provenance limitation, not evidence that the source is unavailable, and does not block
 proving the protocol described by the pinned note and Lean definitions.
 
-The concrete Action protocol still has outstanding circuit/key and verifier-correspondence
-obligations. The pre-existing verifier and soundness formalization does not itself supply
-an honest-prover distribution or simulator.
-
-The current [Action compiler reference theorem](ActionCompilerSimulation.lean) gives a numerical joint
-simulation bound from original gate, lookup, and copy-value validity, the selector
-compression count, and a nonidentity blinding point. It uses the actual Action
+The current [Action compiler reference theorem](ActionCompilerSimulation.lean) gives a
+numerical statistical honest-verifier simulation bound for a complete encoded reference
+attempt. It assumes original gate, lookup, and copy-value validity, eleven IPA rounds,
+and a nonidentity blinding point. The concrete circuit and selector properties are proved.
+It uses the actual Action
 compiler key, Action's canonical public inputs, and
 compiler-derived fixed rows, sigma rows, and complete ordered copy list. Sigma coherence
 and every public polynomial degree bound are derived. The existing Action compiler
 proofs discharge its fixed-column prefix, permutation count, and operation-footprint
 bounds. [Action configuration](ActionConfiguration.lean) also supplies the complete
 advice and instance query order, the permutation columns, and all degree-derived
-dimensions. Given fifteen compressed selector columns, the
+dimensions. The [compression certificate](ActionCompressionCertificate.lean) proves
+that the actual compiler produces fifteen compressed selector columns. The
 [derived key](ActionDerivedKey.lean) has the required shape, fixed-query order,
-domain, sigma naming, copy-query layout, and product dimensions. The compression
-count remains as a concrete Action obligation. The
+domain, sigma naming, copy-query layout, and product dimensions. The
 [compiled masking profile](ActionBoundaryProfile.lean) is derived from the actual
 source and boundary values: structural certificates for every source gate and lookup
 survive selector substitution, query resolution, and verifier-expression translation.
@@ -53,8 +51,8 @@ another selector in its column is active. It uses the compiler's actual fixed-ce
 writes and the packer's distinct root assignments. The
 [boundary-value refinement](ActionBoundaryValues.lean) now incorporates these values
 into the complete masking profile and main simulation theorem. It removes the
-initial packed-column zeros and selector-routing premises. The compression count
-is the only remaining concrete selector premise.
+initial packed-column zeros and selector-routing premises. The checked compression
+count removes the final concrete selector premise from the main theorem.
 The [ordered shape certificate](ActionOrderedShapes.lean) reduces all 395 regions
 to 57 distinct source shapes, with separate kernel-checked equalities for the four
 Action stages. It retains selector columns, their order, and both empty regions.
@@ -62,15 +60,23 @@ Action stages. It retains selector columns, their order, and both empty regions.
 placement trace supplies every individual V1 start. The
 [concrete placement certificate](ActionOrderedPlacement.lean) checks all 181
 nonempty-region blocks and returns all 395 starts, including both empty regions.
-It still needs to be connected to the exact legacy-sort output.
+The [exact legacy-sort certificate](ActionOrderedSort.lean) checks all 23 recursive
+phases, including tied keys, against those source shapes. The
+[source-order reconstruction](ActionOrderedStarts.lean) connects that order to the
+placement blocks and restores all 395 compiler starts to their original region indices.
 The [compression-input refinement](ActionCompressionInput.lean) proves that the
 actual compiler's column count is exactly `actionOrderedSelectorCount`, a finite
 calculation using these certified source shapes, activations, and selector degrees.
-The remaining numerical certificate must show that this calculation returns fifteen.
+The [closed numerical certificate](ActionCompressionCertificate.lean) checks all
+6,795 source activations at those starts and proves that the count is fifteen.
 The [bit-vector refinement](SelectorActivationBits.lean) preserves the complete
 activation table and its conflict tests, including duplicate and out-of-range
 activations. The [packing refinement](SelectorBitPacking.lean) gives exactly the
 same greedy column count through this compact representation.
+The finite equalities use [kernel reflexivity](../../Meta/KernelRfl.lean), which
+checks each auxiliary theorem before closing its goal. Regression checks reject
+false results and changed recursive-callback arguments. No new native certificate
+is introduced.
 The [encoded-attempt theorem](PlonkAttemptSimulation.lean) preserves this bound while
 retaining partial output, the received challenges, and the specified failure status.
 The [full-attempt failure bound](PlonkFailures.lean) is now numerical too. These results
@@ -93,10 +99,9 @@ guard, every member evaluation, and each complete compressed evaluation vector. 
 assembled commitment point and scalar equal the reference reconstruction under the stated
 key and point conditions. The [compiler-derived key connector](PlonkDerivedKey.lean)
 supplies public commitment agreement from actual key generation. The concrete Action
-opening connection now obtains its shape and query-layout premises from configuration
-and the remaining compression-count condition.
-The remaining protocol and public-key obligations, and the separate limitations on claims
-about a concrete implementation, are listed below.
+opening connection obtains its shape and query layout from configuration and the
+proved compression count. The witness and public-parameter assumptions, retry scope,
+and separate implementation claims are described below.
 
 The target for the specified interactive protocol is **statistical HVZK**. The
 [Halo2 book's perfect SHVZK model](https://zcash.github.io/halo2/design/protocol.html)
@@ -1230,9 +1235,10 @@ check holds using the actual fixed values. The source trace excludes every guard
 of a previous-row read from row zero. Compression preserves that guard's zero value
 even when another selector in the same column is active. The partial expression
 checker evaluates these public factors, and its compiler-preservation proof carries
-them through all gates and lookup expressions. This removes the initial-column-zero
-and selector-routing assumptions from the encoded comparison; only the count of
-fifteen compressed columns remains as a concrete selector obligation.
+them through all gates and lookup expressions. The exact source-sort, placement,
+activation-bit, and greedy-packing certificates now prove the fifteen-column count.
+The encoded comparison therefore needs no initial-column-zero, selector-routing,
+or compression-count premise.
 
 [ActionCommitments.lean](ActionCommitments.lean) identifies Action's existing public data
 with the general compiler construction. Its actual public-input and sigma commitments
@@ -1254,15 +1260,15 @@ The coefficient `148m+70` counts bias costs in the comparison: `148m+46` private
 22 verifier-challenge costs, and two additional costs in the exceptional-event analysis.
 Those last two costs do not add random draws to the prover tape.
 
-This is still a conditional algebraic simulation theorem. Completing the specified
-interactive protocol theorem requires discharging the remaining concrete circuit and
-public-key conditions. The group IDs, node order, duplicate guard, commitment compression,
-complete evaluation vectors, and final opening assembly are now derived under the stated
-key and point conditions. For compiler-derived keys, public commitment agreement and
-domain values follow from key generation and the shape/layout conditions. The
-compression count remains open. The actual configuration supplies shape and layout
-from that count, and the source trace and actual boundary values supply the full
-masking profile without initial-column-zero or selector-routing assumptions.
+The main Action reference theorem now derives its concrete circuit and key properties
+from the source compiler. Its witness premise is satisfaction of the original gates,
+lookup tuples, and compiler copy equations; its public-parameter premise is a nonzero
+blinding point in the eleven-round setup. The group IDs, node order, duplicate guard,
+commitment compression, complete evaluation vectors, and final opening assembly follow
+under the stated distinct-point condition. Public commitment agreement, domain values,
+shape, layout, and the complete degree and masking profiles are supplied by Action key
+generation and the checked compression count. Exceptional challenges remain in the
+simulation experiment and are charged to its numerical error bound.
 The complete reference computation has
 a checked stage-by-stage causality proof on the same private tape and sampling law. The
 successful single-attempt law is now normalized, and finite independent retry histories
