@@ -51,6 +51,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkSigmaCertificate
 import Zcash.Snark.ZeroKnowledge.BlindingGenerator
 import Zcash.Snark.ZeroKnowledge.PlonkEncoding
 import Zcash.Snark.ZeroKnowledge.PlonkBinaryBounds
+import Zcash.Snark.ZeroKnowledge.PlonkCommitmentRouting
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -1426,3 +1427,14 @@ assert_axioms Zcash.Snark.ZeroKnowledge.scalarBlinding_bijective_iff
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkSimulationErrorBound_le_actions_mul_one
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkSimulationErrorBound_one_lt_two_pow
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkSimulationErrorBound_lt_actions_mul_two_pow
+
+-- The actual verifier's slot resolution and compression, with grouping order still explicit.
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPrivateCommitmentId
+assert_computable Zcash.Snark.ZeroKnowledge.plonkOpeningCommitmentIds
+assert_axioms Zcash.Snark.ZeroKnowledge.PlonkPublicCommitmentsMatch
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProofFromJointView_privateCommitment
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProofFromJointView_quotientCommitment
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkOpeningCommitmentIds_commitments
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompressSet_commitment
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierGroup_commitmentMembers
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierGroup_commitment

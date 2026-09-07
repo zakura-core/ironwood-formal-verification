@@ -34,6 +34,10 @@ vanishing exhaustion probabilities. An unlimited-run history law is not yet cons
 The [Vesta specialization](VestaSimulation.lean) now fixes the encodings and derives the
 blinding bijection from nonidentity; all four captured blinding points have kernel-checked
 nonidentity proofs. Its curve-order dependency is recorded in a separate census.
+The [commitment-routing refinement](PlonkCommitmentRouting.lean) identifies the verifier's
+private commitment slots and quotient weights with the reference construction. It proves
+that the verifier's compression agrees with the prover's Horner fold once the exact group
+ID order and public commitment agreement are established; those conditions remain explicit.
 The remaining protocol and public-key obligations, and the separate limitations on claims
 about a concrete implementation, are listed below.
 
@@ -1049,6 +1053,24 @@ a separate sigma-coherence hypothesis. Original gate, lookup, and copy-value val
 public size and expression certificates, the four initial selector zeros, and the URS
 hiding condition remain explicit. The compiler-sigma no-perfect-simulator endpoint uses
 the same public data in the unused-row witness argument.
+
+### Verifier commitment routing
+
+[PlonkCommitmentRouting.lean](PlonkCommitmentRouting.lean) connects the reference proof's
+emitted private commitments to the existing verifier's `assembledCommitment` resolver.
+The verifier's quotient MSM evaluates to the same weighted sum of the eight quotient
+pieces as the reference prover. `PlonkPublicCommitmentsMatch` separately records the
+required agreement of instance, fixed, and sigma commitments with the public polynomials.
+
+`plonkVerifierGroup_commitmentMembers` uses the actual `constructIntermediateSets`
+provenance theorem: every routed member carries the commitment named by its ID, including
+when different slots happen to contain the same group value. `plonkCompressSet_commitment`
+proves that reverse member order with ascending powers equals the prover's Horner fold,
+for every batching challenge, including zero. Together these give
+`plonkVerifierGroup_commitment`, conditional only on the declared group ID order and public
+commitment agreement (and the 2048-row quotient convention). Deriving those ID lists from
+the complete query layout, routing the node evaluations, and proving the concrete public
+key agreement remain open. These algebraic connectors introduce no native certificate.
 
 ### Actual Action public data
 
