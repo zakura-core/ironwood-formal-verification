@@ -11,6 +11,9 @@ soundness formalization does not supply an honest-prover distribution or simulat
 The current [reference-prover theorem](PlonkOriginalSimulation.lean) gives a numerical
 joint simulation bound from original gate, lookup, and copy validity, plus explicit
 public-key conditions. It no longer has an unbounded row-failure term under those premises.
+The [keygen specialization](PlonkKeygenSimulation.lean) constructs its fixed polynomials
+from the circuit compiler, derives every public polynomial degree bound, and proves
+the six masked fixed rows are zero. Two usable boundary rows still require checking.
 The remaining implementation and public-key correspondence obligations are listed below.
 
 The implementation-facing interactive target is **statistical HVZK**. The
@@ -651,6 +654,32 @@ The product-coin experiment is now connected to the full independent challenge l
 Native-loop correspondence, including the
 available Rust implementation's cancellation of fixed permutation cells on zero factors,
 also remains open.
+
+[KeygenFixedSupport.lean](KeygenFixedSupport.lean) proves a generic fact about the actual
+`TopLevelCircuit` compiler: every raw fixed write is below the usable-row boundary.
+Table default-fill stops at that boundary, while constants, selectors, and region writes
+stay within the V1 placement. Deduplication and sorting preserve this support, and the
+dense fixed columns are consequently zero on the masked suffix. This proof uses no
+captured layout and has only Lean's standard axiom dependencies.
+
+[PlonkPublicRows.lean](PlonkPublicRows.lean) constructs instance, fixed, and sigma
+polynomials from their 2048-row vectors, proving every domain evaluation and degree
+bound. [PlonkKeygenFixed.lean](PlonkKeygenFixed.lean) supplies the fixed vectors from
+the compiler's dense columns. With domain exponent 11, five blinding rows, and at least
+29 compiled fixed columns, the six masked boundary rows are proved zero. The remaining
+finite check reads rows 0 and 2041 directly from the compiler; it does not assume an
+equality between arbitrary public polynomial evaluations and captured scalar values.
+
+`wideKeygenPlonkVerifier_simulation_error_bound` in
+[PlonkKeygenSimulation.lean](PlonkKeygenSimulation.lean) uses this construction in the
+same numerical joint bound. Its public degree premises are discharged, and its mask
+profile follows from that finite compiler-row check. The instance and sigma vectors are
+still supplied inputs, with original gate/lookup validity and copy equations required.
+The remaining Action boundary check, statement/sigma provenance, public commitments,
+and agreement between the compiler's circuit and the verifier key remain open. The
+existing Action compilation lemmas also carry the Pallas generator's native order
+certificate; using them in an Action specialization requires explicit trust accounting.
+The generic keygen endpoint is pinned without that dependency.
 
 This is still a conditional algebraic simulation theorem. Completing the exact prover
 theorem requires connecting the stated witness and public-key conditions to the actual
