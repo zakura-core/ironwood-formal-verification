@@ -93,7 +93,8 @@ theorem plonkPermutationFactorRows_length {actions : ℕ} (pub : PlonkPublicPoly
     (plonkPermutationFactorRows pub rows a chunks c i).length = (chunks.getD c []).length := by
   simp only [plonkPermutationFactorRows, plonkPermutationPairPolynomials, List.length_map]
 
-private theorem permutationFactorRows_congr {actions : ℕ}
+/-- Equal current-row advice values give the same public-layout permutation factor list. -/
+theorem plonkPermutationFactorRows_congr {actions : ℕ}
     (pub : PlonkPublicPolynomials actions) (left right : ColumnHistory 2048)
     (chunks : List (List (ColumnRef × ℕ)))
     (hqueries : plonkPermutationQueriesUnrotated chunks = true)
@@ -124,7 +125,7 @@ theorem plonkPermutationFactorRows_masked {actions k : ℕ} {G : Type*}
     (a : Fin actions) (c : ℕ) (i : Fin 2048) (hi : i.val < 2042) :
     plonkPermutationFactorRows pub (plonkTotalColumnRows vk pub witness ch tape) a vk.permutationChunks c i.val =
       plonkPermutationFactorRows pub (plonkUnmaskedAdviceRows witness) a vk.permutationChunks c i.val := by
-  apply permutationFactorRows_congr pub _ _ vk.permutationChunks hqueries a c i.val
+  apply plonkPermutationFactorRows_congr pub _ _ vk.permutationChunks hqueries a c i.val
   intro col
   rw [plonkTotalColumnRows_advice_rows vk pub witness ch tape a col i hi, plonkUnmaskedAdviceRows_eval]
 

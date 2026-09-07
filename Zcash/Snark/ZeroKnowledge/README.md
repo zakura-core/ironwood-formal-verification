@@ -23,9 +23,10 @@ restricts the verifier's challenge space, including excluding zero and evaluatio
 points. The pinned implementation does not enforce all those exclusions. Exact conditional
 simulation of a component is therefore not a perfect SHVZK theorem for this prover. Neither
 the nonuniform sampler nor an upper bound on simulation error alone disproves perfect ZK.
-The domain-row disclosure result below separates complete reference-proof distributions
-when two supplied row vectors differ in a usable cell. Turning it into an implementation
-counterexample still requires an admissible witness pair and execution correspondence.
+The domain-row disclosure result below separates complete reference-proof distributions.
+Under explicit compiler placement and copy-footprint conditions, a second valid reference
+witness can now be constructed from any first one. Turning that result into an implementation
+counterexample still requires Rust witness admissibility and execution correspondence.
 
 ## Field sampling
 
@@ -222,11 +223,33 @@ The exact joint event `(x = omega^row, adviceEval = value)` has mass `Pr[x = ome
 when `value` is that cell and zero otherwise. Consequently, two supplied row vectors
 with different cells have different complete reference-proof laws. Under the wide
 challenge law, their event bias is at least `fieldSample (omega^row) > 0`, and no single
-exact simulator law can match both. This is not yet a valid-witness counterexample for
-Ironwood: both row vectors must be admissible witnesses for the same public statement,
-and the total reference output must be connected to the implemented execution,
-including aborts, retries, and encoding. The pointwise disclosure does not rely on a
+exact simulator law can match both. The pointwise disclosure does not rely on a
 uniform-mask assumption or on the sampling-bias upper bound.
+
+[PlonkInactiveRows.lean](PlonkInactiveRows.lean) and the kernel checks in
+[PlonkInactiveCertificate.lean](PlonkInactiveCertificate.lean) prove that the captured
+one- and two-Action gate and lookup expressions ignore all advice when packed selectors
+are zero. Compiler support supplies these zeros after region placement, independently
+of table values in the original fixed columns.
+
+[PlonkUnusedWitness.lean](PlonkUnusedWitness.lean) changes one advice cell in usable row
+2000. If placement ends by row 1999, earlier expressions cannot read the changed cell
+through any supported rotation, and later expressions ignore it. Gate and lookup validity
+therefore survive every replacement. Copy validity also survives if the declared copy
+list avoids row 2000; that public footprint condition remains explicit.
+
+[PlonkUnusedSimulation.lean](PlonkUnusedSimulation.lean) adds one to the cell, constructing
+a distinct witness valid for the same reference key and public polynomials. Its
+`keygenPlonkReference_no_perfect_simulator` theorem rules out an exact simulator for all
+valid inputs to this reference relation under those placement and copy conditions.
+[PlonkUnusedCertificate.lean](PlonkUnusedCertificate.lean) specializes the valid-witness
+construction to both captured keys, discharging their inactive-expression checks.
+
+This is still conditional on the declared reference relation. Connecting the typed copy
+list to compiler copies, establishing whether Rust admits the changed unused cell, and
+matching its execution, aborts, retries, and encoding remain necessary for an Ironwood
+implementation counterexample. The witness construction does not assume that arbitrary
+changes to padding survive the Rust witness-generation interface.
 
 ## Joint columns and pre-IPA messages
 

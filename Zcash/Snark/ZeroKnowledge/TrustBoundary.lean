@@ -38,6 +38,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkKeygenSimulation
 import Zcash.Snark.ZeroKnowledge.PlonkSelectorSimulation
 import Zcash.Snark.ZeroKnowledge.Observation
 import Zcash.Snark.ZeroKnowledge.PlonkDisclosure
+import Zcash.Snark.ZeroKnowledge.PlonkUnusedCertificate
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -147,9 +148,14 @@ The complete typed reference proof now exposes each usable advice cell at its do
 challenge on every private tape. The exact mass of this joint challenge/scalar event
 separates the full reference laws of row vectors with different usable cells. Under
 wide-reduced challenges the lower bound is positive. A common exact simulator for
-those two laws is impossible, but an implementation impossibility claim still needs
-two permitted satisfying witnesses for the same public statement and execution
-correspondence that accounts for errors, retries, and codecs.
+those two laws is impossible. The inactive-expression certificates for both captured
+keys now allow a second valid reference witness to be constructed from any first one:
+add one to an advice cell in row 2000, assuming placement ends by row 1999 and copies
+avoid the changed row. The gate, lookup, and copy relation is preserved for the same
+public statement. These public placement and copy conditions remain explicit. An
+implementation impossibility claim still requires compiler correspondence for the
+copy list, admissibility of the changed cell at the Rust witness interface, and
+execution correspondence that accounts for errors, retries, and codecs.
 These results do not establish a whole-prover simulator, Fiat–Shamir zero-knowledge, or a
 Rust-to-Lean refinement.
 -/
@@ -867,6 +873,7 @@ assert_computable Zcash.Snark.ZeroKnowledge.plonkPermutationRefUnrotated
 assert_computable Zcash.Snark.ZeroKnowledge.plonkPermutationQueriesUnrotated
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkPermutationRef_usable
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkPermutationFactorRows_length
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPermutationFactorRows_congr
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkPermutationFactorRows_masked
 assert_axioms Zcash.Snark.ZeroKnowledge.copyValues_replay
 assert_axioms Zcash.Snark.ZeroKnowledge.prod_chunk_cells
@@ -1008,3 +1015,27 @@ assert_axioms Zcash.Snark.ZeroKnowledge.freshPlonkVerifierProver_ne_of_usable_ce
 assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkVerifierProver_advice_separation
 assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkVerifierProver_ne_of_usable_cell
 assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkVerifierProver_no_common_exact_simulator
+
+-- A second valid reference witness follows from inactive selectors and a copy footprint.
+assert_computable Zcash.Snark.ZeroKnowledge.plonkInactiveExpressionsCheck +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkInactiveExpressionsCheck_sound
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygenPublicPolynomials_inactive_agrees
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkInactiveExpressionRowValue_eq
+assert_axioms Zcash.Snark.ZeroKnowledge.singleAction_plonkInactiveExpressions
+assert_axioms Zcash.Snark.ZeroKnowledge.multiAction_plonkInactiveExpressions
+assert_computable Zcash.Snark.ZeroKnowledge.plonkUnusedAdviceRow
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkUnusedAdviceRow_usable
+assert_computable Zcash.Snark.ZeroKnowledge.plonkUnusedWitness
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkUnusedWitness_at
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkUnusedWitness_other_row
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAdviceRotationRow_ne_unused
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkUnusedWitness_advice_before
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkUnusedWitness_expression_before
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygenExpressionRowValue_unused
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkOriginalRowsValid_unused
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCopyCellPair_unused
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCopyWitness_unused
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygen_exists_distinct_valid_witness
+assert_axioms Zcash.Snark.ZeroKnowledge.keygenPlonkReference_no_perfect_simulator
+assert_axioms Zcash.Snark.ZeroKnowledge.singleAction_plonkKeygen_distinct_valid_witness
+assert_axioms Zcash.Snark.ZeroKnowledge.multiAction_plonkKeygen_distinct_valid_witness
