@@ -72,7 +72,8 @@ theorem plonkColumnAttempt_complete_iff {actions k : ℕ} {G : Type*}
     using columnAttemptFromTape_complete_iff (plonkColumnConstructionSteps vk pub witness ch) []
       (tape ∘ Fin.cast (plonkColumnConstructionSteps_row_samples vk pub witness ch))
 
-private theorem columnRowsFromTape_cast_eq {n count : ℕ} {steps steps' : List (ColumnStep n)}
+/-- Equal schedules give the same execution when supplied through their fixed-size tape casts. -/
+theorem columnRowsFromTape_cast_eq {n count : ℕ} {steps steps' : List (ColumnStep n)}
     (hsteps : steps = steps') (hcount : columnRowSampleCount steps = count)
     (hcount' : columnRowSampleCount steps' = count) (history : ColumnHistory n)
     (tape : Fin count → Fp) :

@@ -8,6 +8,11 @@ specified constructions, not a verified correspondence with that Rust executable
 There is not yet a zero-knowledge theorem for the complete prover. The existing verifier and
 soundness formalization does not supply an honest-prover distribution or simulator.
 
+The current [reference-prover theorem](PlonkOriginalSimulation.lean) gives a numerical
+joint simulation bound from original gate, lookup, and copy validity, plus explicit
+public-key conditions. It no longer has an unbounded row-failure term under those premises.
+The remaining implementation and public-key correspondence obligations are listed below.
+
 The implementation-facing interactive target is **statistical HVZK**. The
 [Halo2 book's perfect SHVZK model](https://zcash.github.io/halo2/design/protocol.html)
 restricts the verifier's challenge space, including excluding zero and evaluation-domain
@@ -364,8 +369,10 @@ fold. `sampledPlonkVerifier_rows_simulation_error_bound` in
 premises from public degree bounds and row-wise satisfaction of the gate, permutation,
 and lookup constraints. The concrete construction theorems below now supply the lookup
 and product-scan parts, deriving the copy-product identity from original copy equations
-and public sigma coherence. Gate preservation, the circuit's copy/keygen connection,
-and exceptional events remain to be discharged. Satisfying advice columns are inputs
+and public sigma coherence. The original-row theorems below also supply gate preservation
+and construction completion from original validity and public mask checks. The circuit's
+public-polynomial/keygen connection and whole-prover exceptional behavior remain open.
+Satisfying advice columns are inputs
 in the pinned protocol; generating the underlying circuit witness is outside its scope.
 
 [ExceptionalMixtures.lean](ExceptionalMixtures.lean) and
@@ -379,9 +386,9 @@ the original, unconditioned row distribution and the inherited IPA blind.
 existing proof type. Its bound is **`invalidRowMass + (148m + 46) × bias`**. The first term
 is the ideal probability that `X^2048 - 1` does not divide the actual numerator. The
 theorem no longer assumes row correctness; a separate result bounds that term by the
-probability of any violated row constraint. Bounding it numerically for the actual lookup
-and product algorithms, including zero denominators, remains necessary. Public polynomial,
-degree-profile, generator, and supplied-challenge premises still apply.
+probability of any violated row constraint. The construction results below bound it
+using fresh product challenges and explicit original-witness and public-key conditions.
+Public polynomial, degree-profile, generator, and supplied-challenge premises still apply.
 
 [PlonkChallenges.lean](PlonkChallenges.lean) records all `11 + k` verifier challenges in
 their squeeze order and defines both uniform and wide-reduced independent tape laws.
@@ -431,8 +438,8 @@ and `g` counts gamma-linear factors. The dense declared dimensions—fifteen per
 and six lookup factors per usable row per Action—give **`42882m/p + 2 × bias`**.
 The concrete factor coverage and pre-product challenge dependencies are proved below,
 and the final construction theorem applies this term to `averageInvalidRowMass` under
-the complete independent challenge law. The remaining circuit and sorting prerequisites
-still need bounds for valid witnesses.
+the complete independent challenge law. The original-row theorem below removes the
+remaining circuit and sorting failure mass under explicit witness and public mask premises.
 
 [LookupRowConstraints.lean](LookupRowConstraints.lean) proves that the computed lookup
 scan satisfies all five constraints emitted by the existing `lookupExpressions` builder.
@@ -462,10 +469,10 @@ through the actual polynomial builder to exact domain division.
 [PlonkPermutationRows.lean](PlonkPermutationRows.lean) identifies the proof string's
 next/terminal rotations, with a kernel proof that the inverse-sixth-power rotation reads
 the retained row 2042 from row zero. The later construction theorems supply the scan
-correspondence and exact packed constraint layout. Instantiating the named-cell identity
-at those factors and preserving the gate constraints under row masking remain open.
-These results do not yet bound the
-joint `averageInvalidRowMass` term.
+correspondence and exact packed constraint layout. The copy and original-row results below
+instantiate the named-cell identity at those factors and prove gate preservation from
+explicit witness and public-key conditions. The final reference theorem combines these
+results with the numerical exceptional-event bounds.
 
 [LookupSort.lean](LookupSort.lean) implements the sorting rule from step 2 of the pinned
 description: canonical integer sorting, one matching table occurrence reserved at each
@@ -477,8 +484,9 @@ prefixes always succeed; each input value only needs to occur somewhere in the t
 even if the input repeats it many times.
 [LookupSortRows.lean](LookupSortRows.lean) specializes to canonical `Fp.val` order and
 supplies these facts directly to the existing five lookup constraints. This closes the
-sorter's correctness premises. Lookup membership after masking and Rust control-flow
-correspondence remain separate obligations.
+sorter's correctness premises. The original-row theorem below supplies lookup membership
+after masking under the public expression check. Rust control-flow correspondence remains
+a separate obligation.
 [LookupSortExamples.lean](LookupSortExamples.lean) kernel-checks small exact-order cases
 for reverse filling, duplicate table occurrences, and an absent required value.
 
@@ -552,7 +560,7 @@ The other challenge coordinates retain their original wide-reduced laws, so this
 separation adds no sampling error. It is an identity of the offline tape experiment,
 not a claim about Fiat-Shamir outputs conditioned on a proof.
 
-[PlonkRowPrerequisites.lean](PlonkRowPrerequisites.lean) names the three remaining
+[PlonkRowPrerequisites.lean](PlonkRowPrerequisites.lean) names three
 conditions: completed lookup construction, gate divisibility after masking, and the
 packed copy-product identity. It proves that these conditions together with nonzero
 denominators give exact numerator division on the same row tape.
@@ -568,8 +576,9 @@ two-sided event bound is:
 
 `prerequisiteFailureMass` is measured under the full wide-reduced challenge law and
 independent uniform row tape already used in the sampling hybrid. It covers failed
-construction, gates, or the copy-product identity; it has not been proved negligible
-or zero for a valid Orchard witness. Private row tapes appear only in the probability
+construction, gates, or the copy-product identity. The original-row theorem below proves
+it is zero under explicit witness and public-key conditions; connecting those conditions
+to the full Action keygen remains open. Private row tapes appear only in the probability
 analysis, not in the disclosed verifier view. No distribution is conditioned on success.
 
 [ColumnRetained.lean](ColumnRetained.lean) and [PlonkAdviceRows.lean](PlonkAdviceRows.lean)
@@ -595,21 +604,59 @@ the joint simulation bound:
 
 **`gateConstructionFailureMass + (42882m + 4113)/p + (148m + 70) × bias`**.
 
-The remaining mass covers failed lookup construction or gate division after masking.
-It is still measured under the original reference tape law, without conditioning on
-success, and has not been proved negligible for a valid Orchard witness. The copy
+This mass covers failed lookup construction or gate division after masking under the
+original reference tape law. The original-witness theorem below proves it is zero
+under explicit public mask conditions, without conditioning on success. The copy
 premises still require connecting the supplied usable-cell copy list and public sigma
-labels to full Action keygen. The query certificates establish only the key's query
-layout. Lookup membership after advice masking and gate preservation also remain open.
+labels to full Action keygen. The copy-query certificates establish only the key's
+query layout.
+
+[ExpressionMasking.lean](ExpressionMasking.lean) gives a computable, public expression
+checker. It recognizes retained advice queries and products annihilated by fixed zero
+selectors. Passing the check proves invariance under arbitrary changes to the other
+advice values; failure of the check is not a claim that a mask actually influences the
+expression. [PlonkAdviceRotations.lean](PlonkAdviceRotations.lean) connects the check to
+the exact current, next, and previous query rows, including modular wraparound.
+[PlonkExpressionRows.lean](PlonkExpressionRows.lean) identifies these expression values
+with the existing polynomial gate and lookup-compression builders.
+
+[PlonkOriginalRows.lean](PlonkOriginalRows.lean) separates original witness validity
+from public mask safety. Original gates vanish and each uncompressed lookup input tuple
+occurs in its table. The public mask profile then gives actual masked gate division
+and compressed lookup membership for every challenge and tape.
+[ColumnCompletion.lean](ColumnCompletion.lean) and
+[PlonkLookupCompletion.lean](PlonkLookupCompletion.lean) show that the resulting successful
+sorts make the actual partial column schedule complete on the same tape. This is
+construction completion; zero product denominators can still affect proof acceptance.
+
+[PlonkValidRows.lean](PlonkValidRows.lean) consequently proves that the construction-and-gate
+failure mass is zero under any challenge law. With original copy equations and public
+sigma coherence, all row prerequisites hold.
+[PlonkOriginalSimulation.lean](PlonkOriginalSimulation.lean) gives the two-sided joint
+reference-proof bound:
+
+**`(42882m + 4113)/p + (148m + 70) × bias`**.
+
+This removes the unbounded row term under the stated original-witness and public-key
+premises. It does not assume uniform field masks or perfect completeness of the prover.
+
+[PlonkMaskBoundary.lean](PlonkMaskBoundary.lean) reduces the public mask profile to eight
+gate rows and two lookup rows: all advice queries in rows 1 through 2040 are retained.
+[PlonkMaskCertificate.lean](PlonkMaskCertificate.lean) checks both captured keys in the
+kernel using the stated fixed-query boundary values from `actionLayout.json`. The file
+records the source hash and scalar values. Its profile theorems still require that
+the supplied public polynomials evaluate to those values; authenticating the capture
+and connecting these rows and the copy/sigma profile to full Action keygen remain open.
 The product-coin experiment is now connected to the full independent challenge law.
 Native-loop correspondence, including the
 available Rust implementation's cancellation of fixed permutation cells on zero factors,
 also remains open.
 
 This is still a conditional algebraic simulation theorem. Completing the exact prover
-theorem requires discharging the remaining row conditions for the actual circuit, the full verifier's
-grouping and commitment routing, failures and retries across the whole prover, the challenge
-model and Fiat–Shamir argument, and correspondence with the Rust implementation. The
+theorem requires connecting the stated witness and public-key conditions to the actual
+circuit and key generation, the full verifier's grouping and commitment routing, failures
+and retries across the whole prover, the challenge model and Fiat–Shamir argument, and
+correspondence with the Rust implementation. The
 available Rust quotient implementations have not been proved equivalent to these polynomial
 computations, and byte encoding is outside the typed proof result.
 

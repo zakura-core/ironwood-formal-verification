@@ -32,6 +32,8 @@ import Zcash.Snark.ZeroKnowledge.PlonkProductCertificate
 import Zcash.Snark.ZeroKnowledge.PlonkConstructedSimulation
 import Zcash.Snark.ZeroKnowledge.PlonkCopySimulation
 import Zcash.Snark.ZeroKnowledge.PlonkCopyCertificate
+import Zcash.Snark.ZeroKnowledge.PlonkOriginalSimulation
+import Zcash.Snark.ZeroKnowledge.PlonkMaskCertificate
 import Zcash.Snark.ZeroKnowledge.Observation
 import Zcash.Meta.AxiomCheck
 
@@ -63,9 +65,10 @@ the ideal probability of row states that fail division as an explicit error term
 does not assume correctness on every random state. The fresh-challenge comparison retains
 the entire verifier tape, adding its exceptional-challenge probability and the average
 invalid-row probability to the prover's sampling bias. With independent wide-reduced
-verifier coins, the challenge term is bounded by `4113/p + 22 × bias`. Bounding the
-remaining invalid-row probability for the honest algorithms and integrating the full
-verifier's grouping remain open.
+verifier coins, the challenge term is bounded by `4113/p + 22 × bias`. The later
+original-row theorem bounds the remaining row contribution using explicit witness
+and public-key conditions. Connecting those conditions to full Action keygen and
+integrating the full verifier's grouping remain open.
 The product-row scan now has checked recurrence and terminal-value lemmas that retain
 zero-denominator cases. Separate factor-family bounds permit a random private prefix
 independent of the two product challenges. The actual reference factor lists and their
@@ -112,9 +115,18 @@ equal the original witness factors. Original copy equations propagate through th
 replayed copy permutation; public sigma coherence then gives the exact packed product
 identity for every challenge and tape. Under these explicit witness and key premises,
 the prerequisite mass equals `gateConstructionFailureMass`, and the joint bound carries
-only that remaining row error. Connecting the supplied usable-cell copy list and sigma
-labels to full Action keygen, preserving gates and lookup membership under masking,
-and bounding the remaining construction prerequisites for valid witnesses remain open. The
+only that remaining row error. A public expression checker now proves invariance under
+changes to unretained advice, including products killed by fixed zero selectors.
+The exact modular rotation rules identify every retained query. Original gate validity
+and lookup tuple membership then give masked gate division and compressed lookup
+membership on every tape. The successful sorts make the actual partial column runner
+complete on that same tape, so `gateConstructionFailureMass` is zero. The resulting
+joint reference bound is `(42882m + 4113)/p + (148m + 70) × bias`, given those original
+witness conditions and the public masking/copy profiles. All interior rows pass the
+mask check automatically; both captured keys have kernel certificates for the eight
+remaining boundary rows with the stated captured fixed-query values. Matching those
+values to the supplied public polynomials, and connecting the usable-cell copy list
+and sigma labels to full Action keygen, remain explicit obligations. The
 sampling comparison alone is not a simulator for failed attempts. The proof string's
 terminal rotations use the kernel root certificate.
 These results do not establish a whole-prover simulator, Fiat–Shamir zero-knowledge, or a
@@ -853,6 +865,58 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonkRowPrerequisiteFailureMass_eq_of_co
 assert_axioms Zcash.Snark.ZeroKnowledge.singleAction_plonkCopyQueries
 assert_axioms Zcash.Snark.ZeroKnowledge.multiAction_plonkCopyQueries
 assert_axioms Zcash.Snark.ZeroKnowledge.wideCopyValidPlonkVerifier_simulation_error_bound
+
+-- Original gate and lookup validity, public mask safety, and completion of the actual row attempt.
+assert_computable Zcash.Snark.ZeroKnowledge.exprPublicValue
+assert_axioms Zcash.Snark.ZeroKnowledge.exprPublicValue_sound
+assert_computable Zcash.Snark.ZeroKnowledge.exprMaskInvariant
+assert_axioms Zcash.Snark.ZeroKnowledge.exprMaskInvariant_of_retained_all
+assert_axioms Zcash.Snark.ZeroKnowledge.exprMaskInvariant_sound
+assert_computable Zcash.Snark.ZeroKnowledge.plonkAdviceRotationOffsets
+assert_computable Zcash.Snark.ZeroKnowledge.plonkAdviceRotationRow
+assert_computable Zcash.Snark.ZeroKnowledge.plonkAdviceQueryRetained
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAdviceQueryFactor_row
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPolynomialClaimProof_advice_eval_row
+assert_computable Zcash.Snark.ZeroKnowledge.plonkAdviceRowValues +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPolynomialClaimProof_adviceRowValues
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAdviceRowValues_masked
+assert_axioms Zcash.Snark.ZeroKnowledge.columnAttemptFromTape_complete_of_total
+assert_axioms Zcash.Snark.ZeroKnowledge.columnRowsFromTape_cast_eq
+assert_computable Zcash.Snark.ZeroKnowledge.plonkFixedRowValues +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkInstanceRowValues +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkExpressionRowValue +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkExpressionMaskCheck +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPolynomialClaimProof_fixedRowValues
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPolynomialClaimProof_instanceRowValues
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkExpressionRowValue_masked
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkGatePolynomial_eval_row
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkLookupCompressedRows_eq_values
+assert_axioms Zcash.Snark.ZeroKnowledge.PlonkMaskingProfile
+assert_axioms Zcash.Snark.ZeroKnowledge.PlonkOriginalRowsValid
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkTotalColumnRows_gateConstraints_dvd
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkTotalColumnRows_lookupTuples
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkTotalColumnRows_lookupMembership
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkConstructColumnResult_ne_none_of_sorted
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkColumnAttempt_complete_of_sorted
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkColumnAttempt_complete_of_original
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkGateConstructionReady_of_original
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkGateConstructionFailureMass_eq_zero
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkRowPrerequisites_of_original
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkRowPrerequisiteFailureMass_eq_zero
+assert_axioms Zcash.Snark.ZeroKnowledge.wideOriginalValidPlonkVerifier_simulation_error_bound
+assert_computable Zcash.Snark.ZeroKnowledge.plonkMaskBoundaryRows
+assert_computable Zcash.Snark.ZeroKnowledge.plonkLookupMaskBoundaryRows
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaskBoundaryRows_lookup
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAdviceQueryRetained_interior
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkExpressionMaskCheck_interior
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaskingProfile_of_boundaries
+assert_computable Zcash.Snark.ZeroKnowledge.plonkMaskBoundaryCheck
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaskBoundaryCheck_sound
+assert_computable Zcash.Snark.ZeroKnowledge.capturedPlonkMaskBoundaryFixed +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.singleAction_plonkMaskBoundary
+assert_axioms Zcash.Snark.ZeroKnowledge.multiAction_plonkMaskBoundary
+assert_axioms Zcash.Snark.ZeroKnowledge.singleAction_plonkMaskingProfile
+assert_axioms Zcash.Snark.ZeroKnowledge.multiAction_plonkMaskingProfile
 
 -- At an unmasked row the disclosed evaluation is the original cell, for every mask law.
 assert_axioms Zcash.Snark.ZeroKnowledge.maskedRowPolynomial_eval_before
