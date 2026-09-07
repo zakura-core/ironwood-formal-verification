@@ -38,6 +38,13 @@ at most nine, lookup inputs at most four, lookup tables at most one, and permuta
 chunks have width at most seven. The selector packer's degree invariant holds for
 every activation pattern; this proof does not assume its final packing trace.
 There is no unbounded row-failure term under those premises.
+The [selector-trace refinement](ActionSelectorTrace.lean) now connects compact
+source activation traces to the compiler's placement walk. The checked components
+cover witness loading, all range-check variants used here, and the complete
+variable-base multiplication gadget. Its main region enables only selector eight
+at local row zero. The remaining Action regions, global placement, and final
+compression still need their concrete trace certificates; this component result
+does not yet discharge the four initial packed-column zeros.
 The [encoded-attempt theorem](PlonkAttemptSimulation.lean) preserves this bound while
 retaining partial output, the received challenges, and the specified failure status.
 The [full-attempt failure bound](PlonkFailures.lean) is now numerical too. These results
@@ -1164,9 +1171,9 @@ The query layout guarantees all 29 fixed columns exist; the circuit shape suppli
 `plonkCompilerOpening_eq_public` applies the complete opening connector to that generated
 key and derives the reference domain size and root too. It requires shape and query-layout
 agreement, eleven IPA rounds, a positive Action count, and distinct rotation points;
-it has no separate public-commitment or domain-value premise. Kernel proofs of the compiled
-Action shape and query layout are still open. The captured-key query certificates alone
-do not discharge them.
+it has no separate public-commitment or domain-value premise. Action's configuration
+theorems now supply the compiled shape and query layout given fifteen compressed
+selector columns. That compression count still needs a source certificate.
 
 ### Actual Action public data
 
@@ -1214,8 +1221,10 @@ public-key conditions. The group IDs, node order, duplicate guard, commitment co
 complete evaluation vectors, and final opening assembly are now derived under the stated
 key and point conditions. For compiler-derived keys, public commitment agreement and
 domain values follow from key generation and the shape/layout conditions. The four
-initial Action selector zeros and its concrete key shape, layout, and expression checks
-remain open. The complete reference computation has
+initial Action selector zeros, the compression count, and the nine-selector routing
+condition remain open. The actual configuration supplies shape and layout from the
+count, and source proofs supply the compiled expression checks from the packing
+conditions. The complete reference computation has
 a checked stage-by-stage causality proof on the same private tape and sampling law. The
 successful single-attempt law is now normalized, and finite independent retry histories
 are compared with a uniform bound and vanishing exhaustion tails. An unlimited-run
