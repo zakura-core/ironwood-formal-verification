@@ -15,13 +15,20 @@ The concrete Action protocol still has outstanding circuit/key and verifier-corr
 obligations. The pre-existing verifier and soundness formalization does not itself supply
 an honest-prover distribution or simulator.
 
-The current [Action reference theorem](ActionSimulation.lean) gives a numerical joint
+The current [Action compiler reference theorem](ActionCompilerSimulation.lean) gives a numerical joint
 simulation bound from original gate, lookup, and copy-value validity, plus explicit
-key and initial-selector conditions. It uses Action's canonical public inputs and
+compression, expression, and initial-selector conditions. It uses the actual Action
+compiler key, Action's canonical public inputs, and
 compiler-derived fixed rows, sigma rows, and complete ordered copy list. Sigma coherence
 and every public polynomial degree bound are derived. The existing Action compiler
 proofs discharge its fixed-column prefix, permutation count, and operation-footprint
-bounds. Four initial packed-selector zeros remain as the Action masking premise.
+bounds. [Action configuration](ActionConfiguration.lean) also supplies the complete
+advice and instance query order, the permutation columns, and all degree-derived
+dimensions. Given fifteen compressed selector columns, the
+[derived key](ActionDerivedKey.lean) has the required shape, fixed-query order,
+domain, sigma naming, copy-query layout, and product dimensions. The compression
+count, four initial packed-selector zeros, and compiled expression checks remain
+as concrete Action obligations.
 There is no unbounded row-failure term under those premises.
 The [encoded-attempt theorem](PlonkAttemptSimulation.lean) preserves this bound while
 retaining partial output, the received challenges, and the specified failure status.
@@ -44,8 +51,9 @@ guard, every member evaluation, and each complete compressed evaluation vector. 
 [final opening connection](PlonkVerifierOpening.lean) proves that the actual verifier's
 assembled commitment point and scalar equal the reference reconstruction under the stated
 key and point conditions. The [compiler-derived key connector](PlonkDerivedKey.lean)
-supplies public commitment agreement from actual key generation; its concrete Action
-shape and query-layout premises remain to be established.
+supplies public commitment agreement from actual key generation. The concrete Action
+opening connection now obtains its shape and query-layout premises from configuration
+and the remaining compression-count condition.
 The remaining protocol and public-key obligations, and the separate limitations on claims
 about a concrete implementation, are listed below.
 

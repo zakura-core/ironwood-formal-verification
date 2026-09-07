@@ -14,6 +14,44 @@ namespace Zcash.Snark.ZeroKnowledge
 
 open Halo2
 
+/-- A packed selector cell is zero when no activation at that row is routed to its column. -/
+theorem topLevelSelectorRows_zero_of_no_activation {F : Type} [FiniteField F]
+    {Config : Type} {PublicInput : TypeMap} [ProvableType PublicInput]
+    (top : TopLevelCircuit F Config PublicInput) (column row : ℕ)
+    (hselector : top.constraintSystem.numFixedColumns ≤ column)
+    (hno : ∀ selector compressed,
+      (selector, row) ∈ top.selectorActivations →
+      top.selectorMap.lookup selector = some compressed → compressed.packedCol ≠ column) :
+    (top.fixedRows.getD column []).getD row 0 = 0 := by
+  by_cases hcolumn : column < top.fixedColumnCount
+  · by_cases hrow : row < top.n
+    · apply top.fixedRows_getD_getD_eq_zero_of_not_mem column row _ hcolumn hrow
+      intro hcell
+      obtain ⟨assignment, hassignment, hcell⟩ := List.mem_map.mp hcell
+      obtain ⟨raw, hraw, hrawCell⟩ := List.mem_map.mp
+        (top.fixedAssignment_cell_mem_raw_of_mem assignment hassignment)
+      have hcolumnEq := congrArg Prod.fst (hrawCell.trans hcell)
+      have hrowEq := congrArg Prod.snd (hrawCell.trans hcell)
+      change raw.1 = column at hcolumnEq
+      change raw.2.1 = row at hrowEq
+      obtain ⟨selector, activationRow, compressed, hactivation, hlookup, rfl⟩ :=
+        Layout.exists_selectorActivation_of_mem_rawAssignments_of_column_ge
+          (top.usableRowsAt top.domainExponent) top.selectorMap top.constraintSystem top.operations
+          top.keygenCoherent
+          (by
+            rw [List.forall_iff_forall_mem]
+            intro constant hconstant
+            exact top.constantColumn_index_lt_numFixedColumns hconstant)
+          hraw (by simpa only [hcolumnEq] using hselector)
+      exact hno selector compressed (hrowEq ▸ hactivation) hlookup hcolumnEq
+    · apply List.getD_eq_default
+      rw [top.fixedRows_getD_length column hcolumn]
+      exact Nat.le_of_not_gt hrow
+  · rw [List.getD_eq_default top.fixedRows [] (by
+      rw [top.fixedRows_length]
+      exact Nat.le_of_not_gt hcolumn)]
+    rfl
+
 /-- A raw write to a packed selector column comes from an activation before the placement endpoint. -/
 theorem topLevelRawSelector_row_lt_placementEnd {F : Type} [FiniteField F]
     {Config : Type} {PublicInput : TypeMap} [ProvableType PublicInput]

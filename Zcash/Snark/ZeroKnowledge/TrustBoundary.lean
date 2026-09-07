@@ -260,7 +260,12 @@ agreement follows from the existing FFT and Lagrange commitment theorems, with t
 kernel-checked domain root now shared from the arithmetic layer. Shape and query layout
 supply all fixed and sigma column coverage and the reference domain values. The Action
 specialization derives its instance and sigma commitment equalities from the concrete
-compiler; its shape and query-layout conditions remain explicit for the full opening.
+compiler. Its configure program now determines the advice and instance queries,
+permutation columns, and degree-derived dimensions. Given fifteen compressed selector
+columns, it supplies the full reference key shape, fixed-query order, domain, sigma
+naming, and copy-query conditions to the opening and encoded simulation theorems.
+The compression count, four initial selector zeros, and compiled expression checks
+remain explicit in that specialization.
 These equalities do not assert verifier acceptance. The concrete Action results have a
 separate census for their inherited Pallas order dependency.
 Fiat–Shamir ZK needs its own argument;
@@ -1083,6 +1088,7 @@ assert_computable Zcash.Snark.ZeroKnowledge.exprPartialPublicValue
 assert_axioms Zcash.Snark.ZeroKnowledge.exprPartialPublicValue_refines
 assert_computable Zcash.Snark.ZeroKnowledge.exprPartialMaskInvariant
 assert_axioms Zcash.Snark.ZeroKnowledge.exprPartialMaskInvariant_refines
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevelSelectorRows_zero_of_no_activation
 assert_axioms Zcash.Snark.ZeroKnowledge.topLevelRawSelector_row_lt_placementEnd
 assert_axioms Zcash.Snark.ZeroKnowledge.topLevelSelectorRows_zero_of_placementEnd_le
 assert_axioms Zcash.Snark.ZeroKnowledge.topLevelSelectorRows_zero_after_placement
