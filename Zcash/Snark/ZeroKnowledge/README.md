@@ -11,9 +11,9 @@ been resolved in the local Bento checkout inspected for this development. This i
 provenance limitation, not evidence that the source is unavailable, and does not block
 proving the protocol described by the pinned note and Lean definitions.
 
-There is not yet a zero-knowledge theorem covering the complete specified prover, including
-its failures and retries. The pre-existing verifier and soundness formalization does not
-itself supply an honest-prover distribution or simulator.
+The concrete Action protocol still has outstanding circuit/key and verifier-correspondence
+obligations. The pre-existing verifier and soundness formalization does not itself supply
+an honest-prover distribution or simulator.
 
 The current [reference-prover theorem](PlonkCompilerSimulation.lean) gives a numerical
 joint simulation bound from original gate, lookup, and copy-value validity, plus explicit
@@ -30,6 +30,9 @@ now proves positive normalizers and carries their cost into the conditional comp
 The [retained-retry capstone](PlonkCompilerRetry.lean) compares the complete observed
 history for every finite independent attempt budget, with a uniform error bound and
 vanishing exhaustion probabilities. An unlimited-run history law is not yet constructed.
+The [Vesta specialization](VestaSimulation.lean) now fixes the encodings and derives the
+blinding bijection from nonidentity; all four captured blinding points have kernel-checked
+nonidentity proofs. Its curve-order dependency is recorded in a separate census.
 The remaining protocol and public-key obligations, and the separate limitations on claims
 about a concrete implementation, are listed below.
 
@@ -503,8 +506,8 @@ At `k = 11`, `wideFreshPlonkVerifier_simulation_error_bound` in
 The row term averages the ideal private row law over the wide-reduced verifier law.
 The concrete construction bound below now separates its zero-denominator contribution
 from the remaining sorting and gate prerequisites, given original copies and public
-sigma coherence. Relating the offline
-tape experiment to the actual interactive schedule remains open.
+sigma coherence. The causality theorem below connects the reference tape experiment to
+the actual interactive schedule.
 
 ## Complete encoded attempts
 
@@ -538,6 +541,43 @@ no simulation error. The successful-output analysis below uses the specified cod
 identity-failure property. The retained-history analysis below uses the observer's exact
 retry/error distinction. The causality proof below connects this observation to the
 complete reference computation on a fixed private tape.
+
+### Specified encodings and Vesta blinding
+
+[ProofEncoding.lean](ProofEncoding.lean) supplies the specified codecs: a scalar's
+canonical 32-byte little-endian representative, and a nonidentity Vesta point's
+32-byte affine x-coordinate with y-parity in bit 255. The point writer fails exactly
+on the identity. The point codec reuses CompElliptic's existing compressed encoding;
+neither codec adds a hash or proof trailer.
+
+[ProofSize.lean](ProofSize.lean) counts the actual reference proof constructor and
+existing message schedule, including the two optional permutation evaluations per
+Action. At eleven IPA rounds there are exactly `85+71m` proof items. With the fixed
+codecs, [PlonkEncoding.lean](PlonkEncoding.lean) proves that every completed reference
+attempt has exactly `2720+2272m` bytes. The same observer preserves the full reference
+prover's causal prefixes and the specified failures.
+
+`freshEncodedPlonkReferenceAttempt` samples the independent wide-reduced private and
+verifier tapes and runs the fixed-tape reference observer. Its law theorem identifies
+this computation exactly with the existing fresh reference proof law followed by the
+canonical observer. The simulator comparison therefore concerns those actual encoded
+attempts, including partial output and failure status.
+
+[BlindingGenerator.lean](BlindingGenerator.lean) proves that scalar blinding by a
+nonzero point is injective in a field module and bijective when the group and scalar
+field have the same finite cardinality. [VestaBlinding.lean](VestaBlinding.lean) derives
+that cardinality condition for Vesta, so the simulation's hiding premise is equivalent
+to `W != 0`. [CapturedBlinding.lean](CapturedBlinding.lean) proves this nonidentity for
+all four checked-in URS captures. The coordinate lookups and curve equation use kernel
+reduction; the captures' native whole-point-list certificates are not used.
+
+[VestaSimulation.lean](VestaSimulation.lean) applies these facts to the compiler-derived
+attempt, successful-emission, and finite retained-retry theorems, with the same numerical
+bounds. The codecs are fixed and the blinding premise is reduced to nonidentity. The
+actual Action circuit/key and verifier-grouping conditions remain explicit. The Vesta
+group-cardinality and concrete scalar-module facts inherit the repository's existing
+`CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt` native certificate. That dependency is named
+in [Vesta/TrustBoundary.lean](Vesta/TrustBoundary.lean); no new native certificate is added.
 
 ## Challenge causality
 
@@ -605,9 +645,9 @@ this adapter gives exactly the existing wide-reduced reference-prover distributi
 `plonkReferenceProofFromTape_causal` proves causality of its entire message schedule;
 `plonkReferenceProofFromTape_observation_causal` includes the encoded prefixes and actual
 abort checks. Both statements hold on every private tape and for all challenge values,
-without a randomness, witness-validity, or challenge-exclusion assumption. The supplied
-codecs and the concrete circuit/key and verifier correspondence retain their separate
-instantiation obligations.
+without a randomness, witness-validity, or challenge-exclusion assumption. The canonical
+codecs above now instantiate that observation. The concrete circuit/key and verifier
+correspondence retain their separate obligations.
 
 ## Full-attempt failure probability
 
@@ -1006,6 +1046,13 @@ public size and expression certificates, the four initial selector zeros, and th
 hiding condition remain explicit. The compiler-sigma no-perfect-simulator endpoint uses
 the same public data in the unused-row witness argument.
 
+[PlonkBinaryBounds.lean](PlonkBinaryBounds.lean) proves the simpler numerical statement
+**`epsilon(m) < m * 2^-238` for `m >= 1`**. It uses the proved `bias <= 2^-260` and
+kernel-checked integer arithmetic for one Action, then the affine dependence on `m`.
+The coefficient `148m+70` counts bias costs in the comparison: `148m+46` private samples,
+22 verifier-challenge costs, and two additional costs in the exceptional-event analysis.
+Those last two costs do not add random draws to the prover tape.
+
 This is still a conditional algebraic simulation theorem. Completing the specified
 interactive protocol theorem requires discharging the remaining concrete circuit and
 public-key conditions and connecting the reference constructions to the existing Lean
@@ -1026,6 +1073,9 @@ a prerequisite for the protocol-level statistical HVZK target.
 
 ## Checks
 
-`lake build Zcash.Snark.ZeroKnowledge.TrustBoundary` checks the proofs and their transitive
-axiom dependencies. The sampling program is also pinned as computable. This directory is
-included in the default library build, and its trust boundary is imported by `CensusCheck`.
+`lake build --wfail Zcash.Snark.ZeroKnowledge.TrustBoundary Zcash.Snark.ZeroKnowledge.Vesta.TrustBoundary CensusCheck`
+checks the proofs, their declared transitive axiom dependencies, and endpoint coverage.
+The parent census permits only Lean's standard axioms. The concrete Vesta census names
+the inherited curve-order certificate separately. The sampling program and canonical
+observer are also pinned as computable. This directory is included in the default
+library build, and both trust boundaries are imported by `CensusCheck`.

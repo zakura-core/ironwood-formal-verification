@@ -4,6 +4,7 @@ import Zcash.Snark.Fixtures.SingleAction.Random.TrustBoundary
 import Zcash.Snark.Fixtures.MultiAction.Honest.TrustBoundary
 import Zcash.Snark.Fixtures.MultiAction.Random.TrustBoundary
 import Zcash.Snark.ZeroKnowledge.TrustBoundary
+import Zcash.Snark.ZeroKnowledge.Vesta.TrustBoundary
 
 /-!
 # Endpoint-census completeness at the elaborated environment

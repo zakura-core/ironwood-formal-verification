@@ -48,6 +48,9 @@ import Zcash.Snark.ZeroKnowledge.PlonkCompilerRetry
 import Zcash.Snark.ZeroKnowledge.PlonkCausality
 import Zcash.Snark.ZeroKnowledge.IpaCausality
 import Zcash.Snark.ZeroKnowledge.PlonkSigmaCertificate
+import Zcash.Snark.ZeroKnowledge.BlindingGenerator
+import Zcash.Snark.ZeroKnowledge.PlonkEncoding
+import Zcash.Snark.ZeroKnowledge.PlonkBinaryBounds
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -57,7 +60,9 @@ These pins bound the transitive proof dependencies to Lean's standard axioms. No
 axiom or admitted lemma is permitted. Probability distributions are intentionally noncomputable;
 the finite sampling program and its declared tape sizes are checked as computable definitions.
 `+choice` permits classical choice only in erased proof fields of a plain computable definition;
-the checker still rejects noncomputable algorithmic content. No `+native` exemption is used.
+the checker still rejects noncomputable algorithmic content. No `+native` exemption is used
+in this census. `Vesta/TrustBoundary` separately names the existing curve-order dependency
+of the concrete Vesta specialization.
 
 The pinned results establish the field-sampling law, both masking constructions, joint
 simulation of the IPA stage with supplied or fresh interactive challenges, and joint hiding
@@ -224,8 +229,15 @@ The evaluation, multi-opening, and IPA stages now satisfy their dependencies on 
 same complete tape. The eleven-round adapter uses a challenge-independent `148m+46`
 sample count and has exactly the existing wide-reduced reference-prover law. Its
 entire message schedule is causal, including the encoded prefixes and actual abort
-checks, for every fixed tape and every challenge value. Concrete codec instantiation
-and the circuit/key and verifier correspondence remain separate obligations.
+checks, for every fixed tape and every challenge value. The canonical scalar and point
+codecs now instantiate that observer. Each successful item has 32 bytes, and the complete
+reference attempt has exactly `2720+2272m` bytes. Its fresh encoded tape law is proved
+equal to the existing fresh reference distribution followed by that same observer.
+The abstract blinding lemma reduces the hiding bijection to nonidentity in a field
+module whose group and scalar field have equal finite cardinalities. The concrete
+Vesta instantiation and captured nonidentity checks are pinned separately. The circuit/key
+and verifier correspondence remain obligations. The readable budget `epsilon(m) < m*2^-238`
+for positive Action counts follows from the sampling bound and kernel integer arithmetic.
 Fiat–Shamir ZK needs its own argument;
 Rust execution correspondence is a separate claim, outside the protocol theorem's target.
 -/
@@ -1375,3 +1387,34 @@ assert_computable Zcash.Snark.ZeroKnowledge.plonkReferenceProofFromTape +choice
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkReferenceProofFromTape_law
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkReferenceProofFromTape_causal
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkReferenceProofFromTape_observation_causal
+
+-- Canonical encodings, complete reference proof size, and the exact observed tape law.
+assert_axioms Zcash.Snark.ZeroKnowledge.scalarRepresentative_lt_two_pow_256
+assert_computable Zcash.Snark.ZeroKnowledge.plonkScalarCodec +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkScalarCodec_length
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPointCodec +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPointCodec_none_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPointCodec_of_ne_zero
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPointCodec_length
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolMessageCount_flatten
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProofString_messageCount
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProofFromJointView_messageCount
+assert_computable Zcash.Snark.ZeroKnowledge.encodedPlonkAttempt +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.encodedPlonkAttempt_complete_iff
+assert_computable Zcash.Snark.ZeroKnowledge.plonkReferenceAttemptFromTape +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkReferenceAttemptFromTape_law
+assert_axioms Zcash.Snark.ZeroKnowledge.freshEncodedPlonkReferenceAttempt
+assert_axioms Zcash.Snark.ZeroKnowledge.freshEncodedPlonkReferenceAttempt_law
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkReferenceProofFromTape_messageCount
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkReferenceAttemptFromTape_proof_length
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkReferenceAttemptFromTape_prefix_causal
+
+-- The group argument is abstract here; the concrete Vesta cardinality has its own census.
+assert_axioms Zcash.Snark.ZeroKnowledge.scalarBlinding_injective
+assert_axioms Zcash.Snark.ZeroKnowledge.scalarBlinding_bijective
+assert_axioms Zcash.Snark.ZeroKnowledge.scalarBlinding_bijective_iff
+
+-- The readable bound in the PR follows from the checked numerical budget.
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkSimulationErrorBound_le_actions_mul_one
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkSimulationErrorBound_one_lt_two_pow
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkSimulationErrorBound_lt_actions_mul_two_pow

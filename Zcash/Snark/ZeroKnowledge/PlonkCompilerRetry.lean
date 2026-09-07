@@ -13,7 +13,7 @@ are retained. For every finite attempt budget, the two-sided error is at most
 The caller uses independent private and verifier tapes across attempts and keeps
 the same statement and witness. This theorem does not cover a caller retaining
 mutable transcript or prover state between attempts. The reference model's
-concrete circuit/key and stage-causality conditions remain explicit.
+concrete circuit/key and verifier-grouping conditions remain explicit.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

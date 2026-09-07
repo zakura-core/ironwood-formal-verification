@@ -13,7 +13,7 @@ The bound is `2 epsilon / (1 - B)` where `B` is the honest failure bound plus
 the raw simulation error. `B < 1` is kernel-certified whenever `m ≤ 65535`,
 including both captured Action counts. The general endpoint keeps the numerical
 inequality explicit rather than imposing that arithmetic range on the protocol.
-The circuit/key and stage-causality obligations of the raw theorem remain.
+The concrete circuit/key and verifier-grouping obligations of the raw theorem remain.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge
