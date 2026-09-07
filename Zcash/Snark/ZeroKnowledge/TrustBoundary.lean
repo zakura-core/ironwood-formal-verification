@@ -29,6 +29,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkConstruction
 import Zcash.Snark.ZeroKnowledge.PlonkConstructedConstraints
 import Zcash.Snark.ZeroKnowledge.PlonkProductBounds
 import Zcash.Snark.ZeroKnowledge.PlonkProductCertificate
+import Zcash.Snark.ZeroKnowledge.PlonkConstructedSimulation
 import Zcash.Snark.ZeroKnowledge.Observation
 import Zcash.Meta.AxiomCheck
 
@@ -67,7 +68,8 @@ The product-row scan now has checked recurrence and terminal-value lemmas that r
 zero-denominator cases. Separate factor-family bounds permit a random private prefix
 independent of the two product challenges. The actual reference factor lists and their
 pre-product challenge independence now apply that bound to the computed denominators;
-their contribution to the joint invalid-row event still requires proof.
+their contribution to the joint invalid-row event is derived under the complete
+independent challenge law.
 The computed lookup scan now supplies all five of the existing row constraints from
 the compression, permutation, and run-structure facts outside zero denominators.
 The actual polynomial selectors and rotations carry this result to domain division.
@@ -96,9 +98,15 @@ independent prior private-state law. Both captured keys have kernel-checked thre
 fifteen-reference certificates. Completed partial attempts inherit the event
 bound without conditioning on success. The fixed-size uniform row tape realizes the
 sequential law already used by the joint simulation.
+Exact reordering of independent challenge draws separates beta and gamma from the
+other wide-reduced coins without charging the whole verifier tape's bias again.
+The averaged invalid-row event is exactly the computed row-tape experiment; it is
+covered by failed construction, gate or copy-product prerequisites, and zero
+denominators. The resulting concrete joint comparison has error at most
+`prerequisiteFailureMass + (42882m + 4113)/p + (148m + 70) × bias`.
 Preserving gates and lookup membership under masking, deriving the packed product
-identity from actual copy wiring, bounding construction failure, and relating the
-fresh product-coin experiment to the full challenge law remain open. The
+identity from actual copy wiring, and bounding the remaining construction prerequisites
+for valid witnesses remain open. The
 sampling comparison alone is not a simulator for failed attempts. The proof string's
 terminal rotations use the kernel root certificate.
 These results do not establish a whole-prover simulator, Fiat–Shamir zero-knowledge, or a
@@ -786,6 +794,22 @@ assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkProductDenominators_mixture_bad
 assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkColumnAttempt_productDenominators_bad_le
 assert_axioms Zcash.Snark.ZeroKnowledge.singleAction_plonkProductShape
 assert_axioms Zcash.Snark.ZeroKnowledge.multiAction_plonkProductShape
+
+-- The full challenge law and concrete row exceptions inside the joint simulation.
+assert_computable Zcash.Snark.ZeroKnowledge.plonkOtherChallengesFromTape +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkOtherChallengesFromTape_products
+assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkOtherChallenges
+assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkChallenges_products
+assert_axioms Zcash.Snark.ZeroKnowledge.PlonkRowPrerequisites
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkTotalColumnRows_domain_division
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkTotalColumnRows_invalid_cover
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkReferenceRowTapeLaw
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkReferenceRowTapeLaw_products
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkReferenceRowTapeLaw_denominators_bad_le
+assert_axioms Zcash.Snark.ZeroKnowledge.freshPlonkInvalidRowMass_referenceRows
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkRowPrerequisiteFailureMass
+assert_axioms Zcash.Snark.ZeroKnowledge.freshPlonkInvalidRowMass_le_prerequisites
+assert_axioms Zcash.Snark.ZeroKnowledge.wideConstructedPlonkVerifier_simulation_error_bound
 
 -- At an unmasked row the disclosed evaluation is the original cell, for every mask law.
 assert_axioms Zcash.Snark.ZeroKnowledge.maskedRowPolynomial_eval_before

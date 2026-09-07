@@ -9,10 +9,11 @@ factor bound applies to the denominators actually read by the reference scans.
 With fifteen packed permutation references the bound is `42882m/p + 2 × bias`.
 An arbitrary random private state is allowed before the two fresh challenges.
 
-This bounds a sufficient exceptional event for the reference construction. It is
-not a bound for every failed attempt, a distribution conditioned on successful
-sorting, or the remaining invalid-row term in the full simulation theorem. The
-fresh independent challenge law still needs the separate transcript refinement.
+This bounds a sufficient exceptional event for the reference construction, without
+conditioning on successful sorting. `PlonkConstructedSimulation` includes this term
+in the joint row-error bound with the remaining construction prerequisites explicit.
+`PlonkProductChallenges` connects these coins to the full independent challenge tape;
+the online schedule and Fiat-Shamir still require separate refinement.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

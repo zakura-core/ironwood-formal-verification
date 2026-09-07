@@ -11,8 +11,9 @@ provided those challenge draws are independent of it.
 
 The finite-family bound is one uniform field atom per factor, plus the two wide-
 reduction biases. `PlonkProductBounds` applies it to the concrete reference column
-computation with fresh challenges. Connecting it to the joint prover's invalid-row
-event remains a separate obligation.
+computation with fresh challenges. `PlonkConstructedSimulation` includes its
+contribution to the joint invalid-row event while retaining the remaining construction
+prerequisites explicitly.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

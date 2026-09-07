@@ -407,8 +407,9 @@ At `k = 11`, `wideFreshPlonkVerifier_simulation_error_bound` in
 **`averageInvalidRowMass + 4113/p + (148m + 68) × bias`**.
 
 The row term averages the ideal private row law over the wide-reduced verifier law.
-Bounding it for the actual lookup and product constructors and relating the offline
-tape experiment to the actual interactive schedule remain open.
+The concrete construction bound below now separates its zero-denominator contribution
+from the remaining sorting, gate, and copy-product prerequisites. Relating the offline
+tape experiment to the actual interactive schedule remains open.
 
 [RunningProductRows.lean](RunningProductRows.lean) gives computable lookup and chained
 permutation ratio scans with `0` mapped to `0` on inversion. It proves the exact condition
@@ -425,9 +426,10 @@ fresh `beta` and `gamma`, allowing a random private prefix independent of those 
 The wide-reduced bound is **`(b + g)/p + 2 × bias`**, where `b` counts beta-only factors
 and `g` counts gamma-linear factors. The dense declared dimensions—fifteen permutation
 and six lookup factors per usable row per Action—give **`42882m/p + 2 × bias`**.
-The concrete factor coverage and pre-product challenge dependencies are now proved
-below. This is not yet a bound on `averageInvalidRowMass`: coverage of every constraint
-family and the connection to the full challenge experiment remain open.
+The concrete factor coverage and pre-product challenge dependencies are proved below,
+and the final construction theorem applies this term to `averageInvalidRowMass` under
+the complete independent challenge law. The remaining circuit and sorting prerequisites
+still need bounds for valid witnesses.
 
 [LookupRowConstraints.lean](LookupRowConstraints.lean) proves that the computed lookup
 scan satisfies all five constraints emitted by the existing `lookupExpressions` builder.
@@ -541,10 +543,36 @@ this is an unconditional event bound, not conditioning the law on completion.
 [PlonkProductCertificate.lean](PlonkProductCertificate.lean) verifies in the kernel
 that both captured keys have three permutation chunks and fifteen packed references.
 
+[PlonkProductChallenges.lean](PlonkProductChallenges.lean) separates beta and gamma
+exactly from the full wide-reduced challenge tape by commuting independent draws.
+The other challenge coordinates retain their original wide-reduced laws, so this
+separation adds no sampling error. It is an identity of the offline tape experiment,
+not a claim about Fiat-Shamir outputs conditioned on a proof.
+
+[PlonkRowPrerequisites.lean](PlonkRowPrerequisites.lean) names the three remaining
+conditions: completed lookup construction, gate divisibility after masking, and the
+packed copy-product identity. It proves that these conditions together with nonzero
+denominators give exact numerator division on the same row tape.
+[PlonkReferenceRowLaw.lean](PlonkReferenceRowLaw.lean) identifies the existing averaged
+invalid-row term with that concrete tape experiment. Its union bound separates failure
+of those prerequisites from the now-bounded denominator event.
+
+[PlonkConstructedSimulation.lean](PlonkConstructedSimulation.lean) instantiates the
+joint verifier-typed simulation with the concrete total reference constructors. Its
+two-sided event bound is:
+
+**`prerequisiteFailureMass + (42882m + 4113)/p + (148m + 70) × bias`**.
+
+`prerequisiteFailureMass` is measured under the full wide-reduced challenge law and
+independent uniform row tape already used in the sampling hybrid. It covers failed
+construction, gates, or the copy-product identity; it has not been proved negligible
+or zero for a valid Orchard witness. Private row tapes appear only in the probability
+analysis, not in the disclosed verifier view. No distribution is conditioned on success.
+
 The remaining row obligations are lookup membership after advice masking, gate
 preservation, and the packed copy-permutation product identity. These results do not
-yet bound `averageInvalidRowMass` or the entire column-construction failure probability.
-Relating the fresh product-coin experiment to the full challenge law is still required.
+yet give a numerical bound for the remaining prerequisite failure probability.
+The product-coin experiment is now connected to the full independent challenge law.
 Native-loop correspondence, including the
 available Rust implementation's cancellation of fixed permutation cells on zero factors,
 also remains open.
