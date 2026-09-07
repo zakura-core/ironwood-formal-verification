@@ -1,4 +1,4 @@
-import Zcash.Snark.ZeroKnowledge.ActionSelectorTrace
+import Zcash.Snark.ZeroKnowledge.ActionSourceSelectorTrace
 import Zcash.Snark.ZeroKnowledge.ActionSimulation
 import Zcash.Snark.ZeroKnowledge.ActionCommitments
 import Zcash.Snark.ZeroKnowledge.ActionCompilerSimulation
@@ -231,4 +231,130 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_selectorActivations_eq_tra
   CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.variableBaseMainSelectorTrace_initial
 assert_axioms Zcash.Snark.ZeroKnowledge.actionVariableBaseMain_initial_selector +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- The complete source trace, composed from all Action subcircuits.
+assert_computable Zcash.Snark.ZeroKnowledge.shortSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.witnessShortCheck_selectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.witnessCheck_selectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.witnessCheckDecomposed_selectorTrace
+assert_computable Zcash.Snark.ZeroKnowledge.sinsemillaRoundsSelectorTrace
+assert_computable Zcash.Snark.ZeroKnowledge.sinsemillaPieceSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.sinsemillaRound_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.sinsemillaLoop_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.sinsemillaPiece_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.sinsemillaSlot_regionSelectorTrace
+assert_computable Zcash.Snark.ZeroKnowledge.sinsemillaChainSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.sinsemillaChain_regionSelectorTrace
+assert_computable Zcash.Snark.ZeroKnowledge.sinsemillaHashSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.sinsemillaHash_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.sinsemillaHash_selectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.witnessMessagePiece_selectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.condSwap_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.merkleDecomposition_regionSelectorTrace
+assert_computable Zcash.Snark.ZeroKnowledge.merkleHashSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.merkleHash_selectorTrace
+assert_computable Zcash.Snark.ZeroKnowledge.merkleLayerSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.merkleLayer_selectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.merkleRoot_selectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.incompleteAdd_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.decomposeEnable_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.decomposeAssign_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.copyDecompose_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.fixedConstantsWindow_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.fixedConstantsLoop_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.fixedWindow_regionSelectorTrace
+assert_computable Zcash.Snark.ZeroKnowledge.fixedWindowChainSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.fixedWindowChain_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.fullWidthWindow_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.fullWidthScalar_regionSelectorTrace
+assert_computable Zcash.Snark.ZeroKnowledge.fullWidthInnerSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.fullWidthInner_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.fullWidth_selectorTrace +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.runningFixedInnerSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.shortInner_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.shortSign_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.shortFixed_selectorTrace +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.baseFieldInner_regionSelectorTrace +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.baseFieldCheck13_selectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.baseFieldCanonicity_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.baseFieldFixed_selectorTrace +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.poseidonFullRound_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.poseidonPartialRound_regionSelectorTrace
+assert_computable Zcash.Snark.ZeroKnowledge.poseidonPermutationSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.poseidonPermutation_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.poseidonInit_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.poseidonInput_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.poseidonHash_selectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.addChip_regionSelectorTrace
+assert_computable Zcash.Snark.ZeroKnowledge.valueCommitSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.valueCommit_selectorTrace +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.spendAuthoritySelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.spendAuthority_selectorTrace +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.addressIntegritySelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.addressIntegrity_selectorTrace +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.nullifierSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.nullifier_selectorTrace +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.sinsemillaCommitSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.sinsemillaCommit_selectorTrace +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.commitIvkGate_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.commitIvkCanonicity_selectorTrace
+assert_computable Zcash.Snark.ZeroKnowledge.commitIvkPiecesSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.commitIvkPieces_selectorTrace
+assert_computable Zcash.Snark.ZeroKnowledge.commitIvkSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.commitIvk_selectorTrace +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.noteDecomposeB_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.noteDecomposeD_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.noteDecomposeE_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.noteDecomposeG_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.noteDecomposeH_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.noteGdCanonicity_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.notePkdCanonicity_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.noteValueCanonicity_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.noteRhoCanonicity_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.notePsiCanonicity_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.noteYCanonicity_regionSelectorTrace
+assert_computable Zcash.Snark.ZeroKnowledge.noteYSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.noteY_selectorTrace
+assert_computable Zcash.Snark.ZeroKnowledge.notePiecesSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.notePieces_selectorTrace
+assert_computable Zcash.Snark.ZeroKnowledge.noteChecksSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.noteChecks_selectorTrace +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.noteGatesSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.noteGates_selectorTrace
+assert_computable Zcash.Snark.ZeroKnowledge.noteCommitSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.noteCommit_selectorTrace +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.actionWitnessSelectorTrace
+assert_computable Zcash.Snark.ZeroKnowledge.actionChecksSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.actionSynthChecks_selectorTrace +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOrchardChecks_regionSelectorTrace
+assert_computable Zcash.Snark.ZeroKnowledge.actionNotesSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.actionSynthNotes_selectorTrace +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.actionBaseSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.actionSynthesizeBase_selectorTrace +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionBaseCall_selectorTrace +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCrossAddressRow_regionSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCrossAddress_selectorTrace
+assert_computable Zcash.Snark.ZeroKnowledge.actionSourceSelectorTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.actionMainPost_selectorTrace +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_selectorTrace_eq +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_selectorActivations_eq_sourceTrace +native(
   CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)

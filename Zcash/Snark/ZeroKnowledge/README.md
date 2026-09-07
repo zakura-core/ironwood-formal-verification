@@ -38,13 +38,15 @@ at most nine, lookup inputs at most four, lookup tables at most one, and permuta
 chunks have width at most seven. The selector packer's degree invariant holds for
 every activation pattern; this proof does not assume its final packing trace.
 There is no unbounded row-failure term under those premises.
-The [selector-trace refinement](ActionSelectorTrace.lean) now connects compact
-source activation traces to the compiler's placement walk. The checked components
-cover witness loading, all range-check variants used here, and the complete
-variable-base multiplication gadget. Its main region enables only selector eight
-at local row zero. The remaining Action regions, global placement, and final
-compression still need their concrete trace certificates; this component result
-does not yet discharge the four initial packed-column zeros.
+The [complete source selector trace](ActionSourceSelectorTrace.lean) now connects
+all 395 Action regions to the compiler's activation walk. The proof composes
+witness loading, both Merkle paths, the commitment and integrity checks, both
+note commitments, and the final cross-address check. It retains empty regions,
+duplicate activations, selector indices, and local rows, while proving independence
+from the witness programs. The variable-base main region enables only selector
+eight at local row zero. Global placement and final compression still need their
+concrete certificates; the source trace does not yet discharge the four initial
+packed-column zeros.
 The [encoded-attempt theorem](PlonkAttemptSimulation.lean) preserves this bound while
 retaining partial output, the received challenges, and the specified failure status.
 The [full-attempt failure bound](PlonkFailures.lean) is now numerical too. These results

@@ -1,4 +1,4 @@
-import Zcash.Snark.ZeroKnowledge.SelectorTracePrograms
+import Zcash.Snark.ZeroKnowledge.SelectorTraceFold
 import Zcash.Snark.ZeroKnowledge.Sampling
 import Zcash.Snark.ZeroKnowledge.MaskPolynomials
 import Zcash.Snark.ZeroKnowledge.MaskSampling
@@ -1656,3 +1656,6 @@ assert_axioms Zcash.Snark.ZeroKnowledge.regionSelectorTrace_forRange'
 assert_axioms Zcash.Snark.ZeroKnowledge.regionSelectorTrace_forRangeVar'
 assert_axioms Zcash.Snark.ZeroKnowledge.regionSelectorTrace_foldRange
 assert_axioms Zcash.Snark.ZeroKnowledge.selectorTrace_toFormal_call
+
+assert_computable Zcash.Snark.ZeroKnowledge.selectorRowRun
+assert_axioms Zcash.Snark.ZeroKnowledge.selectorTrace_foldCall

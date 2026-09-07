@@ -19,6 +19,10 @@ def runningSelectorTrace {K : ℕ} (config : LookupRangeCheck.Config K) (offset 
   (List.ofFn fun i : Fin count =>
     [(config.qLookup.index, offset + i.val), (config.qRunning.index, offset + i.val)]).flatten
 
+/-- The common local trace of a witnessed short check, regardless of bit width. -/
+def shortSelectorTrace {K : ℕ} (config : LookupRangeCheck.Config K) : List (ℕ × ℕ) :=
+  [(config.qLookup.index, 0), (config.qLookup.index, 1), (config.qBitshift.index, 1)]
+
 @[selector_trace_norm]
 theorem rangeCheckRound_regionSelectorTrace (K : ℕ) (config : LookupRangeCheck.Config K)
     (element : AssignedCell Fp) (index row : ℕ) (region : RegionIndex) :
@@ -82,5 +86,27 @@ theorem copyCheck_selectorTrace (K count : ℕ) (strict : Bool)
     selectorTrace (((LookupRangeCheck.copyCheck K count strict).call config input).operations region) =
       [runningSelectorTrace config 0 count] := by
   simp only [LookupRangeCheck.copyCheck, selector_trace_norm]
+
+/-- A witnessed short check has one region with its two lookups and bitshift gate. -/
+@[selector_trace_norm]
+theorem witnessShortCheck_selectorTrace (K bits : ℕ) (config : LookupRangeCheck.Config K)
+    (witness : WitgenIR Fp 1) (region : RegionIndex) :
+    selectorTrace ((LookupRangeCheck.witnessShortCheck K bits config witness).operations region) =
+      [[(config.qLookup.index, 0), (config.qLookup.index, 1), (config.qBitshift.index, 1)]] := by
+  simp only [LookupRangeCheck.witnessShortCheck, selector_trace_norm]
+
+@[selector_trace_norm]
+theorem witnessCheck_selectorTrace (K count : ℕ) (strict : Bool) (config : LookupRangeCheck.Config K)
+    (witness : WitgenIR Fp 1) (hstrict : strict = true → 0 < count) (region : RegionIndex) :
+    selectorTrace ((LookupRangeCheck.witnessCheck K count strict config witness hstrict).operations region) =
+      [runningSelectorTrace config 0 count] := by
+  simp only [LookupRangeCheck.witnessCheck, selector_trace_norm]
+
+@[selector_trace_norm]
+theorem witnessCheckDecomposed_selectorTrace (config : LookupRangeCheck.Config 10)
+    (witness : WitgenIR Fp 1) (region : RegionIndex) :
+    selectorTrace ((LookupRangeCheck.witnessCheckDecomposed config witness).operations region) =
+      [runningSelectorTrace config 0 25] := by
+  simp only [LookupRangeCheck.witnessCheckDecomposed, selector_trace_norm]
 
 end Zcash.Snark.ZeroKnowledge

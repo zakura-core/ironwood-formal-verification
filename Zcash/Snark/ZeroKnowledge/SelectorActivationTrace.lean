@@ -39,6 +39,10 @@ def placeSelectorTrace (starts : List ℕ) (trace : List (List (ℕ × ℕ)))
   (trace.zipIdx initial).flatMap fun (body, index) =>
     body.map fun (selector, row) => (selector, starts.getD index 0 + row)
 
+/-- One selector activation at each successive row of a compact trace. -/
+def selectorRowRun (selector offset count : ℕ) : List (ℕ × ℕ) :=
+  (List.ofFn fun i : Fin count => [(selector, offset + i.val)]).flatten
+
 theorem regionSelectorTrace_nil : regionSelectorTrace ([] : RegionOperations F) = [] := rfl
 
 theorem regionSelectorTrace_cons (operation : RegionOperation F) (rest : RegionOperations F) :

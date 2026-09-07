@@ -1,0 +1,134 @@
+import Zcash.Snark.ZeroKnowledge.ActionAuxiliaryTrace
+import Zcash.Snark.ZeroKnowledge.MerkleSelectorTrace
+import Zcash.Snark.ZeroKnowledge.CommitIvkSelectorTrace
+import Zcash.Snark.ZeroKnowledge.NoteCommitSelectorTrace
+import Zcash.Snark.ZeroKnowledge.ActionSelectorTrace
+
+/-!
+# The complete Action source selector trace
+
+The three synthesis stages and the post-NU6.3 cross-address region are connected
+compositionally to their compact traces. The final equality opens the opaque
+top-level circuit only through its recorded implementation equation. It retains
+all regions, activation multiplicities, selector indices, and local rows.
+-/
+
+namespace Zcash.Snark.ZeroKnowledge
+
+open Halo2 Zcash.Circuits Zcash.Circuits.Action
+
+/-- Witness loading keeps all eight regions, including the five selector-free loads. -/
+def actionWitnessSelectorTrace (config : Circuit.Config) : List (List (ℕ × ℕ)) :=
+  [[], [], [(config.eccConfig.witnessPoint.qPoint.index, 0)],
+    [(config.eccConfig.witnessPoint.qPointNonId.index, 0)],
+    [(config.eccConfig.witnessPoint.qPointNonId.index, 0)], [], [], []]
+
+/-- The exact sequence of all 295 integrity-check regions. -/
+def actionChecksSelectorTrace (config : Circuit.Config) : List (List (ℕ × ℕ)) :=
+  (List.replicate 16 (merkleLayerSelectorTrace (config.merkle1.condSwap, config.merkle1, config.lookupConfig))).flatten ++
+    (List.replicate 16 (merkleLayerSelectorTrace (config.merkle2.condSwap, config.merkle2, config.lookupConfig))).flatten ++
+    [[], []] ++
+    valueCommitSelectorTrace (config.eccConfig.mulFixedShort, config.eccConfig.mulFixedFull, config.eccConfig.add) ++
+    nullifierSelectorTrace (config.poseidonConfig, config.addChipConfig, config.eccConfig.mulFixedBaseField, config.eccConfig.add) ++
+    spendAuthoritySelectorTrace (config.eccConfig.mulFixedFull, config.eccConfig.add) ++
+    commitIvkSelectorTrace
+      { gate := config.commitIvkConfig, hashConfig := config.sinsemilla1, lookupConfig := config.lookupConfig,
+        mulConfig := config.eccConfig.mulFixedFull, addConfig := config.eccConfig.add } ++
+    addressIntegritySelectorTrace (config.eccConfig.mul, config.eccConfig.witnessPoint)
+
+@[selector_trace_norm]
+theorem actionSynthChecks_selectorTrace (generators : Specs.Sinsemilla.Generators) (bases : Circuit.Bases)
+    (witness : Circuit.Witnesses Fp) (config : Circuit.Config) (cells : Circuit.WitnessCells) (region : RegionIndex) :
+    selectorTrace ((Circuit.synthChecks generators bases witness config cells).operations region) =
+      actionChecksSelectorTrace config := by
+  rw [Circuit.synthChecks_eq]
+  simp only [Circuit.synthChecksProgram, selector_trace_norm,
+    actionChecksSelectorTrace, List.cons_append, List.append_assoc]
+
+@[selector_trace_norm]
+theorem actionOrchardChecks_regionSelectorTrace (config : Circuit.Config)
+    (cells : Circuit.WitnessCells) (checks : Circuit.CheckCells) (region : RegionIndex) :
+    regionSelectorTrace ((Circuit.synthOrchardChecks config cells checks).operations region) =
+      [(config.qOrchard.index, 0)] := rfl
+
+/-- Old and new note commitments with their intervening witness and copy regions. -/
+def actionNotesSelectorTrace (config : Circuit.Config) : List (List (ℕ × ℕ)) :=
+  noteCommitSelectorTrace
+      { gates := config.noteCommitOld, hashConfig := config.sinsemilla1, lookupConfig := config.lookupConfig,
+        mulConfig := config.eccConfig.mulFixedFull, addConfig := config.eccConfig.add } ++
+    [[], [(config.eccConfig.witnessPoint.qPointNonId.index, 0)],
+      [(config.eccConfig.witnessPoint.qPointNonId.index, 0)], []] ++
+    noteCommitSelectorTrace
+      { gates := config.noteCommitNew, hashConfig := config.sinsemilla2, lookupConfig := config.lookupConfig,
+        mulConfig := config.eccConfig.mulFixedFull, addConfig := config.eccConfig.add } ++
+    [[(config.qOrchard.index, 0)]]
+
+@[selector_trace_norm]
+theorem actionSynthNotes_selectorTrace (generators : Specs.Sinsemilla.Generators) (bases : Circuit.Bases)
+    (witness : Circuit.Witnesses Fp) (config : Circuit.Config) (cells : Circuit.WitnessCells)
+    (checks : Circuit.CheckCells) (region : RegionIndex) :
+    selectorTrace ((Circuit.synthNotes generators bases witness config cells checks).operations region) =
+      actionNotesSelectorTrace config := by
+  rw [Circuit.synthNotes_eq]
+  simp only [Circuit.synthNotesProgram, Ecc.WitnessPoint.pointNonIdFormal, selector_trace_norm,
+    actionNotesSelectorTrace, List.cons_append, List.append_assoc]
+
+/-- The base Action's complete source trace, independent of witness programs. -/
+def actionBaseSelectorTrace (config : Circuit.Config) : List (List (ℕ × ℕ)) :=
+  actionWitnessSelectorTrace config ++ actionChecksSelectorTrace config ++ actionNotesSelectorTrace config
+
+@[selector_trace_norm]
+theorem actionSynthesizeBase_selectorTrace (generators : Specs.Sinsemilla.Generators) (bases : Circuit.Bases)
+    (witness : Circuit.Witnesses Fp) (config : Circuit.Config) (region : RegionIndex) :
+    selectorTrace ((Circuit.synthesizeBase generators bases witness config).operations region) =
+      actionBaseSelectorTrace config := by
+  simp only [Circuit.synthesizeBase, selector_trace_norm, actionBaseSelectorTrace,
+    actionWitnessSelectorTrace, List.append_assoc]
+
+@[selector_trace_norm]
+theorem actionBaseCall_selectorTrace (generators : Specs.Sinsemilla.Generators) (bases : Circuit.Bases)
+    (config : Circuit.Config) (input : Var unit Fp) (region : RegionIndex) :
+    selectorTrace (((Circuit.baseCircuit generators bases).call config input).operations region) =
+      actionBaseSelectorTrace config := by
+  rw [FormalCircuit.call_operations]
+  change selectorTrace ((Circuit.synthesizeBase generators bases Circuit.hintWitnesses config).operations region) = _
+  exact actionSynthesizeBase_selectorTrace _ _ _ _ _
+
+@[selector_trace_norm]
+theorem actionCrossAddressRow_regionSelectorTrace (config : Circuit.Config)
+    (oldCell newCell : AssignedCell Fp) (row : ℕ) (region : RegionIndex) :
+    regionSelectorTrace ((Circuit.synthCrossAddressRow config oldCell newCell row).operations region) =
+      [(config.qOrchard.index, row)] := rfl
+
+@[selector_trace_norm]
+theorem actionCrossAddress_selectorTrace (config : Circuit.Config)
+    (points : Var Circuit.AddressPoints Fp) (region : RegionIndex) :
+    selectorTrace ((Circuit.synthCrossAddressChecks config points).operations region) =
+      [selectorRowRun config.qOrchard.index 0 4] := by
+  simp only [Circuit.synthCrossAddressChecks, selector_trace_norm, selectorRowRun, Nat.mul_one]
+
+/-- All source regions of the specified post-NU6.3 Action circuit. -/
+def actionSourceSelectorTrace (config : Circuit.Config) : List (List (ℕ × ℕ)) :=
+  actionBaseSelectorTrace config ++ [selectorRowRun config.qOrchard.index 0 4]
+
+@[selector_trace_norm]
+theorem actionMainPost_selectorTrace (generators : Specs.Sinsemilla.Generators) (bases : Circuit.Bases)
+    (config : Circuit.Config) (input : Var unit Fp) (region : RegionIndex) :
+    selectorTrace ((Circuit.mainPost generators bases config input).operations region) =
+      actionSourceSelectorTrace config := by
+  simp only [Circuit.mainPost, selector_trace_norm, actionSourceSelectorTrace]
+
+/-- The actual opaque Action circuit has precisely the source-derived compact trace. -/
+theorem actionCircuit_selectorTrace_eq :
+    selectorTrace actionCircuit.operations = actionSourceSelectorTrace actionConfig := by
+  rw [Internal.actionCircuit_eq_impl]
+  change selectorTrace ((Circuit.mainPost Specs.Sinsemilla.orchardGenerators orchardBases actionConfig ()).operations 0) = _
+  exact actionMainPost_selectorTrace _ _ _ _ _
+
+/-- The compiler's complete activation list follows by placing the source-derived trace. -/
+theorem actionCircuit_selectorActivations_eq_sourceTrace :
+    actionCircuit.selectorActivations =
+      placeSelectorTrace actionCircuit.regionStarts (actionSourceSelectorTrace actionConfig) := by
+  rw [actionCircuit_selectorActivations_eq_trace, actionCircuit_selectorTrace_eq]
+
+end Zcash.Snark.ZeroKnowledge
