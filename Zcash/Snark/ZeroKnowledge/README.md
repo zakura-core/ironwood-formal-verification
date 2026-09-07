@@ -549,12 +549,29 @@ checks satisfy this condition: the duplicate-opening check reads the already rec
 satisfying the prefix condition therefore has the same property after encoding and
 these checks. The generic adapter keeps the message-producer condition explicit.
 
+[ProtocolStages.lean](ProtocolStages.lean) and
+[PlonkStageCausality.lean](PlonkStageCausality.lean) decompose the full existing attempt
+trace into message blocks separated by receives. The equality preserves its exact order,
+including empty blocks for consecutive challenges. A dependency proof for each message
+block gives causality of the complete trace and its encoded observation. Once all
+scheduled challenges agree, the whole typed challenge record agrees, so the final
+scalars need no additional causality premise.
+
+[PlonkRowCausality.lean](PlonkRowCausality.lean) proves further concrete dependencies on
+every fixed replacement-row tape. Initial advice columns ignore the entire verifier
+tape; the complete column state uses only `theta,beta,gamma`; quotient pieces additionally
+use `y`. The existing [lookup-prefix result](PlonkPrefix.lean) places the intermediate
+advice and lookup-permutation columns before `beta,gamma`. These statements include
+the reference constructor's totalized fallbacks and require no witness-validity premise.
+
 [IpaCausality.lean](IpaCausality.lean) proves pointwise dependency facts for the actual
 tape-based IPA computation. The sparse-mask commitment needs neither `xi`, `z`, nor any
 round challenge. The pair in round `j` depends only on challenges from rounds strictly
 before `j`; in particular it does not use the challenge received after that pair. These
 proofs include zero challenges and invalid openings, and assume no sampling law.
-The complete PLONK/IPA construction still needs the full message-prefix theorem.
+The complete PLONK/IPA construction still needs the full message-prefix theorem:
+the complete batched-tape decoder and emitted commitment/evaluation fields must be
+connected to these dependency facts and the checked stage composition.
 
 ## Full-attempt failure probability
 

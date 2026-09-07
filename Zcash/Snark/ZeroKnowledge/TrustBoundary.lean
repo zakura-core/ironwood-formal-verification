@@ -45,7 +45,8 @@ import Zcash.Snark.ZeroKnowledge.PlonkAttemptSimulation
 import Zcash.Snark.ZeroKnowledge.PlonkFailures
 import Zcash.Snark.ZeroKnowledge.PlonkCompilerSuccess
 import Zcash.Snark.ZeroKnowledge.PlonkCompilerRetry
-import Zcash.Snark.ZeroKnowledge.PlonkChallengeCausality
+import Zcash.Snark.ZeroKnowledge.PlonkStageCausality
+import Zcash.Snark.ZeroKnowledge.PlonkRowCausality
 import Zcash.Snark.ZeroKnowledge.IpaCausality
 import Zcash.Snark.ZeroKnowledge.PlonkSigmaCertificate
 import Zcash.Meta.AxiomCheck
@@ -210,8 +211,14 @@ The deterministic causality interface now proves that a causal message producer 
 causal under the actual observation and failure checks. The checks use only received
 challenges. The IPA mask commitment ignores xi, z, and every round challenge; a round
 pair depends only on strictly earlier rounds. These facts hold on every private tape,
-including zero challenges and invalid openings. The complete reference construction's
-message-prefix condition and concrete codec instantiation remain obligations.
+including zero challenges and invalid openings. The complete staged schedule is now
+proved equal to the existing attempt trace, including empty blocks between consecutive
+receives. Per-stage dependency facts suffice for causality of that complete trace and
+its encoding; the final scalars require no further premise once all challenges agree.
+On a fixed replacement-row tape, the initial advice block ignores all challenges,
+the complete column state uses only theta, beta, gamma, and quotient pieces add only y.
+Connecting the full batched-tape decoder and emitted commitments/evaluations to these
+facts, and instantiating concrete codecs, remain obligations.
 Fiat–Shamir ZK needs its own argument;
 Rust execution correspondence is a separate claim, outside the protocol theorem's target.
 -/
@@ -1279,3 +1286,26 @@ assert_axioms Zcash.Snark.ZeroKnowledge.honestIpaTranscript_messages_prefix
 assert_axioms Zcash.Snark.ZeroKnowledge.ipaTranscriptFromTape_maskCommitment_agrees
 assert_axioms Zcash.Snark.ZeroKnowledge.ipaTranscriptFromTape_messages_prefix
 assert_axioms Zcash.Snark.ZeroKnowledge.ipaTranscriptFromTape_withChallenges_messages_agree
+
+-- The exact schedule reduces the full causality theorem to dependencies of its message stages.
+assert_computable Zcash.Snark.ZeroKnowledge.protocolStagesTrace
+assert_computable Zcash.Snark.ZeroKnowledge.plonkEvaluationStage
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPreIpaStages
+assert_computable Zcash.Snark.ZeroKnowledge.plonkStageMessages
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolStagesTrace_eq_flatten
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolStagesTrace_challengeCount
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolStagesTrace_prefix_congr
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAttemptChallenge_prefix_injective
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkEvaluationStage_challengeCount
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkStageMessages_challengeCount
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAttemptTrace_eq_stages
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAttemptTrace_causal_of_stages
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkObservedPrefix_causal_of_stages
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkTotalColumnConstructor_challenges
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkTotalColumnConstructor_before_theta
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkColumnSteps_take_before_theta
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkTotalColumnRows_take_before_theta
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkTotalColumnRows_advice_before_theta
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkTotalColumnRows_challenges
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkConstraintModel_challenges
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkHonestQuotientPieces_challenges
