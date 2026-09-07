@@ -16,8 +16,8 @@ obligations. The pre-existing verifier and soundness formalization does not itse
 an honest-prover distribution or simulator.
 
 The current [Action compiler reference theorem](ActionCompilerSimulation.lean) gives a numerical joint
-simulation bound from original gate, lookup, and copy-value validity, plus explicit
-selector-packing and initial-row conditions. It uses the actual Action
+simulation bound from original gate, lookup, and copy-value validity, the selector
+compression count, and a nonidentity blinding point. It uses the actual Action
 compiler key, Action's canonical public inputs, and
 compiler-derived fixed rows, sigma rows, and complete ordered copy list. Sigma coherence
 and every public polynomial degree bound are derived. The existing Action compiler
@@ -27,11 +27,10 @@ advice and instance query order, the permutation columns, and all degree-derived
 dimensions. Given fifteen compressed selector columns, the
 [derived key](ActionDerivedKey.lean) has the required shape, fixed-query order,
 domain, sigma naming, copy-query layout, and product dimensions. The compression
-count and four initial packed-selector zeros remain as concrete Action obligations,
-along with routing nine previous-row selectors into those four columns. The
-[compiled masking check](ActionCompilerMasking.lean) is derived from those packing
-conditions: structural certificates for every source gate and lookup survive
-selector substitution, query resolution, and verifier-expression translation.
+count remains as a concrete Action obligation. The
+[compiled masking profile](ActionBoundaryProfile.lean) is derived from the actual
+source and boundary values: structural certificates for every source gate and lookup
+survive selector substitution, query resolution, and verifier-expression translation.
 The [complete degree profile](ActionGateDegree.lean)
 now follows from the actual source expressions and compiler: gates have degree
 at most nine, lookup inputs at most four, lookup tables at most one, and permutation
@@ -51,9 +50,11 @@ also reproduces the actual V1 region starts, including the order of tied regions
 from reduced source data. The [replacement-value theorem](ActionSelectorReplacement.lean)
 proves that each inactive guard still vanishes after compression, including when
 another selector in its column is active. It uses the compiler's actual fixed-cell
-writes and the packer's distinct root assignments. Integrating these values into
-the mask profile is the next step; the current main theorem still takes the
-compression count, routing, and four initial packed-column zeros as premises.
+writes and the packer's distinct root assignments. The
+[boundary-value refinement](ActionBoundaryValues.lean) now incorporates these values
+into the complete masking profile and main simulation theorem. It removes the
+initial packed-column zeros and selector-routing premises. The compression count
+is the only remaining concrete selector premise.
 The [encoded-attempt theorem](PlonkAttemptSimulation.lean) preserves this bound while
 retaining partial output, the received challenges, and the specified failure status.
 The [full-attempt failure bound](PlonkFailures.lean) is now numerical too. These results
@@ -1192,8 +1193,9 @@ theorem proves equality with the canonical public-input element vector at every 
 row. `actionPublicPolynomials` combines those rows with the compiler's fixed and sigma
 rows. The masking profiles for both captured keys now use those public polynomials.
 Action's already-proved fourteen-column prefix and placement endpoint 1779 supply the
-general selector-support premises. `ActionInitialSelectorsZero` names exactly the four
-initial-row facts still required from the concrete compiler; it remains an unproved premise.
+general selector-support premises. `ActionInitialSelectorsZero` names the four
+initial-row facts used by the older selector-only route; it remains an unproved
+proposition, but the main compiler theorem no longer requires it.
 
 `wideActionReference_simulation_error_bound` in [ActionSimulation.lean](ActionSimulation.lean)
 applies the encoded Vesta comparison to this Action public data and its compiler copy list.
@@ -1203,6 +1205,18 @@ lookup, and copy-value validity, the four initial selector zeros, the remaining 
 expression/layout conditions, and nonidentity of the blinding point are explicit.
 The captured nonidentity lemmas above supply the latter for all four URS fixtures.
 The public simulator takes these public inputs and has no witness argument.
+
+The stronger `wideActionCompilerReference_simulation_error_bound` in
+[ActionCompilerSimulation.lean](ActionCompilerSimulation.lean) obtains the complete
+degree and masking profiles from the actual Action compiler. In particular,
+[ActionBoundaryProfile.lean](ActionBoundaryProfile.lean) proves that the boundary
+check holds using the actual fixed values. The source trace excludes every guard
+of a previous-row read from row zero. Compression preserves that guard's zero value
+even when another selector in the same column is active. The partial expression
+checker evaluates these public factors, and its compiler-preservation proof carries
+them through all gates and lookup expressions. This removes the initial-column-zero
+and selector-routing assumptions from the encoded comparison; only the count of
+fifteen compressed columns remains as a concrete selector obligation.
 
 [ActionCommitments.lean](ActionCommitments.lean) identifies Action's existing public data
 with the general compiler construction. Its actual public-input and sigma commitments
@@ -1229,11 +1243,11 @@ interactive protocol theorem requires discharging the remaining concrete circuit
 public-key conditions. The group IDs, node order, duplicate guard, commitment compression,
 complete evaluation vectors, and final opening assembly are now derived under the stated
 key and point conditions. For compiler-derived keys, public commitment agreement and
-domain values follow from key generation and the shape/layout conditions. The four
-initial Action selector zeros, the compression count, and the nine-selector routing
-condition remain open. The actual configuration supplies shape and layout from the
-count, and source proofs supply the compiled expression checks from the packing
-conditions. The complete reference computation has
+domain values follow from key generation and the shape/layout conditions. The
+compression count remains open. The actual configuration supplies shape and layout
+from that count, and the source trace and actual boundary values supply the full
+masking profile without initial-column-zero or selector-routing assumptions.
+The complete reference computation has
 a checked stage-by-stage causality proof on the same private tape and sampling law. The
 successful single-attempt law is now normalized, and finite independent retry histories
 are compared with a uniform bound and vanishing exhaustion tails. An unlimited-run

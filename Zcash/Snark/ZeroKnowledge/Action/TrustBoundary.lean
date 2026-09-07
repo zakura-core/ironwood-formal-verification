@@ -3,6 +3,7 @@ import Zcash.Snark.ZeroKnowledge.ActionTracePlacement
 import Zcash.Snark.ZeroKnowledge.ActionSimulation
 import Zcash.Snark.ZeroKnowledge.ActionCommitments
 import Zcash.Snark.ZeroKnowledge.ActionCompilerSimulation
+import Zcash.Snark.ZeroKnowledge.ActionCompilerMasking
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -14,27 +15,25 @@ opaque circuit package and its proved API. That package carries the named Pallas
 point-order dependency. The encoded Vesta comparison additionally carries the
 existing Vesta point-order dependency. No new native certificate is introduced.
 
-The four initial selector zeros remain an explicit proposition, not a certificate.
-The actual compiler's masking check follows from the proved source classifications
-and an explicit selector-routing condition; both captured keys also have their own
-kernel-checked predicates.
+The actual compiler's masking profile follows from the source classifications,
+activation trace, and evaluated replacement polynomials. It needs only the
+compression count. The older selector-only route still records initial packed-column
+zeros and selector routing as premises; the main simulation no longer uses that route.
 The actual configure program now supplies the query order and all key dimensions
 except the selector-compression count. Given fifteen packed columns, the derived
 key supplies the domain, sigma naming, exact copy layout, and complete opening
 connection. These facts also instantiate the encoded simulation bound. The
 entire compiled degree profile follows from the source and the packer's degree
 invariant. Structural source mask certificates survive selector replacement,
-query resolution, and verifier-expression translation. The remaining concrete
-conditions are the compression count, the routing of nine previous-row selectors
-into the four initial zero columns, and those initial values. No native root or
+query resolution, and verifier-expression translation. No native root or
 circuit-computation certificate is added.
 
 The complete source trace now proves that all nine previous-row selectors are
 inactive at global row zero. The ordered synthesis summary also supplies exactly
 the compiler's V1 starts and absolute activation list. These source refinements
 also prove that the inactive guards' replacement polynomials vanish after
-compression. The main simulation's profile still takes the stated packed-column
-conditions; integrating the replacement-value theorem is a separate next step.
+compression, including at another active selector's nonzero root. These actual
+boundary values now supply the main simulation's complete masking profile.
 -/
 
 assert_axioms Zcash.Snark.ZeroKnowledge.ActionInitialSelectorsZero +native(
@@ -381,4 +380,32 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_selectorActivations_eq_sou
   CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
 
 assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_previousSelector_replacement_zero +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- Actual compiler values discharge masking without initial-column or routing premises.
+assert_computable Zcash.Snark.ZeroKnowledge.actionBoundaryFixedKnown +choice +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.actionBoundaryQueryKnown +choice +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionBoundaryQueryKnown_selector +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionBoundaryQueryKnown_fixed +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionBoundaryQueryKnown_initial_fixed +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionBoundaryQueryKnown_later_fixed +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_substitutedPartialMaskCertificates +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_compiledExpressionMaskSafe_values +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_verifierGate_maskBoundaryCheck_values +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_verifierLookupInput_maskBoundaryCheck_values +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_verifierLookupTable_maskBoundaryCheck_values +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionReferenceKey_maskBoundaryCheck_values +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionReferenceKey_maskingProfile +native(
   CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)

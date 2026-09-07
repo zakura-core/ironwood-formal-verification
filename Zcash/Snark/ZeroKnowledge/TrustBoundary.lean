@@ -65,6 +65,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkVerifierOpening
 import Zcash.Snark.ZeroKnowledge.PlonkDerivedKey
 import Zcash.Snark.ZeroKnowledge.SelectorReplacementDegree
 import Zcash.Snark.ZeroKnowledge.KeygenExpressionMasking
+import Zcash.Snark.ZeroKnowledge.KeygenPartialMasking
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -1675,3 +1676,18 @@ assert_axioms Zcash.Snark.ZeroKnowledge.process_entry_root_coordinates
 assert_axioms Zcash.Snark.ZeroKnowledge.deriveSelCompressMap_lookup_root_coordinates
 assert_axioms Zcash.Snark.ZeroKnowledge.topLevelActiveSelector_fixedValue
 assert_axioms Zcash.Snark.ZeroKnowledge.topLevelSelectorReplacement_zero_of_inactive
+
+-- Evaluated public factors survive source substitution and expression compilation.
+assert_computable Zcash.Snark.ZeroKnowledge.partialProductValue
+assert_axioms Zcash.Snark.ZeroKnowledge.partialProductValue_some
+assert_axioms Zcash.Snark.ZeroKnowledge.partialProductValue_zero_left
+assert_axioms Zcash.Snark.ZeroKnowledge.partialProductValue_zero_right
+assert_axioms Zcash.Snark.ZeroKnowledge.partialProductValue_scalar_right
+assert_axioms Zcash.Snark.ZeroKnowledge.partialProductValue_neg_one
+assert_computable Zcash.Snark.ZeroKnowledge.sourcePartialValue
+assert_computable Zcash.Snark.ZeroKnowledge.sourcePartialMaskSafe
+assert_axioms Zcash.Snark.ZeroKnowledge.substSelectorMap_partialMaskCertificates
+assert_axioms Zcash.Snark.ZeroKnowledge.selReplacement_sourcePartialMaskSafe
+assert_axioms Zcash.Snark.ZeroKnowledge.selReplacement_sourcePartialValue
+assert_axioms Zcash.Snark.ZeroKnowledge.exprPartialPublicValue_product
+assert_axioms Zcash.Snark.ZeroKnowledge.eraseExpr_partialMaskCertificates
