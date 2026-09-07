@@ -27,7 +27,9 @@ retaining partial output, the received challenges, and the specified failure sta
 The [full-attempt failure bound](PlonkFailures.lean) is now numerical too. These results
 compare unconditioned attempts. The [successful-view capstone](PlonkCompilerSuccess.lean)
 now proves positive normalizers and carries their cost into the conditional comparison.
-Whole-prover retry semantics remain open.
+The [retained-retry capstone](PlonkCompilerRetry.lean) compares the complete observed
+history for every finite independent attempt budget, with a uniform error bound and
+vanishing exhaustion probabilities. An unlimited-run history law is not yet constructed.
 The remaining protocol and public-key obligations, and the separate limitations on claims
 about a concrete implementation, are listed below.
 
@@ -529,8 +531,9 @@ and public-key premises. It does not condition away failures.
 The common public initialization is fixed separately and contributes no proof bytes.
 The unconditioned bound holds for every supplied deterministic codec, so encoding adds
 no simulation error. The successful-output analysis below uses the specified codec's
-identity-failure property. Proving causality of the complete staged reference construction
-and the whole-prover retry policy remain open.
+identity-failure property. The retained-history analysis below uses the observer's exact
+retry/error distinction. Proving causality of the complete staged reference construction
+remains open.
 
 ## Full-attempt failure probability
 
@@ -577,9 +580,46 @@ No actual success probability or conditional simulation statement is assumed.
 Independent draws which discard unsuccessful observations converge to this conditional
 law. The retry comparison now holds for arbitrary observation types, with no finite-type
 instance required. Selecting completed attempts is distinct from the protocol's retry
-policy: a terminal opening error is not a retry request. The caller's treatment of these
-outcomes and any history of earlier failed prefixes remain to be modeled. Completion
-still means emitting the full proof, without asserting verifier acceptance.
+policy: a terminal opening error is not a retry request. The next section models that
+distinction while retaining earlier failed prefixes. Completion still means emitting the
+full proof, without asserting verifier acceptance.
+
+## Retained whole-prover retry histories
+
+[RetryHistory.lean](RetryHistory.lean) gives a deterministic program on a finite attempt
+tape. It retains every attempt up to the first outcome which does not request a retry,
+and reports an exhausted budget separately. Appending unused future attempts after a
+terminal outcome cannot change the history. The corresponding probability recursion is
+proved equal to running this program on independent draws from the single-attempt law.
+
+[PlonkRetry.lean](PlonkRetry.lean) uses the actual attempt observation to make its retry
+decision. Only `retryRandomness` continues; both completed emission and the terminal
+`coincidentOpeningQueries` error stop. Running the policy on encoded observations gives
+the same result as observing the used raw attempts. Every failed prefix, received
+challenge sequence, verifier tape, and status stays in the history. Each attempt uses
+fresh independent private and verifier tapes, with the statement and witness unchanged.
+
+[RetryHistorySimulation.lean](RetryHistorySimulation.lean) proves the joint comparison
+for every finite budget `n`, with two-sided error at most
+**`epsilon(m) × (1 + F(m) + ... + F(m)^(n-1))`**, and therefore at most
+**`epsilon(m) / (1 - F(m))`** when `F(m) < 1`. A fresh attempt costs `epsilon(m)`;
+the preceding real attempt's retry probability scales the continuation's error even
+though that preceding observation is retained. The proof compares the joint history,
+without replacing it by separate marginal comparisons.
+
+`wideRetriedCompilerKeygenPlonk_simulation_capstone` in
+[PlonkCompilerRetry.lean](PlonkCompilerRetry.lean) supplies the existing compiler-derived
+prover and its public simulator to this bound. It keeps the same explicit circuit, key,
+witness, and codec conditions. [PlonkFiniteView.lean](PlonkFiniteView.lean) supplies finite
+raw attempt spaces for probability proofs; the sampler and simulator do not enumerate
+them. Encoded histories still have arbitrary finite length.
+
+The exhaustion probability is exactly the retry probability raised to `n`, hence at
+most **`F(m)^n`** for the real law and **`B(m)^n`** for the simulator. Both tend to zero
+when `B(m) < 1`, with the same checked certificate for `m ≤ 65535`. These results do not
+yet construct a distribution for an unlimited retry loop. They also do not cover a
+caller which reuses transcript or prover state across attempts. Stage-by-stage causality
+and concrete circuit/key correspondence remain separate obligations.
 
 [RunningProductRows.lean](RunningProductRows.lean) gives computable lookup and chained
 permutation ratio scans with `0` mapped to `0` on inversion. It proves the exact condition
@@ -894,9 +934,10 @@ the same public data in the unused-row witness argument.
 This is still a conditional algebraic simulation theorem. Completing the specified
 interactive protocol theorem requires discharging the remaining concrete circuit and
 public-key conditions, connecting the reference constructions to the existing Lean
-verifier's grouping and commitment routing, proving stage-by-stage causality, and
-accounting for the whole-prover retry policy and any retained history. The successful
-single-attempt law is now normalized by the capstone above.
+verifier's grouping and commitment routing, and proving stage-by-stage causality. The
+successful single-attempt law is now normalized, and finite independent retry histories
+are compared with a uniform bound and vanishing exhaustion tails. An unlimited-run
+history distribution is not yet constructed.
 The attempt observation above now retains the scheduled failures and partial output.
 Its random-bit tape and independent verifier
 challenges are explicit assumptions of the interactive experiment.

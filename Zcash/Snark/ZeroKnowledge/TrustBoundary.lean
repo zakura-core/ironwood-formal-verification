@@ -44,6 +44,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkCompilerSimulation
 import Zcash.Snark.ZeroKnowledge.PlonkAttemptSimulation
 import Zcash.Snark.ZeroKnowledge.PlonkFailures
 import Zcash.Snark.ZeroKnowledge.PlonkCompilerSuccess
+import Zcash.Snark.ZeroKnowledge.PlonkCompilerRetry
 import Zcash.Snark.ZeroKnowledge.PlonkSigmaCertificate
 import Zcash.Meta.AxiomCheck
 
@@ -194,8 +195,15 @@ The numerical inequality `B < 1` is kernel-certified for `m <= 65535`, including
 both captured Action counts; the general endpoint takes that inequality explicitly.
 Support certificates are proofs, not witness inputs to the simulator. Independent
 selection of completed attempts converges to this conditioned law, also for view
-types without a Fintype instance. This does not identify terminal errors with retry
-requests or model the complete retry history. Whole-prover retry semantics remain open.
+types without a Fintype instance. Separately, every finite independent retry budget
+now retains all earlier failed observations, stopping on either completion or the
+terminal opening error and continuing only on a retry request. Its two-sided joint
+budget is `epsilon / (1 - F)`, where `F` is the honest single-attempt failure bound.
+The real and simulated exhaustion probabilities are at most `F^n` and `B^n` and
+tend to zero for `B < 1`. The probability recursion is proved equal to the observable
+retry program on an independent attempt tape. The witness and statement stay fixed;
+fresh private and verifier tapes are required for each attempt. No unlimited-run
+history distribution or state-carrying caller equivalence is asserted here.
 Stage-by-stage causality of the reference construction and concrete codec instantiation
 remain separate from the observation theorem. Fiat–Shamir ZK needs its own argument;
 Rust execution correspondence is a separate claim, outside the protocol theorem's target.
@@ -1194,3 +1202,52 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonk_success_support
 assert_axioms Zcash.Snark.ZeroKnowledge.successfulPlonk_simulation_error_bound
 assert_axioms Zcash.Snark.ZeroKnowledge.successfulPlonk_selection_tendsto
 assert_axioms Zcash.Snark.ZeroKnowledge.wideSuccessfulCompilerKeygenPlonk_simulation_capstone
+
+-- Independent retries retain every prefix and distinguish retry requests from terminal errors.
+assert_computable Zcash.Snark.ZeroKnowledge.RetryHistory.prepend
+assert_computable Zcash.Snark.ZeroKnowledge.RetryHistory.stopped
+assert_computable Zcash.Snark.ZeroKnowledge.RetryHistory.map
+assert_computable Zcash.Snark.ZeroKnowledge.runRetryHistory
+assert_axioms Zcash.Snark.ZeroKnowledge.runRetryHistory_prefix
+assert_axioms Zcash.Snark.ZeroKnowledge.runRetryHistory_exhausted_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.runRetryHistory_of_all_retry
+assert_axioms Zcash.Snark.ZeroKnowledge.runRetryHistory_append_of_stopped
+assert_axioms Zcash.Snark.ZeroKnowledge.runRetryHistory_map
+assert_axioms Zcash.Snark.ZeroKnowledge.retainedRetryStep
+assert_axioms Zcash.Snark.ZeroKnowledge.retainedRetries
+assert_axioms Zcash.Snark.ZeroKnowledge.retryAttemptTape
+assert_axioms Zcash.Snark.ZeroKnowledge.retainedRetries_fromTape
+assert_axioms Zcash.Snark.ZeroKnowledge.retainedRetryStep_exhausted
+assert_axioms Zcash.Snark.ZeroKnowledge.retainedRetries_exhausted
+assert_axioms Zcash.Snark.ZeroKnowledge.eventBias_bind_source
+assert_axioms Zcash.Snark.ZeroKnowledge.retainedRetryStep_source_bias
+assert_axioms Zcash.Snark.ZeroKnowledge.retainedRetryStep_continuation_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.retainedRetryError
+assert_axioms Zcash.Snark.ZeroKnowledge.retainedRetryError_eq_sum
+assert_axioms Zcash.Snark.ZeroKnowledge.retainedRetryError_le
+assert_axioms Zcash.Snark.ZeroKnowledge.retainedRetries_simulation_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.retainedRetries_uniform_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.retainedRetries_exhausted_le
+assert_axioms Zcash.Snark.ZeroKnowledge.retainedRetries_exhausted_tendsto
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkFinitePermSetEval
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkFiniteLookupEval
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkFiniteProofString
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkFiniteChallenges
+assert_computable Zcash.Snark.ZeroKnowledge.plonkRetrySet +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkRetryDecidable +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkObservedRetrySet
+assert_computable Zcash.Snark.ZeroKnowledge.plonkObservedRetryDecidable
+assert_computable Zcash.Snark.ZeroKnowledge.runPlonkRetries +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.runPlonkRetries_fromObserved
+assert_axioms Zcash.Snark.ZeroKnowledge.runPlonkRetries_terminal
+assert_axioms Zcash.Snark.ZeroKnowledge.runPlonkRetries_complete
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkRetry_subset_failure
+assert_axioms Zcash.Snark.ZeroKnowledge.observedPlonkRetries
+assert_axioms Zcash.Snark.ZeroKnowledge.observedPlonkRetries_fromTape
+assert_axioms Zcash.Snark.ZeroKnowledge.observedPlonkRetries_simulation_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.observedPlonkRetries_uniform_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.observedPlonkRetries_exhausted
+assert_axioms Zcash.Snark.ZeroKnowledge.observedPlonkRetries_both_exhausted_le
+assert_axioms Zcash.Snark.ZeroKnowledge.observedPlonkRetries_exhausted_tendsto
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAttemptFailureBound_lt_one
+assert_axioms Zcash.Snark.ZeroKnowledge.wideRetriedCompilerKeygenPlonk_simulation_capstone
