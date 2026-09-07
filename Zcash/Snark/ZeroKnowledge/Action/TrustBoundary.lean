@@ -1,4 +1,4 @@
-import Zcash.Snark.ZeroKnowledge.ActionInitialSelectorTrace
+import Zcash.Snark.ZeroKnowledge.ActionSelectorReplacement
 import Zcash.Snark.ZeroKnowledge.ActionTracePlacement
 import Zcash.Snark.ZeroKnowledge.ActionSimulation
 import Zcash.Snark.ZeroKnowledge.ActionCommitments
@@ -32,7 +32,9 @@ circuit-computation certificate is added.
 The complete source trace now proves that all nine previous-row selectors are
 inactive at global row zero. The ordered synthesis summary also supplies exactly
 the compiler's V1 starts and absolute activation list. These source refinements
-leave the stated packed-column conditions explicit.
+also prove that the inactive guards' replacement polynomials vanish after
+compression. The main simulation's profile still takes the stated packed-column
+conditions; integrating the replacement-value theorem is a separate next step.
 -/
 
 assert_axioms Zcash.Snark.ZeroKnowledge.ActionInitialSelectorsZero +native(
@@ -376,4 +378,7 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_regionStarts_eq_source +na
 assert_computable Zcash.Snark.ZeroKnowledge.actionSourceSelectorActivations +choice
 assert_axioms Zcash.Snark.ZeroKnowledge.actionSourceSelectorActivations_def
 assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_selectorActivations_eq_source +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_previousSelector_replacement_zero +native(
   CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)

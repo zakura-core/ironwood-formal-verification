@@ -48,8 +48,12 @@ eight at local row zero. The [initial inactivity certificate](ActionInitialSelec
 now excludes all nine previous-row selectors from global row zero, for any
 nonnegative placement. The [ordered-summary refinement](ActionTracePlacement.lean)
 also reproduces the actual V1 region starts, including the order of tied regions,
-from reduced source data. The concrete compression count, routing, and four initial
-packed-column zeros still require their certificates.
+from reduced source data. The [replacement-value theorem](ActionSelectorReplacement.lean)
+proves that each inactive guard still vanishes after compression, including when
+another selector in its column is active. It uses the compiler's actual fixed-cell
+writes and the packer's distinct root assignments. Integrating these values into
+the mask profile is the next step; the current main theorem still takes the
+compression count, routing, and four initial packed-column zeros as premises.
 The [encoded-attempt theorem](PlonkAttemptSimulation.lean) preserves this bound while
 retaining partial output, the received challenges, and the specified failure status.
 The [full-attempt failure bound](PlonkFailures.lean) is now numerical too. These results
