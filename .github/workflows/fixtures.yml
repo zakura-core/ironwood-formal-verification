@@ -58,6 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      pull-requests: read # paths-filter lists changed files through the pull request API
     outputs:
       # Scheduled and manually dispatched runs bypass the filter (the filter step is
       # skipped, and this expression then forces regeneration).

@@ -24,6 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      pull-requests: read # paths-filter lists changed files through the pull request API
     outputs:
       lean: ${{ steps.filter.outputs.lean }}
     steps:
