@@ -30,6 +30,8 @@ import Zcash.Snark.ZeroKnowledge.PlonkConstructedConstraints
 import Zcash.Snark.ZeroKnowledge.PlonkProductBounds
 import Zcash.Snark.ZeroKnowledge.PlonkProductCertificate
 import Zcash.Snark.ZeroKnowledge.PlonkConstructedSimulation
+import Zcash.Snark.ZeroKnowledge.PlonkCopySimulation
+import Zcash.Snark.ZeroKnowledge.PlonkCopyCertificate
 import Zcash.Snark.ZeroKnowledge.Observation
 import Zcash.Meta.AxiomCheck
 
@@ -104,9 +106,15 @@ The averaged invalid-row event is exactly the computed row-tape experiment; it i
 covered by failed construction, gate or copy-product prerequisites, and zero
 denominators. The resulting concrete joint comparison has error at most
 `prerequisiteFailureMass + (42882m + 4113)/p + (148m + 70) × bias`.
-Preserving gates and lookup membership under masking, deriving the packed product
-identity from actual copy wiring, and bounding the remaining construction prerequisites
-for valid witnesses remain open. The
+Usable advice rows are preserved on every total-construction tape. Both captured
+permutation layouts use only unrotated advice queries, so their computed usable factors
+equal the original witness factors. Original copy equations propagate through the
+replayed copy permutation; public sigma coherence then gives the exact packed product
+identity for every challenge and tape. Under these explicit witness and key premises,
+the prerequisite mass equals `gateConstructionFailureMass`, and the joint bound carries
+only that remaining row error. Connecting the supplied usable-cell copy list and sigma
+labels to full Action keygen, preserving gates and lookup membership under masking,
+and bounding the remaining construction prerequisites for valid witnesses remain open. The
 sampling comparison alone is not a simulator for failed attempts. The proof string's
 terminal rotations use the kernel root certificate.
 These results do not establish a whole-prover simulator, Fiat–Shamir zero-knowledge, or a
@@ -810,6 +818,41 @@ assert_axioms Zcash.Snark.ZeroKnowledge.freshPlonkInvalidRowMass_referenceRows
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkRowPrerequisiteFailureMass
 assert_axioms Zcash.Snark.ZeroKnowledge.freshPlonkInvalidRowMass_le_prerequisites
 assert_axioms Zcash.Snark.ZeroKnowledge.wideConstructedPlonkVerifier_simulation_error_bound
+
+-- Original copy equations survive masking and supply the computed product identity.
+assert_axioms Zcash.Snark.ZeroKnowledge.columnRowsFromCoins_retained
+assert_axioms Zcash.Snark.ZeroKnowledge.columnRowsFromTape_retained
+assert_computable Zcash.Snark.ZeroKnowledge.plonkUnmaskedAdviceRows +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkUnmaskedAdviceRows_polynomial
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkUnmaskedAdviceRows_eval
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkTotalColumnRows_advice_rows
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAdviceQueryOrder_current
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPolynomialClaimProof_advice_current
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPermutationRefUnrotated
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPermutationQueriesUnrotated
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPermutationRef_usable
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPermutationFactorRows_length
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPermutationFactorRows_masked
+assert_axioms Zcash.Snark.ZeroKnowledge.copyValues_replay
+assert_axioms Zcash.Snark.ZeroKnowledge.prod_chunk_cells
+assert_axioms Zcash.Snark.ZeroKnowledge.PlonkCopyCell
+assert_computable Zcash.Snark.ZeroKnowledge.plonkCopyCellPair +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkCopyCellName +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkCopyCellEntry
+assert_computable Zcash.Snark.ZeroKnowledge.plonkCopyCellSigma +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCopyCellPair_sigma
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCopyCellPair_masked
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPermutationNumerator_prod_cells
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPermutationDenominator_prod_cells
+assert_axioms Zcash.Snark.ZeroKnowledge.PlonkCopyWitness
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCopyWitness_masked
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkTotalColumnRows_copyProduct
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkRowPrerequisites_iff_of_copy
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkGateConstructionFailureMass
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkRowPrerequisiteFailureMass_eq_of_copy
+assert_axioms Zcash.Snark.ZeroKnowledge.singleAction_plonkCopyQueries
+assert_axioms Zcash.Snark.ZeroKnowledge.multiAction_plonkCopyQueries
+assert_axioms Zcash.Snark.ZeroKnowledge.wideCopyValidPlonkVerifier_simulation_error_bound
 
 -- At an unmasked row the disclosed evaluation is the original cell, for every mask law.
 assert_axioms Zcash.Snark.ZeroKnowledge.maskedRowPolynomial_eval_before

@@ -363,8 +363,9 @@ fold. `sampledPlonkVerifier_rows_simulation_error_bound` in
 [PlonkRowSimulation.lean](PlonkRowSimulation.lean) therefore derives both quotient
 premises from public degree bounds and row-wise satisfaction of the gate, permutation,
 and lookup constraints. The concrete construction theorems below now supply the lookup
-and product-scan parts. Gate preservation, the packed copy-product identity, and exceptional
-events remain to be discharged. Satisfying advice columns are inputs
+and product-scan parts, deriving the copy-product identity from original copy equations
+and public sigma coherence. Gate preservation, the circuit's copy/keygen connection,
+and exceptional events remain to be discharged. Satisfying advice columns are inputs
 in the pinned protocol; generating the underlying circuit witness is outside its scope.
 
 [ExceptionalMixtures.lean](ExceptionalMixtures.lean) and
@@ -408,7 +409,8 @@ At `k = 11`, `wideFreshPlonkVerifier_simulation_error_bound` in
 
 The row term averages the ideal private row law over the wide-reduced verifier law.
 The concrete construction bound below now separates its zero-denominator contribution
-from the remaining sorting, gate, and copy-product prerequisites. Relating the offline
+from the remaining sorting and gate prerequisites, given original copies and public
+sigma coherence. Relating the offline
 tape experiment to the actual interactive schedule remains open.
 
 [RunningProductRows.lean](RunningProductRows.lean) gives computable lookup and chained
@@ -416,8 +418,9 @@ permutation ratio scans with `0` mapped to `0` on inversion. It proves the exact
 for a row recurrence to fail: its denominator is zero and its required right side is
 nonzero. Under the product identity, the terminal value satisfies `z²-z = 0` even when
 denominators vanish. For lookups, permutations of the input and table prefixes supply
-that identity. The sorter below supplies the lookup permutations; the permutation-column
-identity still needs to be connected. The zero-preserving fallback matches the available Bento source
+that identity. The sorter below supplies the lookup permutations; the copy theorems below
+supply the permutation-column identity from original copies and public sigma coherence.
+The zero-preserving fallback matches the available Bento source
 at `e32e61eb35b6e5b5e0600cb0903adcfe0cd617d8`, in `crates/sensei/src/native/prover.rs`;
 this does not establish correspondence with the still-unlocated Sensei pin.
 
@@ -569,9 +572,35 @@ construction, gates, or the copy-product identity; it has not been proved neglig
 or zero for a valid Orchard witness. Private row tapes appear only in the probability
 analysis, not in the disclosed verifier view. No distribution is conditioned on success.
 
-The remaining row obligations are lookup membership after advice masking, gate
-preservation, and the packed copy-permutation product identity. These results do not
-yet give a numerical bound for the remaining prerequisite failure probability.
+[ColumnRetained.lean](ColumnRetained.lean) and [PlonkAdviceRows.lean](PlonkAdviceRows.lean)
+prove that every total-construction tape preserves the original usable advice cells,
+including tapes whose partial construction later fails.
+[PlonkPermutationMasking.lean](PlonkPermutationMasking.lean) carries this equality to
+the computed permutation factors when their advice queries are unrotated.
+[PlonkCopyCertificate.lean](PlonkCopyCertificate.lean) kernel-checks that public query
+condition for both captured keys.
+
+[CopyProducts.lean](CopyProducts.lean) propagates original copy equations through the
+keygen replay's cycle closure. [PlonkCopyCells.lean](PlonkCopyCells.lean) identifies the
+actual three-chunk numerator and denominator loops with products over typed usable
+cells. [PlonkCopyWitness.lean](PlonkCopyWitness.lean) then derives their equality from
+the original witness copy equations and public sigma coherence. This identity holds
+for every challenge and row tape, including zero denominators; it does not require
+cell-name injectivity or successful construction.
+
+[PlonkCopyPrerequisites.lean](PlonkCopyPrerequisites.lean) proves that under those
+explicit copy premises, `prerequisiteFailureMass` equals `gateConstructionFailureMass`.
+[PlonkCopySimulation.lean](PlonkCopySimulation.lean) carries that exact equality into
+the joint simulation bound:
+
+**`gateConstructionFailureMass + (42882m + 4113)/p + (148m + 70) × bias`**.
+
+The remaining mass covers failed lookup construction or gate division after masking.
+It is still measured under the original reference tape law, without conditioning on
+success, and has not been proved negligible for a valid Orchard witness. The copy
+premises still require connecting the supplied usable-cell copy list and public sigma
+labels to full Action keygen. The query certificates establish only the key's query
+layout. Lookup membership after advice masking and gate preservation also remain open.
 The product-coin experiment is now connected to the full independent challenge law.
 Native-loop correspondence, including the
 available Rust implementation's cancellation of fixed permutation cells on zero factors,
