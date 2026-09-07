@@ -56,6 +56,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkQueryBlocks
 import Zcash.Snark.ZeroKnowledge.GroupingSlots
 import Zcash.Snark.ZeroKnowledge.PlonkVerifierGrouping
 import Zcash.Snark.ZeroKnowledge.PlonkQueryCertificate
+import Zcash.Snark.ZeroKnowledge.PlonkEvaluationCompression
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -1521,3 +1522,28 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierGroup_nodes
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierGroup_commitment_from_layout
 assert_axioms Zcash.Snark.ZeroKnowledge.singleAction_plonkQueryLayout
 assert_axioms Zcash.Snark.ZeroKnowledge.multiAction_plonkQueryLayout
+
+-- The duplicate guard, every routed claim, and complete compressed evaluation vectors.
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPerActionQuerySpine_nodup
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkSharedQuerySpine_nodup
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkQuerySpine_nodup
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkQueryPattern_noDuplicates
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierGroup_noDuplicates
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierGroup_duplicateGuard
+assert_computable Zcash.Snark.ZeroKnowledge.plonkGroupPointLabels
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkGroupPointLabels_indices
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkGroupPointLabels_observations
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkGroupPointLabels_nodes
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkGroupPointLabels_nodup
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkGroupPointLabels_mem
+assert_computable Zcash.Snark.ZeroKnowledge.plonkQueryClaim +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkQueryClaim_private
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProofFromJointView_queryClaims
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProofFromJointView_queryClaim_exists
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkQueryClaim_firstGroup
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkQueryClaims_nodeValues
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierGroup_memberClaim
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkScalarFold_reverse
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierGroup_compressedClaim
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompressSet_evaluationLength
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierGroup_evaluations_from_layout

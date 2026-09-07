@@ -39,8 +39,9 @@ ID lists and node order from the actual query assembler for every positive Actio
 It proves that the verifier's compressed commitments agree with the reference construction
 under the key layout, distinct rotation points, and public commitment agreement conditions.
 Both captured keys have [kernel-checked query-layout certificates](PlonkQueryCertificate.lean).
-The member evaluations and concrete public commitment agreement still require correspondence
-proofs; the group ordering is now derived.
+The [scalar-routing refinement](PlonkEvaluationCompression.lean) also derives the duplicate
+guard, every member evaluation, and each complete compressed evaluation vector. Concrete
+public commitment agreement and the final opening-assembly connection remain to be discharged.
 The remaining protocol and public-key obligations, and the separate limitations on claims
 about a concrete implementation, are listed below.
 
@@ -1032,7 +1033,7 @@ theorems use the actual captured expressions with these compiler fixed rows.
 numerical joint simulation, keeping the same bound. Establishing the four initial selector
 zeros from the concrete Action compilation is still open; the captured row values alone
 do not discharge that obligation. The Action specialization below supplies canonical
-instance rows. Key/public-commitment correspondence and full verifier grouping remain;
+instance rows. Key/public-commitment correspondence and final opening assembly remain;
 sigma rows and copy-list provenance are derived below.
 
 [CopyReplayTransport.lean](CopyReplayTransport.lean) proves that an injective cell encoding
@@ -1075,8 +1076,8 @@ for every batching challenge, including zero. Together these give
 [PlonkVerifierGrouping.lean](PlonkVerifierGrouping.lean). The latter takes the key query
 layout, distinct rotation points, a positive Action count, public commitment agreement,
 and the 2048-row quotient convention. It derives every actual group ID list and the full
-node order. Routing the member evaluations and proving concrete public commitment agreement
-remain open. These connectors introduce no native certificate.
+node order. The member-evaluation connection is completed below; concrete public commitment
+agreement remains open. These connectors introduce no native certificate.
 
 [PlonkQueryLayout.lean](PlonkQueryLayout.lean) proves the flat query stream for any Action
 count under `PlonkQueryLayout`, which records the key's instance, advice, and fixed query
@@ -1097,6 +1098,24 @@ that the resulting five filtered lists are exactly the reference opening lists, 
 the verifier's reversal. The theorem covers all positive Action counts, independently
 of the IPA round count. [PlonkQueryCertificate.lean](PlonkQueryCertificate.lean) checks the
 layout premises for both captured keys; it does not certify their commitment values.
+
+[PlonkQueryUniqueness.lean](PlonkQueryUniqueness.lean) proves that slot/rotation pairs never
+repeat, for any Action count. Under injective point interpretation, the actual duplicate
+guard succeeds. [PlonkQueryClaims.lean](PlonkQueryClaims.lean) identifies every flat scalar
+claim with the reference view, using the verifier's existing inferred quotient value for
+the `H` slot. This flat-stream equality also covers exceptional challenges.
+[PlonkEvaluationRouting.lean](PlonkEvaluationRouting.lean) then derives each routed
+member evaluation; query membership and routed-ID agreement are not additional premises.
+
+`plonkVerifierGroup_evaluations_from_layout` in
+[PlonkEvaluationCompression.lean](PlonkEvaluationCompression.lean) proves equality of the
+complete compressed evaluation vectors with `plonkPublicNodeValues`. The proof establishes
+their lengths, node indices, and the reversal between the verifier's ascending powers and
+the reference Horner fold. It applies to every batching challenge, including zero, under
+the same positive Action count, query-layout, and distinct rotation-point conditions.
+It does not require public commitment agreement for the scalar-vector equality. Connecting
+the final `assembleOpening` result remains a separate step; these grouping results do not
+assert verifier acceptance or alter the simulation bound.
 
 ### Actual Action public data
 
@@ -1132,9 +1151,9 @@ Those last two costs do not add random draws to the prover tape.
 
 This is still a conditional algebraic simulation theorem. Completing the specified
 interactive protocol theorem requires discharging the remaining concrete circuit and
-public-key conditions and connecting the reference evaluations to the existing Lean
-verifier's routed members. The group IDs, node order, and commitment compression are now
-derived under the stated key and point conditions. The complete reference computation has
+public-key conditions and completing the final verifier opening-assembly connection.
+The group IDs, node order, duplicate guard, commitment compression, and complete evaluation
+vectors are now derived under the stated key and point conditions. The complete reference computation has
 a checked stage-by-stage causality proof on the same private tape and sampling law. The
 successful single-attempt law is now normalized, and finite independent retry histories
 are compared with a uniform bound and vanishing exhaustion tails. An unlimited-run
