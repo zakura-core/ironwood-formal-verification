@@ -362,8 +362,9 @@ row is equivalent to divisibility by `X^n - 1`. It applies this to the actual co
 fold. `sampledPlonkVerifier_rows_simulation_error_bound` in
 [PlonkRowSimulation.lean](PlonkRowSimulation.lean) therefore derives both quotient
 premises from public degree bounds and row-wise satisfaction of the gate, permutation,
-and lookup constraints. The sorting and scan proofs below still need to be instantiated
-at the masked-column schedule to supply that satisfaction premise. Satisfying advice columns are inputs
+and lookup constraints. The concrete construction theorems below now supply the lookup
+and product-scan parts. Gate preservation, the packed copy-product identity, and exceptional
+events remain to be discharged. Satisfying advice columns are inputs
 in the pinned protocol; generating the underlying circuit witness is outside its scope.
 
 [ExceptionalMixtures.lean](ExceptionalMixtures.lean) and
@@ -440,9 +441,9 @@ and proves that every lookup constraint polynomial is divisible by the domain po
 [PlonkLookupRows.lean](PlonkLookupRows.lean) identifies these records with the actual
 proof string and each Action's entries in the honest constraint model.
 This replaces a lookup-constraint correctness premise with explicit row-construction
-facts. The sorter below supplies its permutation and run-structure facts. The concrete
-constructor below supplies the expression feeds at each private prefix; their agreement
-with the final column state and the full trace's scan correspondence remain to be proved.
+facts. The sorter below supplies its permutation and run-structure facts. The later
+construction theorems identify the prefix reads and computed scan with the final columns,
+discharging those facts for completed reference attempts outside zero denominators.
 
 [PermutationRowConstraints.lean](PermutationRowConstraints.lean) computes the
 permutation factors using the verifier's exact column-name stride and chains the three
@@ -454,9 +455,10 @@ the product identity on named cells from copy-preserving permutation wiring.
 through the actual polynomial builder to exact domain division.
 [PlonkPermutationRows.lean](PlonkPermutationRows.lean) identifies the proof string's
 next/terminal rotations, with a kernel proof that the inverse-sixth-power rotation reads
-the retained row 2042 from row zero. Instantiating the named-cell identity at the actual
-packed factors, proving the masked-column schedule's scan correspondence, and preserving
-the gate constraints under row masking remain open. These results do not yet bound the
+the retained row 2042 from row zero. The later construction theorems supply the scan
+correspondence and exact packed constraint layout. Instantiating the named-cell identity
+at those factors and preserving the gate constraints under row masking remain open.
+These results do not yet bound the
 joint `averageInvalidRowMass` term.
 
 [LookupSort.lean](LookupSort.lean) implements the sorting rule from step 2 of the pinned
@@ -491,16 +493,39 @@ use the same private witness; this comparison does not simulate construction fai
 The total comparison constructor replaces a failed sort by zero rows and therefore
 cannot be identified unconditionally with the honest attempt.
 
-The remaining row obligations include agreement between prefix reads and final columns,
-matching the two computations of each lookup sort, matching inherited permutation seeds,
-lookup membership after advice masking, the packed copy-permutation product identity,
-and gate preservation. These results do not yet bound `averageInvalidRowMass` or the
-column-construction failure probability. Native-loop correspondence, including the
+[PlonkColumnOrder.lean](PlonkColumnOrder.lean) proves the four phase ranges in the actual
+emission order. [PlonkColumnReads.lean](PlonkColumnReads.lean) uses those ranges to prove
+that each construction reads exactly the same polynomials from its preceding private
+prefix as from the final column state. This includes all rotated queries, both
+computations of each lookup sort, and the inherited permutation seeds.
+
+[PlonkConstructedRows.lean](PlonkConstructedRows.lean) then identifies the actual
+polynomial rows produced by the attempt: usable advice equals the supplied witness,
+both lookup columns come from one canonical sort, and every product follows the
+computed scan through its retained terminal row. Its general retained-row theorem
+also applies to columns already produced in a failed attempt's prefix.
+
+[PlonkConstructedLookup.lean](PlonkConstructedLookup.lean) derives domain divisibility
+of all fifteen lookup constraints per Action from completed construction and nonzero
+denominator factors. It assumes no sorting or scan correspondence.
+[PlonkConstructedPermutation.lean](PlonkConstructedPermutation.lean) identifies the
+actual three-set/chunk layout and derives divisibility of all seven permutation
+constraints from the executed scans, nonzero denominators, and the full packed
+copy-product identity.
+[PlonkConstructedConstraints.lean](PlonkConstructedConstraints.lean) combines these
+results with gate correctness to derive division of every constraint and of the
+actual numerator by `X^2048 - 1`.
+
+The remaining row obligations are lookup membership after advice masking, gate
+preservation, the packed copy-permutation product identity, and the independence
+needed to apply the denominator probability bounds to the concrete prefix law.
+These results do not yet bound `averageInvalidRowMass` or the column-construction
+failure probability. Native-loop correspondence, including the
 available Rust implementation's cancellation of fixed permutation cells on zero factors,
 also remains open.
 
 This is still a conditional algebraic simulation theorem. Completing the exact prover
-theorem requires row correctness for the instantiated schedule, the full verifier's
+theorem requires discharging the remaining row conditions for the actual circuit, the full verifier's
 grouping and commitment routing, failures and retries across the whole prover, the challenge
 model and Fiat–Shamir argument, and correspondence with the Rust implementation. The
 available Rust quotient implementations have not been proved equivalent to these polynomial
