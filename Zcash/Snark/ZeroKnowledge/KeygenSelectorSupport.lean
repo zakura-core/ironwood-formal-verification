@@ -6,7 +6,8 @@ import Clean.Halo2.TopLevel
 Loaded tables may continue through the whole usable prefix. The compiler's packed
 selector columns have a stricter support bound: only selector activations write to
 them, and every activation lies within V1 placement. Their rows are therefore zero
-from the placement endpoint onward, including any unused part of the usable prefix.
+from the placement endpoint onward, including any unused part of the usable prefix
+and the row accessor's zero padding outside the compiler's dimensions.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge
@@ -52,5 +53,23 @@ theorem topLevelSelectorRows_zero_of_placementEnd_le {F : Type} [FiniteField F]
   have hbound := topLevelRawSelector_row_lt_placementEnd top raw hraw
     (by simpa only [hcolumnEq] using hselector)
   exact Nat.not_lt_of_ge hafter (hrowEq ▸ hbound)
+
+/-- Selector rows stay zero after placement, including the accessor's zero padding outside its dimensions. -/
+theorem topLevelSelectorRows_zero_after_placement {F : Type} [FiniteField F]
+    {Config : Type} {PublicInput : TypeMap} [ProvableType PublicInput]
+    (top : TopLevelCircuit F Config PublicInput) (column row : ℕ)
+    (hselector : top.constraintSystem.numFixedColumns ≤ column)
+    (hafter : FloorPlanner.V1.placementEnd top.operations ≤ row) :
+    (top.fixedRows.getD column []).getD row 0 = 0 := by
+  by_cases hcolumn : column < top.fixedColumnCount
+  · by_cases hrow : row < top.n
+    · exact topLevelSelectorRows_zero_of_placementEnd_le top column row hselector hcolumn hrow hafter
+    · apply List.getD_eq_default
+      rw [top.fixedRows_getD_length column hcolumn]
+      exact Nat.le_of_not_gt hrow
+  · rw [List.getD_eq_default top.fixedRows [] (by
+      rw [top.fixedRows_length]
+      exact Nat.le_of_not_gt hcolumn)]
+    rfl
 
 end Zcash.Snark.ZeroKnowledge

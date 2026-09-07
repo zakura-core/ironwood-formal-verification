@@ -61,8 +61,8 @@ axiom or admitted lemma is permitted. Probability distributions are intentionall
 the finite sampling program and its declared tape sizes are checked as computable definitions.
 `+choice` permits classical choice only in erased proof fields of a plain computable definition;
 the checker still rejects noncomputable algorithmic content. No `+native` exemption is used
-in this census. `Vesta/TrustBoundary` separately names the existing curve-order dependency
-of the concrete Vesta specialization.
+in this census. `Vesta/TrustBoundary` and `Action/TrustBoundary` separately name the
+existing curve-order dependencies of those concrete specializations.
 
 The pinned results establish the field-sampling law, both masking constructions, joint
 simulation of the IPA stage with supplied or fresh interactive challenges, and joint hiding
@@ -238,6 +238,13 @@ module whose group and scalar field have equal finite cardinalities. The concret
 Vesta instantiation and captured nonidentity checks are pinned separately. The circuit/key
 and verifier correspondence remain obligations. The readable budget `epsilon(m) < m*2^-238`
 for positive Action counts follows from the sampling bound and kernel integer arithmetic.
+The selector-support theorem now covers zero padding outside the compiler's dimensions,
+removing the former compiler-domain and fixed-column-count mask premises. The actual
+Action specialization supplies canonical public-input rows and compiler fixed/sigma
+polynomials and copies. Its prefix, permutation count, and operation-footprint bounds
+follow from the existing Action compilation API. The four initial selector zeros and
+remaining key/verifier correspondence conditions are explicit. The concrete Action
+results have a separate census for their inherited Pallas order dependency.
 Fiat–Shamir ZK needs its own argument;
 Rust execution correspondence is a separate claim, outside the protocol theorem's target.
 -/
@@ -1058,6 +1065,7 @@ assert_computable Zcash.Snark.ZeroKnowledge.exprPartialMaskInvariant
 assert_axioms Zcash.Snark.ZeroKnowledge.exprPartialMaskInvariant_refines
 assert_axioms Zcash.Snark.ZeroKnowledge.topLevelRawSelector_row_lt_placementEnd
 assert_axioms Zcash.Snark.ZeroKnowledge.topLevelSelectorRows_zero_of_placementEnd_le
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevelSelectorRows_zero_after_placement
 assert_computable Zcash.Snark.ZeroKnowledge.plonkPartialMaskBoundaryCheck
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkPartialMaskBoundaryCheck_sound
 assert_computable Zcash.Snark.ZeroKnowledge.plonkInitialMaskColumns

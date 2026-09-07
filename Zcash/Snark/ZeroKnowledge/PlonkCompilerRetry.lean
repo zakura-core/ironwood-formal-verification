@@ -29,7 +29,6 @@ theorem wideRetriedCompilerKeygenPlonk_simulation_capstone {actions : ℕ} {G : 
     (urs : URS G) (hk : urs.k = 11)
     (vk : VerifyingKey (plonkProofShape actions urs.k) Fp G)
     (top : Halo2.TopLevelCircuit Fp Config PublicInput)
-    (htopK : top.domainExponent = 11) (htopColumns : 29 ≤ top.fixedColumnCount)
     (htopPrefix : top.constraintSystem.numFixedColumns ≤ 14)
     (hpermutation : top.permutationColumnCount = 15)
     (hused : Halo2.usedRows top.operations ≤ 2041)
@@ -65,7 +64,7 @@ theorem wideRetriedCompilerKeygenPlonk_simulation_capstone {actions : ℕ} {G : 
         (observedPlonkRetries actual pointCodec scalarCodec attempts)
         (plonkSimulationErrorBound actions / (1 - plonkAttemptFailureBound actions)) := by
   intro pub copies hvalues actual simulate
-  have h := wideCompilerKeygenPlonkVerifier_simulation_error_bound urs hk vk top htopK htopColumns
+  have h := wideCompilerKeygenPlonkVerifier_simulation_error_bound urs hk vk top
     htopPrefix hpermutation hused hfirst hwidth hindices hdelta hstride hqueries instances witness degree
     hmask hvalid homega hn hblind hchunks hpacked hW hvalues
   have hf := widePlonkAttempt_failure_le urs hk (plonkTotalColumnConstructor vk pub witness) [] vk pub

@@ -7,7 +7,8 @@ import Zcash.Snark.ZeroKnowledge.PlonkOriginalSimulation
 The public degree bounds come from interpolation. Selector-only expression
 certificates and V1 placement supply the full mask profile once the four initial
 selector zeros are known. No assumption is made about boundary values in the
-fourteen original fixed columns.
+fourteen original fixed columns. Zero padding in the compiler's row accessor
+removes the former compiler-domain and fixed-column-count premises for mask safety.
 
 PlonkCompilerSimulation also derives sigma rows and copies from keygen. Establishing
 the initial selector row for the deployed circuit, matching instance rows and public
@@ -28,7 +29,6 @@ theorem wideSelectorKeygenPlonkVerifier_simulation_error_bound {actions : ℕ} {
     (urs : URS G) (hk : urs.k = 11)
     (vk : VerifyingKey (plonkProofShape actions urs.k) Fp G)
     (top : Halo2.TopLevelCircuit Fp Config PublicInput)
-    (htopK : top.domainExponent = 11) (htopColumns : 29 ≤ top.fixedColumnCount)
     (htopPrefix : top.constraintSystem.numFixedColumns ≤ 14)
     (hplacement : Halo2.FloorPlanner.V1.placementEnd top.operations ≤ 2041)
     (hfirst : ∀ column : Fin 29, column.val ∈ plonkInitialMaskColumns →
@@ -59,7 +59,7 @@ theorem wideSelectorKeygenPlonkVerifier_simulation_error_bound {actions : ℕ} {
     plonkPublicPolynomialsFromRows_degree instances (plonkKeygenFixedRows top) sigma
   exact wideOriginalValidPlonkVerifier_simulation_error_bound urs hk vk
     (plonkKeygenPublicPolynomials top instances sigma) witness degree
-    (plonkKeygenPublicPolynomials_selectorMaskingProfile top htopK htopColumns htopPrefix
+    (plonkKeygenPublicPolynomials_selectorMaskingProfile top htopPrefix
       hplacement hfirst instances sigma vk hmask)
     hvalid copies hcopy homega hn hblind hchunks hpacked hinstance hfixed hsigma hW
 

@@ -15,13 +15,14 @@ The concrete Action protocol still has outstanding circuit/key and verifier-corr
 obligations. The pre-existing verifier and soundness formalization does not itself supply
 an honest-prover distribution or simulator.
 
-The current [reference-prover theorem](PlonkCompilerSimulation.lean) gives a numerical
-joint simulation bound from original gate, lookup, and copy-value validity, plus explicit
-public-key conditions. It constructs fixed and sigma polynomials and the complete ordered
-copy list from the compiler, deriving sigma coherence and every public polynomial degree
-bound. It has no unbounded row-failure term under those premises.
-Selector-only certificates and compiler placement reduce the masking conditions to four
-initial packed-selector zeros, plus explicit public column and placement bounds.
+The current [Action reference theorem](ActionSimulation.lean) gives a numerical joint
+simulation bound from original gate, lookup, and copy-value validity, plus explicit
+key and initial-selector conditions. It uses Action's canonical public inputs and
+compiler-derived fixed rows, sigma rows, and complete ordered copy list. Sigma coherence
+and every public polynomial degree bound are derived. The existing Action compiler
+proofs discharge its fixed-column prefix, permutation count, and operation-footprint
+bounds. Four initial packed-selector zeros remain as the Action masking premise.
+There is no unbounded row-failure term under those premises.
 The [encoded-attempt theorem](PlonkAttemptSimulation.lean) preserves this bound while
 retaining partial output, the received challenges, and the specified failure status.
 The [full-attempt failure bound](PlonkFailures.lean) is now numerical too. These results
@@ -1010,19 +1011,22 @@ are zero. No table element, generator coordinate, or region-fixed constant is ne
 [KeygenSelectorSupport.lean](KeygenSelectorSupport.lean) proves that packed-selector
 writes come only from selector activations before V1's placement endpoint. Hence the
 compiler's dense selector columns are zero afterward, even where table default-fill
-continues through usable rows. [PlonkKeygenSelectors.lean](PlonkKeygenSelectors.lean)
-uses this fact with the selector certificates. Given exponent 11, at least 29 fixed
-columns, at most fourteen original fixed columns, and placement ending by row 2041,
-the mask profile requires only the four initial packed-selector zeros. This prefix bound
-includes the Action compiler's fourteen original fixed columns. The one- and two-Action
-profile theorems use the actual captured expressions with these compiler fixed rows.
+continues through usable rows. The theorem also covers zero padding outside the compiler's
+column and row ranges. [PlonkKeygenSelectors.lean](PlonkKeygenSelectors.lean) uses this
+stronger support fact with the selector certificates: at most fourteen original fixed
+columns, placement ending by row 2041, and the four initial packed-selector zeros suffice.
+The former compiler-domain and fixed-column-count premises are unnecessary for this mask
+profile and are removed from the positive simulation path. The reference prover still
+has eleven IPA rounds and the verifier's 2048-row domain. The one- and two-Action profile
+theorems use the actual captured expressions with these compiler fixed rows.
 
 `wideSelectorKeygenPlonkVerifier_simulation_error_bound` in
 [PlonkSelectorSimulation.lean](PlonkSelectorSimulation.lean) supplies this profile to the
 numerical joint simulation, keeping the same bound. Establishing the four initial selector
 zeros from the concrete Action compilation is still open; the captured row values alone
-do not discharge that obligation. The instance, commitment, and execution correspondence
-obligations also remain; sigma rows and copy-list provenance are derived below.
+do not discharge that obligation. The Action specialization below supplies canonical
+instance rows. Key/public-commitment correspondence and full verifier grouping remain;
+sigma rows and copy-list provenance are derived below.
 
 [CopyReplayTransport.lean](CopyReplayTransport.lean) proves that an injective cell encoding
 preserves the exact ordered copy replay, including its same-cycle test. This supplies the
@@ -1045,6 +1049,31 @@ a separate sigma-coherence hypothesis. Original gate, lookup, and copy-value val
 public size and expression certificates, the four initial selector zeros, and the URS
 hiding condition remain explicit. The compiler-sigma no-perfect-simulator endpoint uses
 the same public data in the unused-row witness argument.
+
+### Actual Action public data
+
+[ActionPublicData.lean](ActionPublicData.lean) fixes the circuit to `actionCircuit`.
+`actionInstanceRows` reads its actual public-input layout, and the instance-polynomial
+theorem proves equality with the canonical public-input element vector at every domain
+row. `actionPublicPolynomials` combines those rows with the compiler's fixed and sigma
+rows. The masking profiles for both captured keys now use those public polynomials.
+Action's already-proved fourteen-column prefix and placement endpoint 1779 supply the
+general selector-support premises. `ActionInitialSelectorsZero` names exactly the four
+initial-row facts still required from the concrete compiler; it remains an unproved premise.
+
+`wideActionReference_simulation_error_bound` in [ActionSimulation.lean](ActionSimulation.lean)
+applies the encoded Vesta comparison to this Action public data and its compiler copy list.
+The existing fifteen-column permutation and exact operation-footprint theorems discharge
+the corresponding compiler conditions. The error bound is unchanged. Original gate,
+lookup, and copy-value validity, the four initial selector zeros, the remaining key
+expression/layout conditions, and nonidentity of the blinding point are explicit.
+The captured nonidentity lemmas above supply the latter for all four URS fixtures.
+The public simulator takes these public inputs and has no witness argument.
+
+[Action/TrustBoundary.lean](Action/TrustBoundary.lean) names the existing
+`CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt` dependency carried by the opaque Action circuit
+package, alongside the Vesta order dependency of the concrete simulation. This refinement
+introduces no new native certificate and does not assert the initial selector zeros.
 
 [PlonkBinaryBounds.lean](PlonkBinaryBounds.lean) proves the simpler numerical statement
 **`epsilon(m) < m * 2^-238` for `m >= 1`**. It uses the proved `bias <= 2^-260` and
@@ -1073,9 +1102,16 @@ a prerequisite for the protocol-level statistical HVZK target.
 
 ## Checks
 
-`lake build --wfail Zcash.Snark.ZeroKnowledge.TrustBoundary Zcash.Snark.ZeroKnowledge.Vesta.TrustBoundary CensusCheck`
-checks the proofs, their declared transitive axiom dependencies, and endpoint coverage.
-The parent census permits only Lean's standard axioms. The concrete Vesta census names
-the inherited curve-order certificate separately. The sampling program and canonical
-observer are also pinned as computable. This directory is included in the default
-library build, and both trust boundaries are imported by `CensusCheck`.
+The following checks the proofs, declared transitive axiom dependencies, and endpoint coverage:
+
+```sh
+lake build --wfail Zcash.Snark.ZeroKnowledge.TrustBoundary \
+  Zcash.Snark.ZeroKnowledge.Vesta.TrustBoundary \
+  Zcash.Snark.ZeroKnowledge.Action.TrustBoundary CensusCheck
+```
+
+The parent census permits only Lean's standard axioms. The concrete Vesta and Action
+censuses name their inherited curve-order certificates separately. The sampling program,
+canonical observer, and Action public-data construction are also pinned as computable.
+This directory is included in the default library build, and all three trust boundaries
+are imported by `CensusCheck`.

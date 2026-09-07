@@ -29,7 +29,6 @@ theorem wideCompilerKeygenPlonkVerifier_simulation_error_bound {actions : ℕ} {
     (urs : URS G) (hk : urs.k = 11)
     (vk : VerifyingKey (plonkProofShape actions urs.k) Fp G)
     (top : Halo2.TopLevelCircuit Fp Config PublicInput)
-    (htopK : top.domainExponent = 11) (htopColumns : 29 ≤ top.fixedColumnCount)
     (htopPrefix : top.constraintSystem.numFixedColumns ≤ 14)
     (hpermutation : top.permutationColumnCount = 15)
     (hused : Halo2.usedRows top.operations ≤ 2041)
@@ -65,7 +64,7 @@ theorem wideCompilerKeygenPlonkVerifier_simulation_error_bound {actions : ℕ} {
       ((((42882 * actions + 4113 : ℕ) : ℝ≥0∞) / scalarFieldOrder) +
         (((148 * actions + 70 : ℕ) : ℝ≥0∞) * challenge255Bias)) := by
   intro pub copies hvalues
-  exact wideSelectorKeygenPlonkVerifier_simulation_error_bound urs hk vk top htopK htopColumns htopPrefix
+  exact wideSelectorKeygenPlonkVerifier_simulation_error_bound urs hk vk top htopPrefix
     ((Halo2.V1_placementEnd_le_usedRows top.operations).trans hused)
     hfirst instances (plonkKeygenSigmaRows top) witness degree hmask hvalid copies
     (plonkKeygenCopyWitness_of_values vk top hpermutation (hused.trans (by decide)) hwidth hindices

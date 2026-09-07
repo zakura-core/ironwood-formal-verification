@@ -8,8 +8,10 @@ import Zcash.Snark.ZeroKnowledge.PlonkSelectorCertificate
 When the original fixed-column prefix ends by column 14 and V1 placement ends by
 row 2041, the compiler supplies zero for every packed selector at all later mask
 boundaries. Only four initial packed-selector zeros remain to be established from
-the concrete circuit. The certificates impose no conditions on the other fixed
-values, including the table fill in row 2041.
+the concrete circuit. Zero padding covers indices outside the compiler's column
+and row ranges, so this profile needs no compiler-domain or fixed-column-count
+premise. The certificates impose no conditions on the other fixed values,
+including the table fill in row 2041.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge
@@ -31,20 +33,17 @@ theorem plonkMaskBoundaryRows_after_zero (boundary : Fin 8) (hboundary : boundar
 
 /-- The compiler's placement bound forces all noninitial packed-selector boundaries to zero. -/
 theorem plonkKeygenFixedRows_selector_zero (top : TopLevelCircuit Fp Config PublicInput)
-    (hk : top.domainExponent = 11) (hcolumns : 29 ≤ top.fixedColumnCount)
     (hprefix : top.constraintSystem.numFixedColumns ≤ 14)
     (hplacement : FloorPlanner.V1.placementEnd top.operations ≤ 2041)
     (column : Fin 29) (hcolumn : 14 ≤ column.val)
     (row : Fin 2048) (hrow : 2041 ≤ row.val) :
     plonkKeygenFixedRows top column row = 0 := by
-  exact topLevelSelectorRows_zero_of_placementEnd_le top column.val row.val
-    (hprefix.trans hcolumn) (column.isLt.trans_le hcolumns)
-    (by simpa only [TopLevelCircuit.n, hk] using row.isLt) (hplacement.trans hrow)
+  exact topLevelSelectorRows_zero_after_placement top column.val row.val
+    (hprefix.trans hcolumn) (hplacement.trans hrow)
 
 /-- The initial selector row and compiler support give every known public boundary value. -/
 theorem plonkKeygenPublicPolynomials_selectorBoundary_agrees {actions : ℕ}
     (top : TopLevelCircuit Fp Config PublicInput)
-    (hk : top.domainExponent = 11) (hcolumns : 29 ≤ top.fixedColumnCount)
     (hprefix : top.constraintSystem.numFixedColumns ≤ 14)
     (hplacement : FloorPlanner.V1.placementEnd top.operations ≤ 2041)
     (hfirst : ∀ column : Fin 29, column.val ∈ plonkInitialMaskColumns →
@@ -74,7 +73,7 @@ theorem plonkKeygenPublicPolynomials_selectorBoundary_agrees {actions : ℕ}
     · have hselector : 14 ≤ query := Nat.le_of_not_gt hsmall
       simp only [finFn, hquery, ↓reduceDIte]
       rw [plonkFixedQueryOrder_selector ⟨query, hquery⟩ hselector]
-      exact (plonkKeygenFixedRows_selector_zero top hk hcolumns hprefix hplacement
+      exact (plonkKeygenFixedRows_selector_zero top hprefix hplacement
         ⟨query, hquery⟩ hselector (plonkMaskBoundaryRows boundary)
         (plonkMaskBoundaryRows_after_zero boundary hboundary)).trans hvalue
     · simpa [finFn, hquery] using hvalue
@@ -82,7 +81,6 @@ theorem plonkKeygenPublicPolynomials_selectorBoundary_agrees {actions : ℕ}
 /-- The public selector certificate and the compiler's initial selector row supply mask safety. -/
 theorem plonkKeygenPublicPolynomials_selectorMaskingProfile {actions k : ℕ} {G : Type*}
     (top : TopLevelCircuit Fp Config PublicInput)
-    (hk : top.domainExponent = 11) (hcolumns : 29 ≤ top.fixedColumnCount)
     (hprefix : top.constraintSystem.numFixedColumns ≤ 14)
     (hplacement : FloorPlanner.V1.placementEnd top.operations ≤ 2041)
     (hfirst : ∀ column : Fin 29, column.val ∈ plonkInitialMaskColumns →
@@ -92,33 +90,31 @@ theorem plonkKeygenPublicPolynomials_selectorMaskingProfile {actions k : ℕ} {G
     (hcheck : plonkPartialMaskBoundaryCheck vk plonkSelectorBoundaryKnown = true) :
     PlonkMaskingProfile vk (plonkKeygenPublicPolynomials top instances sigma) :=
   plonkPartialMaskBoundaryCheck_sound vk _ _
-    (plonkKeygenPublicPolynomials_selectorBoundary_agrees top hk hcolumns hprefix hplacement hfirst instances sigma)
+    (plonkKeygenPublicPolynomials_selectorBoundary_agrees top hprefix hplacement hfirst instances sigma)
     hcheck
 
 /-- The one-Action captured key is mask-safe for compiler fixed rows with the stated initial selectors. -/
 theorem singleAction_plonkKeygenSelectorProfile
     (top : TopLevelCircuit Fp Config PublicInput)
-    (hk : top.domainExponent = 11) (hcolumns : 29 ≤ top.fixedColumnCount)
     (hprefix : top.constraintSystem.numFixedColumns ≤ 14)
     (hplacement : FloorPlanner.V1.placementEnd top.operations ≤ 2041)
     (hfirst : ∀ column : Fin 29, column.val ∈ plonkInitialMaskColumns →
       plonkKeygenFixedRows top column 0 = 0)
     (instances : Fin 1 → Fin 2048 → Fp) (sigma : Fin 15 → Fin 2048 → Fp) :
     PlonkMaskingProfile (k := 11) Fixture.vk (plonkKeygenPublicPolynomials top instances sigma) :=
-  plonkKeygenPublicPolynomials_selectorMaskingProfile top hk hcolumns hprefix hplacement hfirst
+  plonkKeygenPublicPolynomials_selectorMaskingProfile top hprefix hplacement hfirst
     instances sigma Fixture.vk singleAction_plonkSelectorBoundary
 
 /-- The two-Action captured key has the same compiler-selector mask profile. -/
 theorem multiAction_plonkKeygenSelectorProfile
     (top : TopLevelCircuit Fp Config PublicInput)
-    (hk : top.domainExponent = 11) (hcolumns : 29 ≤ top.fixedColumnCount)
     (hprefix : top.constraintSystem.numFixedColumns ≤ 14)
     (hplacement : FloorPlanner.V1.placementEnd top.operations ≤ 2041)
     (hfirst : ∀ column : Fin 29, column.val ∈ plonkInitialMaskColumns →
       plonkKeygenFixedRows top column 0 = 0)
     (instances : Fin 2 → Fin 2048 → Fp) (sigma : Fin 15 → Fin 2048 → Fp) :
     PlonkMaskingProfile (k := 11) Fixture2.vk (plonkKeygenPublicPolynomials top instances sigma) :=
-  plonkKeygenPublicPolynomials_selectorMaskingProfile top hk hcolumns hprefix hplacement hfirst
+  plonkKeygenPublicPolynomials_selectorMaskingProfile top hprefix hplacement hfirst
     instances sigma Fixture2.vk multiAction_plonkSelectorBoundary
 
 end Zcash.Snark.ZeroKnowledge

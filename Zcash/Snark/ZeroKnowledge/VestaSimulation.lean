@@ -43,7 +43,6 @@ variable {actions : ℕ} {Config : Type} {PublicInput : TypeMap} [ProvableType P
     (urs : URS VestaG) (hk : urs.k = 11)
     (vk : VerifyingKey (plonkProofShape actions urs.k) Fp VestaG)
     (top : Halo2.TopLevelCircuit Fp Config PublicInput)
-    (htopK : top.domainExponent = 11) (htopColumns : 29 ≤ top.fixedColumnCount)
     (htopPrefix : top.constraintSystem.numFixedColumns ≤ 14)
     (hpermutation : top.permutationColumnCount = 15)
     (hused : Halo2.usedRows top.operations ≤ 2041)
@@ -62,7 +61,7 @@ variable {actions : ℕ} {Config : Type} {PublicInput : TypeMap} [ProvableType P
     (hchunks : vk.permutationChunks.length = 3) (hpacked : vk.permutationChunks.flatten.length = 15)
     (hW : urs.w ≠ 0)
 
-include hk htopK htopColumns htopPrefix hpermutation hused hfirst hwidth hindices
+include hk htopPrefix hpermutation hused hfirst hwidth hindices
   hdelta hstride hqueries degree hmask hvalid homega hn hblind hchunks hpacked hW
 
 /-- The public simulator covers the concrete encoded reference attempt with the compiler-derived budget. -/
@@ -80,7 +79,7 @@ theorem wideVestaCompilerKeygenPlonk_simulation_error_bound :
         (freshEncodedPlonkReferenceAttempt urs hk vk pub witness) (plonkSimulationErrorBound actions) := by
   intro pub copies hvalues
   simp only [freshEncodedPlonkReferenceAttempt_law]
-  exact wideObservedCompilerKeygenPlonk_simulation_error_bound urs hk vk top htopK htopColumns
+  exact wideObservedCompilerKeygenPlonk_simulation_error_bound urs hk vk top
     htopPrefix hpermutation hused hfirst hwidth hindices hdelta hstride hqueries instances witness degree
     hmask hvalid homega hn hblind hchunks hpacked (vestaBlinding_bijective urs.w hW)
     plonkPointCodec plonkScalarCodec hvalues
@@ -102,7 +101,7 @@ theorem wideVestaSuccessfulCompilerKeygenPlonk_simulation_capstone
             (successfulPlonkView simulate plonkPointCodec plonkScalarCodec hi) (plonkSuccessfulErrorBound actions) ∧
           PMFEventBiasLE (successfulPlonkView simulate plonkPointCodec plonkScalarCodec hi)
             (successfulPlonkView actual plonkPointCodec plonkScalarCodec ha) (plonkSuccessfulErrorBound actions) :=
-  wideSuccessfulCompilerKeygenPlonk_simulation_capstone urs hk vk top htopK htopColumns
+  wideSuccessfulCompilerKeygenPlonk_simulation_capstone urs hk vk top
     htopPrefix hpermutation hused hfirst hwidth hindices hdelta hstride hqueries instances witness degree
     hmask hvalid homega hn hblind hchunks hpacked (vestaBlinding_bijective urs.w hW)
     plonkPointCodec plonkScalarCodec plonkPointCodec_none_iff hbudget
@@ -124,7 +123,7 @@ theorem wideVestaRetriedCompilerKeygenPlonk_simulation_capstone
       PMFEventBiasLE (observedPlonkRetries simulate plonkPointCodec plonkScalarCodec attempts)
         (observedPlonkRetries actual plonkPointCodec plonkScalarCodec attempts)
         (plonkSimulationErrorBound actions / (1 - plonkAttemptFailureBound actions)) :=
-  wideRetriedCompilerKeygenPlonk_simulation_capstone urs hk vk top htopK htopColumns
+  wideRetriedCompilerKeygenPlonk_simulation_capstone urs hk vk top
     htopPrefix hpermutation hused hfirst hwidth hindices hdelta hstride hqueries instances witness degree
     hmask hvalid homega hn hblind hchunks hpacked (vestaBlinding_bijective urs.w hW)
     plonkPointCodec plonkScalarCodec plonkPointCodec_none_iff hrate attempts
