@@ -35,6 +35,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkCopyCertificate
 import Zcash.Snark.ZeroKnowledge.PlonkOriginalSimulation
 import Zcash.Snark.ZeroKnowledge.PlonkMaskCertificate
 import Zcash.Snark.ZeroKnowledge.PlonkKeygenSimulation
+import Zcash.Snark.ZeroKnowledge.PlonkSelectorSimulation
 import Zcash.Snark.ZeroKnowledge.Observation
 import Zcash.Meta.AxiomCheck
 
@@ -133,8 +134,12 @@ rows produced by the circuit compiler, a structural proof derives zero throughou
 the masked suffix from the bounds on table, constant, selector, and region writes.
 This connects six boundary rows to actual keygen and leaves a finite mask check that
 reads only rows 0 and 2041 from the compiler. The keygen reference endpoint uses these
-constructed polynomials; checking the two remaining Action boundary rows and relating
-the supplied instance/sigma rows and public commitments to the deployed key remain open. The
+constructed polynomials. The selector-only certificates further leave all thirteen
+original fixed columns unknown, and a compiler support theorem makes packed selectors
+zero from the V1 placement endpoint onward. Given the public column/placement bounds,
+only the initial packed-selector values remain to be established for the Action circuit.
+Relating the supplied instance/sigma rows and public commitments to the deployed key
+also remains open. The
 sampling comparison alone is not a simulator for failed attempts. The proof string's
 terminal rotations use the kernel root certificate.
 These results do not establish a whole-prover simulator, Fiat–Shamir zero-knowledge, or a
@@ -944,6 +949,27 @@ assert_computable Zcash.Snark.ZeroKnowledge.plonkKeygenMaskBoundaryFixed +choice
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygenPublicPolynomials_maskBoundary
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygenPublicPolynomials_maskingProfile
 assert_axioms Zcash.Snark.ZeroKnowledge.wideKeygenPlonkVerifier_simulation_error_bound
+
+-- Partial public information and selector placement reduce the concrete mask check to row zero.
+assert_computable Zcash.Snark.ZeroKnowledge.exprPartialPublicValue
+assert_axioms Zcash.Snark.ZeroKnowledge.exprPartialPublicValue_refines
+assert_computable Zcash.Snark.ZeroKnowledge.exprPartialMaskInvariant
+assert_axioms Zcash.Snark.ZeroKnowledge.exprPartialMaskInvariant_refines
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevelRawSelector_row_lt_placementEnd
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevelSelectorRows_zero_of_placementEnd_le
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPartialMaskBoundaryCheck
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPartialMaskBoundaryCheck_sound
+assert_computable Zcash.Snark.ZeroKnowledge.plonkSelectorBoundaryKnown +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.singleAction_plonkSelectorBoundary
+assert_axioms Zcash.Snark.ZeroKnowledge.multiAction_plonkSelectorBoundary
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkFixedQueryOrder_selector
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaskBoundaryRows_after_zero
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygenFixedRows_selector_zero
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygenPublicPolynomials_selectorBoundary_agrees
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygenPublicPolynomials_selectorMaskingProfile
+assert_axioms Zcash.Snark.ZeroKnowledge.singleAction_plonkKeygenSelectorProfile
+assert_axioms Zcash.Snark.ZeroKnowledge.multiAction_plonkKeygenSelectorProfile
+assert_axioms Zcash.Snark.ZeroKnowledge.wideSelectorKeygenPlonkVerifier_simulation_error_bound
 
 -- At an unmasked row the disclosed evaluation is the original cell, for every mask law.
 assert_axioms Zcash.Snark.ZeroKnowledge.maskedRowPolynomial_eval_before

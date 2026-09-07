@@ -11,9 +11,10 @@ soundness formalization does not supply an honest-prover distribution or simulat
 The current [reference-prover theorem](PlonkOriginalSimulation.lean) gives a numerical
 joint simulation bound from original gate, lookup, and copy validity, plus explicit
 public-key conditions. It no longer has an unbounded row-failure term under those premises.
-The [keygen specialization](PlonkKeygenSimulation.lean) constructs its fixed polynomials
-from the circuit compiler, derives every public polynomial degree bound, and proves
-the six masked fixed rows are zero. Two usable boundary rows still require checking.
+The [selector/keygen specialization](PlonkSelectorSimulation.lean) constructs its fixed
+polynomials from the circuit compiler and derives every public polynomial degree bound.
+Selector-only certificates and compiler placement reduce the masking conditions to the
+initial packed-selector row, plus explicit public column and placement bounds.
 The remaining implementation and public-key correspondence obligations are listed below.
 
 The implementation-facing interactive target is **statistical HVZK**. The
@@ -675,11 +676,38 @@ equality between arbitrary public polynomial evaluations and captured scalar val
 same numerical joint bound. Its public degree premises are discharged, and its mask
 profile follows from that finite compiler-row check. The instance and sigma vectors are
 still supplied inputs, with original gate/lookup validity and copy equations required.
-The remaining Action boundary check, statement/sigma provenance, public commitments,
-and agreement between the compiler's circuit and the verifier key remain open. The
+The selector refinement below narrows the remaining Action boundary check. Statement/sigma
+provenance, public commitments, and agreement between the compiler's circuit and the
+verifier key remain open. The
 existing Action compilation lemmas also carry the Pallas generator's native order
 certificate; using them in an Action specialization requires explicit trust accounting.
 The generic keygen endpoint is pinned without that dependency.
+
+[PartialExpressionMasking.lean](PartialExpressionMasking.lean) lets a certificate leave
+public fixed values unknown. A partial value or mask check refines the original checker
+for every compatible full assignment; an unknown value cannot certify a zero factor.
+[PlonkPartialMaskBoundary.lean](PlonkPartialMaskBoundary.lean) applies this to the same
+eight gate and two lookup boundaries. The kernel certificates in
+[PlonkSelectorCertificate.lean](PlonkSelectorCertificate.lean) pass for both captured
+keys while leaving all thirteen original fixed columns unknown. They use only the packed
+selectors: column 19 has value 4 in row 0, and all other packed-selector boundary entries
+are zero. No table element, generator coordinate, or region-fixed constant is needed.
+
+[KeygenSelectorSupport.lean](KeygenSelectorSupport.lean) proves that packed-selector
+writes come only from selector activations before V1's placement endpoint. Hence the
+compiler's dense selector columns are zero afterward, even where table default-fill
+continues through usable rows. [PlonkKeygenSelectors.lean](PlonkKeygenSelectors.lean)
+uses this fact with the selector certificates. Given exponent 11, at least 29 fixed
+columns, at most thirteen original fixed columns, and placement ending by row 2041,
+the mask profile requires only the initial packed-selector row. The one- and two-Action
+profile theorems use the actual captured expressions with these compiler fixed rows.
+
+`wideSelectorKeygenPlonkVerifier_simulation_error_bound` in
+[PlonkSelectorSimulation.lean](PlonkSelectorSimulation.lean) supplies this profile to the
+numerical joint simulation, keeping the same bound. Establishing the initial selector
+values from the concrete Action compilation is still open; the captured row values alone
+do not discharge that obligation. The instance, sigma, commitment, and execution
+correspondence obligations also remain.
 
 This is still a conditional algebraic simulation theorem. Completing the exact prover
 theorem requires connecting the stated witness and public-key conditions to the actual
