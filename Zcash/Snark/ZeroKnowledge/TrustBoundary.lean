@@ -59,6 +59,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkQueryCertificate
 import Zcash.Snark.ZeroKnowledge.PlonkEvaluationCompression
 import Zcash.Snark.ZeroKnowledge.PlonkVerifierOpening
 import Zcash.Snark.ZeroKnowledge.PlonkDerivedKey
+import Zcash.Snark.ZeroKnowledge.SelectorReplacementDegree
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -264,7 +265,10 @@ compiler. Its configure program now determines the advice and instance queries,
 permutation columns, and degree-derived dimensions. Given fifteen compressed selector
 columns, it supplies the full reference key shape, fixed-query order, domain, sigma
 naming, and copy-query conditions to the opening and encoded simulation theorems.
-The compression count, four initial selector zeros, and compiled expression checks
+The full Action degree profile is now derived: the greedy packer preserves each
+selector's source-degree budget, the replacements fit their combination lengths,
+and source expression bounds survive compilation. The compression count, four
+initial selector zeros, and compiled masking check
 remain explicit in that specialization.
 These equalities do not assert verifier acceptance. The concrete Action results have a
 separate census for their inherited Pallas order dependency.
@@ -1591,3 +1595,18 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompilerFixedColumnCoverage
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompilerPublicCommitmentsMatch
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompilerKey_domain
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompilerOpening_eq_public
+
+assert_axioms Zcash.Snark.ZeroKnowledge.eraseExpr_toExpr_degree_le
+assert_axioms Zcash.Snark.ZeroKnowledge.substSelectorMap_degree_singleton
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevel_gate_degree_le
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevel_lookupInput_substitution_degree
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevel_lookupInput_degree_le
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevel_lookupTable_degree_le
+assert_axioms Zcash.Snark.ZeroKnowledge.extendCombination_degree_budget
+assert_axioms Zcash.Snark.ZeroKnowledge.buildCombinations_degree_budget
+assert_axioms Zcash.Snark.ZeroKnowledge.process_entry_degree_budget
+assert_computable Zcash.Snark.ZeroKnowledge.selectorCompressionDegreeBudget
+assert_axioms Zcash.Snark.ZeroKnowledge.deriveSelCompressMap_lookup_degree_budget
+assert_axioms Zcash.Snark.ZeroKnowledge.selReplacement_degree_le
+assert_computable Zcash.Snark.ZeroKnowledge.selectorWeightedDegree
+assert_axioms Zcash.Snark.ZeroKnowledge.substSelectorMap_degree_le_weighted

@@ -17,7 +17,7 @@ an honest-prover distribution or simulator.
 
 The current [Action compiler reference theorem](ActionCompilerSimulation.lean) gives a numerical joint
 simulation bound from original gate, lookup, and copy-value validity, plus explicit
-compression, expression, and initial-selector conditions. It uses the actual Action
+compression, masking, and initial-selector conditions. It uses the actual Action
 compiler key, Action's canonical public inputs, and
 compiler-derived fixed rows, sigma rows, and complete ordered copy list. Sigma coherence
 and every public polynomial degree bound are derived. The existing Action compiler
@@ -27,8 +27,12 @@ advice and instance query order, the permutation columns, and all degree-derived
 dimensions. Given fifteen compressed selector columns, the
 [derived key](ActionDerivedKey.lean) has the required shape, fixed-query order,
 domain, sigma naming, copy-query layout, and product dimensions. The compression
-count, four initial packed-selector zeros, and compiled expression checks remain
-as concrete Action obligations.
+count, four initial packed-selector zeros, and compiled masking check remain as
+concrete Action obligations. The [complete degree profile](ActionGateDegree.lean)
+now follows from the actual source expressions and compiler: gates have degree
+at most nine, lookup inputs at most four, lookup tables at most one, and permutation
+chunks have width at most seven. The selector packer's degree invariant holds for
+every activation pattern; this proof does not assume its final packing trace.
 There is no unbounded row-failure term under those premises.
 The [encoded-attempt theorem](PlonkAttemptSimulation.lean) preserves this bound while
 retaining partial output, the received challenges, and the specified failure status.

@@ -13,12 +13,14 @@ point-order dependency. The encoded Vesta comparison additionally carries the
 existing Vesta point-order dependency. No new native certificate is introduced.
 
 The four initial selector zeros remain an explicit proposition, not a certificate.
-The key-expression checks use the already kernel-checked captured-key predicates.
+The masking check is still explicit for the compiler key; both captured keys have
+their own kernel-checked predicates.
 The actual configure program now supplies the query order and all key dimensions
 except the selector-compression count. Given fifteen packed columns, the derived
 key supplies the domain, sigma naming, exact copy layout, and complete opening
 connection. These facts also instantiate the encoded simulation bound. The
-compression count and compiled expression checks remain explicit; no native root
+entire compiled degree profile follows from the source and the packer's degree
+invariant. The compression count and masking check remain explicit; no native root
 or circuit-computation certificate is added.
 -/
 
@@ -107,3 +109,39 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionReferenceKey_opening_eq_public +na
 assert_axioms Zcash.Snark.ZeroKnowledge.wideActionCompilerReference_simulation_error_bound +native(
   CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
   CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+
+assert_computable Zcash.Snark.ZeroKnowledge.actionSelectorDegrees
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_selectorMaxDegrees +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_lookupInputDegrees +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_lookupTableDegrees +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_lookupInput_degree_le +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_lookupTable_degree_le +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_verifierLookupInput_degree_le +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_verifierLookupTable_degree_le +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionReferenceKey_lookupDegrees +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionReferenceKey_degreeProfile_of_gates +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+assert_computable Zcash.Snark.ZeroKnowledge.actionSelectorDegreeCost
+assert_axioms Zcash.Snark.ZeroKnowledge.actionSelectorDegrees_le
+assert_axioms Zcash.Snark.ZeroKnowledge.actionSelectorDegreeCost_pos
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_weightedGateDegrees +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_selectorReplacement_degree_le +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_substitutedGate_degree_le +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_verifierGate_degree_le +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionReferenceKey_gateDegrees +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionReferenceKey_degreeProfile +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)

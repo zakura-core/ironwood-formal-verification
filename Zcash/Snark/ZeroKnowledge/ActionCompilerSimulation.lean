@@ -1,4 +1,4 @@
-import Zcash.Snark.ZeroKnowledge.ActionDerivedKey
+import Zcash.Snark.ZeroKnowledge.ActionGateDegree
 import Zcash.Snark.ZeroKnowledge.ActionSimulation
 import Zcash.Snark.ZeroKnowledge.ActionCommitments
 
@@ -10,9 +10,10 @@ domain, and permutation layout are supplied by `ActionDerivedKey`, given the
 remaining selector-compression count. This removes independent key-layout, sigma
 naming, copy-query, and product-dimension premises from the Action reference bound.
 
-The compression count, four initial selector zeros, and compiled expression degree
-and mask checks still need concrete Action proofs. Original row and copy equations
-remain the valid-witness premise; nonidentity of the URS blinding point remains the
+The entire degree profile follows from the actual compiler. The compression count,
+four initial selector zeros, and compiled masking check still need concrete Action
+proofs. Original row and copy equations remain the valid-witness premise;
+nonidentity of the URS blinding point remains the
 public-parameter condition. This theorem compares the encoded reference attempts.
 -/
 
@@ -60,7 +61,6 @@ theorem wideActionCompilerReference_simulation_error_bound {actions : ℕ} [Fint
     (hfirst : ActionInitialSelectorsZero)
     (inputs : Fin actions → PublicInputs Fp)
     (witness : Fin actions → Fin 10 → Fin 2048 → Fp)
-    (degree : PlonkDegreeProfile (actionReferenceKey (actions := actions) urs hk hpacked))
     (hmask : plonkPartialMaskBoundaryCheck (actionReferenceKey (actions := actions) urs hk hpacked)
       plonkSelectorBoundaryKnown = true)
     (hvalid : PlonkOriginalRowsValid (actionReferenceKey (actions := actions) urs hk hpacked)
@@ -86,7 +86,8 @@ theorem wideActionCompilerReference_simulation_error_bound {actions : ℕ} [Fint
   exact wideActionReference_simulation_error_bound urs hk _ hfirst
     (actionReferenceKey_copyChunkWidths (actions := actions) urs hk hpacked)
     (actionReferenceKey_copySigmaIndices (actions := actions) urs hk hpacked) hnaming.1 hnaming.2
-    (actionReferenceKey_copyQueries (actions := actions) urs hk hpacked) inputs witness degree hmask hvalid
+    (actionReferenceKey_copyQueries (actions := actions) urs hk hpacked) inputs witness
+    (actionReferenceKey_degreeProfile (actions := actions) urs hk hpacked) hmask hvalid
     hdomain.1 hdomain.2 (actionReferenceKey_queryLayout (actions := actions) urs hk hpacked).blinding
     hshape.1 hshape.2 hW
 
