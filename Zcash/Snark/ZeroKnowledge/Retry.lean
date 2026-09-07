@@ -72,7 +72,7 @@ theorem conditioned_retry_fixedpoint {A B : Type*} (law : PMF A) (success : Set 
     mul_comm (law.toOuterMeasure successᶜ), ← mul_add, event_mass_add_compl, mul_one]
 
 /-- Only failed first attempts expose a difference in the continuation laws. -/
-theorem retryStep_error_bound {A B : Type*} [Fintype A]
+theorem retryStep_error_bound {A B : Type*}
     (law : PMF A) (success : Set A) [DecidablePred (fun a => a ∈ success)] (respond : A → B)
     {left right : PMF B} {ε : ℝ≥0∞}
     (forward : PMFEventBiasLE left right ε) (reverse : PMFEventBiasLE right left ε) :
@@ -80,35 +80,20 @@ theorem retryStep_error_bound {A B : Type*} [Fintype A]
         (law.toOuterMeasure successᶜ * ε) ∧
       PMFEventBiasLE (retryStep law success respond right) (retryStep law success respond left)
         (law.toOuterMeasure successᶜ * ε) := by
-  have hmass : (∑ a, law a * (if a ∈ success then 0 else ε)) =
-      law.toOuterMeasure successᶜ * ε := by
-    rw [law.toOuterMeasure_apply_fintype, Finset.sum_mul]
-    apply Finset.sum_congr rfl
-    intro a _
-    by_cases ha : a ∈ success <;> simp [ha, Set.indicator]
-  have hforward (a : A) : PMFEventBiasLE
-      (if a ∈ success then PMF.pure (respond a) else left)
-      (if a ∈ success then PMF.pure (respond a) else right)
-      (if a ∈ success then 0 else ε) := by
-    by_cases ha : a ∈ success
-    · simp only [if_pos ha]
-      intro event
-      simp
-    · simpa [ha] using forward
-  have hreverse (a : A) : PMFEventBiasLE
-      (if a ∈ success then PMF.pure (respond a) else right)
-      (if a ∈ success then PMF.pure (respond a) else left)
-      (if a ∈ success then 0 else ε) := by
-    by_cases ha : a ∈ success
-    · simp only [if_pos ha]
-      intro event
-      simp
-    · simpa [ha] using reverse
-  exact ⟨hmass ▸ PMFEventBiasLE.bind_average hforward,
-    hmass ▸ PMFEventBiasLE.bind_average hreverse⟩
+  have step {l r : PMF B} (h : PMFEventBiasLE l r ε) :
+      PMFEventBiasLE (retryStep law success respond l) (retryStep law success respond r)
+        (law.toOuterMeasure successᶜ * ε) := by
+    intro event
+    simp only [retryStep_event_mass]
+    calc
+      _ ≤ law.toOuterMeasure (respond ⁻¹' event ∩ success) +
+          law.toOuterMeasure successᶜ * (r.toOuterMeasure event + ε) :=
+        add_le_add le_rfl (mul_le_mul_right (h event) _)
+      _ = _ := by rw [mul_add, add_assoc]
+  exact ⟨step forward, step reverse⟩
 
 /-- Finite independent retries approach the conditioned law with the geometric failure bound. -/
-theorem boundedRetries_error_bound {A : Type*} [Fintype A]
+theorem boundedRetries_error_bound {A : Type*}
     (law : PMF A) (success : Set A) [DecidablePred (fun a => a ∈ success)]
     (h : ∃ a ∈ success, a ∈ law.support) (n : ℕ) :
     PMFEventBiasLE (boundedRetries law success n) ((law.filter success h).map some)
@@ -144,7 +129,7 @@ theorem failure_mass_lt_one {A : Type*} (law : PMF A) (success : Set A)
   simpa only [add_comm, event_mass_add_compl] using hlt
 
 /-- Every event in the independent-retry experiment converges to its conditioned probability. -/
-theorem boundedRetries_tendsto {A : Type*} [Fintype A]
+theorem boundedRetries_tendsto {A : Type*}
     (law : PMF A) (success : Set A) [DecidablePred (fun a => a ∈ success)]
     (h : ∃ a ∈ success, a ∈ law.support) (event : Set (Option A)) :
     Filter.Tendsto (fun n => (boundedRetries law success n).toOuterMeasure event) Filter.atTop

@@ -228,7 +228,7 @@ theorem wideSuccessfulIpa_simulation_capstone
   exact ⟨by simpa only [two_mul] using eventBias_map hc.1 (ipaAttemptObservation pointCodec scalarCodec),
     by simpa only [two_mul] using eventBias_map hc.2 (ipaAttemptObservation pointCodec scalarCodec)⟩
 
-omit [AddCommGroup G] [Module Fp G] in
+omit [AddCommGroup G] [Module Fp G] [Fintype G] in
 /-- Independent retries of the encoded IPA experiment converge to its successful-attempt law. -/
 theorem encodedIpa_retries_tendsto {k : ℕ} (law : PMF (IpaFreshView k G))
     (pointCodec : G → Option (List UInt8)) (scalarCodec : Fp → List UInt8)

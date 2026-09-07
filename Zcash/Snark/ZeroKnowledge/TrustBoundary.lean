@@ -43,6 +43,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkUnusedKeygen
 import Zcash.Snark.ZeroKnowledge.PlonkCompilerSimulation
 import Zcash.Snark.ZeroKnowledge.PlonkAttemptSimulation
 import Zcash.Snark.ZeroKnowledge.PlonkFailures
+import Zcash.Snark.ZeroKnowledge.PlonkCompilerSuccess
 import Zcash.Snark.ZeroKnowledge.PlonkSigmaCertificate
 import Zcash.Meta.AxiomCheck
 
@@ -186,7 +187,15 @@ conditionally on the entire private prefix. The actual proof's point slots are
 covered by these families. Wide reduction and the `k+1` actual stopping challenges
 supply the stated bound, even at exceptional challenges and without row-correctness
 premises. Completion means that the emission schedule finishes, not verifier
-acceptance. This does not yet normalize successful full proofs or analyze whole-prover retries.
+acceptance. The successful-view capstone now derives positive normalizers from these
+failure and simulation bounds and proves the two-sided conditional budget
+`2 epsilon / (1 - B)`, where `B = (42904m+4158)/p + (296m+138) bias`.
+The numerical inequality `B < 1` is kernel-certified for `m <= 65535`, including
+both captured Action counts; the general endpoint takes that inequality explicitly.
+Support certificates are proofs, not witness inputs to the simulator. Independent
+selection of completed attempts converges to this conditioned law, also for view
+types without a Fintype instance. This does not identify terminal errors with retry
+requests or model the complete retry history. Whole-prover retry semantics remain open.
 Stage-by-stage causality of the reference construction and concrete codec instantiation
 remain separate from the observation theorem. Fiat–Shamir ZK needs its own argument;
 Rust execution correspondence is a separate claim, outside the protocol theorem's target.
@@ -1168,3 +1177,20 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonkAttempt_failure_subset
 assert_axioms Zcash.Snark.ZeroKnowledge.freshSampledPlonkVerifier_challenges
 assert_axioms Zcash.Snark.ZeroKnowledge.freshPlonkAttempt_failure_le
 assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkAttempt_failure_le
+
+-- Successful full observations: explicit normalizers and the compiler-derived comparison.
+assert_computable Zcash.Snark.ZeroKnowledge.plonkAttemptSuccessDecidable +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkSimulationErrorBound
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAttemptFailureBound
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCommonFailureBound
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkSuccessfulErrorBound
+assert_axioms Zcash.Snark.ZeroKnowledge.successfulPlonkView
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCommonFailureBound_eq
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCommonFailureBound_mono
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCommonFailureBound_lt_one
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkSuccessLowerBound_pos
+assert_axioms Zcash.Snark.ZeroKnowledge.plonk_common_failure_le
+assert_axioms Zcash.Snark.ZeroKnowledge.plonk_success_support
+assert_axioms Zcash.Snark.ZeroKnowledge.successfulPlonk_simulation_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.successfulPlonk_selection_tendsto
+assert_axioms Zcash.Snark.ZeroKnowledge.wideSuccessfulCompilerKeygenPlonk_simulation_capstone

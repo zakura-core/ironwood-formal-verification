@@ -25,7 +25,9 @@ initial packed-selector zeros, plus explicit public column and placement bounds.
 The [encoded-attempt theorem](PlonkAttemptSimulation.lean) preserves this bound while
 retaining partial output, the received challenges, and the specified failure status.
 The [full-attempt failure bound](PlonkFailures.lean) is now numerical too. These results
-compare unconditioned attempts; successful-output normalization and full retries remain open.
+compare unconditioned attempts. The [successful-view capstone](PlonkCompilerSuccess.lean)
+now proves positive normalizers and carries their cost into the conditional comparison.
+Whole-prover retry semantics remain open.
 The remaining protocol and public-key obligations, and the separate limitations on claims
 about a concrete implementation, are listed below.
 
@@ -526,10 +528,9 @@ and public-key premises. It does not condition away failures.
 
 The common public initialization is fixed separately and contributes no proof bytes.
 The unconditioned bound holds for every supplied deterministic codec, so encoding adds
-no simulation error. Successful-output analysis will use the specified codec's
+no simulation error. The successful-output analysis below uses the specified codec's
 identity-failure property. Proving causality of the complete staged reference construction
-and handling successful-output normalization and independent whole-prover retries remain
-open.
+and the whole-prover retry policy remain open.
 
 ## Full-attempt failure probability
 
@@ -552,6 +553,33 @@ error is at most **`(22m+45)/p + (148m+68) × bias`**. For one Action this is
 blinding-generator bijection is required. Completion means finishing the emission
 schedule; the theorem does not assert verifier acceptance. The bound does not discard
 exceptional challenges or assume row correctness.
+
+## Successful full-prover views
+
+[PlonkSuccessBounds.lean](PlonkSuccessBounds.lean) adds the honest failure bound `F(m)`
+to the raw joint simulation error `epsilon(m)`. Their sum bounds failure on both sides:
+
+**`B(m) = (42904m + 4158)/p + (296m + 138) × bias`**.
+
+It kernel-proves `B(m) < 1` for `m ≤ 65535`, which includes both captured Action counts.
+This is an arithmetic certificate; the general simulation endpoint retains `B(m) < 1`
+as its numerical premise without imposing that range on the protocol.
+
+[PlonkSuccess.lean](PlonkSuccess.lean) derives supported successful outcomes on both
+sides before filtering either law. [PlonkCompilerSuccess.lean](PlonkCompilerSuccess.lean)
+instantiates that argument with the existing compiler-derived prover and public simulator.
+`wideSuccessfulCompilerKeygenPlonk_simulation_capstone` gives the two-sided bound
+**`2 × epsilon(m) / (1 - B(m))`** for the full encoded view conditioned on completing the
+emission schedule. The simulator is the existing public-data law conditioned on that
+same observable event; its support certificate is an erased proof, not a witness input.
+No actual success probability or conditional simulation statement is assumed.
+
+Independent draws which discard unsuccessful observations converge to this conditional
+law. The retry comparison now holds for arbitrary observation types, with no finite-type
+instance required. Selecting completed attempts is distinct from the protocol's retry
+policy: a terminal opening error is not a retry request. The caller's treatment of these
+outcomes and any history of earlier failed prefixes remain to be modeled. Completion
+still means emitting the full proof, without asserting verifier acceptance.
 
 [RunningProductRows.lean](RunningProductRows.lean) gives computable lookup and chained
 permutation ratio scans with `0` mapped to `0` on inversion. It proves the exact condition
@@ -867,7 +895,8 @@ This is still a conditional algebraic simulation theorem. Completing the specifi
 interactive protocol theorem requires discharging the remaining concrete circuit and
 public-key conditions, connecting the reference constructions to the existing Lean
 verifier's grouping and commitment routing, proving stage-by-stage causality, and
-accounting for successful output and whole-prover retries.
+accounting for the whole-prover retry policy and any retained history. The successful
+single-attempt law is now normalized by the capstone above.
 The attempt observation above now retains the scheduled failures and partial output.
 Its random-bit tape and independent verifier
 challenges are explicit assumptions of the interactive experiment.
