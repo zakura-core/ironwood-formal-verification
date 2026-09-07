@@ -13,15 +13,19 @@ point-order dependency. The encoded Vesta comparison additionally carries the
 existing Vesta point-order dependency. No new native certificate is introduced.
 
 The four initial selector zeros remain an explicit proposition, not a certificate.
-The masking check is still explicit for the compiler key; both captured keys have
-their own kernel-checked predicates.
+The actual compiler's masking check follows from the proved source classifications
+and an explicit selector-routing condition; both captured keys also have their own
+kernel-checked predicates.
 The actual configure program now supplies the query order and all key dimensions
 except the selector-compression count. Given fifteen packed columns, the derived
 key supplies the domain, sigma naming, exact copy layout, and complete opening
 connection. These facts also instantiate the encoded simulation bound. The
 entire compiled degree profile follows from the source and the packer's degree
-invariant. The compression count and masking check remain explicit; no native root
-or circuit-computation certificate is added.
+invariant. Structural source mask certificates survive selector replacement,
+query resolution, and verifier-expression translation. The remaining concrete
+conditions are the compression count, the routing of nine previous-row selectors
+into the four initial zero columns, and those initial values. No native root or
+circuit-computation certificate is added.
 -/
 
 assert_axioms Zcash.Snark.ZeroKnowledge.ActionInitialSelectorsZero +native(
@@ -144,4 +148,45 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_verifierGate_degree_le +na
 assert_axioms Zcash.Snark.ZeroKnowledge.actionReferenceKey_gateDegrees +native(
   CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.actionReferenceKey_degreeProfile +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+assert_computable Zcash.Snark.ZeroKnowledge.actionPreviousRowSelectors
+assert_computable Zcash.Snark.ZeroKnowledge.actionSourceMaskZero
+assert_computable Zcash.Snark.ZeroKnowledge.actionSourceMaskSafe
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_sourceGateMaskCertificates +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_sourceLookupInputMaskCertificates +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_sourceLookupTableMaskCertificates +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_sourceGateMaskSafe +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_sourceLookupInputMaskSafe +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_sourceLookupTableMaskSafe +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_gateQueryState_advice +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_gateQueryState_fixed +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_fixIdx_packedColumn +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_advIdx_initial_retained +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.ActionPreviousSelectorPacking +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.actionPackedMaskZero
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_packedSelectorBounds +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_substitutedSourceMaskCertificates +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_compiledExpressionMaskSafe +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_verifierGate_maskBoundaryCheck +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_verifierLookupInput_maskBoundaryCheck +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_verifierLookupTable_maskBoundaryCheck +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionReferenceKey_maskBoundaryCheck +native(
   CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)

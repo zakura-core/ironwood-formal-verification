@@ -60,6 +60,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkEvaluationCompression
 import Zcash.Snark.ZeroKnowledge.PlonkVerifierOpening
 import Zcash.Snark.ZeroKnowledge.PlonkDerivedKey
 import Zcash.Snark.ZeroKnowledge.SelectorReplacementDegree
+import Zcash.Snark.ZeroKnowledge.KeygenExpressionMasking
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -267,9 +268,11 @@ columns, it supplies the full reference key shape, fixed-query order, domain, si
 naming, and copy-query conditions to the opening and encoded simulation theorems.
 The full Action degree profile is now derived: the greedy packer preserves each
 selector's source-degree budget, the replacements fit their combination lengths,
-and source expression bounds survive compilation. The compression count, four
-initial selector zeros, and compiled masking check
-remain explicit in that specialization.
+and source expression bounds survive compilation. Structural source certificates
+also survive selector substitution and the complete expression compiler. The
+remaining concrete conditions are the compression count, the routing of nine
+previous-row selectors into the four declared initial zero columns, and those
+four initial values. The full compiled masking check is derived from these facts.
 These equalities do not assert verifier acceptance. The concrete Action results have a
 separate census for their inherited Pallas order dependency.
 Fiat–Shamir ZK needs its own argument;
@@ -1610,3 +1613,15 @@ assert_axioms Zcash.Snark.ZeroKnowledge.deriveSelCompressMap_lookup_degree_budge
 assert_axioms Zcash.Snark.ZeroKnowledge.selReplacement_degree_le
 assert_computable Zcash.Snark.ZeroKnowledge.selectorWeightedDegree
 assert_axioms Zcash.Snark.ZeroKnowledge.substSelectorMap_degree_le_weighted
+
+-- Structural masking certificates survive both selector substitution and expression erasure.
+assert_computable Zcash.Snark.ZeroKnowledge.sourceExpressionZero
+assert_computable Zcash.Snark.ZeroKnowledge.sourceExpressionMaskSafe
+assert_axioms Zcash.Snark.ZeroKnowledge.sourceExpressionMaskSafe_of_zero
+assert_axioms Zcash.Snark.ZeroKnowledge.selReplacement_sourceExpressionZero
+assert_axioms Zcash.Snark.ZeroKnowledge.selReplacement_sourceExpressionMaskSafe
+assert_axioms Zcash.Snark.ZeroKnowledge.substSelectorMap_sourceMaskCertificates
+assert_axioms Zcash.Snark.ZeroKnowledge.exprPartialMaskInvariant_of_publicValue
+assert_axioms Zcash.Snark.ZeroKnowledge.eraseExpr_decidableEq_irrel
+assert_axioms Zcash.Snark.ZeroKnowledge.derivePinnedCS_decidableEq_irrel
+assert_axioms Zcash.Snark.ZeroKnowledge.eraseExpr_sourceMaskCertificates

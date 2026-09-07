@@ -96,6 +96,44 @@ def exprPartialMaskInvariant (known : ℕ → Option F) (retained : ℕ → Bool
       else exprPartialMaskInvariant known retained left && exprPartialMaskInvariant known retained right
   | .scaled e c => if c = 0 then true else exprPartialMaskInvariant known retained e
 
+/-- Every expression whose value is determined by public data passes the mask check. -/
+theorem exprPartialMaskInvariant_of_publicValue (known : ℕ → Option F) (retained : ℕ → Bool)
+    (expression : Expr F) (value : F)
+    (hvalue : exprPartialPublicValue known expression = some value) :
+    exprPartialMaskInvariant known retained expression = true := by
+  induction expression generalizing value with
+  | constant | fixed => rfl
+  | advice | «instance» => simp [exprPartialPublicValue] at hvalue
+  | negated expression ih =>
+      cases he : exprPartialPublicValue known expression with
+      | none => simp [exprPartialPublicValue, he] at hvalue
+      | some v => exact ih v he
+  | sum left right ihLeft ihRight =>
+      cases hl : exprPartialPublicValue known left with
+      | none => simp [exprPartialPublicValue, hl] at hvalue
+      | some x =>
+          cases hr : exprPartialPublicValue known right with
+          | none => simp [exprPartialPublicValue, hl, hr] at hvalue
+          | some y => simp [exprPartialMaskInvariant, ihLeft x hl, ihRight y hr]
+  | product left right ihLeft ihRight =>
+      by_cases hl0 : exprPartialPublicValue known left = some 0
+      · simp [exprPartialMaskInvariant, hl0]
+      · by_cases hr0 : exprPartialPublicValue known right = some 0
+        · simp [exprPartialMaskInvariant, hr0]
+        · simp only [exprPartialPublicValue, if_neg hl0, if_neg hr0] at hvalue
+          cases hl : exprPartialPublicValue known left with
+          | none => simp [hl] at hvalue
+          | some x =>
+              cases hr : exprPartialPublicValue known right with
+              | none => simp [hl, hr] at hvalue
+              | some y => simp [exprPartialMaskInvariant, ihLeft x hl, ihRight y hr]
+  | scaled expression c ih =>
+      by_cases hc : c = 0
+      · simp [exprPartialMaskInvariant, hc]
+      · cases he : exprPartialPublicValue known expression with
+        | none => simp [exprPartialPublicValue, hc, he] at hvalue
+        | some v => simp [exprPartialMaskInvariant, ih v he]
+
 /-- Passing the partial checker implies the existing full public mask check. -/
 theorem exprPartialMaskInvariant_refines (known : ℕ → Option F) (fixed : ℕ → F)
     (hagrees : ∀ query value, known query = some value → fixed query = value)
