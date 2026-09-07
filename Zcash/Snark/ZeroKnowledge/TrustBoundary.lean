@@ -45,6 +45,8 @@ import Zcash.Snark.ZeroKnowledge.PlonkAttemptSimulation
 import Zcash.Snark.ZeroKnowledge.PlonkFailures
 import Zcash.Snark.ZeroKnowledge.PlonkCompilerSuccess
 import Zcash.Snark.ZeroKnowledge.PlonkCompilerRetry
+import Zcash.Snark.ZeroKnowledge.PlonkChallengeCausality
+import Zcash.Snark.ZeroKnowledge.IpaCausality
 import Zcash.Snark.ZeroKnowledge.PlonkSigmaCertificate
 import Zcash.Meta.AxiomCheck
 
@@ -204,8 +206,13 @@ tend to zero for `B < 1`. The probability recursion is proved equal to the obser
 retry program on an independent attempt tape. The witness and statement stay fixed;
 fresh private and verifier tapes are required for each attempt. No unlimited-run
 history distribution or state-carrying caller equivalence is asserted here.
-Stage-by-stage causality of the reference construction and concrete codec instantiation
-remain separate from the observation theorem. Fiat–Shamir ZK needs its own argument;
+The deterministic causality interface now proves that a causal message producer stays
+causal under the actual observation and failure checks. The checks use only received
+challenges. The IPA mask commitment ignores xi, z, and every round challenge; a round
+pair depends only on strictly earlier rounds. These facts hold on every private tape,
+including zero challenges and invalid openings. The complete reference construction's
+message-prefix condition and concrete codec instantiation remain obligations.
+Fiat–Shamir ZK needs its own argument;
 Rust execution correspondence is a separate claim, outside the protocol theorem's target.
 -/
 
@@ -1251,3 +1258,24 @@ assert_axioms Zcash.Snark.ZeroKnowledge.observedPlonkRetries_both_exhausted_le
 assert_axioms Zcash.Snark.ZeroKnowledge.observedPlonkRetries_exhausted_tendsto
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkAttemptFailureBound_lt_one
 assert_axioms Zcash.Snark.ZeroKnowledge.wideRetriedCompilerKeygenPlonk_simulation_capstone
+
+-- Causality is pointwise on fixed tapes, without excluding failures or zero challenges.
+assert_computable Zcash.Snark.ZeroKnowledge.protocolPrefix
+assert_computable Zcash.Snark.ZeroKnowledge.ProtocolCausal
+assert_computable Zcash.Snark.ZeroKnowledge.ProtocolChecksCausal
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolPrefix_isPrefix
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolPrefix_challengeCount
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolPrefix_eq_of_count_le
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolPrefix_append_of_count_le
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolPrefix_append_of_lt_count
+assert_axioms Zcash.Snark.ZeroKnowledge.observeProtocolTrace_congr_challenges
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolCausal_observation
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAfterChallenge_causal
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProtocolCausal_observation
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaCoreMessages_prefix
+assert_axioms Zcash.Snark.ZeroKnowledge.honestIpaTranscript_maskCommitment_agrees
+assert_axioms Zcash.Snark.ZeroKnowledge.honestIpaTranscript_messages_agree
+assert_axioms Zcash.Snark.ZeroKnowledge.honestIpaTranscript_messages_prefix
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaTranscriptFromTape_maskCommitment_agrees
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaTranscriptFromTape_messages_prefix
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaTranscriptFromTape_withChallenges_messages_agree

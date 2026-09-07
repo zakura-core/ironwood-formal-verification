@@ -535,6 +535,27 @@ identity-failure property. The retained-history analysis below uses the observer
 retry/error distinction. Proving causality of the complete staged reference construction
 remains open.
 
+## Challenge causality
+
+[ProtocolCausality.lean](ProtocolCausality.lean) makes the remaining interactive-execution
+condition precise: after `n` received challenges, changing later challenges must leave
+every message before the next receive unchanged. Its prefix operation preserves message
+order and has exactly the claimed receive budget. The interpreter depends only on the
+challenges and checks scheduled inside that prefix, including failed encodings.
+
+[PlonkChallengeCausality.lean](PlonkChallengeCausality.lean) proves that the actual failure
+checks satisfy this condition: the duplicate-opening check reads the already received
+`x`, and each IPA retry check reads its current round challenge. A message producer
+satisfying the prefix condition therefore has the same property after encoding and
+these checks. The generic adapter keeps the message-producer condition explicit.
+
+[IpaCausality.lean](IpaCausality.lean) proves pointwise dependency facts for the actual
+tape-based IPA computation. The sparse-mask commitment needs neither `xi`, `z`, nor any
+round challenge. The pair in round `j` depends only on challenges from rounds strictly
+before `j`; in particular it does not use the challenge received after that pair. These
+proofs include zero challenges and invalid openings, and assume no sampling law.
+The complete PLONK/IPA construction still needs the full message-prefix theorem.
+
 ## Full-attempt failure probability
 
 [PlonkPoints.lean](PlonkPoints.lean) proves joint uniformity of the pre-IPA commitments
