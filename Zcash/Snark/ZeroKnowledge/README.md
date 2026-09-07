@@ -24,8 +24,8 @@ Selector-only certificates and compiler placement reduce the masking conditions 
 initial packed-selector zeros, plus explicit public column and placement bounds.
 The [encoded-attempt theorem](PlonkAttemptSimulation.lean) preserves this bound while
 retaining partial output, the received challenges, and the specified failure status.
-It compares unconditioned attempts; successful-output normalization and full retries
-remain open.
+The [full-attempt failure bound](PlonkFailures.lean) is now numerical too. These results
+compare unconditioned attempts; successful-output normalization and full retries remain open.
 The remaining protocol and public-key obligations, and the separate limitations on claims
 about a concrete implementation, are listed below.
 
@@ -530,6 +530,28 @@ no simulation error. Successful-output analysis will use the specified codec's
 identity-failure property. Proving causality of the complete staged reference construction
 and handling successful-output normalization and independent whole-prover retries remain
 open.
+
+## Full-attempt failure probability
+
+[PlonkPoints.lean](PlonkPoints.lean) proves joint uniformity of the pre-IPA commitments
+under ideal field blinds, without requiring good challenges or valid row states. It
+applies the IPA point bound conditionally on the entire preceding private state; the
+inherited IPA blind is not assumed independent of that state. A union bound covers all
+`22m+2k+11` emitted points. [PlonkAttemptPoints.lean](PlonkAttemptPoints.lean) connects every
+point slot in the existing proof schedule to those families and transfers the bound
+through the complete wide-reduced private tape.
+
+[PlonkFailureChallenges.lean](PlonkFailureChallenges.lean) counts only challenges which
+stop the attempt: `x = 0` and the `k` zero IPA round challenges. Their probability is at
+most `(k+1)/p + (k+11) × bias` under the independent wide-reduced verifier law.
+
+`widePlonkAttempt_failure_le` in [PlonkFailures.lean](PlonkFailures.lean) combines these
+results. At eleven rounds, the probability of a retry request or the specified terminal
+error is at most **`(22m+45)/p + (148m+68) × bias`**. For one Action this is
+**`67/p + 216 × bias`**. The codec must fail precisely on the identity, and the usual
+blinding-generator bijection is required. Completion means finishing the emission
+schedule; the theorem does not assert verifier acceptance. The bound does not discard
+exceptional challenges or assume row correctness.
 
 [RunningProductRows.lean](RunningProductRows.lean) gives computable lookup and chained
 permutation ratio scans with `0` mapped to `0` on inversion. It proves the exact condition

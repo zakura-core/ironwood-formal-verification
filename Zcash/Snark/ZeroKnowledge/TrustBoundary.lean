@@ -42,6 +42,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkUnusedCertificate
 import Zcash.Snark.ZeroKnowledge.PlonkUnusedKeygen
 import Zcash.Snark.ZeroKnowledge.PlonkCompilerSimulation
 import Zcash.Snark.ZeroKnowledge.PlonkAttemptSimulation
+import Zcash.Snark.ZeroKnowledge.PlonkFailures
 import Zcash.Snark.ZeroKnowledge.PlonkSigmaCertificate
 import Zcash.Meta.AxiomCheck
 
@@ -179,7 +180,13 @@ x check is equivalent to distinctness of the actual interpolation node lists. No
 condition on xi or evaluation-domain membership is added. The same numerical joint
 bound holds after this observation, without conditioning on success. The generic
 interpreter also proves that appending messages after a failed prefix changes nothing.
-This does not yet normalize successful full proofs or analyze whole-prover retries.
+The full failure bound is now `(22m+45)/p + (148m+68) bias`. The pre-IPA points
+are jointly uniform with ideal blinds, and the IPA identity bound is applied
+conditionally on the entire private prefix. The actual proof's point slots are
+covered by these families. Wide reduction and the `k+1` actual stopping challenges
+supply the stated bound, even at exceptional challenges and without row-correctness
+premises. Completion means that the emission schedule finishes, not verifier
+acceptance. This does not yet normalize successful full proofs or analyze whole-prover retries.
 Stage-by-stage causality of the reference construction and concrete codec instantiation
 remain separate from the observation theorem. Fiat–Shamir ZK needs its own argument;
 Rust execution correspondence is a separate claim, outside the protocol theorem's target.
@@ -1139,3 +1146,25 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonkAfterChallenge_all
 assert_axioms Zcash.Snark.ZeroKnowledge.observePlonkAttempt_complete_iff
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkAttempt_complete_iff
 assert_axioms Zcash.Snark.ZeroKnowledge.wideObservedCompilerKeygenPlonk_simulation_error_bound
+
+-- Full-attempt failure probabilities, including the specified wide-reduced private and verifier tapes.
+assert_computable Zcash.Snark.ZeroKnowledge.plonkJointPointFailure
+assert_computable Zcash.Snark.ZeroKnowledge.PlonkFailureChallenges +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkFailureChallengeIndex
+assert_computable Zcash.Snark.ZeroKnowledge.plonkAttemptSuccessSet +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformPointFamily_identity_le
+assert_axioms Zcash.Snark.ZeroKnowledge.idealPlonkMaterial_points
+assert_axioms Zcash.Snark.ZeroKnowledge.idealPlonkJoint_preIpa_points
+assert_axioms Zcash.Snark.ZeroKnowledge.idealPlonkJoint_ipa_identity_le
+assert_axioms Zcash.Snark.ZeroKnowledge.idealPlonkJoint_identity_le
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProofString_no_identity
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProofFromJointView_identity_imp
+assert_axioms Zcash.Snark.ZeroKnowledge.sampledPlonkVerifier_identity_le
+assert_axioms Zcash.Snark.ZeroKnowledge.freshSampledPlonkVerifier_identity_le
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkFailureChallenges_cover
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformPlonkFailureChallenges_le
+assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkFailureChallenges_le
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAttempt_failure_subset
+assert_axioms Zcash.Snark.ZeroKnowledge.freshSampledPlonkVerifier_challenges
+assert_axioms Zcash.Snark.ZeroKnowledge.freshPlonkAttempt_failure_le
+assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkAttempt_failure_le
