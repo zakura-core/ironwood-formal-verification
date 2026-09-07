@@ -6,8 +6,8 @@ import Zcash.Snark.ZeroKnowledge.ActionConfiguration
 
 The compiler's activation list is exactly the placed compact trace. The source
 equation for Action's variable-base multiplication main region also identifies
-its only row-zero selector. Reducing the remaining Action regions and certifying
-their placement and packing are separate obligations.
+its only row-zero selector. `ActionSourceSelectorTrace` composes every Action
+region; the concrete packing certificate remains a separate obligation.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

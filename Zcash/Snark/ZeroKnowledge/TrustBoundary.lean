@@ -1,4 +1,6 @@
 import Zcash.Snark.ZeroKnowledge.SelectorTraceFold
+import Zcash.Snark.ZeroKnowledge.SelectorInitialTrace
+import Zcash.Snark.ZeroKnowledge.SelectorTracePlacement
 import Zcash.Snark.ZeroKnowledge.Sampling
 import Zcash.Snark.ZeroKnowledge.MaskPolynomials
 import Zcash.Snark.ZeroKnowledge.MaskSampling
@@ -1659,3 +1661,11 @@ assert_axioms Zcash.Snark.ZeroKnowledge.selectorTrace_toFormal_call
 
 assert_computable Zcash.Snark.ZeroKnowledge.selectorRowRun
 assert_axioms Zcash.Snark.ZeroKnowledge.selectorTrace_foldCall
+
+assert_computable Zcash.Snark.ZeroKnowledge.initialSelectorCheck
+assert_axioms Zcash.Snark.ZeroKnowledge.initialSelectorCheck_not_mem_local
+assert_axioms Zcash.Snark.ZeroKnowledge.mem_placeSelectorTrace_initial
+assert_axioms Zcash.Snark.ZeroKnowledge.initialSelectorCheck_not_mem_placed
+assert_computable Zcash.Snark.ZeroKnowledge.regionStartsFromSummary
+assert_axioms Zcash.Snark.ZeroKnowledge.regionStartsFromSummary_def
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevel_regionStarts_eq_planSummary

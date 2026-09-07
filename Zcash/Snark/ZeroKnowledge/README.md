@@ -44,9 +44,12 @@ witness loading, both Merkle paths, the commitment and integrity checks, both
 note commitments, and the final cross-address check. It retains empty regions,
 duplicate activations, selector indices, and local rows, while proving independence
 from the witness programs. The variable-base main region enables only selector
-eight at local row zero. Global placement and final compression still need their
-concrete certificates; the source trace does not yet discharge the four initial
-packed-column zeros.
+eight at local row zero. The [initial inactivity certificate](ActionInitialSelectorTrace.lean)
+now excludes all nine previous-row selectors from global row zero, for any
+nonnegative placement. The [ordered-summary refinement](ActionTracePlacement.lean)
+also reproduces the actual V1 region starts, including the order of tied regions,
+from reduced source data. The concrete compression count, routing, and four initial
+packed-column zeros still require their certificates.
 The [encoded-attempt theorem](PlonkAttemptSimulation.lean) preserves this bound while
 retaining partial output, the received challenges, and the specified failure status.
 The [full-attempt failure bound](PlonkFailures.lean) is now numerical too. These results

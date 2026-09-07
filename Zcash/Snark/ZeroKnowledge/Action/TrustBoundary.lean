@@ -1,4 +1,5 @@
-import Zcash.Snark.ZeroKnowledge.ActionSourceSelectorTrace
+import Zcash.Snark.ZeroKnowledge.ActionInitialSelectorTrace
+import Zcash.Snark.ZeroKnowledge.ActionTracePlacement
 import Zcash.Snark.ZeroKnowledge.ActionSimulation
 import Zcash.Snark.ZeroKnowledge.ActionCommitments
 import Zcash.Snark.ZeroKnowledge.ActionCompilerSimulation
@@ -27,6 +28,11 @@ query resolution, and verifier-expression translation. The remaining concrete
 conditions are the compression count, the routing of nine previous-row selectors
 into the four initial zero columns, and those initial values. No native root or
 circuit-computation certificate is added.
+
+The complete source trace now proves that all nine previous-row selectors are
+inactive at global row zero. The ordered synthesis summary also supplies exactly
+the compiler's V1 starts and absolute activation list. These source refinements
+leave the stated packed-column conditions explicit.
 -/
 
 assert_axioms Zcash.Snark.ZeroKnowledge.ActionInitialSelectorsZero +native(
@@ -357,4 +363,17 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionMainPost_selectorTrace +native(
 assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_selectorTrace_eq +native(
   CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_selectorActivations_eq_sourceTrace +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- Initial source inactivity and exact summary-derived placement.
+assert_axioms Zcash.Snark.ZeroKnowledge.actionSourceSelectorTrace_initialCheck
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_previousSelector_initial_inactive +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.actionSourceRegionStarts +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.actionSourceRegionStarts_def
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_regionStarts_eq_source +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.actionSourceSelectorActivations +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.actionSourceSelectorActivations_def
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_selectorActivations_eq_source +native(
   CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
