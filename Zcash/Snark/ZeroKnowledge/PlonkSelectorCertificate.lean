@@ -5,10 +5,12 @@ import Zcash.Snark.Fixtures.MultiAction.Honest.Fixture
 /-!
 # Captured expressions need only the packed selector boundary values
 
-The certificates leave every query into the thirteen original fixed columns unknown.
+The certificates leave every query into the fourteen original fixed columns unknown.
 Consequently no table element, generator coordinate, or region-fixed constant is
-needed for these mask checks. The supplied selector encoding still has to agree
-with the public columns generated for the circuit.
+needed for these mask checks. Row 0 needs only zero in columns 18, 20, 21, and 24;
+the other selector values there are unrestricted. All fifteen packed selectors are
+zero at the later boundaries. These values still have to follow from the public
+columns generated for the circuit.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

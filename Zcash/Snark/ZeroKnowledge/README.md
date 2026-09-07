@@ -13,8 +13,8 @@ joint simulation bound from original gate, lookup, and copy validity, plus expli
 public-key conditions. It no longer has an unbounded row-failure term under those premises.
 The [selector/keygen specialization](PlonkSelectorSimulation.lean) constructs its fixed
 polynomials from the circuit compiler and derives every public polynomial degree bound.
-Selector-only certificates and compiler placement reduce the masking conditions to the
-initial packed-selector row, plus explicit public column and placement bounds.
+Selector-only certificates and compiler placement reduce the masking conditions to four
+initial packed-selector zeros, plus explicit public column and placement bounds.
 The remaining implementation and public-key correspondence obligations are listed below.
 
 The implementation-facing interactive target is **statistical HVZK**. The
@@ -689,8 +689,9 @@ for every compatible full assignment; an unknown value cannot certify a zero fac
 [PlonkPartialMaskBoundary.lean](PlonkPartialMaskBoundary.lean) applies this to the same
 eight gate and two lookup boundaries. The kernel certificates in
 [PlonkSelectorCertificate.lean](PlonkSelectorCertificate.lean) pass for both captured
-keys while leaving all thirteen original fixed columns unknown. They use only the packed
-selectors: column 19 has value 4 in row 0, and all other packed-selector boundary entries
+keys while leaving all fourteen original fixed columns unknown. At row 0 they require
+only that packed-selector columns 18, 20, 21, and 24 are zero; the other selector values
+there are unrestricted. At the later boundaries all fifteen packed-selector columns
 are zero. No table element, generator coordinate, or region-fixed constant is needed.
 
 [KeygenSelectorSupport.lean](KeygenSelectorSupport.lean) proves that packed-selector
@@ -698,14 +699,15 @@ writes come only from selector activations before V1's placement endpoint. Hence
 compiler's dense selector columns are zero afterward, even where table default-fill
 continues through usable rows. [PlonkKeygenSelectors.lean](PlonkKeygenSelectors.lean)
 uses this fact with the selector certificates. Given exponent 11, at least 29 fixed
-columns, at most thirteen original fixed columns, and placement ending by row 2041,
-the mask profile requires only the initial packed-selector row. The one- and two-Action
+columns, at most fourteen original fixed columns, and placement ending by row 2041,
+the mask profile requires only the four initial packed-selector zeros. This prefix bound
+includes the Action compiler's fourteen original fixed columns. The one- and two-Action
 profile theorems use the actual captured expressions with these compiler fixed rows.
 
 `wideSelectorKeygenPlonkVerifier_simulation_error_bound` in
 [PlonkSelectorSimulation.lean](PlonkSelectorSimulation.lean) supplies this profile to the
-numerical joint simulation, keeping the same bound. Establishing the initial selector
-values from the concrete Action compilation is still open; the captured row values alone
+numerical joint simulation, keeping the same bound. Establishing the four initial selector
+zeros from the concrete Action compilation is still open; the captured row values alone
 do not discharge that obligation. The instance, sigma, commitment, and execution
 correspondence obligations also remain.
 

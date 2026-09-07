@@ -52,8 +52,19 @@ theorem plonkPartialMaskBoundaryCheck_sound {actions k : ℕ} {G : Type*}
     rw [← plonkMaskBoundaryRows_lookup boundary]
     exact exprPartialMaskInvariant_refines _ _ (hagrees _) _ expr (List.all_eq_true.mp h.2 expr hexpr)
 
-/-- The selector-only boundary data: packed column 19 is 4 at row 0; all other selector entries are zero. -/
+/-- Only these packed selector columns need known values at the initial row. -/
+def plonkInitialMaskColumns : List ℕ := [18, 20, 21, 24]
+
+/-- Every initial mask-check column belongs to the packed-selector suffix of the captured layout. -/
+theorem plonkInitialMaskColumns_bounds (query : ℕ) (hquery : query ∈ plonkInitialMaskColumns) :
+    14 ≤ query ∧ query < 29 := by
+  simp [plonkInitialMaskColumns] at hquery
+  rcases hquery with rfl | rfl | rfl | rfl <;> decide
+
+/-- Four selectors are zero at row 0; all packed selectors are zero at the later boundaries. -/
 def plonkSelectorBoundaryKnown (boundary : Fin 8) (query : ℕ) : Option Fp :=
-  if query < 13 then none else some (if boundary.val = 0 ∧ query = 19 then 4 else 0)
+  if boundary.val = 0 then
+    if query ∈ plonkInitialMaskColumns then some 0 else none
+  else if query < 14 then none else some 0
 
 end Zcash.Snark.ZeroKnowledge

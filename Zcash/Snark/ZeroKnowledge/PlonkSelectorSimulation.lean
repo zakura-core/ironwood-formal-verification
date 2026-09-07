@@ -5,9 +5,9 @@ import Zcash.Snark.ZeroKnowledge.PlonkOriginalSimulation
 # Reference simulation from the compiler's initial packed selectors
 
 The public degree bounds come from interpolation. Selector-only expression
-certificates and V1 placement supply the full mask profile once the initial packed
-selector values are known. No assumption is made about boundary values in the
-thirteen original fixed columns.
+certificates and V1 placement supply the full mask profile once the four initial
+selector zeros are known. No assumption is made about boundary values in the
+fourteen original fixed columns.
 
 Establishing the initial selector row for the deployed circuit, matching instance
 and sigma rows and public commitments to keygen, and refining the complete prover
@@ -28,10 +28,10 @@ theorem wideSelectorKeygenPlonkVerifier_simulation_error_bound {actions : ℕ} {
     (vk : VerifyingKey (plonkProofShape actions urs.k) Fp G)
     (top : Halo2.TopLevelCircuit Fp Config PublicInput)
     (htopK : top.domainExponent = 11) (htopColumns : 29 ≤ top.fixedColumnCount)
-    (htopPrefix : top.constraintSystem.numFixedColumns ≤ 13)
+    (htopPrefix : top.constraintSystem.numFixedColumns ≤ 14)
     (hplacement : Halo2.FloorPlanner.V1.placementEnd top.operations ≤ 2041)
-    (hfirst : ∀ column : Fin 29, 13 ≤ column.val →
-      plonkKeygenFixedRows top column 0 = if column.val = 19 then 4 else 0)
+    (hfirst : ∀ column : Fin 29, column.val ∈ plonkInitialMaskColumns →
+      plonkKeygenFixedRows top column 0 = 0)
     (instances : Fin actions → Fin 2048 → Fp) (sigma : Fin 15 → Fin 2048 → Fp)
     (witness : Fin actions → Fin 10 → Fin 2048 → Fp) (degree : PlonkDegreeProfile vk)
     (hmask : plonkPartialMaskBoundaryCheck vk plonkSelectorBoundaryKnown = true)
