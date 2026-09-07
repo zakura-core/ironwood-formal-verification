@@ -84,6 +84,30 @@ theorem sampleFieldsWith_map {A B : Type*} (count : ℕ)
     funext value
     exact ih (fun rest => finish (Fin.cons value rest))
 
+/-- Discarding a fixed number of fresh draws preserves a constant result exactly. -/
+theorem sampleFieldsWith_const {A : Type*} (count : ℕ) (value : A) (law : PMF Fp) :
+    (sampleFieldsWith count (fun _ => value)).runFreshPMF law = PMF.pure value := by
+  induction count with
+  | zero => rfl
+  | succ count ih =>
+    change law.bind (fun _ => (sampleFieldsWith count (fun _ => value)).runFreshPMF law) = _
+    simp_rw [ih]
+    exact PMF.bind_const _ _
+
+/-- Each coordinate of the independent tape has the supplied field law exactly. -/
+theorem sampleFieldsWith_coordinate (count : ℕ) (index : Fin count) (law : PMF Fp) :
+    (sampleFieldsWith count (fun tape => tape index)).runFreshPMF law = law := by
+  induction count with
+  | zero => exact Fin.elim0 index
+  | succ count ih =>
+    refine Fin.cases ?_ (fun j => ?_) index
+    · change law.bind (fun value => (sampleFieldsWith count (fun _ => value)).runFreshPMF law) = law
+      simp_rw [sampleFieldsWith_const]
+      exact PMF.bind_pure _
+    · change law.bind (fun _ => (sampleFieldsWith count (fun rest => rest j)).runFreshPMF law) = law
+      rw [ih j]
+      exact PMF.bind_const _ _
+
 /-- Independent ideal draws are the uniform law on the complete field tape. -/
 theorem sampleFieldsWith_uniform {A : Type*} (count : ℕ)
     (finish : (Fin count → Fp) → A) :

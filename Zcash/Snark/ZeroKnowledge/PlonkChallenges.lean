@@ -1,7 +1,8 @@
 import Zcash.Snark.Core.Challenges
 import Zcash.Snark.ZeroKnowledge.PlonkTranscript
 
-/-!+# Full interactive verifier challenge tapes
+/-!
+# Full interactive verifier challenge tapes
 
 The `11 + k` challenge values are ordered as in the verifier: `theta`, `beta`, `gamma`,
 `y`, `x`, the four multiopen challenges, `xi`, `z`, and the IPA round challenges.
@@ -48,6 +49,18 @@ noncomputable def uniformPlonkChallenges (k : ℕ) : PMF (Challenges k Fp) :=
 /-- Independent verifier challenges using the implemented wide-reduction law. -/
 noncomputable def widePlonkChallenges (k : ℕ) : PMF (Challenges k Fp) :=
   (sampleFieldsWith (k + 11) plonkChallengesFromTape).runFreshPMF fieldSample
+
+/-- The evaluation challenge has exactly the wide-reduced field law in the complete tape. -/
+theorem widePlonkChallenges_x (k : ℕ) :
+    (widePlonkChallenges k).map (fun ch => ch.x) = fieldSample := by
+  rw [widePlonkChallenges, ← sampleFieldsWith_map]
+  exact sampleFieldsWith_coordinate (k + 11) ⟨4, by omega⟩ fieldSample
+
+/-- The corresponding coordinate is exactly uniform under the ideal verifier tape law. -/
+theorem uniformPlonkChallenges_x (k : ℕ) :
+    (uniformPlonkChallenges k).map (fun ch => ch.x) = idealFieldSample := by
+  rw [uniformPlonkChallenges, PMF.map_comp, ← sampleFieldsWith_uniform]
+  exact sampleFieldsWith_coordinate (k + 11) ⟨4, by omega⟩ idealFieldSample
 
 /-- Replacing the complete verifier tape by uniform field coins costs `k+11` sample biases. -/
 theorem widePlonkChallenges_sampling_error_bound (k : ℕ) :

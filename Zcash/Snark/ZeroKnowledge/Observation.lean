@@ -24,6 +24,37 @@ noncomputable def evaluationView {F R : Type*} (challengeLaw : PMF F) (maskLaw :
     (evaluate : R → F → F) : PMF (F × F) :=
   challengeLaw.bind fun x => maskLaw.map fun mask => (x, evaluate mask x)
 
+/-- Exact observation mass for a challenge-dependent computation that discloses a fixed cell.
+
+Only the selected challenge coordinate is retained by this projection. The other
+coins may change the computation and its private distribution arbitrarily. -/
+theorem projectedKernelView_apply_at_point {C A F : Type*} [DecidableEq F]
+    (law : PMF C) (run : C → PMF A) (challenge : C → F) (observe : A → F)
+    (point cell value : F)
+    (hcell : ∀ c, challenge c = point → (run c).map observe = PMF.pure cell) :
+    (law.bind fun c => (run c).map fun a => (challenge c, observe a)) (point, value) =
+      if value = cell then (law.map challenge) point else 0 := by
+  classical
+  have hkernel (c : C) :
+      ((run c).map fun a => (challenge c, observe a)) (point, value) =
+        if point = challenge c then (if value = cell then 1 else 0) else 0 := by
+    by_cases hx : point = challenge c
+    · have hmap : (run c).map (fun a => (challenge c, observe a)) =
+          ((run c).map observe).map (Prod.mk (challenge c)) :=
+        (PMF.map_comp _ _ _).symm
+      rw [hmap, hcell c hx.symm, PMF.pure_map]
+      simp [PMF.pure_apply, hx]
+    · simp [PMF.map_apply, hx]
+  rw [PMF.bind_apply]
+  by_cases hv : value = cell
+  · rw [if_pos hv, PMF.map_apply]
+    apply tsum_congr
+    intro c
+    rw [hkernel]
+    by_cases hx : point = challenge c <;> simp [hx, hv]
+  · rw [if_neg hv]
+    simp [hkernel, hv]
+
 /-- Exact mass of a joint observation when every mask gives the same value at that point. -/
 theorem evaluationView_apply_at_point {F R : Type*} [DecidableEq F]
     (challengeLaw : PMF F) (maskLaw : PMF R)

@@ -37,6 +37,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkMaskCertificate
 import Zcash.Snark.ZeroKnowledge.PlonkKeygenSimulation
 import Zcash.Snark.ZeroKnowledge.PlonkSelectorSimulation
 import Zcash.Snark.ZeroKnowledge.Observation
+import Zcash.Snark.ZeroKnowledge.PlonkDisclosure
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -134,14 +135,21 @@ rows produced by the circuit compiler, a structural proof derives zero throughou
 the masked suffix from the bounds on table, constant, selector, and region writes.
 This connects six boundary rows to actual keygen and leaves a finite mask check that
 reads only rows 0 and 2041 from the compiler. The keygen reference endpoint uses these
-constructed polynomials. The selector-only certificates further leave all thirteen
+constructed polynomials. The selector-only certificates further leave all fourteen
 original fixed columns unknown, and a compiler support theorem makes packed selectors
 zero from the V1 placement endpoint onward. Given the public column/placement bounds,
-only the initial packed-selector values remain to be established for the Action circuit.
+only four initial packed-selector zeros remain to be established for the Action circuit.
 Relating the supplied instance/sigma rows and public commitments to the deployed key
 also remains open. The
 sampling comparison alone is not a simulator for failed attempts. The proof string's
 terminal rotations use the kernel root certificate.
+The complete typed reference proof now exposes each usable advice cell at its domain
+challenge on every private tape. The exact mass of this joint challenge/scalar event
+separates the full reference laws of row vectors with different usable cells. Under
+wide-reduced challenges the lower bound is positive. A common exact simulator for
+those two laws is impossible, but an implementation impossibility claim still needs
+two permitted satisfying witnesses for the same public statement and execution
+correspondence that accounts for errors, retries, and codecs.
 These results do not establish a whole-prover simulator, Fiat–Shamir zero-knowledge, or a
 Rust-to-Lean refinement.
 -/
@@ -165,6 +173,8 @@ assert_axioms Zcash.Snark.ZeroKnowledge.wordSampleCount_two
 assert_axioms Zcash.Snark.ZeroKnowledge.weightedBias_symm
 assert_axioms Zcash.Snark.ZeroKnowledge.sampleFieldsWith_queryBound
 assert_axioms Zcash.Snark.ZeroKnowledge.sampleFieldsWith_map
+assert_axioms Zcash.Snark.ZeroKnowledge.sampleFieldsWith_const
+assert_axioms Zcash.Snark.ZeroKnowledge.sampleFieldsWith_coordinate
 assert_axioms Zcash.Snark.ZeroKnowledge.sampleFieldsWith_uniform
 assert_axioms Zcash.Snark.ZeroKnowledge.sampleFieldsWith_error_bound
 assert_axioms Zcash.Snark.ZeroKnowledge.sampledAttempt_error_bound
@@ -980,3 +990,21 @@ assert_axioms Zcash.Snark.ZeroKnowledge.evaluationView_apply_at_point
 assert_axioms Zcash.Snark.ZeroKnowledge.evaluationView_ne_of_disclosed_cell
 assert_axioms Zcash.Snark.ZeroKnowledge.adviceEvaluationView_ne_of_usable_cell
 assert_axioms Zcash.Snark.ZeroKnowledge.adviceEvaluationView_ne_under_wide_reduction
+
+-- The same disclosure is retained by the complete typed reference proof and challenge tape.
+assert_computable Zcash.Snark.ZeroKnowledge.plonkVerifierProofFromTape +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.sampledPlonkVerifierProver_fromTape
+assert_axioms Zcash.Snark.ZeroKnowledge.projectedKernelView_apply_at_point
+assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkChallenges_x
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformPlonkChallenges_x
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierProofFromTape_advice_current
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierProofFromTape_advice_usable
+assert_axioms Zcash.Snark.ZeroKnowledge.sampledPlonkVerifierProver_advice_usable
+assert_axioms Zcash.Snark.ZeroKnowledge.sampledPlonkVerifierProver_ne_of_usable_cell
+assert_computable Zcash.Snark.ZeroKnowledge.plonkAdviceObservation
+assert_axioms Zcash.Snark.ZeroKnowledge.freshPlonkVerifierProver_advice_mass
+assert_axioms Zcash.Snark.ZeroKnowledge.freshPlonkVerifierProver_advice_separation
+assert_axioms Zcash.Snark.ZeroKnowledge.freshPlonkVerifierProver_ne_of_usable_cell
+assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkVerifierProver_advice_separation
+assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkVerifierProver_ne_of_usable_cell
+assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkVerifierProver_no_common_exact_simulator

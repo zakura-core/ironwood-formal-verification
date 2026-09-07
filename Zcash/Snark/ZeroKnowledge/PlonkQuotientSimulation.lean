@@ -52,7 +52,18 @@ end Quotient
 
 section Simulation
 
-variable {G : Type*} [AddCommGroup G] [Module Fp G] [Fintype G]
+variable {G : Type*} [AddCommGroup G] [Module Fp G]
+
+/-- The existing joint construction and proof projection on one complete private field tape. -/
+def plonkVerifierProofFromTape {actions : ℕ}
+    (construct : PrivateColumnId actions → ColumnHistory 2048 → (Fin 2048 → Fp))
+    (history : ColumnHistory 2048) (urs : URS G)
+    (vk : VerifyingKey (plonkProofShape actions urs.k) Fp G) (pub : PlonkPublicPolynomials actions)
+    (ch : Challenges urs.k Fp) (tape : Fin (plonkJointSampleCount construct urs.k) → Fp) :
+    ProofString (plonkProofShape actions urs.k) Fp G :=
+  plonkProofFromJointView pub ch.x ch.x1
+    (plonkJointViewFromTape construct history urs pub ch.x ch.x1 ch.x2 ch.x4 ch.x3 ch.xi ch.z
+      ch.ipaRound (plonkHonestQuotientPieces vk pub ch) tape)
 
 /-- The complete algebraic proof law with the computed constraint quotient and the full field tape. -/
 noncomputable def sampledPlonkVerifierProver {actions : ℕ}
@@ -62,6 +73,20 @@ noncomputable def sampledPlonkVerifierProver {actions : ℕ}
     (ch : Challenges urs.k Fp) : PMF (ProofString (plonkProofShape actions urs.k) Fp G) :=
   (sampledPlonkJointProver construct history urs pub ch.x ch.x1 ch.x2 ch.x4 ch.x3 ch.xi ch.z
     ch.ipaRound (plonkHonestQuotientPieces vk pub ch)).map (plonkProofFromJointView pub ch.x ch.x1)
+
+/-- Sampling the deterministic typed proof gives exactly the law used by joint simulation. -/
+theorem sampledPlonkVerifierProver_fromTape {actions : ℕ}
+    (construct : PrivateColumnId actions → ColumnHistory 2048 → (Fin 2048 → Fp))
+    (history : ColumnHistory 2048) (urs : URS G)
+    (vk : VerifyingKey (plonkProofShape actions urs.k) Fp G) (pub : PlonkPublicPolynomials actions)
+    (ch : Challenges urs.k Fp) :
+    sampledPlonkVerifierProver construct history urs vk pub ch =
+      (sampleFieldsWith (plonkJointSampleCount construct urs.k)
+        (plonkVerifierProofFromTape construct history urs vk pub ch)).runFreshPMF fieldSample := by
+  unfold sampledPlonkVerifierProver sampledPlonkJointProver plonkVerifierProofFromTape
+  exact (sampleFieldsWith_map _ _ _ _).symm
+
+variable [Fintype G]
 
 /-- The public simulator uses the existing verifier's constraint calculation to form its IPA input. -/
 noncomputable def idealPlonkVerifierSimulator {actions : ℕ} (urs : URS G)

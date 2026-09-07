@@ -23,6 +23,9 @@ restricts the verifier's challenge space, including excluding zero and evaluatio
 points. The pinned implementation does not enforce all those exclusions. Exact conditional
 simulation of a component is therefore not a perfect SHVZK theorem for this prover. Neither
 the nonuniform sampler nor an upper bound on simulation error alone disproves perfect ZK.
+The domain-row disclosure result below separates complete reference-proof distributions
+when two supplied row vectors differ in a usable cell. Turning it into an implementation
+counterexample still requires an admissible witness pair and execution correspondence.
 
 ## Field sampling
 
@@ -207,6 +210,23 @@ the joint challenge/evaluation views of different row vectors, including under t
 wide-reduction challenge law. This is a column-view result: an end-to-end impossibility
 claim still requires two satisfying witnesses for the same public statement and a proof
 that the full execution exposes the observation after accounting for aborts and retries.
+
+[PlonkDisclosure.lean](PlonkDisclosure.lean) now connects the observation to the complete
+reference `ProofString` and challenge tape used by the numerical simulation theorem.
+`plonkVerifierProofFromTape` composes the existing full-tape computation and proof
+projection; sampling it gives exactly `sampledPlonkVerifierProver`. Every private tape
+emits the original usable cell in the corresponding current-row advice slot when
+`x = omega^row`, independently of the quotient, commitments, and IPA tail.
+
+The exact joint event `(x = omega^row, adviceEval = value)` has mass `Pr[x = omega^row]`
+when `value` is that cell and zero otherwise. Consequently, two supplied row vectors
+with different cells have different complete reference-proof laws. Under the wide
+challenge law, their event bias is at least `fieldSample (omega^row) > 0`, and no single
+exact simulator law can match both. This is not yet a valid-witness counterexample for
+Ironwood: both row vectors must be admissible witnesses for the same public statement,
+and the total reference output must be connected to the implemented execution,
+including aborts, retries, and encoding. The pointwise disclosure does not rely on a
+uniform-mask assumption or on the sampling-bias upper bound.
 
 ## Joint columns and pre-IPA messages
 
