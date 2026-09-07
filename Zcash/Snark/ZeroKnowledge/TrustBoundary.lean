@@ -68,6 +68,7 @@ import Zcash.Snark.ZeroKnowledge.KeygenExpressionMasking
 import Zcash.Snark.ZeroKnowledge.KeygenPartialMasking
 import Zcash.Snark.ZeroKnowledge.PlannerStarts
 import Zcash.Snark.ZeroKnowledge.SelectorCompressionCount
+import Zcash.Snark.ZeroKnowledge.SelectorBitPacking
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -1704,3 +1705,16 @@ assert_axioms Zcash.Snark.ZeroKnowledge.slotShapeSummariesFrom_replicate_empty_s
 assert_computable Zcash.Snark.ZeroKnowledge.selectorPackingCount
 assert_axioms Zcash.Snark.ZeroKnowledge.selectorPackingCount_def
 assert_axioms Zcash.Snark.ZeroKnowledge.deriveSelCompressMap_newFixedCols_eq_count
+
+-- Bit-vector certificates preserve the actual activation table and greedy count.
+assert_computable Zcash.Snark.ZeroKnowledge.selectorBitsRows
+assert_axioms Zcash.Snark.ZeroKnowledge.selectorBitsRows_size
+assert_axioms Zcash.Snark.ZeroKnowledge.selectorBitsRows_zero
+assert_axioms Zcash.Snark.ZeroKnowledge.selectorBitsRows_or_row
+assert_computable Zcash.Snark.ZeroKnowledge.selectorActivationBits
+assert_axioms Zcash.Snark.ZeroKnowledge.selectorActivationBits_size
+assert_axioms Zcash.Snark.ZeroKnowledge.activationTable_eq_selectorBitsRows
+assert_axioms Zcash.Snark.ZeroKnowledge.selectorBitsRows_conflicts
+assert_computable Zcash.Snark.ZeroKnowledge.selectorBitPackingCount
+assert_axioms Zcash.Snark.ZeroKnowledge.selectorBitPackingCount_def
+assert_axioms Zcash.Snark.ZeroKnowledge.selectorPackingCount_eq_bits

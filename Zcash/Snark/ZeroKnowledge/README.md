@@ -59,12 +59,18 @@ The [ordered shape certificate](ActionOrderedShapes.lean) reduces all 395 region
 to 57 distinct source shapes, with separate kernel-checked equalities for the four
 Action stages. It retains selector columns, their order, and both empty regions.
 [Planner start reconstruction](PlannerStarts.lean) proves how a lawful compact
-placement trace supplies every individual V1 start. Certifying the concrete sorted
-placement and its resulting compression count remains in progress.
+placement trace supplies every individual V1 start. The
+[concrete placement certificate](ActionOrderedPlacement.lean) checks all 181
+nonempty-region blocks and returns all 395 starts, including both empty regions.
+It still needs to be connected to the exact legacy-sort output.
 The [compression-input refinement](ActionCompressionInput.lean) proves that the
 actual compiler's column count is exactly `actionOrderedSelectorCount`, a finite
 calculation using these certified source shapes, activations, and selector degrees.
 The remaining numerical certificate must show that this calculation returns fifteen.
+The [bit-vector refinement](SelectorActivationBits.lean) preserves the complete
+activation table and its conflict tests, including duplicate and out-of-range
+activations. The [packing refinement](SelectorBitPacking.lean) gives exactly the
+same greedy column count through this compact representation.
 The [encoded-attempt theorem](PlonkAttemptSimulation.lean) preserves this bound while
 retaining partial output, the received challenges, and the specified failure status.
 The [full-attempt failure bound](PlonkFailures.lean) is now numerical too. These results

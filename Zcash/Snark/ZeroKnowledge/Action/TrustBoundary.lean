@@ -6,6 +6,7 @@ import Zcash.Snark.ZeroKnowledge.ActionCompilerSimulation
 import Zcash.Snark.ZeroKnowledge.ActionCompilerMasking
 import Zcash.Snark.ZeroKnowledge.ActionOrderedShapes
 import Zcash.Snark.ZeroKnowledge.ActionCompressionInput
+import Zcash.Snark.ZeroKnowledge.ActionOrderedPlacement
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -438,3 +439,11 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_selectorActivations_eq_ord
 assert_computable Zcash.Snark.ZeroKnowledge.actionOrderedSelectorCount +choice
 assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_newFixedCols_eq_orderedCount +native(
   CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- Exact starts for every block in the concrete ordered placement certificate.
+assert_computable Zcash.Snark.ZeroKnowledge.actionSortedPlacementTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.actionSortedPlacementTrace_lawful
+assert_computable Zcash.Snark.ZeroKnowledge.actionSortedPlacementShapes
+assert_computable Zcash.Snark.ZeroKnowledge.actionSortedPlacementStarts
+assert_axioms Zcash.Snark.ZeroKnowledge.actionSortedPlacementStarts_eq_slot
+assert_axioms Zcash.Snark.ZeroKnowledge.actionSortedPlacementShapes_length
