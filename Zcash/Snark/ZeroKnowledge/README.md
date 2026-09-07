@@ -22,6 +22,10 @@ copy list from the compiler, deriving sigma coherence and every public polynomia
 bound. It has no unbounded row-failure term under those premises.
 Selector-only certificates and compiler placement reduce the masking conditions to four
 initial packed-selector zeros, plus explicit public column and placement bounds.
+The [encoded-attempt theorem](PlonkAttemptSimulation.lean) preserves this bound while
+retaining partial output, the received challenges, and the specified failure status.
+It compares unconditioned attempts; successful-output normalization and full retries
+remain open.
 The remaining protocol and public-key obligations, and the separate limitations on claims
 about a concrete implementation, are listed below.
 
@@ -494,6 +498,39 @@ from the remaining sorting and gate prerequisites, given original copies and pub
 sigma coherence. Relating the offline
 tape experiment to the actual interactive schedule remains open.
 
+## Complete encoded attempts
+
+[ProverAttempt.lean](ProverAttempt.lean) interprets the existing typed transcript schedule
+with supplied point and scalar codecs. A failed point encoding emits no bytes for that
+point and requests new randomness. A post-challenge failure retains that challenge.
+The kernel-checked prefix theorem proves that adding any messages after a failed prefix
+does not change the observation. Completed attempts emit every point/scalar encoding;
+challenge markers contribute no proof bytes.
+
+[PlonkAttempt.lean](PlonkAttempt.lean) reuses the existing verifier's `preIpaTranscript`,
+then appends its round blocks and final `c,f` scalars. It receives exactly `11+k` challenges
+in the existing order. After `x1,x2` it reports the duplicate-opening error if `x = 0`;
+the proof identifies that check with distinctness of the actual interpolation node lists.
+Each zero IPA round challenge requests fresh randomness after both round points.
+For a codec that fails precisely on the identity, completion is equivalent to all emitted
+points being nonidentity, `x ≠ 0`, and all round challenges being nonzero. No other
+challenge exclusions are enforced by this observer.
+
+`wideObservedCompilerKeygenPlonk_simulation_error_bound` in
+[PlonkAttemptSimulation.lean](PlonkAttemptSimulation.lean) compares the entire encoded
+observation: emitted bytes, received challenges, attempt status, and the verifier's full
+tape, including unused coins. Its two-sided bound is unchanged:
+**`(42882m + 4113)/p + (148m + 70) × bias`**. The simulator still has no witness argument.
+This is post-processing of the compiler-derived reference law under the same witness
+and public-key premises. It does not condition away failures.
+
+The common public initialization is fixed separately and contributes no proof bytes.
+The unconditioned bound holds for every supplied deterministic codec, so encoding adds
+no simulation error. Successful-output analysis will use the specified codec's
+identity-failure property. Proving causality of the complete staged reference construction
+and handling successful-output normalization and independent whole-prover retries remain
+open.
+
 [RunningProductRows.lean](RunningProductRows.lean) gives computable lookup and chained
 permutation ratio scans with `0` mapped to `0` on inversion. It proves the exact condition
 for a row recurrence to fail: its denominator is zero and its required right side is
@@ -807,8 +844,10 @@ the same public data in the unused-row witness argument.
 This is still a conditional algebraic simulation theorem. Completing the specified
 interactive protocol theorem requires discharging the remaining concrete circuit and
 public-key conditions, connecting the reference constructions to the existing Lean
-verifier's grouping and commitment routing, and accounting for encoding, failures, and
-retries across the whole specified prover. Its random-bit tape and independent verifier
+verifier's grouping and commitment routing, proving stage-by-stage causality, and
+accounting for successful output and whole-prover retries.
+The attempt observation above now retains the scheduled failures and partial output.
+Its random-bit tape and independent verifier
 challenges are explicit assumptions of the interactive experiment.
 
 A Fiat–Shamir ZK claim requires a separate hash-model and simulation argument. A theorem

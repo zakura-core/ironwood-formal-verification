@@ -41,6 +41,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkDisclosure
 import Zcash.Snark.ZeroKnowledge.PlonkUnusedCertificate
 import Zcash.Snark.ZeroKnowledge.PlonkUnusedKeygen
 import Zcash.Snark.ZeroKnowledge.PlonkCompilerSimulation
+import Zcash.Snark.ZeroKnowledge.PlonkAttemptSimulation
 import Zcash.Snark.ZeroKnowledge.PlonkSigmaCertificate
 import Zcash.Meta.AxiomCheck
 
@@ -169,11 +170,19 @@ joint statistical theorem and unused-row counterexample construct the fixed and 
 polynomials and copies from keygen; sigma coherence is derived. Original gate, lookup,
 and copy-value validity, public size bounds, and initial selector zeros for the positive
 theorem remain premises. Verifier-key column correspondence, instance provenance, and
-public commitments remain implementation obligations. An implementation impossibility
-claim still requires admissibility of the changed cell at the Rust witness interface and
-execution correspondence that accounts for errors, retries, and codecs.
-These results do not establish a whole-prover simulator, Fiat–Shamir zero-knowledge, or a
-Rust-to-Lean refinement.
+public commitments remain obligations for the concrete protocol specialization.
+The full attempt observer now reuses the existing verifier's message schedule and
+retains encoded prefixes, received challenges, the full verifier tape, and a distinct
+status for completion, retry, or coincident opening queries. Its success criterion is
+exact: every point encodes, x is nonzero, and all round challenges are nonzero. The
+x check is equivalent to distinctness of the actual interpolation node lists. No
+condition on xi or evaluation-domain membership is added. The same numerical joint
+bound holds after this observation, without conditioning on success. The generic
+interpreter also proves that appending messages after a failed prefix changes nothing.
+This does not yet normalize successful full proofs or analyze whole-prover retries.
+Stage-by-stage causality of the reference construction and concrete codec instantiation
+remain separate from the observation theorem. Fiat–Shamir ZK needs its own argument;
+Rust execution correspondence is a separate claim, outside the protocol theorem's target.
 -/
 
 assert_computable Zcash.Snark.ZeroKnowledge.fieldSampleCount
@@ -1094,3 +1103,39 @@ assert_axioms Zcash.Snark.ZeroKnowledge.singleAction_plonkSigmaNaming
 assert_axioms Zcash.Snark.ZeroKnowledge.multiAction_plonkSigmaNaming
 assert_axioms Zcash.Snark.ZeroKnowledge.wideCompilerKeygenPlonkVerifier_simulation_error_bound
 assert_axioms Zcash.Snark.ZeroKnowledge.compilerSigmaPlonkReference_no_perfect_simulator
+
+-- Complete protocol attempts: existing schedule, partial encoding, and explicit failure outcomes.
+assert_computable Zcash.Snark.ZeroKnowledge.protocolChallengeCount
+assert_computable Zcash.Snark.ZeroKnowledge.protocolMessageCount
+assert_computable Zcash.Snark.ZeroKnowledge.observeProtocolTrace
+assert_computable Zcash.Snark.ZeroKnowledge.protocolTraceBytes
+assert_computable Zcash.Snark.ZeroKnowledge.plonkAttemptTrace
+assert_computable Zcash.Snark.ZeroKnowledge.plonkChallengeSequence
+assert_computable Zcash.Snark.ZeroKnowledge.plonkAttemptChallenge +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkAfterChallenge +choice
+assert_computable Zcash.Snark.ZeroKnowledge.observePlonkAttempt +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkAttemptObservation +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolChallengeCount_append
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolChallengeCount_eq_zero_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolMessageCount_append
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolChallengeCount_flatten
+assert_axioms Zcash.Snark.ZeroKnowledge.observeProtocolTrace_complete_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.observeProtocolTrace_append_of_failed
+assert_axioms Zcash.Snark.ZeroKnowledge.observeProtocolTrace_received_prefix
+assert_axioms Zcash.Snark.ZeroKnowledge.observeProtocolTrace_received_length
+assert_axioms Zcash.Snark.ZeroKnowledge.observeProtocolTrace_proof_prefix
+assert_axioms Zcash.Snark.ZeroKnowledge.observeProtocolTrace_proof_of_complete
+assert_axioms Zcash.Snark.ZeroKnowledge.observeProtocolTrace_proof_length
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPreIpaTranscript_challengeCount
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAttemptTrace_challengeCount
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkChallengeSequence_length
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAttemptChallenge_round
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAttemptChallenge_fromTape
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAfterChallenge_opening
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkOpeningPointSets_nodup_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAfterChallenge_opening_points
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAfterChallenge_round
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAfterChallenge_all
+assert_axioms Zcash.Snark.ZeroKnowledge.observePlonkAttempt_complete_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAttempt_complete_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.wideObservedCompilerKeygenPlonk_simulation_error_bound
