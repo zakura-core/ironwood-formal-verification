@@ -13,7 +13,8 @@ instance, fixed, and sigma commitments have an explicit agreement condition.
 
 The commitment IDs below follow the prover's Horner order. The verifier processes
 each group in reverse order with ascending powers. Establishing its exact ID lists
-from the query layout is a separate combinatorial obligation.
+from the query layout is proved in `PlonkVerifierGrouping`, which uses these algebraic
+connectors without a separate group-order premise.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

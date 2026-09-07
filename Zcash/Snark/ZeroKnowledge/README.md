@@ -34,15 +34,13 @@ vanishing exhaustion probabilities. An unlimited-run history law is not yet cons
 The [Vesta specialization](VestaSimulation.lean) now fixes the encodings and derives the
 blinding bijection from nonidentity; all four captured blinding points have kernel-checked
 nonidentity proofs. Its curve-order dependency is recorded in a separate census.
-The [commitment-routing refinement](PlonkCommitmentRouting.lean) identifies the verifier's
-private commitment slots and quotient weights with the reference construction. It proves
-that the verifier's compression agrees with the prover's Horner fold once the exact group
-ID order and public commitment agreement are established; those conditions remain explicit.
-The [query-layout refinement](PlonkQueryLayout.lean) now identifies the complete reference
-proof's flat query pattern and transfers its grouping, node order, and duplicate check to
-the actual verifier. [Disjoint Action blocks](PlonkQueryBlocks.lean) derive the full
-first-appearance commitment order and four-point table for arbitrary positive Action counts.
-The final five-group classification remains to be connected to the declared opening lists.
+The [verifier-grouping refinement](PlonkVerifierGrouping.lean) derives the exact five group
+ID lists and node order from the actual query assembler for every positive Action count.
+It proves that the verifier's compressed commitments agree with the reference construction
+under the key layout, distinct rotation points, and public commitment agreement conditions.
+Both captured keys have [kernel-checked query-layout certificates](PlonkQueryCertificate.lean).
+The member evaluations and concrete public commitment agreement still require correspondence
+proofs; the group ordering is now derived.
 The remaining protocol and public-key obligations, and the separate limitations on claims
 about a concrete implementation, are listed below.
 
@@ -1072,10 +1070,13 @@ provenance theorem: every routed member carries the commitment named by its ID, 
 when different slots happen to contain the same group value. `plonkCompressSet_commitment`
 proves that reverse member order with ascending powers equals the prover's Horner fold,
 for every batching challenge, including zero. Together these give
-`plonkVerifierGroup_commitment`, conditional only on the declared group ID order and public
-commitment agreement (and the 2048-row quotient convention). Deriving those ID lists from
-the complete query layout, routing the node evaluations, and proving the concrete public
-key agreement remain open. These algebraic connectors introduce no native certificate.
+`plonkVerifierGroup_commitment`, whose group-order premise is now discharged by
+`plonkVerifierGroup_commitment_from_layout` in
+[PlonkVerifierGrouping.lean](PlonkVerifierGrouping.lean). The latter takes the key query
+layout, distinct rotation points, a positive Action count, public commitment agreement,
+and the 2048-row quotient convention. It derives every actual group ID list and the full
+node order. Routing the member evaluations and proving concrete public commitment agreement
+remain open. These connectors introduce no native certificate.
 
 [PlonkQueryLayout.lean](PlonkQueryLayout.lean) proves the flat query stream for any Action
 count under `PlonkQueryLayout`, which records the key's instance, advice, and fixed query
@@ -1090,9 +1091,12 @@ commitment values or claimed evaluations.
 by composing disjoint Action blocks with the shared suffix. Only the fixed local layout is
 kernel-evaluated; the theorem applies to arbitrary bundle sizes. Every positive Action count
 has the same four-point table. [GroupingSlots.lean](GroupingSlots.lean) projects the existing
-algorithm to slot order and point-index sets, including its reversal before routing. These
-results reduce the remaining five-group ordering proof to each slot's point-set classification;
-they do not yet discharge it or the concrete key layout conditions.
+algorithm to slot order and point-index sets, including its reversal before routing.
+[PlonkQueryGroups.lean](PlonkQueryGroups.lean) completes the slot classification and proves
+that the resulting five filtered lists are exactly the reference opening lists, with
+the verifier's reversal. The theorem covers all positive Action counts, independently
+of the IPA round count. [PlonkQueryCertificate.lean](PlonkQueryCertificate.lean) checks the
+layout premises for both captured keys; it does not certify their commitment values.
 
 ### Actual Action public data
 
@@ -1128,8 +1132,9 @@ Those last two costs do not add random draws to the prover tape.
 
 This is still a conditional algebraic simulation theorem. Completing the specified
 interactive protocol theorem requires discharging the remaining concrete circuit and
-public-key conditions and connecting the reference constructions to the existing Lean
-verifier's grouping and commitment routing. The complete reference computation now has
+public-key conditions and connecting the reference evaluations to the existing Lean
+verifier's routed members. The group IDs, node order, and commitment compression are now
+derived under the stated key and point conditions. The complete reference computation has
 a checked stage-by-stage causality proof on the same private tape and sampling law. The
 successful single-attempt law is now normalized, and finite independent retry histories
 are compared with a uniform bound and vanishing exhaustion tails. An unlimited-run

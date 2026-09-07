@@ -54,6 +54,8 @@ import Zcash.Snark.ZeroKnowledge.PlonkBinaryBounds
 import Zcash.Snark.ZeroKnowledge.PlonkCommitmentRouting
 import Zcash.Snark.ZeroKnowledge.PlonkQueryBlocks
 import Zcash.Snark.ZeroKnowledge.GroupingSlots
+import Zcash.Snark.ZeroKnowledge.PlonkVerifierGrouping
+import Zcash.Snark.ZeroKnowledge.PlonkQueryCertificate
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -1492,3 +1494,30 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonkQuerySpine_head
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkQuerySpine_points
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkQueryPattern_points
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkQueryPattern_pointIndex
+
+-- The five groups, node order, and compressed commitments now follow from the query layout.
+assert_computable Zcash.Snark.ZeroKnowledge.plonkCommitmentGroup
+assert_computable Zcash.Snark.ZeroKnowledge.plonkGroupPointIndices
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkGroupPointIndices_eq_opening
+assert_computable Zcash.Snark.ZeroKnowledge.plonkCommitmentPointIndices
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCommitmentGroup_shift
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPerActionQuerySpine_pointMembership
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPerActionQuerySpine_mem
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkSharedCommitmentOrder_group
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkSharedQuerySpine_mem
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkQuerySpine_mem
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkGroupPointIndices_filter
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkQueryPattern_commitments
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkQueryPattern_slotIndices
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCommitmentOrder_head
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCommitmentOrder_pointSets
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkQueryPattern_setList
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkGroupPointIndices_findIdx
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCommitmentOrder_filter
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkQueryPattern_groupIds
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkQueryPattern_groupNodes
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierGroup_ids
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierGroup_nodes
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierGroup_commitment_from_layout
+assert_axioms Zcash.Snark.ZeroKnowledge.singleAction_plonkQueryLayout
+assert_axioms Zcash.Snark.ZeroKnowledge.multiAction_plonkQueryLayout
