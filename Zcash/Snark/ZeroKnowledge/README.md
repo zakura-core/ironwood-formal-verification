@@ -43,7 +43,9 @@ The [scalar-routing refinement](PlonkEvaluationCompression.lean) also derives th
 guard, every member evaluation, and each complete compressed evaluation vector. The
 [final opening connection](PlonkVerifierOpening.lean) proves that the actual verifier's
 assembled commitment point and scalar equal the reference reconstruction under the stated
-key and point conditions. Concrete public commitment agreement remains to be discharged.
+key and point conditions. The [compiler-derived key connector](PlonkDerivedKey.lean)
+supplies public commitment agreement from actual key generation; its concrete Action
+shape and query-layout premises remain to be established.
 The remaining protocol and public-key obligations, and the separate limitations on claims
 about a concrete implementation, are listed below.
 
@@ -586,7 +588,8 @@ reduction; the captures' native whole-point-list certificates are not used.
 [VestaSimulation.lean](VestaSimulation.lean) applies these facts to the compiler-derived
 attempt, successful-emission, and finite retained-retry theorems, with the same numerical
 bounds. The codecs are fixed and the blinding premise is reduced to nonidentity. The
-actual Action circuit/key and verifier-grouping conditions remain explicit. The Vesta
+actual Action mask and key conditions remain explicit; the later opening connector
+derives verifier grouping from the query layout. The Vesta
 group-cardinality and concrete scalar-module facts inherit the repository's existing
 `CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt` native certificate. That dependency is named
 in [Vesta/TrustBoundary.lean](Vesta/TrustBoundary.lean); no new native certificate is added.
@@ -1002,8 +1005,9 @@ same numerical joint bound. Its public degree premises are discharged, and its m
 profile follows from that finite compiler-row check. The instance and sigma vectors are
 still supplied inputs, with original gate/lookup validity and copy equations required.
 The selector refinement below narrows the remaining Action boundary check. The later sigma
-refinement derives its rows from keygen. Statement provenance, public commitments, and
-agreement between the compiler's circuit and the verifier key remain open. The
+refinement derives its rows from keygen. The later Action public-data and compiler-key
+connectors supply statement provenance and public commitments. Concrete key shape,
+query-layout, and expression checks remain open. The
 existing Action compilation lemmas also carry the Pallas generator's native order
 certificate; using them in an Action specialization requires explicit trust accounting.
 The generic keygen endpoint is pinned without that dependency.
@@ -1036,7 +1040,7 @@ theorems use the actual captured expressions with these compiler fixed rows.
 numerical joint simulation, keeping the same bound. Establishing the four initial selector
 zeros from the concrete Action compilation is still open; the captured row values alone
 do not discharge that obligation. The Action specialization below supplies canonical
-instance rows. Key/public-commitment correspondence remains;
+instance rows. The concrete key's shape, query layout, and expression conditions remain;
 sigma rows and copy-list provenance are derived below.
 
 [CopyReplayTransport.lean](CopyReplayTransport.lean) proves that an injective cell encoding
@@ -1079,8 +1083,8 @@ for every batching challenge, including zero. Together these give
 [PlonkVerifierGrouping.lean](PlonkVerifierGrouping.lean). The latter takes the key query
 layout, distinct rotation points, a positive Action count, public commitment agreement,
 and the 2048-row quotient convention. It derives every actual group ID list and the full
-node order. The member-evaluation connection is completed below; concrete public commitment
-agreement remains open. These connectors introduce no native certificate.
+node order. The member-evaluation connection is completed below, followed by public
+commitment agreement for compiler-derived keys. These connectors introduce no native certificate.
 
 [PlonkQueryLayout.lean](PlonkQueryLayout.lean) proves the flat query stream for any Action
 count under `PlonkQueryLayout`, which records the key's instance, advice, and fixed query
@@ -1130,6 +1134,24 @@ public commitment agreement, and the reference domain size and root. It imposes 
 nonzero batching-challenge condition. The dynamic group-count check is also proved to
 succeed. These connectors do not assert verifier acceptance or alter the simulation bound.
 
+[PlonkKeygenCommitments.lean](PlonkKeygenCommitments.lean) connects the compiler's actual
+Lagrange commitments to the reference row interpolants, including the public blind of one.
+It uses the existing FFT and commitment correctness lemmas. The primitive-root proof is
+now shared from [Arithmetic/Domain.lean](../../Arithmetic/Domain.lean): the same kernel-checked
+modular exponentiations support both the compiler and ZK layers, without the former native
+root-certificate dependency.
+
+`plonkCompilerPublicCommitmentsMatch` in [PlonkDerivedKey.lean](PlonkDerivedKey.lean) derives
+all instance, fixed, and sigma commitment equalities for `TopLevelCircuit.toVerifierKey`.
+The query layout guarantees all 29 fixed columns exist; the circuit shape supplies the
+15 sigma columns. Its key transport changes only the type-level circuit dimensions.
+`plonkCompilerOpening_eq_public` applies the complete opening connector to that generated
+key and derives the reference domain size and root too. It requires shape and query-layout
+agreement, eleven IPA rounds, a positive Action count, and distinct rotation points;
+it has no separate public-commitment or domain-value premise. Kernel proofs of the compiled
+Action shape and query layout are still open. The captured-key query certificates alone
+do not discharge them.
+
 ### Actual Action public data
 
 [ActionPublicData.lean](ActionPublicData.lean) fixes the circuit to `actionCircuit`.
@@ -1150,6 +1172,14 @@ expression/layout conditions, and nonidentity of the blinding point are explicit
 The captured nonidentity lemmas above supply the latter for all four URS fixtures.
 The public simulator takes these public inputs and has no witness argument.
 
+[ActionCommitments.lean](ActionCommitments.lean) identifies Action's existing public data
+with the general compiler construction. Its actual public-input and sigma commitments
+agree with the reference polynomials using Action's proved domain and permutation count.
+`actionCompilerPublicCommitmentsMatch` supplies all public commitment equalities, and
+`actionCompilerOpening_eq_public` supplies the final opening equality, for Action's
+compiler-derived key under the stated shape and query-layout premises. They do not
+assume equalities of the captured commitment bytes.
+
 [Action/TrustBoundary.lean](Action/TrustBoundary.lean) names the existing
 `CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt` dependency carried by the opaque Action circuit
 package, alongside the Vesta order dependency of the concrete simulation. This refinement
@@ -1166,7 +1196,10 @@ This is still a conditional algebraic simulation theorem. Completing the specifi
 interactive protocol theorem requires discharging the remaining concrete circuit and
 public-key conditions. The group IDs, node order, duplicate guard, commitment compression,
 complete evaluation vectors, and final opening assembly are now derived under the stated
-key and point conditions. The complete reference computation has
+key and point conditions. For compiler-derived keys, public commitment agreement and
+domain values follow from key generation and the shape/layout conditions. The four
+initial Action selector zeros and its concrete key shape, layout, and expression checks
+remain open. The complete reference computation has
 a checked stage-by-stage causality proof on the same private tape and sampling law. The
 successful single-attempt law is now normalized, and finite independent retry histories
 are compared with a uniform bound and vanishing exhaustion tails. An unlimited-run

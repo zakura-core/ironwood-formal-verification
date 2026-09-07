@@ -3,40 +3,27 @@ import Zcash.Arithmetic.Domain
 /-!
 # The evaluation-domain root without a native certificate
 
-The existing domain constant is reused verbatim. Its primitive-root property is proved
-from two modular exponentiations checked by Lean's kernel, avoiding the native axiom in
-CompElliptic's bundled parameter certificate.
+The domain constant and its kernel-checked primitive-root property are shared with
+the arithmetic and compiler layers. These names preserve the zero-knowledge API
+without duplicating the root proof or using CompElliptic's native certificate.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge
 
-set_option maxRecDepth 8192
-
-open Zcash.Arithmetic (Fp rootOfUnityFp omegaOf powFast_eq_pow)
+open Zcash.Arithmetic (rootOfUnityFp omegaOf)
 
 /-- The deployed root literal has exact order `2^32`, by kernel-checked field arithmetic. -/
-theorem rootOfUnityFp_primitiveRoot : IsPrimitiveRoot rootOfUnityFp (2 ^ 32) := by
-  rw [IsPrimitiveRoot.iff_orderOf]
-  haveI : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
-  apply orderOf_eq_prime_pow (p := 2) (n := 31)
-  · rw [← powFast_eq_pow]
-    decide +kernel
-  · rw [← powFast_eq_pow]
-    decide +kernel
+theorem rootOfUnityFp_primitiveRoot : IsPrimitiveRoot rootOfUnityFp (2 ^ 32) :=
+  Zcash.Arithmetic.rootOfUnityFp_primitiveRoot
 
 /-- Squaring down the same root gives the actual size-`2^k` domain generator. -/
 theorem omegaOf_primitiveRoot (k : ℕ) (hk : k ≤ 32) :
-    IsPrimitiveRoot (omegaOf k) (2 ^ k) := by
-  unfold omegaOf
-  rw [powFast_eq_pow]
-  apply IsPrimitiveRoot.pow (by positivity) rootOfUnityFp_primitiveRoot
-  rw [← pow_add, Nat.sub_add_cancel hk]
+    IsPrimitiveRoot (omegaOf k) (2 ^ k) :=
+  Zcash.Arithmetic.omegaOf_isPrimitiveRoot k hk
 
 /-- Every supported domain row has a distinct evaluation point. -/
 theorem omegaOf_rows_injective (k : ℕ) (hk : k ≤ 32) :
-    Function.Injective fun row : Fin (2 ^ k) => omegaOf k ^ row.val := by
-  intro i j h
-  apply Fin.ext
-  exact (omegaOf_primitiveRoot k hk).pow_inj i.isLt j.isLt h
+    Function.Injective fun row : Fin (2 ^ k) => omegaOf k ^ row.val :=
+  Zcash.Arithmetic.omegaOf_powers_injective k hk
 
 end Zcash.Snark.ZeroKnowledge

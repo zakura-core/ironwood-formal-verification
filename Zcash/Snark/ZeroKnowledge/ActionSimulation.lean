@@ -11,8 +11,9 @@ prefix, permutation count, and complete operation-footprint bounds.
 
 The four initial selector zeros remain explicit, as do the key-expression/layout
 and original gate, lookup, and copy-value conditions. The theorem concerns the
-encoded reference computation; agreement with the verifier's complete grouping
-and public commitment routing is still a separate obligation.
+encoded reference computation. `ActionCommitments` separately connects the actual
+compiler key's public commitments and complete verifier opening to this public data
+under its shape and query-layout conditions.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

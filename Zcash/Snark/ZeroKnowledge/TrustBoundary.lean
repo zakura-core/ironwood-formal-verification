@@ -58,6 +58,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkVerifierGrouping
 import Zcash.Snark.ZeroKnowledge.PlonkQueryCertificate
 import Zcash.Snark.ZeroKnowledge.PlonkEvaluationCompression
 import Zcash.Snark.ZeroKnowledge.PlonkVerifierOpening
+import Zcash.Snark.ZeroKnowledge.PlonkDerivedKey
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -92,8 +93,8 @@ the entire verifier tape, adding its exceptional-challenge probability and the a
 invalid-row probability to the prover's sampling bias. With independent wide-reduced
 verifier coins, the challenge term is bounded by `4113/p + 22 × bias`. The later
 original-row theorem bounds the remaining row contribution using explicit witness
-and public-key conditions. Connecting those conditions to full Action keygen and
-integrating the full verifier's grouping remain open.
+and public-key conditions. The later compiler and verifier-grouping connectors derive
+the public commitment and routing matches under explicit shape and query-layout conditions.
 The product-row scan now has checked recurrence and terminal-value lemmas that retain
 zero-denominator cases. Separate factor-family bounds permit a random private prefix
 independent of the two product challenges. The actual reference factor lists and their
@@ -150,9 +151,9 @@ joint reference bound is `(42882m + 4113)/p + (148m + 70) × bias`, given those 
 witness conditions and the public masking/copy profiles. All interior rows pass the
 mask check automatically; both captured keys have kernel certificates for the eight
 remaining boundary rows with the stated captured fixed-query values. Matching those
-values to the supplied public polynomials and connecting witness values and public
-commitments to full Action keygen remain explicit obligations. The ordered compiler
-copy-list and sigma-row adapters are checked below. The
+values to the supplied public polynomials and connecting the concrete key's shape,
+layout, and expression conditions remain explicit obligations. The ordered compiler
+copy-list, sigma-row, and public commitment adapters are checked below. The
 public-row constructor now supplies all public polynomial degree bounds. For fixed
 rows produced by the circuit compiler, a structural proof derives zero throughout
 the masked suffix from the bounds on table, constant, selector, and region writes.
@@ -186,8 +187,8 @@ keys have kernel certificates for the sigma indices, delta, and chunk stride. Th
 joint statistical theorem and unused-row counterexample construct the fixed and sigma
 polynomials and copies from keygen; sigma coherence is derived. Original gate, lookup,
 and copy-value validity, public size bounds, and initial selector zeros for the positive
-theorem remain premises. Verifier-key column correspondence, instance provenance, and
-public commitments remain obligations for the concrete protocol specialization.
+theorem remain premises. The Action public-input layout and compiler public-commitment
+correspondence are derived below; concrete key shape and query-layout checks remain.
 The full attempt observer now reuses the existing verifier's message schedule and
 retains encoded prefixes, received challenges, the full verifier tape, and a distinct
 status for completion, retry, or coincident opening queries. Its success criterion is
@@ -242,8 +243,8 @@ reference attempt has exactly `2720+2272m` bytes. Its fresh encoded tape law is 
 equal to the existing fresh reference distribution followed by that same observer.
 The abstract blinding lemma reduces the hiding bijection to nonidentity in a field
 module whose group and scalar field have equal finite cardinalities. The concrete
-Vesta instantiation and captured nonidentity checks are pinned separately. The circuit/key
-and verifier correspondence remain obligations. The readable budget `epsilon(m) < m*2^-238`
+Vesta instantiation and captured nonidentity checks are pinned separately. Concrete
+circuit and key conditions remain obligations. The readable budget `epsilon(m) < m*2^-238`
 for positive Action counts follows from the sampling bound and kernel integer arithmetic.
 The selector-support theorem now covers zero padding outside the compiler's dimensions,
 removing the former compiler-domain and fixed-column-count mask premises. The actual
@@ -254,9 +255,14 @@ remaining key correspondence conditions are explicit. The actual query assembly,
 opening groups, and both compression projections now feed the final opening assembly.
 Under the stated query layout, distinct rotation points, domain, and public commitment
 conditions, its evaluated commitment and scalar equal the reference reconstruction.
-The dynamic group-count check also succeeds; these equalities do not assert verifier
-acceptance. The concrete Action results have a separate census for their inherited
-Pallas order dependency.
+The dynamic group-count check also succeeds. For compiler-derived keys, public commitment
+agreement follows from the existing FFT and Lagrange commitment theorems, with the
+kernel-checked domain root now shared from the arithmetic layer. Shape and query layout
+supply all fixed and sigma column coverage and the reference domain values. The Action
+specialization derives its instance and sigma commitment equalities from the concrete
+compiler; its shape and query-layout conditions remain explicit for the full opening.
+These equalities do not assert verifier acceptance. The concrete Action results have a
+separate census for their inherited Pallas order dependency.
 Fiat–Shamir ZK needs its own argument;
 Rust execution correspondence is a separate claim, outside the protocol theorem's target.
 -/
@@ -449,6 +455,8 @@ assert_axioms Zcash.Snark.ZeroKnowledge.ipaTranscript_verifier_capstone
 assert_axioms Zcash.Snark.ZeroKnowledge.ipaTranscript_assembleFinalMsm
 
 -- Joint replacement-row rank, with the real domain constant certified without native axioms.
+assert_axioms Zcash.Arithmetic.rootOfUnityFp_primitiveRoot
+assert_axioms Zcash.Arithmetic.omegaOf_isPrimitiveRoot
 assert_axioms Zcash.Snark.ZeroKnowledge.rootOfUnityFp_primitiveRoot
 assert_axioms Zcash.Snark.ZeroKnowledge.omegaOf_primitiveRoot
 assert_axioms Zcash.Snark.ZeroKnowledge.omegaOf_rows_injective
@@ -1566,3 +1574,14 @@ assert_axioms Zcash.Snark.ZeroKnowledge.multiopenCombine_evaluated_congr
 assert_computable Zcash.Snark.ZeroKnowledge.plonkVerifierOpening +choice
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierOpening_shape
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierOpening_eq_public
+
+-- Actual compiler key generation supplies the public commitment and domain conditions.
+assert_axioms Zcash.Snark.ZeroKnowledge.lagrangeCommitInstance_eq_polynomialCommitment
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygenFixedCommitment
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygenSigmaCommitment
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygenInstanceCommitment
+assert_computable Zcash.Snark.ZeroKnowledge.plonkCompilerPublicPolynomials +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompilerFixedColumnCoverage
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompilerPublicCommitmentsMatch
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompilerKey_domain
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompilerOpening_eq_public
