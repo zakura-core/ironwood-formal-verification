@@ -45,8 +45,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkAttemptSimulation
 import Zcash.Snark.ZeroKnowledge.PlonkFailures
 import Zcash.Snark.ZeroKnowledge.PlonkCompilerSuccess
 import Zcash.Snark.ZeroKnowledge.PlonkCompilerRetry
-import Zcash.Snark.ZeroKnowledge.PlonkStageCausality
-import Zcash.Snark.ZeroKnowledge.PlonkRowCausality
+import Zcash.Snark.ZeroKnowledge.PlonkCommitmentCausality
 import Zcash.Snark.ZeroKnowledge.IpaCausality
 import Zcash.Snark.ZeroKnowledge.PlonkSigmaCertificate
 import Zcash.Meta.AxiomCheck
@@ -215,10 +214,14 @@ including zero challenges and invalid openings. The complete staged schedule is 
 proved equal to the existing attempt trace, including empty blocks between consecutive
 receives. Per-stage dependency facts suffice for causality of that complete trace and
 its encoding; the final scalars require no further premise once all challenges agree.
-On a fixed replacement-row tape, the initial advice block ignores all challenges,
-the complete column state uses only theta, beta, gamma, and quotient pieces add only y.
-Connecting the full batched-tape decoder and emitted commitments/evaluations to these
-facts, and instantiating concrete codecs, remain obligations.
+The complete batched decoder now preserves masks, coefficients, blinds, and the IPA
+suffix independently of retained-row callbacks. The corresponding full-tape proof
+fields satisfy their stage dependencies: advice ignores all challenges, lookup
+permutation points use only theta, product points use theta, beta, gamma, the linear
+mask ignores all challenges, and quotient pieces add only y. These facts establish
+the entire existing attempt prefix before x on the actual complete prover tape.
+The remaining evaluation and opening messages, the full IPA connection, and concrete
+codec instantiation still need their respective causality/correspondence arguments.
 Fiat–Shamir ZK needs its own argument;
 Rust execution correspondence is a separate claim, outside the protocol theorem's target.
 -/
@@ -1309,3 +1312,41 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonkTotalColumnRows_advice_before_theta
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkTotalColumnRows_challenges
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkConstraintModel_challenges
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkHonestQuotientPieces_challenges
+
+-- The actual full-tape decoder and all emitted commitments before the evaluation challenge.
+assert_axioms Zcash.Snark.ZeroKnowledge.TapeAgrees
+assert_axioms Zcash.Snark.ZeroKnowledge.TapeAgrees.eq
+assert_axioms Zcash.Snark.ZeroKnowledge.columnTapeCounts_shape
+assert_axioms Zcash.Snark.ZeroKnowledge.columnCoinEquiv_shape_congr
+assert_axioms Zcash.Snark.ZeroKnowledge.columnCoinEquiv_symm_shape_congr
+assert_axioms Zcash.Snark.ZeroKnowledge.batchedTapeCounts_shape
+assert_axioms Zcash.Snark.ZeroKnowledge.batchedToColumnTape_shape_congr
+assert_axioms Zcash.Snark.ZeroKnowledge.batchedPreIpaTapeEquiv_shape_congr
+assert_axioms Zcash.Snark.ZeroKnowledge.preIpaCoinEquiv_shape_congr
+assert_axioms Zcash.Snark.ZeroKnowledge.batchedPreIpaCoins_shape_congr
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkColumnBatches_shape
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPreIpaCoinsEquiv_constructor_irrel
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaterialFromTape_coins_congr
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaterialFromTape_rows_take
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaterialFromTape_congr
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaterialFromTape_before_theta
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaterialFromTape_before_products
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaterialFromTape_challenges
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkJointTape_split_congr
+assert_computable Zcash.Snark.ZeroKnowledge.plonkJointMaterialFromTape +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkJointMaterialFromTape_coins_congr
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkJointMaterialFromTape_rows_take
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkJointMaterialFromTape_congr
+assert_computable Zcash.Snark.ZeroKnowledge.plonkProofColumnPoint
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProofFromJointView_columnPoint
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaskViewFromMaterial_column
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaskViewFromMaterial_column_congr
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierProofFromTape_column_prefix
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierProofFromTape_advice_causal
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierProofFromTape_lookup_causal
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierProofFromTape_products_causal
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaskViewFromMaterial_linear
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaskViewFromMaterial_piece
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierProofFromTape_linear_causal
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierProofFromTape_quotient_causal
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAttemptTrace_prefix_before_x

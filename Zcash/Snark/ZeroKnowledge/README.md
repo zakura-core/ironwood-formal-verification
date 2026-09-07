@@ -64,8 +64,9 @@ not condition on success.
 
 `m` is the number of Actions. `148m + 46` counts the prover's private random field
 elements for one proof attempt—used to mask witness data and blind commitments.
-That is 1,552 / 2,736 64-bit words for one / two Actions. Instantiating the
-continuation with a fully modeled prover and verifying that count against Rust remain open.
+That is 1,552 / 2,736 64-bit words for one / two Actions.
+[PlonkSampling.lean](PlonkSampling.lean) connects this count to the complete
+deterministic reference-prover tape described below.
 
 ## Masking optimizations
 
@@ -567,14 +568,29 @@ use `y`. The existing [lookup-prefix result](PlonkPrefix.lean) places the interm
 advice and lookup-permutation columns before `beta,gamma`. These statements include
 the reference constructor's totalized fallbacks and require no witness-validity premise.
 
+[TapeCausality.lean](TapeCausality.lean) and
+[PlonkTapeCausality.lean](PlonkTapeCausality.lean) connect those facts to the complete
+actual prover tape. The decoder depends only on mask boundaries and batch order;
+changing retained-row callbacks changes none of the selected row masks, linear
+coefficients, commitment blinds, or IPA suffix. The row-prefix facts therefore apply
+to the actual decoded private material without a separate row-tape assumption.
+
+[PlonkCommitmentCausality.lean](PlonkCommitmentCausality.lean) then proves the dependencies
+of the emitted fields in the existing `ProofString`: advice precedes every challenge,
+lookup permutation commitments use only `theta`, product commitments additionally use
+`beta,gamma`, the linear-mask commitment ignores all challenges, and quotient commitments
+add only `y`. The complete existing message prefix before the receive of `x` is proved
+equal whenever those four already received challenges and the complete private tape
+agree. These deterministic results require no sampling law or challenge exclusions.
+
 [IpaCausality.lean](IpaCausality.lean) proves pointwise dependency facts for the actual
 tape-based IPA computation. The sparse-mask commitment needs neither `xi`, `z`, nor any
 round challenge. The pair in round `j` depends only on challenges from rounds strictly
 before `j`; in particular it does not use the challenge received after that pair. These
 proofs include zero challenges and invalid openings, and assume no sampling law.
 The complete PLONK/IPA construction still needs the full message-prefix theorem:
-the complete batched-tape decoder and emitted commitment/evaluation fields must be
-connected to these dependency facts and the checked stage composition.
+the remaining evaluation and opening messages and the complete IPA computation must
+be connected to these dependency facts and the checked stage composition.
 
 ## Full-attempt failure probability
 
