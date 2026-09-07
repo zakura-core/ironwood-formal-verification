@@ -8,11 +8,11 @@ specified constructions, not a verified correspondence with that Rust executable
 There is not yet a zero-knowledge theorem for the complete prover. The existing verifier and
 soundness formalization does not supply an honest-prover distribution or simulator.
 
-The current [reference-prover theorem](PlonkOriginalSimulation.lean) gives a numerical
-joint simulation bound from original gate, lookup, and copy validity, plus explicit
-public-key conditions. It no longer has an unbounded row-failure term under those premises.
-The [selector/keygen specialization](PlonkSelectorSimulation.lean) constructs its fixed
-polynomials from the circuit compiler and derives every public polynomial degree bound.
+The current [reference-prover theorem](PlonkCompilerSimulation.lean) gives a numerical
+joint simulation bound from original gate, lookup, and copy-value validity, plus explicit
+public-key conditions. It constructs fixed and sigma polynomials and the complete ordered
+copy list from the compiler, deriving sigma coherence and every public polynomial degree
+bound. It has no unbounded row-failure term under those premises.
 Selector-only certificates and compiler placement reduce the masking conditions to four
 initial packed-selector zeros, plus explicit public column and placement bounds.
 The remaining implementation and public-key correspondence obligations are listed below.
@@ -257,8 +257,11 @@ seven/seven/one widths in [PlonkCopyCertificate.lean](PlonkCopyCertificate.lean)
 construction and the no-perfect-simulator theorem. A compiler operation footprint ending
 by row 1999 supplies both selector placement and the unused-row copy condition. The theorem
 therefore needs no separately supplied copy list or assertion that it avoids row 2000.
-The public size and footprint bounds, original witness validity, and sigma coherence remain
-explicit. Matching the compiler's column meanings to the verifier key also remains open.
+This endpoint retains public size and footprint bounds, original witness validity, and
+sigma coherence. [PlonkCompilerSimulation.lean](PlonkCompilerSimulation.lean) derives that
+coherence using the actual compiler sigma table and retains only original copy-value
+equations as the copy-validity premise. Matching the compiler's column meanings to the
+verifier key also remains open.
 
 An Ironwood implementation counterexample still requires establishing whether Rust admits
 the changed unused cell and matching its execution, aborts, retries, and encoding. The
@@ -667,10 +670,10 @@ the joint simulation bound:
 
 This mass covers failed lookup construction or gate division after masking under the
 original reference tape law. The original-witness theorem below proves it is zero
-under explicit public mask conditions, without conditioning on success. The copy
-premises still require connecting the supplied usable-cell copy list and public sigma
-labels to full Action keygen. The copy-query certificates establish only the key's
-query layout.
+under explicit public mask conditions, without conditioning on success. This generic
+endpoint takes a usable-cell copy list and its public sigma-label coherence as premises.
+The compiler refinement below derives both. The copy-query certificates establish the
+key's query layout.
 
 [ExpressionMasking.lean](ExpressionMasking.lean) gives a computable, public expression
 checker. It recognizes retained advice queries and products annihilated by fixed zero
@@ -707,7 +710,8 @@ gate rows and two lookup rows: all advice queries in rows 1 through 2040 are ret
 kernel using the stated fixed-query boundary values from `actionLayout.json`. The file
 records the source hash and scalar values. Its profile theorems still require that
 the supplied public polynomials evaluate to those values; authenticating the capture
-and connecting these rows and the copy/sigma profile to full Action keygen remain open.
+and connecting these captured rows to full Action keygen remain open. The later compiler
+copy and sigma refinement below derives those public copy profiles directly.
 The product-coin experiment is now connected to the full independent challenge law.
 Native-loop correspondence, including the
 available Rust implementation's cancellation of fixed permutation cells on zero factors,
@@ -733,9 +737,9 @@ equality between arbitrary public polynomial evaluations and captured scalar val
 same numerical joint bound. Its public degree premises are discharged, and its mask
 profile follows from that finite compiler-row check. The instance and sigma vectors are
 still supplied inputs, with original gate/lookup validity and copy equations required.
-The selector refinement below narrows the remaining Action boundary check. Statement/sigma
-provenance, public commitments, and agreement between the compiler's circuit and the
-verifier key remain open. The
+The selector refinement below narrows the remaining Action boundary check. The later sigma
+refinement derives its rows from keygen. Statement provenance, public commitments, and
+agreement between the compiler's circuit and the verifier key remain open. The
 existing Action compilation lemmas also carry the Pallas generator's native order
 certificate; using them in an Action specialization requires explicit trust accounting.
 The generic keygen endpoint is pinned without that dependency.
@@ -765,8 +769,30 @@ profile theorems use the actual captured expressions with these compiler fixed r
 [PlonkSelectorSimulation.lean](PlonkSelectorSimulation.lean) supplies this profile to the
 numerical joint simulation, keeping the same bound. Establishing the four initial selector
 zeros from the concrete Action compilation is still open; the captured row values alone
-do not discharge that obligation. The instance, sigma, commitment, and execution
-correspondence obligations also remain.
+do not discharge that obligation. The instance, commitment, and execution correspondence
+obligations also remain; sigma rows and copy-list provenance are derived below.
+
+[CopyReplayTransport.lean](CopyReplayTransport.lean) proves that an injective cell encoding
+preserves the exact ordered copy replay, including its same-cycle test. This supplies the
+usable-to-full-domain correspondence in [PlonkKeygenSigmaRows.lean](PlonkKeygenSigmaRows.lean).
+Combined with the existing array/union-find assembly theorem, each entry of the compiler's
+actual `permPolysOf` table is the delta/omega name of the corresponding replayed packed cell.
+
+[PlonkKeygenSigma.lean](PlonkKeygenSigma.lean) interpolates these compiler rows into the public
+sigma polynomials and derives their label-coherence equation. The original copy-value
+equations are the only remaining copy-witness premise. [PlonkSigmaCertificate.lean](PlonkSigmaCertificate.lean)
+checks the packed sigma indices, delta, and seven-column stride for both captured keys in
+the kernel. These finite checks do not identify their full keys or public commitments
+with compiled Action key generation.
+
+`wideCompilerKeygenPlonkVerifier_simulation_error_bound` in
+[PlonkCompilerSimulation.lean](PlonkCompilerSimulation.lean) retains the same two-sided bound
+**`(42882m + 4113)/p + (148m + 70) × bias`** with fixed polynomials, sigma polynomials, and
+the ordered copy list produced by the compiler. It takes neither arbitrary sigma rows nor
+a separate sigma-coherence hypothesis. Original gate, lookup, and copy-value validity,
+public size and expression certificates, the four initial selector zeros, and the URS
+hiding condition remain explicit. The compiler-sigma no-perfect-simulator endpoint uses
+the same public data in the unused-row witness argument.
 
 This is still a conditional algebraic simulation theorem. Completing the exact prover
 theorem requires connecting the stated witness and public-key conditions to the actual

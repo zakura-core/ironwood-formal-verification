@@ -8,8 +8,9 @@ challenges are sampled. The sigma premise relates public polynomial labels to th
 replay of an explicit usable-cell copy list. Masking preserves those copy equations,
 so the computed product identity holds on every tape, including zero denominators.
 PlonkKeygenCopies supplies this usable-cell list from the compiler's ordered copy
-stream. Connecting the public labels and witness values to full Action keygen remains
-a separate refinement obligation.
+stream, and PlonkKeygenSigma derives the public-label coherence from key generation.
+Witness values, verifier-key column meanings, and public commitments still need their
+implementation correspondence.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

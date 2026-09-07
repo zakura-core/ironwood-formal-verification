@@ -40,6 +40,8 @@ import Zcash.Snark.ZeroKnowledge.Observation
 import Zcash.Snark.ZeroKnowledge.PlonkDisclosure
 import Zcash.Snark.ZeroKnowledge.PlonkUnusedCertificate
 import Zcash.Snark.ZeroKnowledge.PlonkUnusedKeygen
+import Zcash.Snark.ZeroKnowledge.PlonkCompilerSimulation
+import Zcash.Snark.ZeroKnowledge.PlonkSigmaCertificate
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -130,9 +132,9 @@ joint reference bound is `(42882m + 4113)/p + (148m + 70) × bias`, given those 
 witness conditions and the public masking/copy profiles. All interior rows pass the
 mask check automatically; both captured keys have kernel certificates for the eight
 remaining boundary rows with the stated captured fixed-query values. Matching those
-values to the supplied public polynomials and connecting sigma labels and witness values
-to full Action keygen remain explicit obligations. The ordered compiler copy-list adapter
-is checked below. The
+values to the supplied public polynomials and connecting witness values and public
+commitments to full Action keygen remain explicit obligations. The ordered compiler
+copy-list and sigma-row adapters are checked below. The
 public-row constructor now supplies all public polynomial degree bounds. For fixed
 rows produced by the circuit compiler, a structural proof derives zero throughout
 the masked suffix from the bounds on table, constant, selector, and region writes.
@@ -158,10 +160,17 @@ public statement. The compiler refinement now computes the complete ordered V1 c
 including deferred constants, and packs its endpoint coordinates into the prover's cell
 type. Re-encoding is the identity on the source list. With fifteen permutation columns,
 the checked seven/seven/one widths, and an operation footprint ending by row 1999, the
-compiler supplies both placement and the unused-row copy condition. Original validity,
-public size bounds, sigma coherence, and verifier-key column correspondence remain open
-premises. An implementation impossibility claim still requires admissibility of the
-changed cell at the Rust witness interface and
+compiler supplies both placement and the unused-row copy condition. The later sigma
+refinement embeds usable packed cells into the full rectangular table and transports
+the exact ordered replay through that injection. The existing array/union-find theorem
+then identifies every compiler sigma row with its replayed-cell name. Both captured
+keys have kernel certificates for the sigma indices, delta, and chunk stride. The newest
+joint statistical theorem and unused-row counterexample construct the fixed and sigma
+polynomials and copies from keygen; sigma coherence is derived. Original gate, lookup,
+and copy-value validity, public size bounds, and initial selector zeros for the positive
+theorem remain premises. Verifier-key column correspondence, instance provenance, and
+public commitments remain implementation obligations. An implementation impossibility
+claim still requires admissibility of the changed cell at the Rust witness interface and
 execution correspondence that accounts for errors, retries, and codecs.
 These results do not establish a whole-prover simulator, Fiat–Shamir zero-knowledge, or a
 Rust-to-Lean refinement.
@@ -1066,3 +1075,22 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygenCopies_rows_lt_usedRows
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygenCopies_avoid_unused
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompilerCopies_exists_distinct_valid_witness
 assert_axioms Zcash.Snark.ZeroKnowledge.compilerCopiesPlonkReference_no_perfect_simulator
+
+-- Compiler sigma entries agree with the exact packed replay, not only its cycle classes.
+assert_axioms Zcash.Snark.ZeroKnowledge.replayKeygenPermutation_map_apply
+assert_computable Zcash.Snark.ZeroKnowledge.plonkCopyCellToFull
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCopyCellToFull_pair
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCopyCellToFull_injective
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCopyCellToFull_copies_encode
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompilerSigmaRow_eq_replay
+assert_computable Zcash.Snark.ZeroKnowledge.plonkKeygenSigmaRows +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygenSigmaRows_eq_replay
+assert_computable Zcash.Snark.ZeroKnowledge.plonkCopySigmaIndices
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygenSigmaCoherent
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkKeygenCopyWitness_of_values
+assert_axioms Zcash.Snark.ZeroKnowledge.singleAction_plonkCopySigmaIndices
+assert_axioms Zcash.Snark.ZeroKnowledge.multiAction_plonkCopySigmaIndices
+assert_axioms Zcash.Snark.ZeroKnowledge.singleAction_plonkSigmaNaming
+assert_axioms Zcash.Snark.ZeroKnowledge.multiAction_plonkSigmaNaming
+assert_axioms Zcash.Snark.ZeroKnowledge.wideCompilerKeygenPlonkVerifier_simulation_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.compilerSigmaPlonkReference_no_perfect_simulator

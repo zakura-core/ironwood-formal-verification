@@ -9,9 +9,10 @@ certificates and V1 placement supply the full mask profile once the four initial
 selector zeros are known. No assumption is made about boundary values in the
 fourteen original fixed columns.
 
-Establishing the initial selector row for the deployed circuit, matching instance
-and sigma rows and public commitments to keygen, and refining the complete prover
-execution remain necessary for the exact implementation theorem.
+PlonkCompilerSimulation also derives sigma rows and copies from keygen. Establishing
+the initial selector row for the deployed circuit, matching instance rows and public
+commitments, and refining the complete prover execution remain necessary for the
+exact implementation theorem.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge
