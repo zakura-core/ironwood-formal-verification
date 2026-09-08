@@ -106,6 +106,8 @@ import Zcash.Snark.ZeroKnowledge.RetryStreamNontermination
 import Zcash.Meta.AxiomCheck
 import Zcash.Snark.ZeroKnowledge.WindowDigits
 import Zcash.Snark.ZeroKnowledge.AdviceWitnessAssignment
+import Zcash.Snark.ZeroKnowledge.CompiledFixedWitnesses
+import Zcash.Snark.ZeroKnowledge.WitnessProgramSupport
 
 /-!
 # Checked trust boundary of the zero-knowledge development
@@ -2271,3 +2273,60 @@ assert_computable Zcash.Snark.ZeroKnowledge.topLevelAdviceAssignment +choice
 assert_axioms Zcash.Snark.ZeroKnowledge.topLevelAdviceAssignment_environment
 assert_axioms Zcash.Snark.ZeroKnowledge.topLevelAdviceAssignment_publicInput
 assert_axioms Zcash.Snark.ZeroKnowledge.generatedAdviceAssignment_publicInput
+
+-- Source witness equations, compiled fixed data, and checked structured-IR read support.
+
+-- AdviceWitnessCausality
+assert_computable Zcash.Snark.ZeroKnowledge.adviceProgramTarget
+assert_axioms Zcash.Snark.ZeroKnowledge.AdviceReadAgreement
+assert_computable Zcash.Snark.ZeroKnowledge.AdviceProgramReadsFrom +choice
+assert_computable Zcash.Snark.ZeroKnowledge.AdviceProgramsCausal +choice
+assert_computable Zcash.Snark.ZeroKnowledge.AdviceWitnessEquations +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.runAdvicePrograms_readAgreement
+assert_axioms Zcash.Snark.ZeroKnowledge.runAdvicePrograms_satisfies
+
+-- AdviceWitnessEquations
+assert_computable Zcash.Snark.ZeroKnowledge.eraseRegionAdvice
+assert_computable Zcash.Snark.ZeroKnowledge.eraseCircuitAdvice
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceWitnessEquations_append
+assert_axioms Zcash.Snark.ZeroKnowledge.regionWitnessEquations_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.circuitWitnessEquations_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.eraseRegionAdvice_extends_congr
+assert_axioms Zcash.Snark.ZeroKnowledge.eraseCircuitAdvice_extends_congr
+assert_axioms Zcash.Snark.ZeroKnowledge.runAdvicePrograms_fixedWitnesses
+assert_axioms Zcash.Snark.ZeroKnowledge.runCircuitAdvice_extendsWitnesses
+
+-- CompiledFixedWitnesses
+assert_axioms Zcash.Snark.ZeroKnowledge.erasedRegionWitnesses_iff_fixed
+assert_axioms Zcash.Snark.ZeroKnowledge.erasedCircuitWitnesses_iff_fixed
+assert_axioms Zcash.Snark.ZeroKnowledge.compiledFixedValue_of_mem_raw
+assert_axioms Zcash.Snark.ZeroKnowledge.compiledEnvironment_fixedConstraints
+assert_axioms Zcash.Snark.ZeroKnowledge.compiledEnvironment_fixedWitnesses
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevelAdviceAssignment_extendsWitnesses
+
+-- WitnessReadSupport
+assert_computable Zcash.Snark.ZeroKnowledge.fieldWitnessReads
+assert_computable Zcash.Snark.ZeroKnowledge.listWitnessReads
+assert_computable Zcash.Snark.ZeroKnowledge.natWitnessReads
+assert_computable Zcash.Snark.ZeroKnowledge.boolWitnessReads
+assert_axioms Zcash.Snark.ZeroKnowledge.WitnessContextAgreement
+assert_axioms Zcash.Snark.ZeroKnowledge.WitnessContextAgreement.mono
+assert_axioms Zcash.Snark.ZeroKnowledge.WitnessContextAgreement.left
+assert_axioms Zcash.Snark.ZeroKnowledge.WitnessContextAgreement.right
+assert_axioms Zcash.Snark.ZeroKnowledge.fieldWitnessReads_eval
+assert_axioms Zcash.Snark.ZeroKnowledge.listWitnessReads_eval
+assert_axioms Zcash.Snark.ZeroKnowledge.natWitnessReads_eval
+assert_axioms Zcash.Snark.ZeroKnowledge.boolWitnessReads_eval
+
+-- WitnessProgramSupport
+assert_axioms Zcash.Snark.ZeroKnowledge.WitnessContextAgreement.withLocals
+assert_axioms Zcash.Snark.ZeroKnowledge.WitnessContextAgreement.withIndex
+assert_axioms Zcash.Snark.ZeroKnowledge.WitnessContextAgreement.list_member
+assert_computable Zcash.Snark.ZeroKnowledge.vectorWitnessReads
+assert_computable Zcash.Snark.ZeroKnowledge.stepsWitnessReads
+assert_axioms Zcash.Snark.ZeroKnowledge.vectorWitnessReads_eval
+assert_axioms Zcash.Snark.ZeroKnowledge.stepsWitnessReads_eval
+assert_axioms Zcash.Snark.ZeroKnowledge.structuredWitnessReads_eval
+assert_computable Zcash.Snark.ZeroKnowledge.placedWitnessCell
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceReadAgreement_context
+assert_axioms Zcash.Snark.ZeroKnowledge.structuredWitness_readsFrom

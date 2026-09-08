@@ -72,11 +72,25 @@ model. Compare strength only after fixing those models and assumptions.
   store. The checked interpreter preserves the exact public statement and
   reconstructs the same compiler environment. The hint and window proofs recover
   all five semantic scalars exactly; this does not yet prove row validity.
-- [ ] Prove that the constructed rows satisfy every original gate, lookup tuple,
-  and compiler copy equation. This requires checking the actual programs' read
-  dependencies and writes, deriving `ExtendsWitnesses` for the final assignment,
-  and connecting the extracted witness to the normalized application data before
-  applying circuit completeness. Record any additional construction preconditions.
+- [x] Prove the advice interpreter's dependency theorem and connect its equations
+  to the source circuit's complete `ExtendsWitnesses` predicate in
+  [AdviceWitnessCausality.lean](AdviceWitnessCausality.lean) and
+  [AdviceWitnessEquations.lean](AdviceWitnessEquations.lean). The compiler discharges
+  all retained fixed-write and table clauses in
+  [CompiledFixedWitnesses.lean](CompiledFixedWitnesses.lean). The current execution
+  theorem requires causal reads and distinct write targets.
+- [x] Verify the read-support collectors for field, Nat, and Boolean expressions,
+  dynamic indexing, local steps, and vector outputs in
+  [WitnessReadSupport.lean](WitnessReadSupport.lean) and
+  [WitnessProgramSupport.lean](WitnessProgramSupport.lean). The theorem covers all
+  branches and arithmetic values; native callbacks still require their own
+  semantic read certificates.
+- [ ] Discharge the actual Action read and write certificates. Its repeated
+  writes require a value-preservation argument; a distinct-target premise does
+  not apply to this program. Derive `ExtendsWitnesses` for the final assignment.
+- [ ] Connect the extracted witness to the normalized application data, then use
+  circuit completeness to prove every original gate, lookup tuple, and compiler
+  copy equation. Record any additional construction preconditions.
 - [ ] Package that evidence as `ActionZkRelation` and derive application-level
   interactive and one-attempt oracle simulation corollaries.
 

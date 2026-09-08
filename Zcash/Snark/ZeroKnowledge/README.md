@@ -28,6 +28,12 @@ requires each scalar's Nat representative to fit the existing one-field hint.
 [Hint decoding](ActionWitnessHints.lean), [scalar windows](ActionWitnessHintWindows.lean),
 and [canonical Merkle folds](CanonicalMerklePath.lean) are checked. The interpreter
 preserves public inputs and reconstructs the same canonical compiler environment.
+The [source witness-equation bridge](CompiledFixedWitnesses.lean) now discharges
+fixed writes and table contents from the compiled key. A
+[checked dependency collector](WitnessProgramSupport.lean) covers the complete
+structured witness IR. Applying the execution theorem to Action still requires
+the native callbacks' read certificates and a proof that repeated writes preserve
+the values already assigned.
 Proving that the generated rows satisfy every gate, lookup, and copy equation is
 still open; the current constructor does not establish `ActionZkRelation`.
 The [raw-source refinement](ActionRandomnessSource.lean) proves exact agreement
