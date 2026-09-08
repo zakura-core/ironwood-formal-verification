@@ -298,13 +298,16 @@ tape alone do not prove that running-time statement.
 
 **7. Review: prepare the evidence and obtain independent assessment**
 
-- [ ] Prepare a review packet mapping each advertised claim to its exact theorem,
-  real/simulated experiment, validity/setup/randomness assumptions, error formula,
-  failure policy, and runtime scope. Include the checked commit and validation log.
-- [ ] Check that theorem inputs and public observations match the intended claim,
-  including auxiliary data, retained prefixes, oracle state, and exhaustion.
-- [ ] Recheck transitive dependencies and every new declaration pin at the review
-  commit, with no admitted lemma or new unlisted native certificate.
+- [x] Prepare [the review packet](REVIEW.md), mapping each current claim to its
+  exact theorem, real/simulated experiment, validity/setup/randomness assumptions,
+  error formula, failure policy, and runtime scope. It records proof baseline
+  `15fe03fbd72e478601660067065fea711ce17552` and the validation log.
+- [x] Locally check that the recorded theorem inputs and public observations match
+  those claims, including auxiliary data, retained prefixes, oracle state, finite
+  exhaustion, and the private generator-state boundary. This is a local scope check.
+- [x] Recheck transitive dependencies and every new declaration pin at that proof
+  baseline. The full build and 46-declaration inventory pass, with only the two
+  inherited named curve-order native certificates and no admitted lemma.
 - [ ] Obtain independent review of the packet and record the reviewed commit,
   findings, resolutions, and remaining qualifications. A local self-review or
   passing Lean build does not complete this item.
@@ -323,6 +326,6 @@ tape alone do not prove that running-time statement.
   validation; these local results do not assert hosted CI success.
 
 Next implementation order: witness-construction and runtime refinements, then any
-unlimited shared-oracle or computational retry extension. Prepare the review packet
-as those statements stabilize. Completed theorems remain usable with their current
+unlimited shared-oracle or computational retry extension. Update the review packet
+when its proof baseline changes. Completed theorems remain usable with their current
 assumptions throughout.

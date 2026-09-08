@@ -6,13 +6,15 @@ alongside the existing Lean protocol, on Ironwood base
 algorithm. Whole-program Rust equivalence is a separate claim, not a prerequisite for
 this protocol theorem.
 
-The description labels its source `sensei at 56a7de7`. That abbreviated revision has not
-been resolved in the local Bento checkout inspected for this development. This is a
-provenance limitation, not evidence that the source is unavailable, and does not block
-proving the protocol described by the pinned note and Lean definitions.
+The description labels its source `sensei at 56a7de7`, which resolves to
+[Bento commit `56a7de7474da3b86fa475f01400edadfd8af4cb6`](https://github.com/tachyon-zcash/bento/commit/56a7de7474da3b86fa475f01400edadfd8af4cb6).
+The [Sensei crate](https://github.com/tachyon-zcash/bento/tree/56a7de7474da3b86fa475f01400edadfd8af4cb6/crates/sensei)
+is present at that revision.
 
 The [ZK checklist](CHECKLIST.md) records the completed interactive theorem and
 optional assumption instantiations, Fiat–Shamir proofs, and unlimited-retry targets.
+The [review packet](REVIEW.md) maps the current claims to exact experiments,
+assumptions, bounds, and validation evidence; independent review remains pending.
 The [Action instantiation](ActionInstantiation.lean) now packages original gate,
 lookup, and copy validity into one relation and specializes the full encoded
 comparison to a named captured URS. The simulator uses only public inputs and
