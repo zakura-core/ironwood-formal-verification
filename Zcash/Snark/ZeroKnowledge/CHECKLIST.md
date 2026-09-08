@@ -339,12 +339,12 @@ tape alone do not prove that running-time statement.
 - [x] Prepare [the review packet](REVIEW.md), mapping each current claim to its
   exact theorem, real/simulated experiment, validity/setup/randomness assumptions,
   error formula, failure policy, and runtime scope. It records proof baseline
-  `f14dc880abdae4f2e7c4e59f874e8050078d0d2f` and the validation log.
+  `27b03619b51e29d1af54d86515cb0a2608a8d8a1` and the validation log.
 - [x] Locally check that the recorded theorem inputs and public observations match
   those claims, including auxiliary data, retained prefixes, oracle state, finite
   exhaustion, and the private generator-state boundary. This is a local scope check.
 - [x] Recheck transitive dependencies and every new declaration pin at that proof
-  baseline. The full build and 62-declaration inventory pass, with only the two
+  baseline. The full build and 63-declaration inventory pass, with only the two
   inherited named curve-order native certificates and no admitted lemma.
 - [ ] Obtain independent review of the packet and record the reviewed commit,
   findings, resolutions, and remaining qualifications. A local self-review or

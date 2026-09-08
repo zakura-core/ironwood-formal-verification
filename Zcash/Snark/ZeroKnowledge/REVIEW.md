@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `f14dc880abdae4f2e7c4e59f874e8050078d0d2f` on `establish-zk` in
+Proof baseline: `27b03619b51e29d1af54d86515cb0a2608a8d8a1` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -157,12 +157,46 @@ identifies that raw prefix with a fixed bit string. These are input and query
 budgets. A costed simulator implementation, machine running-time bound, and the
 resulting PRNG test-class membership proof remain open.
 
+**Application witness construction**
+
+[ActionWitnessConditions.lean](ActionWitnessConditions.lean) starts from
+`ActionSpec` and makes the constructor's extra input conditions explicit:
+Sinsemilla hashes are defined, the literal Merkle children are canonical base-field
+encodings, and the five scalar representatives fit the current one-field Nat-hint
+interface. These conditions are stronger than the guarded application specification
+alone; they are not additional hypotheses of the existing circuit-level ZK theorem.
+`actionWitnessConditions_proverAssumptions` derives the existing circuit's semantic
+honest-prover preconditions for the normalized application data.
+
+[ActionWitnessNormalization.lean](ActionWitnessNormalization.lean) preserves
+`ActionSpec` and every semantic scalar while deriving auxiliary windows and Merkle
+readings. [ActionWitnessHints.lean](ActionWitnessHints.lean) proves that the actual
+fixed hint program decodes the encoded data in every cell environment.
+[ActionWitnessHintWindows.lean](ActionWitnessHintWindows.lean) connects its actual
+window programs to exact scalar reconstruction. The defined canonical Merkle fold
+and its two 16-layer halves are checked against the literal path statement.
+
+[ActionWitnessRows.lean](ActionWitnessRows.lean) defines a computable constructor
+using the actual circuit operations, V1 placement, fixed columns, and public-input
+layout. `actionWitnessAssignment_environment` identifies the executed environment
+with the canonical environment reconstructed from its advice, and
+`actionWitnessAssignment_publicInput` preserves the supplied public statement.
+The interpreter's frame properties are proved in
+[AdviceWitnessExecution.lean](AdviceWitnessExecution.lean) and
+[AdviceWitnessAssignment.lean](AdviceWitnessAssignment.lean).
+
+The final assignment's read dependencies, witness equations, and extracted private
+data still need their correctness proofs. The semantic precondition theorem concerns
+the normalized application data; it does not assume that the constructor's extractor
+already returns that data. Generated gate, lookup, and copy validity, and hence an
+application-witness-to-`ActionZkRelation` corollary, remain open.
+
 **Validation and review status**
 
-The [validation record](review/validation-f14dc880.log) contains the successful
-full default-target build (`lake build --wfail`, 4,384 jobs), repository guards,
-and the [62-declaration dependency inventory](review/axioms-f14dc880.log) for the
-latest proof milestone. All 847 modules are covered by default targets and all
+The [validation record](review/validation-27b03619.log) contains the successful
+full default-target build (`lake build --wfail`, 4,393 jobs), repository guards,
+and the [63-declaration dependency inventory](review/axioms-27b03619.log) for the
+latest proof milestone. All 856 modules are covered by default targets and all
 326 endpoint declarations are pinned. The full [parent](TrustBoundary.lean) and
 [Action](Action/TrustBoundary.lean) boundaries also check the earlier milestones.
 The native dependencies remain exactly the inherited named curve-order certificates:
@@ -185,5 +219,6 @@ discharged. The full [checklist](CHECKLIST.md) tracks the remaining extensions.
 An independent review should focus on whether each advertised claim matches its
 experiment, whether auxiliary data and shared state preserve the asserted seed
 independence, whether failed prefixes and stopping branches stay visible, and
-whether the computational claims charge the actual truncation tail and whether
-future efficiency claims add the required execution-cost proofs.
+whether the computational claims charge the actual truncation tail, whether the
+application constructor premises and extraction boundary are accurately stated,
+and whether future efficiency claims add the required execution-cost proofs.
