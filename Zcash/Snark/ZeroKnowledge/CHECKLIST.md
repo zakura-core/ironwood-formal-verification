@@ -6,6 +6,10 @@ Valid witnesses, the specified setup, and independent uniform random-bit tapes
 can remain assumptions of that theorem. The next phase pursues the instantiations
 and additional experiments below, without reopening the completed interactive
 target. They remain extensions of that target rather than prerequisites for it.
+The one-attempt programmable-random-oracle distribution theorem is also complete,
+including its fixed-bit simulator. The remaining work concerns witness construction,
+PRNG security and state, shared-oracle retries, simulator runtime, and independent
+review. The actual Action circuit connection is already proved.
 
 Checked items have the cited proof or validation evidence. Unchecked items are
 future work; adding this checklist does not prove them.
@@ -16,6 +20,8 @@ future work; adding this checklist does not prove them.
 | PRNG instantiation | A computational security reduction under a PRNG assumption, with its distinguishing loss recorded separately. |
 | Unlimited independent retries | An explicit unlimited-run distribution built from the finite-budget comparisons and vanishing exhaustion tails. |
 | Fiat–Shamir ZK | A noninteractive security theorem with oracle access and a stated hash model. |
+| Simulator runtime | A costed implementation and running-time bound beyond the existing bit and query budgets. |
+| Independent review | An external assessment of the final statements, experiments, and transitive assumptions. |
 
 These are not all strictly stronger guarantees. A concrete setup corollary
 specializes a general theorem. A PRNG reduction changes the randomness model and
@@ -49,11 +55,16 @@ model. Compare strength only after fixing those models and assumptions.
   `wideActionZkRelation_simulation_error_bound` in
   [ActionInstantiation.lean](ActionInstantiation.lean). The caller supplies the
   relation once, and the simulator takes only the setup and public inputs.
-- [ ] For an application-level `ActionSpec` corollary, define the conversion from
-  the private Action witness to the original advice rows. Prove that the specified
-  valid witness construction supplies all gate, lookup, and copy premises, recording
-  any construction preconditions. Start from
-  [ActionSpec](../../Circuits/Action/Spec.lean) and the existing circuit integration.
+- [ ] Specify the inputs and preconditions of an application-level witness
+  constructor, starting from [ActionSpec](../../Circuits/Action/Spec.lean).
+  Separate witness-generation correctness from the already proved circuit-level
+  ZK statement; do not assume successful proof emission or verifier acceptance.
+- [ ] Define the conversion from a valid private Action witness to original advice
+  rows, including the actual region placement and public-input layout.
+- [ ] Prove that the constructed rows satisfy every original gate, lookup tuple,
+  and compiler copy equation, recording any additional construction preconditions.
+- [ ] Package that evidence as `ActionZkRelation` and derive application-level
+  interactive and one-attempt oracle simulation corollaries.
 
 Closure: the application theorem takes a valid Action witness and constructs the
 row-validity evidence. Validity remains a hypothesis; the existing circuit-level
@@ -97,10 +108,19 @@ the [Action trust boundary](Action/TrustBoundary.lean).
   `epsilon(m) + eta` comparison for arbitrary probabilistic Boolean view tests.
   This assumes a bound for the actual reduction, not statistical closeness of
   the entire PRNG output tape.
-- [ ] Connect that reduction to a stated computational PRNG security definition,
-  including its seed-independence, auxiliary-input, and resource conditions.
-- [ ] Account for generator state and all replaced tapes in retry extensions,
-  including the truncation tail or total randomness budget.
+- [ ] Define the computational PRNG security game, including the admissible
+  distinguisher class or concrete resource budget. Sample the seed independently
+  of retained auxiliary data and make the generated output length explicit.
+- [ ] Instantiate that game with the existing Action reduction. Prove equality of
+  the actual distinguishing experiments and expose the required resource-class
+  membership; connect that membership to the runtime work below.
+- [ ] Define continuous generator state across attempts and its finite tape
+  allocation policy. Prove that replay uses the same state evolution rather than
+  silently reseeding, and state whether unused attempt words are discarded.
+- [ ] Prove the finite-retry computational comparison for every replaced tape,
+  retaining all observed failures and accounting for the total randomness budget.
+- [ ] If extending a computational claim to unlimited retries, include a checked
+  truncation argument and its exhaustion tail under the stated execution model.
 
 Closure: the uniform-bit theorem stays statistical. A PRNG-backed result is
 conditional on the stated PRNG security and generally gives a computational ZK
@@ -202,15 +222,60 @@ establish verifier acceptance.
   for `m >= 1`. The earlier simulator keeps its sharper bound; these additional
   sampling costs belong only to the new simulator distribution. Fixed bit-input
   length does not assert a machine-instruction running-time bound.
-- [ ] If this theorem includes retries, model the shared oracle state across them
-  and reprove the retry comparison in that experiment. The independent verifier
-  tapes of the interactive retry theorem do not supply this connection.
+- [ ] Define finite retained-history retries with a shared oracle cache, fresh
+  private randomness per attempt, and a fixed statement and witness. Retry only
+  `retryRandomness`; completion, terminal opening errors, and simulator programming
+  failure stop. Keep all preceding observed failures and the final cache.
+- [ ] Prove the shared-cache transition and history laws, including the cache
+  budget through every attempted proof. Preserve adaptive preprocessing and
+  postprocessing in the same oracle experiment.
+- [ ] Derive the two-sided statistical comparison for every finite attempt budget,
+  including prior-query conflicts, internal retry-cache growth, simulator sampling
+  bias, and explicit exhaustion.
+- [ ] For an unlimited shared-oracle extension, define its complete observation
+  space and handle possible nontermination. Establish the needed tail or limiting
+  theorem in that model; the independent-tape termination theorem cannot supply it.
 
 Closure for one attempt: the classical programmable-random-oracle distribution
 theorem, its computable simulators, and their sampling/query budgets are checked,
 including a simulator driven by a fixed uniform bit tape.
 The interactive HVZK theorem and its causality proof are inputs to this separate
 oracle argument. Shared-oracle retries and bit-level runtime analysis extend its scope.
+
+**6. Simulator runtime: connect resource counts to execution cost**
+
+- [x] Provide a computable simulator with a fixed uniform bit-input length and
+  checked oracle-cache bounds in [ActionOracleBits.lean](ActionOracleBits.lean).
+- [ ] Specify the runtime model and input representations, including access to
+  public inputs and setup, bit packing, field reduction, group arithmetic,
+  polynomial operations, transcript encoding, and cache lookup/programming.
+- [ ] Build costed implementations of those operations and prove that erasing
+  their costs gives the operations used by the existing simulator. Account for
+  supplied callbacks instead of assigning arbitrary host computations zero cost.
+- [ ] Compose the costed operations into the actual fixed-bit simulator and prove
+  equality with `actionOracleSimulatorFromBits`, retaining all failure branches.
+- [ ] Prove the resulting running-time bound in the Action count, prior cache
+  size, and explicit input sizes. State primitive-cost assumptions and distinguish
+  a cost-model theorem from compiler or machine-code correspondence.
+- [ ] Use the checked runtime bound to discharge the PRNG reduction's resource
+  conditions wherever that computational instantiation is claimed.
+
+Closure: a bound on the same simulator's execution cost follows from a specified
+cost model and explicit primitive assumptions. Computability and a fixed random
+tape alone do not prove that running-time statement.
+
+**7. Review: prepare the evidence and obtain independent assessment**
+
+- [ ] Prepare a review packet mapping each advertised claim to its exact theorem,
+  real/simulated experiment, validity/setup/randomness assumptions, error formula,
+  failure policy, and runtime scope. Include the checked commit and validation log.
+- [ ] Check that theorem inputs and public observations match the intended claim,
+  including auxiliary data, retained prefixes, oracle state, and exhaustion.
+- [ ] Recheck transitive dependencies and every new declaration pin at the review
+  commit, with no admitted lemma or new unlisted native certificate.
+- [ ] Obtain independent review of the packet and record the reviewed commit,
+  findings, resolutions, and remaining qualifications. A local self-review or
+  passing Lean build does not complete this item.
 
 **Validation and review if an extension is pursued**
 
@@ -224,11 +289,9 @@ oracle argument. Shared-oracle retries and bit-level runtime analysis extend its
   The fixed-bit simulator milestone passes locally with 4,234 jobs, and all 794 modules
   are covered by the default targets. Future theorem commits require their own
   validation; these local results do not assert hosted CI success.
-- [ ] Review the final theorem statement, simulation experiment, and transitive
-  assumptions against the claim. Obtain independent review before describing the
-  extensions as independently audited.
 
-If these extensions are pursued, a useful order is relation/setup corollaries,
-the randomness interface, unlimited interactive retries, and Fiat–Shamir simulation,
-followed by any combined PRNG and retry corollaries. The completed interactive
-theorem remains usable with its current assumptions throughout.
+Next implementation order: finite shared-oracle retries, the computational PRNG
+security interface and finite generator-state replay, witness-construction and
+runtime refinements, then any unlimited shared-oracle or computational retry
+extension. Prepare the review packet as those statements stabilize. Completed
+theorems remain usable with their current assumptions throughout.
