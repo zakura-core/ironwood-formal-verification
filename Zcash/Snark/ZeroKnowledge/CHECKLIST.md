@@ -149,6 +149,13 @@ establish verifier acceptance.
   [ByteFiatShamir.lean](ByteFiatShamir.lean). Point-emission checks remain the
   observer's responsibility; this total encoding does not permit an identity
   point to bypass them.
+- [x] Define a lazy cached oracle with exact tape semantics in
+  [CachedOracle.lean](CachedOracle.lean). Prove that programming preserves all
+  stored answers and that its two-sided error is at most the independent
+  experiment's conflict probability in [OracleProgrammingBias.lean](OracleProgrammingBias.lean),
+  including private-randomness mixtures. [OracleResources.lean](OracleResources.lean)
+  bounds query-trace length and cache growth; these are not running-time bounds
+  for arbitrary supplied computations.
 - [ ] Define real and simulated noninteractive experiments with a classical,
   query-bounded random-oracle adversary. Specify statement selection, auxiliary
   input, proof count, and oracle access before and after observing the proof.
@@ -156,9 +163,9 @@ establish verifier acceptance.
   [the verifier's Fiat–Shamir schedule](../Verifier/FiatShamir.lean), including the
   verifying-key representation, public-instance prefix, domain separators, canonical
   point/scalar encoding, squeeze order, and digest-to-field conversion.
-- [ ] Construct a witness-free simulator with a consistent programmable oracle.
-  Prove the required transcript entropy, preserve answers to repeated queries, and
-  bound prior-query conflicts and other programming failures at every challenge stage.
+- [ ] Apply the cached-oracle programming theorem to the witness-free Action
+  simulator and actual challenge schedule. Prove the required transcript entropy
+  and bound prior-query conflicts and other programming failures at every stage.
 - [ ] Compose with the joint PLONK and IPA simulation and exceptional-event bounds.
   Prove an explicit final error as a function of Action count and oracle-query
   budget, accounting for wide reduction without charging the same hybrid twice.
@@ -177,11 +184,10 @@ they do not by themselves prove Fiat–Shamir ZK.
 
 - [x] Build changed modules and their dependent trust boundaries; run the required
   endpoint and axiom checks. Pin every new logical declaration, including helpers
-  outside the endpoint-name census. The completed relation/setup, randomness-source,
-  unlimited-retry, and raw-digest milestones have these checks; the latest adds
-  59 direct pins and passes the 281-endpoint census.
+  outside the endpoint-name census. All completed milestones have these checks.
+  The cached-oracle milestone adds 31 direct pins and passes the 283-endpoint census.
 - [x] Run the full `lake build --wfail` before declaring an extension complete.
-  The raw-digest milestone passes locally with 4,204 jobs, and all 764 modules
+  The cached-oracle milestone passes locally with 4,208 jobs, and all 768 modules
   are covered by the default targets. Future theorem commits require their own
   validation; these local results do not assert hosted CI success.
 - [ ] Review the final theorem statement, simulation experiment, and transitive

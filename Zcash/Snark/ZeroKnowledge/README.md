@@ -37,6 +37,14 @@ coordinates, and challenge markers injectively, and [the hash boundary](ByteFiat
 includes the specified personalization and wide reduction. These results concern
 independent raw responses. Connecting them to a consistent queried oracle and
 bounding programming conflicts remain part of the Fiat–Shamir extension.
+The [cached oracle](CachedOracle.lean) now has exact independent-tape semantics,
+with one stored answer for each address. [Conflict-checked programming](OracleProgrammingBias.lean)
+preserves those answers and gives a generic two-sided comparison whose error is
+the programming-conflict probability, including for privately randomized oracle
+computations. Applying this comparison to the reference prover and bounding its
+conflict event are still required. The [resource lemmas](OracleResources.lean)
+bound recorded queries and cache growth, without asserting a time bound for an
+arbitrary continuation.
 
 The current [Action compiler reference theorem](ActionCompilerSimulation.lean) gives a
 numerical statistical honest-verifier simulation bound for a complete encoded reference

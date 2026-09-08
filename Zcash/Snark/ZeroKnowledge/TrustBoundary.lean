@@ -76,6 +76,8 @@ import Zcash.Snark.ZeroKnowledge.RetryLimit
 import Zcash.Snark.ZeroKnowledge.RetryExpectation
 import Zcash.Snark.ZeroKnowledge.ByteFiatShamir
 import Zcash.Snark.ZeroKnowledge.PlonkDigest
+import Zcash.Snark.ZeroKnowledge.OracleProgrammingBias
+import Zcash.Snark.ZeroKnowledge.OracleResources
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -1831,3 +1833,36 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonkChallengesFromFields
 assert_axioms Zcash.Snark.ZeroKnowledge.attachPlonkDigests
 assert_axioms Zcash.Snark.ZeroKnowledge.rawDigestChallengeExperiment
 assert_axioms Zcash.Snark.ZeroKnowledge.attachPlonkDigests_wideChallenges
+
+-- Consistent lazy oracle execution and its conflict-only programming comparison.
+assert_computable Zcash.Snark.ZeroKnowledge.OracleCache
+assert_computable Zcash.Snark.ZeroKnowledge.oracleCacheLookup
+assert_axioms Zcash.Snark.ZeroKnowledge.oracleCacheLookup_nil
+assert_axioms Zcash.Snark.ZeroKnowledge.oracleCacheLookup_cons_same
+assert_axioms Zcash.Snark.ZeroKnowledge.oracleCacheLookup_cons_ne
+assert_axioms Zcash.Snark.ZeroKnowledge.oracleCacheLookup_eq_none
+assert_computable Zcash.Snark.ZeroKnowledge.cacheOracleComp
+assert_axioms Zcash.Snark.ZeroKnowledge.cacheOracleComp_queryBound
+assert_axioms Zcash.Snark.ZeroKnowledge.cacheOracleComp_run
+assert_axioms Zcash.Snark.ZeroKnowledge.cachedOracleLaw
+assert_computable Zcash.Snark.ZeroKnowledge.cachedOracleRunTape
+assert_axioms Zcash.Snark.ZeroKnowledge.cachedOracleRunTape_ne_none
+assert_axioms Zcash.Snark.ZeroKnowledge.cachedOracleRunTape_law
+assert_computable Zcash.Snark.ZeroKnowledge.programOracleTrace
+assert_axioms Zcash.Snark.ZeroKnowledge.programOracleTrace_append
+assert_axioms Zcash.Snark.ZeroKnowledge.programOracleTrace_keeps
+assert_axioms Zcash.Snark.ZeroKnowledge.programOracleTrace_ne_none_of_fresh
+assert_computable Zcash.Snark.ZeroKnowledge.programOracleView
+assert_axioms Zcash.Snark.ZeroKnowledge.freshOracleTraceLaw
+assert_axioms Zcash.Snark.ZeroKnowledge.freshOracleTraceLaw_result
+assert_computable Zcash.Snark.ZeroKnowledge.freshOracleRunTape
+assert_axioms Zcash.Snark.ZeroKnowledge.freshOracleRunTape_ne_none
+assert_axioms Zcash.Snark.ZeroKnowledge.freshOracleRunTape_law
+assert_axioms Zcash.Snark.ZeroKnowledge.cachedOracleRunTape_eq_programmed
+assert_axioms Zcash.Snark.ZeroKnowledge.programmedOracleLaw
+assert_axioms Zcash.Snark.ZeroKnowledge.programmedOracleRunTape_law
+assert_axioms Zcash.Snark.ZeroKnowledge.oracleProgramming_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.oracleProgramming_family_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.freshOracleRunTape_length_le
+assert_axioms Zcash.Snark.ZeroKnowledge.programOracleTrace_length
+assert_axioms Zcash.Snark.ZeroKnowledge.cachedOracleRunTape_cache_length_le
