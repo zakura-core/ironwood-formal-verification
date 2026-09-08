@@ -7,11 +7,12 @@ can remain assumptions of that theorem. The next phase pursues the instantiation
 and additional experiments below, without reopening the completed interactive
 target. They remain extensions of that target rather than prerequisites for it.
 The one-attempt programmable-random-oracle distribution theorem is also complete,
-including its fixed-bit simulator. Finite shared-oracle retries and the reduction
-for a continuing private generator are also checked. The remaining work concerns
-witness construction, concrete PRNG and runtime instantiations, unlimited
-shared-oracle or computational histories, and independent review. The actual
-Action circuit connection is already proved.
+including its fixed-bit simulator. Finite shared-oracle retries, the complete
+fixed-request shared-oracle stream, and the finite reduction for a continuing
+private generator are also checked. The remaining work concerns witness
+construction, concrete PRNG and runtime instantiations, unlimited computational
+histories, and independent review. The actual Action circuit connection is
+already proved.
 
 Checked items have the cited proof or validation evidence. Unchecked items are
 future work; adding this checklist does not prove them.
@@ -263,16 +264,29 @@ establish verifier acceptance.
   checks the formula and its binary bound. The comparison charges all available
   attempts and assumes no independence of retry decisions or shared-oracle
   termination theorem.
-- [ ] For an unlimited shared-oracle extension, define its complete observation
-  space and handle possible nontermination. Establish the needed tail or limiting
-  theorem in that model; the independent-tape termination theorem cannot supply it.
+- [x] Define the complete observed stream for unlimited shared-oracle retries in
+  [ActionOracleStream.lean](ActionOracleStream.lean), retaining every result,
+  intermediate cache, and possible infinite run. For a fixed valid request and
+  any prior cache of length at most `q`,
+  [ActionOracleStreamSimulation.lean](ActionOracleStreamSimulation.lean) compares
+  every measurable event in both directions with error
+  `C(m,q) = 2 * epsilon_bits(m, q + 22)`, assuming the uniform simulator retry
+  rate `b(m) = B(m) + (132m + 36) delta` is at most `1/2`.
+  [ActionOracleRetryGeometric.lean](ActionOracleRetryGeometric.lean) supplies this
+  condition for `1 <= m <= 65535`, without asserting a protocol maximum. The
+  finite-prefix bound is uniform in the budget; the cylinder limit adds no loss
+  and makes no real-termination assumption. There are no intervening adversary
+  queries during the run. [ActionOracleStreamTermination.lean](ActionOracleStreamTermination.lean)
+  proves almost-sure simulator termination, real nontermination mass at most
+  `C(m,q)`, and truncation errors `b(m)^n` and `b(m)^n + C(m,q)`, respectively.
 
 Closure for one attempt: the classical programmable-random-oracle distribution
 theorem, its computable simulators, and their sampling/query budgets are checked,
 including a simulator driven by a fixed uniform bit tape.
 The interactive HVZK theorem and its causality proof are inputs to this separate
-oracle argument. The finite shared-oracle extension is now checked separately;
-unlimited shared-oracle histories and runtime analysis extend its scope further.
+oracle argument. The finite adaptive shared-oracle extension and complete
+fixed-request shared-oracle stream are also checked. Unlimited computational
+histories and runtime analysis remain separate extensions.
 
 **6. Simulator runtime: connect resource counts to execution cost**
 
@@ -317,15 +331,15 @@ tape alone do not prove that running-time statement.
 - [x] Build changed modules and their dependent trust boundaries; run the required
   endpoint and axiom checks. Pin every new logical declaration, including helpers
   outside the endpoint-name census. All completed milestones have these checks.
-  The continuing-generator retry milestone adds 46 direct pins and passes the
-  308-endpoint census. Its concrete declarations retain only the two existing
+  The unlimited shared-oracle milestone adds 87 direct pins and passes the
+  319-endpoint census. Its concrete declarations retain only the two existing
   Pasta curve-order native certificates.
 - [x] Run the full `lake build --wfail` before declaring an extension complete.
-  The continuing-generator retry milestone passes locally with 4,258 jobs, and all 818 modules
+  The unlimited shared-oracle milestone passes locally with 4,372 jobs, and all 835 modules
   are covered by the default targets. Future theorem commits require their own
   validation; these local results do not assert hosted CI success.
 
-Next implementation order: witness-construction and runtime refinements, then any
-unlimited shared-oracle or computational retry extension. Update the review packet
+Next implementation work: the computational truncation argument, witness
+construction, and runtime refinements. Update the review packet
 when its proof baseline changes. Completed theorems remain usable with their current
 assumptions throughout.

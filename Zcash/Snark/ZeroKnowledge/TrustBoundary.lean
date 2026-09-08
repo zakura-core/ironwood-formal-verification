@@ -94,6 +94,11 @@ import Zcash.Snark.ZeroKnowledge.OracleRetryResources
 import Zcash.Snark.ZeroKnowledge.PrngSecurityReduction
 import Zcash.Snark.ZeroKnowledge.GeneratedRetryCoins
 import Zcash.Snark.ZeroKnowledge.RetryTapeSource
+import Zcash.Snark.ZeroKnowledge.StatefulRetryStreamLimit
+import Zcash.Snark.ZeroKnowledge.StatefulRetryStreamTail
+import Zcash.Snark.ZeroKnowledge.OracleRetryPotential
+import Zcash.Snark.ZeroKnowledge.PlonkRawObservation
+import Zcash.Snark.ZeroKnowledge.OracleRetryTail
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -2090,3 +2095,87 @@ assert_axioms Zcash.Snark.ZeroKnowledge.independentTapeLaw_toList
 assert_axioms Zcash.Snark.ZeroKnowledge.retryAttemptTape_map
 assert_axioms Zcash.Snark.ZeroKnowledge.uniformRetryTape_source_law
 assert_axioms Zcash.Snark.ZeroKnowledge.uniformRetryTape_source_map_law
+
+-- Complete shared-oracle streams, uniform retry potentials, and retained nontermination.
+
+-- MeasureAgreement
+assert_axioms Zcash.Snark.ZeroKnowledge.measureEventBias_map_of_agree
+
+-- MeasureEventBias
+assert_computable Zcash.Snark.ZeroKnowledge.MeasureEventBiasLE +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.eventBias_toMeasure
+assert_axioms Zcash.Snark.ZeroKnowledge.measureEventBias_map
+assert_axioms Zcash.Snark.ZeroKnowledge.measure_event_le_approximation
+assert_axioms Zcash.Snark.ZeroKnowledge.measureEventBias_of_cylinders
+
+-- MeasureStreamLimit
+assert_axioms Zcash.Snark.ZeroKnowledge.measureEventBias_of_prefixes
+
+-- OracleRetryPotential
+assert_axioms Zcash.Snark.ZeroKnowledge.oracleRetryPotential
+assert_axioms Zcash.Snark.ZeroKnowledge.oracleRetryPotential_eq
+assert_axioms Zcash.Snark.ZeroKnowledge.oracleRetryPotential_mono_queries
+assert_axioms Zcash.Snark.ZeroKnowledge.oracleRetryPotential_step
+assert_axioms Zcash.Snark.ZeroKnowledge.oracleRetryPotential_binary_lt
+
+-- OracleRetryTail
+assert_axioms Zcash.Snark.ZeroKnowledge.programOracleView_retry_imp
+assert_axioms Zcash.Snark.ZeroKnowledge.programOracleView_retry_le
+
+-- PlonkRawObservation
+assert_axioms Zcash.Snark.ZeroKnowledge.rawDigestChallengeExperiment_observed
+
+-- StatefulRetryGeometric
+assert_axioms Zcash.Snark.ZeroKnowledge.eventBias_bind_average_support
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryNext_average_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetries_potential_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetries_exhaustion_le
+
+-- StatefulRetryStream
+assert_computable Zcash.Snark.ZeroKnowledge.retainRetryState
+assert_computable Zcash.Snark.ZeroKnowledge.retainedStateRetrySet
+assert_computable Zcash.Snark.ZeroKnowledge.forgetRetryStates
+assert_axioms Zcash.Snark.ZeroKnowledge.runStatefulRetries_forget_states
+assert_computable Zcash.Snark.ZeroKnowledge.statefulRetryStream
+assert_computable Zcash.Snark.ZeroKnowledge.statefulRetryPrefix
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryPrefix_zero
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryPrefix_succ
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryPrefix_at
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryPrefix_stopped_stream
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryStream_none_of_stopped
+
+-- StatefulRetryStreamLaw
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryRecorded
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryRecorded_fromTape
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryRecorded_potential_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryPrefix_map_law
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryStream_measurable
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryStreamLaw
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryStreamLaw_isProbabilityMeasure
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryStreamLaw_prefix
+
+-- StatefulRetryStreamLimit
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryStreamLaw_simulation_error_bound
+
+-- StatefulRetryStreamTail
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryRecorded_exhaustion_le
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryPrefix_measurable
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryPrefix_event_law
+assert_computable Zcash.Snark.ZeroKnowledge.retryStreamNontermination
+assert_axioms Zcash.Snark.ZeroKnowledge.retryStreamNontermination_measurable
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryStream_nontermination_exhausts
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryStreamLaw_nontermination_le
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryStreamLaw_nontermination_le_of_tail
+assert_computable Zcash.Snark.ZeroKnowledge.truncateRetryStream
+assert_axioms Zcash.Snark.ZeroKnowledge.truncateRetryStream_measurable
+assert_axioms Zcash.Snark.ZeroKnowledge.truncateRetryStream_prefix
+assert_axioms Zcash.Snark.ZeroKnowledge.truncateRetryStream_of_stopped
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryStreamLaw_truncate
+assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryStreamLaw_truncation_error_bound
+
+-- UniformInfiniteTape
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformInfiniteTape
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformInfiniteTape_isProbabilityMeasure
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformInfiniteTape_prefix
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformInfiniteTape_prefix_map
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformInfiniteTape_prefix_list

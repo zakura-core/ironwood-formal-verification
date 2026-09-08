@@ -82,7 +82,8 @@ checked sampling and oracle-resource bounds; machine-instruction and bit-sampler
 running times are not formalized here. The hash model uses the existing Lean
 protocol's total public-prefix coordinate encoding. Relating concrete BLAKE2b
 to the random oracle remains a cryptographic modeling assumption. This theorem
-covers one attempt; its finite shared-oracle retry extension is described below.
+covers one attempt; its finite and unlimited shared-oracle retry extensions are
+described below.
 
 The [fixed-bit simulator](ActionOracleBits.lean) supplies a second implementation
 that also wide-reduces its private fields. It takes `512 * (132m + 58)` independent
@@ -124,9 +125,38 @@ cache without assuming independent retry decisions. [The tape law](OracleRetryTa
 proves equality with the deterministic retained-history runner. Every stored
 answer [survives the run](ActionOracleRetryResources.lean), and the final cache
 has at most `q_pre + 22n + q_post` entries. The simulator's complete tape
-allocation has `n * 512 * (132m + 58)` bits. These bounds cover every finite
-budget, including zero, but are not uniform in `n` and establish no unlimited
-shared-oracle termination law.
+allocation has `n * 512 * (132m + 58)` bits. This bound covers every finite
+budget, including zero, and charges the entire available attempt capacity.
+
+The [unlimited shared-oracle theorem](ActionOracleStreamSimulation.lean) instead
+weights each continuation by the simulator's retry probability. For a fixed valid
+request and any prior cache of at most `q` entries, define
+
+```text
+b(m) = F(m) + epsilon(m) + (132m + 36) delta
+C(m,q) = 2 * epsilon_bits(m, q + 22)
+       < 2 * (m * 2^-238 + (q + 22) / p),  for m >= 1.
+```
+
+The [retry-rate certificate](ActionOracleRetryGeometric.lean) proves `b(m) < 1/2`
+for `1 <= m <= 65535`; that range is sufficient, not a protocol maximum. Whenever
+`b(m) <= 1/2`, the two-sided error is at most `C(m,q)` for every finite budget and
+for **every measurable event of the complete infinite observed stream**. The
+[stream construction](ActionOracleStream.lean) retains every attempted result and
+intermediate public cache, including programming failure and an infinite run if
+one occurs. It pads stopped histories with absent entries. Private randomness is
+fresh for each attempt, the request stays fixed, and there are no intervening
+adversary queries. The limit proof does not treat cached responses as fresh
+independent challenges or assume termination of the real prover.
+
+The [termination and truncation bounds](ActionOracleStreamTermination.lean) show
+that the simulator terminates almost surely. Real nontermination has probability
+at most `C(m,q)`. Truncating after `n` attempts changes the simulated distribution
+by at most `b(m)^n`, and the real distribution by at most `b(m)^n + C(m,q)`.
+This complete-stream theorem is stated for a fixed request and arbitrary retained
+cache; the adaptive before/after experiment above has its own finite-budget
+theorem. These probability bounds do not establish machine running time or an
+unlimited theorem for a seeded private generator.
 
 The [continuing-generator runner](ActionGeneratorRetry.lean) now carries one
 private generator state through those retries. Every started attempt allocates

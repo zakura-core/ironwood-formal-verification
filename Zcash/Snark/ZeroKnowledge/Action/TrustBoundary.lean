@@ -20,6 +20,7 @@ import Zcash.Snark.ZeroKnowledge.ActionFiatShamirRetry
 import Zcash.Snark.ZeroKnowledge.ActionPrngSecurity
 import Zcash.Snark.ZeroKnowledge.ActionGeneratorPrng
 import Zcash.Snark.ZeroKnowledge.ActionPrivateRetryBits
+import Zcash.Snark.ZeroKnowledge.ActionOracleStreamTermination
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -929,3 +930,86 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionPrivateRetryBitCount_eq
 assert_computable Zcash.Snark.ZeroKnowledge.actionPrivateRetryRawEquiv +choice
 assert_computable Zcash.Snark.ZeroKnowledge.actionPrivateRetryBitsEquiv +choice
 assert_axioms Zcash.Snark.ZeroKnowledge.uniformActionPrivateRetryBits
+
+-- Complete shared-oracle streams, uniform retry potentials, and retained nontermination.
+
+-- ActionOracleRetryGeometric
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleRetryRate_le_twice_error
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleRetryRate_lt_half
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleRetries_uniform_error_bound +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleRetries_exhaustion_le +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+
+-- ActionOracleRetryTail
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleRetryRate
+assert_axioms Zcash.Snark.ZeroKnowledge.actionZkDigestSimulator_observed +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleSimulator_retry_le +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleBitSimulator_retry_le +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleBitRetries_exhaustion_le +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+
+-- ActionOracleStream
+assert_computable Zcash.Snark.ZeroKnowledge.ActionRetryOracleState
+assert_computable Zcash.Snark.ZeroKnowledge.ActionRetryStreamEntry
+assert_axioms Zcash.Snark.ZeroKnowledge.actionRetryStreamEntry_measurableSpace
+assert_axioms Zcash.Snark.ZeroKnowledge.actionRetryStreamEntry_discreteMeasurableSpace
+assert_computable Zcash.Snark.ZeroKnowledge.ActionRetryRawTape
+assert_computable Zcash.Snark.ZeroKnowledge.actionRawOracleStep +choice +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.actionBitOracleStep +choice +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionRawOracleStep_law +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionBitOracleStep_law +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleRetryStream +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleBitRetryStream +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleRetryStream_isProbabilityMeasure +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleBitRetryStream_isProbabilityMeasure +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+
+-- ActionOracleStreamSimulation
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleRetryRecorded_error_bound +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleRetryStream_simulation_error_bound +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.wideUnlimitedActionOracle_simulation_capstone +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+
+-- ActionOracleStreamTermination
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleBitRetryStream_nontermination_eq_zero +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleRetryStream_nontermination_le +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleBitRetryStream_truncation_error_bound +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleRetryStream_truncation_error_bound +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
