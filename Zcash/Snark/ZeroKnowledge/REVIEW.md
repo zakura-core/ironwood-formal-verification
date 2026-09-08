@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `15fe03fbd72e478601660067065fea711ce17552` on `establish-zk` in
+Proof baseline: `084ea039bbd7113b177b455274014497c2663133` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -14,7 +14,8 @@ Identifying that source does not assert whole-program Rust equivalence.
 
 All theorem names in this packet are in `Zcash.Snark.ZeroKnowledge`.
 `PMFEventBiasLE` bounds every event-probability difference in one direction;
-the simulation results provide both directions. The PRNG results instead bound
+`MeasureEventBiasLE` does so for measurable events of complete stream laws.
+The simulation results provide both directions. The PRNG results instead bound
 the Boolean output of an admitted test under an explicit security assumption.
 
 | Claim | Theorem and source | Compared laws |
@@ -24,6 +25,7 @@ the Boolean output of an admitted test under an explicit security assumption.
 | One-attempt programmable-oracle simulation, error `epsilon(m)+q_pre/p` | `actionFiatShamir_simulation_error_bound` in [ActionFiatShamir.lean](ActionFiatShamir.lean) | `actionOracleRealExperiment` and `actionOracleSimulatedExperiment` |
 | One-attempt fixed-bit simulator, error `epsilon_bits(m,q_pre)` | `actionFiatShamirBits_simulation_error_bound` in [ActionFiatShamirBits.lean](ActionFiatShamirBits.lean) | `actionOracleRealExperiment` and `actionOracleBitSimulatedExperiment` |
 | Every finite shared-oracle retry budget, error `R(m,q_pre,n)` | `actionFiatShamirRetry_simulation_error_bound` in [ActionFiatShamirRetry.lean](ActionFiatShamirRetry.lean) | `actionOracleRetryRealExperiment` and `actionOracleRetrySimulatedExperiment` |
+| Complete shared-oracle retry stream for a fixed request, error `C(m,q)` | `wideUnlimitedActionOracle_simulation_capstone` in [ActionOracleStreamSimulation.lean](ActionOracleStreamSimulation.lean) | `actionOracleRetryStream` and `actionOracleBitRetryStream` |
 | One seeded interactive attempt, test error `epsilon(m)+eta` | `uniformSeedActionZk_test_error_bound` in [ActionPrngSecurity.lean](ActionPrngSecurity.lean) | Auxiliary-data mixtures of tested `actionZkProverFromSource` and `actionZkSimulator` |
 | Finite retries from one continuing generator, test error `R(m,q_pre,n)+eta` | `generatedActionFiatShamirRetry_test_error_bound` in [ActionGeneratorPrng.lean](ActionGeneratorPrng.lean) | Tested `actionGeneratedOracleRetryExperiment` and `actionOracleRetrySimulatedExperiment` |
 
@@ -64,9 +66,20 @@ its own additional sampling term and [exact bit-tape law](ActionOracleBits.lean)
   intervening adversary queries during the internal retry run.
 - Unlimited interactive retries use fresh independent private and verifier tapes.
   Normalization and vanishing exhaustion tails require `B(m) < 1`; `m <= 65535`
-  is a checked sufficient condition, not a protocol maximum. Shared-oracle
-  retries have a finite theorem only. Its bound grows with the budget and supplies
-  neither an unlimited history law nor almost-sure shared-oracle termination.
+  is a checked sufficient condition, not a protocol maximum.
+- Complete shared-oracle streams fix one valid request and retain every result
+  and intermediate public cache, including a possible infinite run. The prior
+  cache is arbitrary; there are no intervening adversary queries. Fresh private
+  and oracle reply tapes realize the existing cached execution. The uniform
+  bound `C(m,q)` uses only the simulator's state-uniform retry rate `b(m) <= 1/2`;
+  `1 <= m <= 65535` supplies it. The cylinder limit covers every measurable event
+  without discarding nontermination. The simulator terminates almost surely;
+  real nontermination has mass at most `C(m,q)`. Truncation after `n` attempts
+  costs at most `b(m)^n` for the simulator and `b(m)^n + C(m,q)` for the real law.
+  See [the complete laws](ActionOracleStream.lean) and
+  [termination theorems](ActionOracleStreamTermination.lean). This fixed-request
+  theorem does not itself instantiate adaptive before/after processing or a
+  continuing private generator on the infinite stream.
 - The [PRNG game](PrngSecurity.lean) samples a uniform bit seed independently of
   preprocessing and retained auxiliary data. Security is relative to an explicit
   admissible test class. Membership of the entire prover/retry/postprocessing
@@ -100,12 +113,18 @@ epsilon_bits(m,q) = epsilon(m) + (132m + 36) delta + q/p
 
 R(m,q,n) = n * epsilon_bits(m,q) + 11n(n-1)/p
          <= n*m*2^-238 + (n*q + 11n(n-1))/p, m >= 1
+
+b(m) = B(m) + (132m + 36) delta
+C(m,q) = 2 * epsilon_bits(m,q + 22)
+       < 2 * (m*2^-238 + (q + 22)/p), m >= 1
 ```
 
 `F` bounds failure to finish the emission schedule and hence the retry probability.
 Finishing that schedule does not assert verifier acceptance. The binary certificates
 are in [PlonkBinaryBounds.lean](PlonkBinaryBounds.lean),
-[OracleBitBounds.lean](OracleBitBounds.lean), and [OracleRetryBounds.lean](OracleRetryBounds.lean).
+[OracleBitBounds.lean](OracleBitBounds.lean), [OracleRetryBounds.lean](OracleRetryBounds.lean),
+and [OracleRetryPotential.lean](OracleRetryPotential.lean). The shared-oracle
+retry-rate certificate is in [ActionOracleRetryGeometric.lean](ActionOracleRetryGeometric.lean).
 
 | Resource | Checked amount |
 | --- | --- |
@@ -124,11 +143,11 @@ resulting PRNG test-class membership proof remain open.
 
 **Validation and review status**
 
-The [validation record](review/validation-15fe03fb.log) contains the successful
-full default-target build (`lake build --wfail`, 4,258 jobs), repository guards,
-and the [46-declaration dependency inventory](review/axioms-15fe03fb.log) for the
-latest proof milestone. All 818 modules are covered by default targets and all
-308 endpoint declarations are pinned. The full [parent](TrustBoundary.lean) and
+The [validation record](review/validation-084ea039.log) contains the successful
+full default-target build (`lake build --wfail`, 4,372 jobs), repository guards,
+and the [87-declaration dependency inventory](review/axioms-084ea039.log) for the
+latest proof milestone. All 835 modules are covered by default targets and all
+319 endpoint declarations are pinned. The full [parent](TrustBoundary.lean) and
 [Action](Action/TrustBoundary.lean) boundaries also check the earlier milestones.
 The native dependencies remain exactly the inherited named curve-order certificates:
 
@@ -150,4 +169,4 @@ discharged. The full [checklist](CHECKLIST.md) tracks the remaining extensions.
 An independent review should focus on whether each advertised claim matches its
 experiment, whether auxiliary data and shared state preserve the asserted seed
 independence, whether failed prefixes and stopping branches stay visible, and
-whether future efficiency or unlimited-run claims add the required proofs.
+whether future efficiency or unlimited computational claims add the required proofs.

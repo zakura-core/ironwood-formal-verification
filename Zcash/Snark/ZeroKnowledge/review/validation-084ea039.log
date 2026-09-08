@@ -1,0 +1,39 @@
+Proof baseline: 084ea039bbd7113b177b455274014497c2663133
+Toolchain: leanprover/lean4:v4.30.0
+Local full-default-target validation; not a hosted CI result.
+The full build was incremental, over the Lean tree committed at this baseline.
+Documentation-only review packet changes are separate from the proof baseline.
+
+$ lake build --wfail
+✔ [4368/4372] Built Zcash.Snark.ZeroKnowledge.TrustBoundary (67s)
+✔ [4369/4372] Built Zcash.Snark.ZeroKnowledge.Action.TrustBoundary (68s)
+✔ [4371/4372] Built Zcash.CensusCheck (50s)
+Build completed successfully (4372 jobs).
+
+$ scripts/check_endpoint_census.sh
+endpoint census: 319 endpoint declaration(s), all pinned.
+exit status: 0
+
+$ scripts/check_build_coverage.sh
+build surface: 6 target(s), lakefile.toml and .github/workflows/lean.yml agree.
+build coverage: 835 module(s), all covered by the default targets.
+exit status: 0
+
+$ scripts/check_no_umbrella_imports.sh
+exit status: 0
+
+$ scripts/check_csimp_census.sh
+csimp census: 1 csimp declaration(s), all covered.
+exit status: 0
+
+$ scripts/check_costed_group_work_census.sh
+costed group-work census: 2 production modules, 20 host-callback definitions pinned.
+exit status: 0
+
+$ git diff --check
+exit status: 0
+
+Relative documentation links: 384 checked, all resolve.
+
+Declaration inventory: 87 new public logical declarations, each directly pinned.
+Detailed output: axioms-084ea039.log
