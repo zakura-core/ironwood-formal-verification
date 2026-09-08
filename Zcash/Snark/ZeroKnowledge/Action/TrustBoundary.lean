@@ -17,6 +17,7 @@ import Zcash.Snark.ZeroKnowledge.ActionDigest
 import Zcash.Snark.ZeroKnowledge.ActionFiatShamir
 import Zcash.Snark.ZeroKnowledge.ActionFiatShamirBits
 import Zcash.Snark.ZeroKnowledge.ActionFiatShamirRetry
+import Zcash.Snark.ZeroKnowledge.ActionPrngSecurity
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -849,3 +850,11 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleBitRetries_keeps +native(
   CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
   CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleBitRetries_tape_bits
+
+-- Uniform-seed PRNG game and exact test-dependent reduction.
+assert_axioms Zcash.Snark.ZeroKnowledge.actionPrngSecurity_game_law +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformSeedActionZk_test_error_bound +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)

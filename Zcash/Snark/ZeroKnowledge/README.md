@@ -24,8 +24,14 @@ Replacing that entire source by a distribution within `eta` adds `eta` to the
 statistical simulation bound. The [seeded-tape reduction](ActionPrng.lean) instead
 assumes a distinguishing bound only for its actual Boolean-output reduction,
 and proves the same additive comparison for a probabilistic view test. It makes
-the generator and seed law explicit and covers one attempt. A computational
-PRNG-security instantiation still needs its resource and auxiliary-input conditions.
+the generator and seed law explicit and covers one attempt. The
+[PRNG security game](PrngSecurity.lean) now specifies a uniform bit seed,
+independent retained auxiliary data, the complete output type, and an admissible
+class of randomized Boolean tests. The [Action game reduction](ActionPrngSecurity.lean)
+proves exact agreement with the actual distinguishing experiment and a bound of
+`epsilon(m) + eta` under that security assumption. The complete prover-and-test
+reduction must belong to the supplied class. A concrete generator security proof
+and a runtime proof establishing that membership remain separate obligations.
 
 The [typed Action comparison](ActionTyped.lean) exposes the same reference law before
 the attempt observer. [Raw digest recovery](ActionDigest.lean) now proves the same

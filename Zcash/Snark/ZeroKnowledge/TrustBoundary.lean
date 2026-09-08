@@ -91,6 +91,7 @@ import Zcash.Snark.ZeroKnowledge.OracleRetryBounds
 import Zcash.Snark.ZeroKnowledge.OracleRetryTape
 import Zcash.Snark.ZeroKnowledge.OracleRetrySimulation
 import Zcash.Snark.ZeroKnowledge.OracleRetryResources
+import Zcash.Snark.ZeroKnowledge.PrngSecurityReduction
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -2052,3 +2053,15 @@ assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetries_state_size_le
 assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryError
 assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetryNext_error_bound
 assert_axioms Zcash.Snark.ZeroKnowledge.statefulRetries_simulation_error_bound
+
+-- Uniform-seed PRNG game and exact test-dependent reduction.
+assert_axioms Zcash.Snark.ZeroKnowledge.boolean_false_le
+assert_axioms Zcash.Snark.ZeroKnowledge.boolean_event_bias
+assert_axioms Zcash.Snark.ZeroKnowledge.boolean_event_bias_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformSeedTapeSource
+assert_axioms Zcash.Snark.ZeroKnowledge.auxiliaryPrngGame
+assert_axioms Zcash.Snark.ZeroKnowledge.auxiliaryPrngGame_seed_law
+assert_computable Zcash.Snark.ZeroKnowledge.UniformSeedPrngSecure +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformSeedPrngSecure_event_bias
+assert_axioms Zcash.Snark.ZeroKnowledge.auxiliaryPrngGame_reduction_law
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformSeedPrng_simulation_error_bound

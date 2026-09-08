@@ -108,12 +108,17 @@ the [Action trust boundary](Action/TrustBoundary.lean).
   `epsilon(m) + eta` comparison for arbitrary probabilistic Boolean view tests.
   This assumes a bound for the actual reduction, not statistical closeness of
   the entire PRNG output tape.
-- [ ] Define the computational PRNG security game, including the admissible
-  distinguisher class or concrete resource budget. Sample the seed independently
-  of retained auxiliary data and make the generated output length explicit.
-- [ ] Instantiate that game with the existing Action reduction. Prove equality of
-  the actual distinguishing experiments and expose the required resource-class
-  membership; connect that membership to the runtime work below.
+- [x] Define the concrete PRNG game in [PrngSecurity.lean](PrngSecurity.lean), with
+  an explicit uniform bit-seed length, complete output type, and supplied
+  admissible distinguisher class. Sample retained auxiliary data independently of
+  the seed. Bound the test's acceptance advantage in both directions, rather than
+  the statistical distance of the generated tape.
+- [x] Instantiate that game with the existing Action reduction in
+  [ActionPrngSecurity.lean](ActionPrngSecurity.lean). Prove exact equality of the
+  actual distinguishing experiments and the `epsilon(m) + eta` bound. Membership
+  of the complete prover-and-test reduction in the admissible class is an explicit
+  premise. Discharging it from runtime bounds remains in section 6; no concrete
+  generator security or efficiency theorem is asserted here.
 - [ ] Define continuous generator state across attempts and its finite tape
   allocation policy. Prove that replay uses the same state evolution rather than
   silently reseeding, and state whether unused attempt words are discarded.
@@ -294,16 +299,16 @@ tape alone do not prove that running-time statement.
 - [x] Build changed modules and their dependent trust boundaries; run the required
   endpoint and axiom checks. Pin every new logical declaration, including helpers
   outside the endpoint-name census. All completed milestones have these checks.
-  The finite shared-oracle retry milestone adds 71 direct pins and passes the
-  304-endpoint census. Its concrete declarations retain only the two existing
+  The PRNG security-game milestone adds 12 direct pins and passes the
+  306-endpoint census. Its concrete declarations retain only the two existing
   Pasta curve-order native certificates.
 - [x] Run the full `lake build --wfail` before declaring an extension complete.
-  The finite shared-oracle retry milestone passes locally with 4,246 jobs, and all 806 modules
+  The PRNG security-game milestone passes locally with 4,250 jobs, and all 810 modules
   are covered by the default targets. Future theorem commits require their own
   validation; these local results do not assert hosted CI success.
 
-Next implementation order: the computational PRNG security interface and finite
-generator-state replay, witness-construction and
+Next implementation order: finite generator-state replay and its computational
+comparison, witness-construction and
 runtime refinements, then any unlimited shared-oracle or computational retry
 extension. Prepare the review packet as those statements stabilize. Completed
 theorems remain usable with their current assumptions throughout.
