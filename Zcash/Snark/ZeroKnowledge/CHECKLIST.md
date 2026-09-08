@@ -350,6 +350,16 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
 
 - [x] Provide a computable simulator with a fixed uniform bit-input length and
   checked oracle-cache bounds in [ActionOracleBits.lean](ActionOracleBits.lean).
+- [x] Specify and implement structural costs for byte equality and the cache
+  phase on materialized query logs. [ByteEqualityCost.lean](ByteEqualityCost.lean),
+  [OracleCacheCost.lean](OracleCacheCost.lean), and
+  [OracleProgrammingCost.lean](OracleProgrammingCost.lean) prove exact cost erasure
+  and retain work on every collision branch. The actual transcript's
+  [byte-size bound](TranscriptByteSize.lean) and
+  [PLONK schedule bound](PlonkTranscriptSize.lean) give the
+  [Action cache-phase bound](ActionCacheCost.lean):
+  `22 * ((q + 22) * (9490m + 14207) + 4) + 2` for `m` Actions and `q` initial
+  cache entries. Constructing the view remains outside this component's cost.
 - [ ] Specify the runtime model and input representations, including access to
   public inputs and setup, bit packing, field reduction, group arithmetic,
   polynomial operations, transcript encoding, and cache lookup/programming.
@@ -393,9 +403,12 @@ tape alone do not prove that running-time statement.
   The repeated-write and Action copy-source milestone inventories 91 declarations
   and passes the 326-endpoint census. Its source-specific declarations use the
   existing Pallas curve-order certificate; it introduces no native certificate.
+  The byte-cache cost milestone inventories 31 declarations across seven modules,
+  each with one direct pin. Its Action corollaries retain the existing Pallas and
+  Vesta curve-order owners; the milestone introduces no native certificate.
 - [x] Run the full `lake build --wfail` before declaring an extension complete.
-  The repeated-write and Action copy-source milestone passes locally with 4,421
-  jobs; all 884 modules are covered by the default targets. Future theorem
+  The byte-cache cost milestone passes locally with 4,428
+  jobs; all 891 modules are covered by the default targets. Future theorem
   commits require their own validation; these local results do not assert hosted
   CI success.
 

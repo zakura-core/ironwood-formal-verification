@@ -1,3 +1,4 @@
+import Zcash.Snark.ZeroKnowledge.ProtocolCacheCost
 import Zcash.Snark.ZeroKnowledge.SelectorTraceFold
 import Zcash.Snark.ZeroKnowledge.SelectorInitialTrace
 import Zcash.Snark.ZeroKnowledge.SelectorTracePlacement
@@ -2432,3 +2433,45 @@ assert_computable Zcash.Snark.ZeroKnowledge.witnessCopyCell
 assert_axioms Zcash.Snark.ZeroKnowledge.witnessCopyCell_eval
 assert_computable Zcash.Snark.ZeroKnowledge.witnessCopyAddress
 assert_axioms Zcash.Snark.ZeroKnowledge.witnessCopyAddress_semantics
+
+-- Structural byte-cache costs and actual protocol size bounds.
+
+-- ByteEqualityCost
+assert_computable Zcash.Snark.ZeroKnowledge.byteListEqCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.byteListEqCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.byteListEqCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.transcriptAddressEqCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.transcriptAddressEqCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.transcriptAddressEqCosted_cost_le
+
+-- OracleCacheCost
+assert_computable Zcash.Snark.ZeroKnowledge.oracleCacheLookupCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.oracleCacheLookupCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.oracleCacheLookupCosted_cost_le
+
+-- OracleProgrammingCost
+assert_computable Zcash.Snark.ZeroKnowledge.programOracleTraceCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.programOracleTraceCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.programOracleTraceCosted_cost_le_capacity
+assert_axioms Zcash.Snark.ZeroKnowledge.programOracleTraceCosted_cost_le
+assert_axioms Zcash.Snark.ZeroKnowledge.programOracleTraceCosted_cost_le_budget
+assert_computable Zcash.Snark.ZeroKnowledge.programOracleViewCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.programOracleViewCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.programOracleViewCosted_cost_le
+
+-- TranscriptByteSize
+assert_axioms Zcash.Snark.ZeroKnowledge.transcriptElementBytes_length_le
+assert_axioms Zcash.Snark.ZeroKnowledge.transcriptBytes_length_le
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolQueryPrefix_length_le
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolQueryAddress_bytes_le
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolOracleView_query_bytes_le
+
+-- PlonkTranscriptSize
+assert_axioms Zcash.Snark.ZeroKnowledge.length_flatten_ofFn_le
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPreIpaTranscript_length_le
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAttemptTrace_length_le
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkQueryAddress_bytes_le
+
+-- ProtocolCacheCost
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolOracleView_programming_cost_le
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkRawOracleView_programming_cost_le

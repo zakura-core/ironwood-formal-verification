@@ -1,3 +1,4 @@
+import Zcash.Snark.ZeroKnowledge.ActionCacheCost
 import Zcash.Snark.ZeroKnowledge.ActionNativeRouting
 import Zcash.Snark.ZeroKnowledge.ActionSelectorReplacement
 import Zcash.Snark.ZeroKnowledge.ActionTracePlacement
@@ -1221,3 +1222,10 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_nativeCopiesSound +native(
   CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.actionAdviceAliasPrograms_sources +native(
   CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- Structural byte-cache costs and actual protocol size bounds.
+
+-- ActionCacheCost
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleInitial_length +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionQueryAddress_bytes_le +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleView_programming_cost_le +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)

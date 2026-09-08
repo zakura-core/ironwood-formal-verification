@@ -129,6 +129,19 @@ distributional comparison; it is not either program's tape length. The simulator
 uses a fixed number of input bits and at most the same `q_pre + 22 + q_post`
 cache entries. A machine-instruction running-time bound is still separate.
 
+The [costed byte comparator](ByteEqualityCost.lean),
+[cache lookup](OracleCacheCost.lean), and
+[conflict-checked programmer](OracleProgrammingCost.lean) now retain structural
+execution counters with exact erasure to the existing results. Failed programming
+keeps the cost of the preceding work. For materialized query logs, the
+[Action cache-phase theorem](ActionCacheCost.lean) derives
+`22 * ((q + 22) * (9490m + 14207) + 4) + 2` units from the original 22-query
+schedule and its [linear transcript-size bound](PlonkTranscriptSize.lean).
+Here `q` is the initial cache length and `m` is the Action count. The units count
+byte comparisons, structural case tests, and cache-cell construction. Producing
+the view, including public commitments, simulator arithmetic, codecs, and the
+observer, still needs separate costed implementations and a composition proof.
+
 The [finite retry theorem](ActionFiatShamirRetry.lean) now compares complete
 histories while the attempts share one evolving oracle cache. Each attempt uses
 fresh private randomness; the public statement and witness stay fixed. The
