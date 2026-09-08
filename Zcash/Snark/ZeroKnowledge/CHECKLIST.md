@@ -8,11 +8,10 @@ and additional experiments below, without reopening the completed interactive
 target. They remain extensions of that target rather than prerequisites for it.
 The one-attempt programmable-random-oracle distribution theorem is also complete,
 including its fixed-bit simulator. Finite shared-oracle retries, the complete
-fixed-request shared-oracle stream, and the finite reduction for a continuing
-private generator are also checked. The remaining work concerns witness
-construction, concrete PRNG and runtime instantiations, unlimited computational
-histories, and independent review. The actual Action circuit connection is
-already proved.
+fixed-request shared-oracle stream, and the finite and unlimited reductions for
+a continuing private generator are also checked. The remaining work concerns
+witness construction, concrete PRNG and runtime instantiations, and independent
+review. The actual Action circuit connection is already proved.
 
 Checked items have the cited proof or validation evidence. Unchecked items are
 future work; adding this checklist does not prove them.
@@ -140,8 +139,21 @@ the [Action trust boundary](Action/TrustBoundary.lean).
   [ActionPrivateRetryBits.lean](ActionPrivateRetryBits.lean). No independence of
   generated attempt blocks is assumed. Concrete PRNG security and reduction-class
   membership remain premises; this is a finite-budget computational reduction.
-- [ ] If extending a computational claim to unlimited retries, include a checked
-  truncation argument and its exhaustion tail under the stated execution model.
+- [x] Define the complete seeded Action stream and prove its exact finite
+  continuing-generator projections in [ActionGeneratorStream.lean](ActionGeneratorStream.lean).
+  The private generator is initialized once; the independent public reply stream
+  drives the existing cached execution, with the fixed request and all public
+  cache updates retained. [ActionGeneratorStreamPrng.lean](ActionGeneratorStreamPrng.lean)
+  proves two-sided tested error `2 * (C(m,q) + b(m)^n + eta)` for an unlimited
+  run, using the whole-prefix PRNG assumption at cutoff `n`. Both the clipped-view
+  reduction and the finite exhaustion detector must belong to the stated
+  admissible class. [ActionOracleRecordedPrng.lean](ActionOracleRecordedPrng.lean)
+  bounds the actual generated exhaustion tail by `b(m)^n + C(m,q) + eta`;
+  [ActionGeneratorStreamTermination.lean](ActionGeneratorStreamTermination.lean)
+  proves the same nontermination bound without testing the infinite event in the
+  PRNG game. No independence of generated blocks or almost-sure seeded termination
+  is assumed. This fixed-request result does not instantiate adaptive before/after
+  processing on the infinite stream or discharge the concrete PRNG/runtime premises.
 
 Closure: the uniform-bit theorem stays statistical. A PRNG-backed result is
 conditional on the stated PRNG security and generally gives a computational ZK
@@ -285,8 +297,8 @@ theorem, its computable simulators, and their sampling/query budgets are checked
 including a simulator driven by a fixed uniform bit tape.
 The interactive HVZK theorem and its causality proof are inputs to this separate
 oracle argument. The finite adaptive shared-oracle extension and complete
-fixed-request shared-oracle stream are also checked. Unlimited computational
-histories and runtime analysis remain separate extensions.
+fixed-request shared-oracle stream are also checked, together with the conditional
+unlimited seeded reduction in item 3. Runtime analysis remains separate.
 
 **6. Simulator runtime: connect resource counts to execution cost**
 
@@ -331,15 +343,14 @@ tape alone do not prove that running-time statement.
 - [x] Build changed modules and their dependent trust boundaries; run the required
   endpoint and axiom checks. Pin every new logical declaration, including helpers
   outside the endpoint-name census. All completed milestones have these checks.
-  The unlimited shared-oracle milestone adds 87 direct pins and passes the
-  319-endpoint census. Its concrete declarations retain only the two existing
+  The unlimited seeded-generator milestone adds 62 direct pins and passes the
+  326-endpoint census. Its concrete declarations retain only the two existing
   Pasta curve-order native certificates.
 - [x] Run the full `lake build --wfail` before declaring an extension complete.
-  The unlimited shared-oracle milestone passes locally with 4,372 jobs, and all 835 modules
+  The unlimited seeded-generator milestone passes locally with 4,384 jobs, and all 847 modules
   are covered by the default targets. Future theorem commits require their own
   validation; these local results do not assert hosted CI success.
 
-Next implementation work: the computational truncation argument, witness
-construction, and runtime refinements. Update the review packet
+Next implementation work: witness construction and runtime refinements. Update the review packet
 when its proof baseline changes. Completed theorems remain usable with their current
 assumptions throughout.

@@ -155,8 +155,8 @@ at most `C(m,q)`. Truncating after `n` attempts changes the simulated distributi
 by at most `b(m)^n`, and the real distribution by at most `b(m)^n + C(m,q)`.
 This complete-stream theorem is stated for a fixed request and arbitrary retained
 cache; the adaptive before/after experiment above has its own finite-budget
-theorem. These probability bounds do not establish machine running time or an
-unlimited theorem for a seeded private generator.
+theorem. These probability bounds do not establish machine running time. The
+seeded-generator extension below adds its explicit PRNG assumptions.
 
 The [continuing-generator runner](ActionGeneratorRetry.lean) now carries one
 private generator state through those retries. Every started attempt allocates
@@ -176,6 +176,31 @@ blocks. It proves equality of the actual execution and security-game observation
 including retained failures, exhaustion, and the final oracle cache. Concrete
 generator security, reduction-class membership, and a running-time proof remain
 explicit obligations. This allocation policy makes no Rust cursor-parity claim.
+
+The [complete seeded stream](ActionGeneratorStream.lean) now initializes that
+generator once and runs with an independent infinite public reply tape. Every
+finite projection equals the actual continuing-generator execution, including
+intermediate public caches; private generator states stay hidden. For a fixed
+valid request, prior cache of length `q`, and cutoff `n`, the
+[unlimited PRNG reduction](ActionGeneratorStreamPrng.lean) bounds both directions
+of every admitted tested comparison by
+
+```text
+error_seeded_infinite(m,q,n) = 2 * (C(m,q) + b(m)^n + eta).
+```
+
+Here `eta` bounds distinguishing the whole generated private prefix from uniform,
+with the same capacity `512 * n * (148m + 46)` bits. Two explicit finite reductions
+must be admitted: the test of the clipped verifier view and the actual exhaustion
+bit. The [exhaustion reduction](ActionOracleRecordedPrng.lean) gives a generated
+tail at most `b(m)^n + C(m,q) + eta`, which pays for truncating the actual unlimited
+execution. The comparison charges `eta` twice, once per reduction. For
+`1 <= m <= 65535`, `b(m)^n <= (1/2)^n`; the general theorem takes `b(m) <= 1/2`.
+[Nontermination has the same tail bound](ActionGeneratorStreamTermination.lean)
+and remains part of the observed experiment. Neither independent PRNG blocks nor
+almost-sure seeded termination is assumed. The theorem fixes the request and
+initial cache; concrete PRNG security, resource-class membership, and runtime
+remain explicit premises or separate work.
 
 The current [Action compiler reference theorem](ActionCompilerSimulation.lean) gives a
 numerical statistical honest-verifier simulation bound for a complete encoded reference
