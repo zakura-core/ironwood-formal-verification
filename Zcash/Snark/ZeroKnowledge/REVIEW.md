@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `bc821da4f9520be36d62b5ec3dad3274d0b0e92a` on `establish-zk` in
+Proof baseline: `e44e33aca8a3a551231afa44917ae8009224f4a5` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -188,25 +188,36 @@ The interpreter's frame properties are proved in
 [AdviceWitnessEquations.lean](AdviceWitnessEquations.lean) now identifies the
 collected advice equations with the original source witness clauses. The canonical
 compiler discharges every remaining fixed-write and table clause in
-[CompiledFixedWitnesses.lean](CompiledFixedWitnesses.lean). The resulting execution
-theorem requires causal reads and distinct write targets. The
-[structured-program dependency theorem](WitnessProgramSupport.lean) verifies the
-collectors through local steps, branches, dynamic indexing, and vector outputs.
+[CompiledFixedWitnesses.lean](CompiledFixedWitnesses.lean). The
+[trace refinement](AdviceWitnessTrace.lean) proves every original witness equation
+when reads are causal and each write preserves established values. Its
+[checked alias plan](AdviceAliasPlan.lean) accepts a repeated target only for a
+certified copy whose source has the same established value. This route does not
+require distinct targets. The [structured-program dependency theorem](WitnessProgramSupport.lean)
+and [builder support](WitnessBuilderSupport.lean) cover local steps, branches,
+dynamic indexing, vectors, and the original value, scalar, Nat, and Boolean builders.
 
-The actual Action still needs native callback read certificates and a proof that
-its repeated writes preserve established values; the distinct-target premise
-does not apply to the complete Action program. Its final witness equations and
-extracted private data therefore still need their correctness proofs. The semantic precondition theorem concerns
+[ActionNativeRouting.lean](ActionNativeRouting.lean) connects every collected copy
+annotation to the original complete Action source. The proof checks the actual
+shared base columns, both incomplete multiplication halves, and the region schedule
+that places their multiplier at region 297. All native annotations have exact
+copy semantics for every environment; the structured IR recognizer supplies the
+remaining copy sources. This certificate neither proves nor assumes successful
+execution of the global alias and read plans.
+
+The actual Action still needs those global checks and native callback read
+certificates. Its final witness equations and extracted private data therefore
+still need their correctness proofs. The semantic precondition theorem concerns
 the normalized application data; it does not assume that the constructor's extractor
 already returns that data. Generated gate, lookup, and copy validity, and hence an
 application-witness-to-`ActionZkRelation` corollary, remain open.
 
 **Validation and review status**
 
-The [validation record](review/validation-bc821da4.log) contains the successful
-full default-target build (`lake build --wfail`, 4,398 jobs), repository guards,
-and the [45-declaration dependency inventory](review/axioms-bc821da4.log) for the
-latest proof milestone. All 861 modules are covered by default targets and all
+The [validation record](review/validation-e44e33ac.log) contains the successful
+full default-target build (`lake build --wfail`, 4,421 jobs), repository guards,
+and the [91-declaration dependency inventory](review/axioms-e44e33ac.log) for the
+latest proof milestone. All 884 modules are covered by default targets and all
 326 endpoint declarations are pinned. The full [parent](TrustBoundary.lean) and
 [Action](Action/TrustBoundary.lean) boundaries also check the earlier milestones.
 The native dependencies remain exactly the inherited named curve-order certificates:
