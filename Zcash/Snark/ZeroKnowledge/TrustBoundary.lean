@@ -69,6 +69,9 @@ import Zcash.Snark.ZeroKnowledge.KeygenPartialMasking
 import Zcash.Snark.ZeroKnowledge.PlannerStarts
 import Zcash.Snark.ZeroKnowledge.SelectorCompressionCount
 import Zcash.Snark.ZeroKnowledge.SelectorBitPacking
+import Zcash.Snark.ZeroKnowledge.RandomTapeSource
+import Zcash.Snark.ZeroKnowledge.DistributionKernel
+import Zcash.Snark.ZeroKnowledge.PrngReduction
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -310,6 +313,24 @@ assert_axioms Zcash.Snark.ZeroKnowledge.sampleFieldsWith_const
 assert_axioms Zcash.Snark.ZeroKnowledge.sampleFieldsWith_coordinate
 assert_axioms Zcash.Snark.ZeroKnowledge.sampleFieldsWith_uniform
 assert_axioms Zcash.Snark.ZeroKnowledge.sampleFieldsWith_error_bound
+
+assert_axioms Zcash.Snark.ZeroKnowledge.independentTapeLaw
+assert_axioms Zcash.Snark.ZeroKnowledge.independentTapeLaw_map
+assert_axioms Zcash.Snark.ZeroKnowledge.independentTapeLaw_uniform
+assert_axioms Zcash.Snark.ZeroKnowledge.sampleFieldsWith_eq_independentTape
+assert_axioms Zcash.Snark.ZeroKnowledge.RawPrivateTape
+assert_computable Zcash.Snark.ZeroKnowledge.reducePrivateTape +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformRawPrivateTape_reduce
+assert_axioms Zcash.Snark.ZeroKnowledge.sourceTapeExperiment
+assert_axioms Zcash.Snark.ZeroKnowledge.sourceTapeExperiment_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.sourceTapeExperiment_simulation_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.eventBias_weighted_tsum
+assert_axioms Zcash.Snark.ZeroKnowledge.eventBias_bind_kernel
+assert_axioms Zcash.Snark.ZeroKnowledge.eventBias_bind_average_tsum
+assert_axioms Zcash.Snark.ZeroKnowledge.seededTapeSource
+assert_axioms Zcash.Snark.ZeroKnowledge.tapeReduction
+assert_axioms Zcash.Snark.ZeroKnowledge.tapeReduction_law
+assert_axioms Zcash.Snark.ZeroKnowledge.seededTape_test_simulation_error_bound
 assert_axioms Zcash.Snark.ZeroKnowledge.sampledAttempt_error_bound
 assert_axioms Zcash.Snark.ZeroKnowledge.eventBias_map
 assert_axioms Zcash.Snark.ZeroKnowledge.eventBias_le_one

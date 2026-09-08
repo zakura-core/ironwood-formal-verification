@@ -18,6 +18,14 @@ lookup, and copy validity into one relation and specializes the full encoded
 comparison to a named captured URS. The simulator uses only public inputs and
 setup parameters. The captured-setup corollary supplies the eleven-round and
 nonidentity proofs internally; it does not assert an application witness constructor.
+The [raw-source refinement](ActionRandomnessSource.lean) proves exact agreement
+between uniform 512-bit private tapes and the existing wide-reduced reference law.
+Replacing that entire source by a distribution within `eta` adds `eta` to the
+statistical simulation bound. The [seeded-tape reduction](ActionPrng.lean) instead
+assumes a distinguishing bound only for its actual Boolean-output reduction,
+and proves the same additive comparison for a probabilistic view test. It makes
+the generator and seed law explicit and covers one attempt. A computational
+PRNG-security instantiation still needs its resource and auxiliary-input conditions.
 
 The current [Action compiler reference theorem](ActionCompilerSimulation.lean) gives a
 numerical statistical honest-verifier simulation bound for a complete encoded reference

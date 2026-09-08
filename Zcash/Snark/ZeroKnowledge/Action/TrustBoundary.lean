@@ -11,6 +11,7 @@ import Zcash.Snark.ZeroKnowledge.ActionOrderedSort
 import Zcash.Snark.ZeroKnowledge.ActionOrderedStarts
 import Zcash.Snark.ZeroKnowledge.ActionCompressionCertificate
 import Zcash.Snark.ZeroKnowledge.ActionInstantiation
+import Zcash.Snark.ZeroKnowledge.ActionPrng
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -145,6 +146,25 @@ assert_computable Zcash.Snark.ZeroKnowledge.capturedActionURS +choice
 assert_axioms Zcash.Snark.ZeroKnowledge.capturedActionURS_rounds
 assert_axioms Zcash.Snark.ZeroKnowledge.capturedActionURS_blinding_ne_zero
 assert_axioms Zcash.Snark.ZeroKnowledge.wideCapturedActionZk_simulation_error_bound +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+
+assert_computable Zcash.Snark.ZeroKnowledge.actionZkRunFromRawTape +choice +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionZkProverFromSource +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionZkProverFromSource_uniform +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.sourceActionZk_simulation_error_bound +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionPrngReduction +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.seededActionZk_test_error_bound +native(
   CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
   CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
 

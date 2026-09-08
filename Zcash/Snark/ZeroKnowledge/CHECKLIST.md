@@ -83,16 +83,24 @@ the [Action trust boundary](Action/TrustBoundary.lean).
   `p`, its bias, the exact private draw count, and the reference tape adapter's law.
   See [Randomness.lean](Randomness.lean), [PlonkTape.lean](PlonkTape.lean), and
   [PlonkEncoding.lean](PlonkEncoding.lean).
-- [ ] Add a randomness-source interface for the complete private tape, including
-  its independence from the statement, witness, and interactive verifier tape.
-  Derive a corollary from a source-law equality or a stated whole-tape distance
-  bound. Marginal per-sample bounds alone do not establish independence.
-- [ ] For a PRNG-backed corollary, specify the generator, seed distribution, draw
-  budget, and state handling. Prove a hybrid reduction from distinguishing the
-  resulting verifier views to distinguishing its output from the ideal tape.
-- [ ] State the PRNG security assumption and add its distinguishing loss explicitly
-  to the protocol error. Account for every replaced tape and, for retries, the
-  truncation tail or total randomness budget.
+- [x] Add a complete raw-tape source, sampled independently of the verifier coins
+  for each fixed statement and witness. Prove exact agreement with the reference
+  under uniform raw bits and an `epsilon(m) + eta` bound under joint source error
+  `eta` in [ActionRandomnessSource.lean](ActionRandomnessSource.lean). Marginal
+  per-sample bounds alone do not establish this whole-tape premise.
+- [x] Parameterize one attempt by a generator, seed law, and raw tape of exactly
+  `148m + 46` 512-bit draws. Prove the test-dependent reduction in
+  [PrngReduction.lean](PrngReduction.lean) and its concrete
+  [Action corollary](ActionPrng.lean). One seed supplies one complete tape;
+  repeated generator state is outside this one-attempt statement.
+- [x] Expose the required PRNG-test advantage bound and prove the final
+  `epsilon(m) + eta` comparison for arbitrary probabilistic Boolean view tests.
+  This assumes a bound for the actual reduction, not statistical closeness of
+  the entire PRNG output tape.
+- [ ] Connect that reduction to a stated computational PRNG security definition,
+  including its seed-independence, auxiliary-input, and resource conditions.
+- [ ] Account for generator state and all replaced tapes in retry extensions,
+  including the truncation tail or total randomness budget.
 
 Closure: the uniform-bit theorem stays statistical. A PRNG-backed result is
 conditional on the stated PRNG security and generally gives a computational ZK
