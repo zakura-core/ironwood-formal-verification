@@ -3,9 +3,9 @@
 The interactive statistical HVZK theorem is complete for the circuit relation and
 random-tape experiment in [ActionCompilerSimulation.lean](ActionCompilerSimulation.lean).
 Valid witnesses, the specified setup, and independent uniform random-bit tapes
-can remain assumptions of that theorem. The work below is optional: it tracks
-convenient instantiations and additional experiments, without reopening the
-completed interactive target.
+can remain assumptions of that theorem. The next phase pursues the instantiations
+and additional experiments below, without reopening the completed interactive
+target. They remain extensions of that target rather than prerequisites for it.
 
 Checked items have the cited proof or validation evidence. Unchecked items are
 future work; adding this checklist does not prove them.
@@ -45,8 +45,10 @@ model. Compare strength only after fixing those models and assumptions.
   lookup tuples, and compiler copy equations. The gate and lookup predicate is
   [PlonkOriginalRowsValid](PlonkOriginalRows.lean); the main theorem supplies the
   concrete copy list. This is the validity condition of the proved circuit relation.
-- [ ] Package these conditions into one named Action ZK relation and derive a
-  corollary whose caller supplies that relation once.
+- [x] Package these conditions into `ActionZkRelation` and derive
+  `wideActionZkRelation_simulation_error_bound` in
+  [ActionInstantiation.lean](ActionInstantiation.lean). The caller supplies the
+  relation once, and the simulator takes only the setup and public inputs.
 - [ ] For an application-level `ActionSpec` corollary, define the conversion from
   the private Action witness to the original advice rows. Prove that the specified
   valid witness construction supplies all gate, lookup, and copy premises, recording
@@ -64,11 +66,12 @@ ZK theorem already handles all witnesses in its relation.
 - [x] Prove nonidentity of all four captured blinding points in
   [CapturedBlinding.lean](CapturedBlinding.lean). The captured URS definitions
   [set `k` to eleven](../Fixtures/SingleAction/Honest/Fixture.lean).
-- [ ] Add a main-theorem corollary for a named, pinned URS, supplying both setup
-  proofs from its definition and nonidentity certificate.
-- [ ] Record whether that corollary names a captured parameter set or a specified
-  parameter-generation procedure. If the latter is claimed, prove the procedure
-  supplies the required setup properties.
+- [x] Add `wideCapturedActionZk_simulation_error_bound` for `capturedActionURS`,
+  supplying both setup proofs from its definition and nonidentity certificate in
+  [ActionInstantiation.lean](ActionInstantiation.lean).
+- [x] Record the scope of that setup: it names the one-Action honest fixture's
+  captured URS, used for any Action count. It claims a captured parameter set;
+  no parameter-generation procedure is asserted.
 
 Closure: the specialized theorem requires no caller-supplied setup proofs. The
 existing inherited Pallas and Vesta curve-order certificates remain recorded in

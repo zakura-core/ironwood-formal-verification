@@ -13,6 +13,11 @@ proving the protocol described by the pinned note and Lean definitions.
 
 The [ZK checklist](CHECKLIST.md) records the completed interactive theorem and
 optional assumption instantiations, Fiat–Shamir proofs, and unlimited-retry targets.
+The [Action instantiation](ActionInstantiation.lean) now packages original gate,
+lookup, and copy validity into one relation and specializes the full encoded
+comparison to a named captured URS. The simulator uses only public inputs and
+setup parameters. The captured-setup corollary supplies the eleven-round and
+nonidentity proofs internally; it does not assert an application witness constructor.
 
 The current [Action compiler reference theorem](ActionCompilerSimulation.lean) gives a
 numerical statistical honest-verifier simulation bound for a complete encoded reference
