@@ -20,6 +20,16 @@ lookup, and copy validity into one relation and specializes the full encoded
 comparison to a named captured URS. The simulator uses only public inputs and
 setup parameters. The captured-setup corollary supplies the eleven-round and
 nonidentity proofs internally; it does not assert an application witness constructor.
+The [application witness constructor](ActionWitnessRows.lean) now supplies a
+separate, computable conversion to original advice rows using the actual fixed
+programs and region placement. Its [input contract](ActionWitnessConditions.lean)
+starts from `ActionSpec`, records hash definedness and canonical encodings, and
+requires each scalar's Nat representative to fit the existing one-field hint.
+[Hint decoding](ActionWitnessHints.lean), [scalar windows](ActionWitnessHintWindows.lean),
+and [canonical Merkle folds](CanonicalMerklePath.lean) are checked. The interpreter
+preserves public inputs and reconstructs the same canonical compiler environment.
+Proving that the generated rows satisfy every gate, lookup, and copy equation is
+still open; the current constructor does not establish `ActionZkRelation`.
 The [raw-source refinement](ActionRandomnessSource.lean) proves exact agreement
 between uniform 512-bit private tapes and the existing wide-reduced reference law.
 Replacing that entire source by a distribution within `eta` adds `eta` to the

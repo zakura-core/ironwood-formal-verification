@@ -57,14 +57,26 @@ model. Compare strength only after fixing those models and assumptions.
   `wideActionZkRelation_simulation_error_bound` in
   [ActionInstantiation.lean](ActionInstantiation.lean). The caller supplies the
   relation once, and the simulator takes only the setup and public inputs.
-- [ ] Specify the inputs and preconditions of an application-level witness
-  constructor, starting from [ActionSpec](../../Circuits/Action/Spec.lean).
-  Separate witness-generation correctness from the already proved circuit-level
-  ZK statement; do not assume successful proof emission or verifier acceptance.
-- [ ] Define the conversion from a valid private Action witness to original advice
-  rows, including the actual region placement and public-input layout.
+- [x] Specify the application-level constructor inputs in
+  [ActionWitnessConditions.lean](ActionWitnessConditions.lean), starting from
+  [ActionSpec](../../Circuits/Action/Spec.lean). The contract records defined
+  Sinsemilla hashes, canonical Merkle children, and scalar representatives that
+  fit the current one-field Nat-hint decoder. It derives the existing circuit's
+  honest-prover preconditions without assuming successful emission, acceptance,
+  or satisfying rows. These constructor conditions do not change the existing
+  circuit-level ZK theorem.
+- [x] Define the conversion to original advice rows in
+  [ActionWitnessRows.lean](ActionWitnessRows.lean). It executes the actual fixed
+  witness programs at the circuit-owned V1 placement, starting with compiled
+  fixed cells, the declared public inputs, and the concrete application hint
+  store. The checked interpreter preserves the exact public statement and
+  reconstructs the same compiler environment. The hint and window proofs recover
+  all five semantic scalars exactly; this does not yet prove row validity.
 - [ ] Prove that the constructed rows satisfy every original gate, lookup tuple,
-  and compiler copy equation, recording any additional construction preconditions.
+  and compiler copy equation. This requires checking the actual programs' read
+  dependencies and writes, deriving `ExtendsWitnesses` for the final assignment,
+  and connecting the extracted witness to the normalized application data before
+  applying circuit completeness. Record any additional construction preconditions.
 - [ ] Package that evidence as `ActionZkRelation` and derive application-level
   interactive and one-attempt oracle simulation corollaries.
 
@@ -347,7 +359,7 @@ tape alone do not prove that running-time statement.
   326-endpoint census. Its concrete declarations retain only the two existing
   Pasta curve-order native certificates.
 - [x] Run the full `lake build --wfail` before declaring an extension complete.
-  The unlimited seeded-generator milestone passes locally with 4,384 jobs, and all 847 modules
+  The application constructor milestone passes locally with 4,393 jobs, and all 856 modules
   are covered by the default targets. Future theorem commits require their own
   validation; these local results do not assert hosted CI success.
 

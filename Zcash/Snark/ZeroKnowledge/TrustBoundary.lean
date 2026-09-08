@@ -104,6 +104,8 @@ import Zcash.Snark.ZeroKnowledge.GeneratedRetryStreamTail
 import Zcash.Snark.ZeroKnowledge.MeasureBiasComposition
 import Zcash.Snark.ZeroKnowledge.RetryStreamNontermination
 import Zcash.Meta.AxiomCheck
+import Zcash.Snark.ZeroKnowledge.WindowDigits
+import Zcash.Snark.ZeroKnowledge.AdviceWitnessAssignment
 
 /-!
 # Checked trust boundary of the zero-knowledge development
@@ -2239,3 +2241,33 @@ assert_axioms Zcash.Snark.ZeroKnowledge.generatedRetryRecordLaw_source
 
 -- RetryStreamNontermination
 assert_axioms Zcash.Snark.ZeroKnowledge.truncateRetryStream_nontermination_measure_zero
+
+-- Application witness normalization, actual hint decoding, and placed advice execution.
+
+-- WindowDigits
+assert_axioms Zcash.Snark.ZeroKnowledge.octalDigit_eq_shift_mask
+assert_axioms Zcash.Snark.ZeroKnowledge.octalDigits_sum_mod
+
+-- AdviceWitnessExecution
+assert_axioms Zcash.Snark.ZeroKnowledge.PlacedAdviceProgram
+assert_computable Zcash.Snark.ZeroKnowledge.regionAdvicePrograms
+assert_computable Zcash.Snark.ZeroKnowledge.circuitAdvicePrograms
+assert_computable Zcash.Snark.ZeroKnowledge.writeAdviceValue
+assert_computable Zcash.Snark.ZeroKnowledge.runAdvicePrograms +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.writeAdviceValue_get_target
+assert_axioms Zcash.Snark.ZeroKnowledge.writeAdviceValue_get_frame
+assert_axioms Zcash.Snark.ZeroKnowledge.runAdvicePrograms_get_frame
+assert_axioms Zcash.Snark.ZeroKnowledge.runAdvicePrograms_get_nonadvice
+assert_axioms Zcash.Snark.ZeroKnowledge.runAdvicePrograms_hint
+assert_axioms Zcash.Snark.ZeroKnowledge.runAdvicePrograms_usableRows
+
+-- AdviceWitnessAssignment
+assert_axioms Zcash.Snark.ZeroKnowledge.proverEnvironment_ext
+assert_computable Zcash.Snark.ZeroKnowledge.initialPublicWitnessAssignment +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.initialPublicWitnessAssignment_inst
+assert_axioms Zcash.Snark.ZeroKnowledge.initialPublicWitnessAssignment_publicInput
+assert_computable Zcash.Snark.ZeroKnowledge.topLevelAdviceEnvironment +choice
+assert_computable Zcash.Snark.ZeroKnowledge.topLevelAdviceAssignment +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevelAdviceAssignment_environment
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevelAdviceAssignment_publicInput
+assert_axioms Zcash.Snark.ZeroKnowledge.generatedAdviceAssignment_publicInput

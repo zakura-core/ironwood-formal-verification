@@ -23,6 +23,7 @@ import Zcash.Snark.ZeroKnowledge.ActionPrivateRetryBits
 import Zcash.Snark.ZeroKnowledge.ActionOracleStreamTermination
 import Zcash.Snark.ZeroKnowledge.ActionGeneratorStreamTermination
 import Zcash.Meta.AxiomCheck
+import Zcash.Snark.ZeroKnowledge.ActionWitnessRows
 
 /-!
 # The actual Action circuit boundary of the zero-knowledge development
@@ -1088,3 +1089,58 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleRecordFromSource_generated +
 assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleRecordFromSource_exhaustion_le +native(
   CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
   CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+
+-- Application witness normalization, actual hint decoding, and placed advice execution.
+
+-- ActionWitnessNormalization
+assert_computable Zcash.Snark.ZeroKnowledge.canonicalActionScalarWindows +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.canonicalActionScalarWindows_val
+assert_axioms Zcash.Snark.ZeroKnowledge.canonicalActionScalarWindows_lt
+assert_axioms Zcash.Snark.ZeroKnowledge.canonicalActionScalarWindows_reconstruct
+assert_computable Zcash.Snark.ZeroKnowledge.canonicalActionMerklePath +choice
+assert_computable Zcash.Snark.ZeroKnowledge.normalizeActionWitness +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.normalizeActionWitness_spec_iff +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- CanonicalMerklePath
+assert_computable Zcash.Snark.ZeroKnowledge.canonicalMerkleReadings +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.canonicalMerkleReadings_chunks
+assert_axioms Zcash.Snark.ZeroKnowledge.exactCanonicalMerklePath_pathNode
+assert_axioms Zcash.Snark.ZeroKnowledge.pathNode_append
+
+-- ActionWitnessConditions
+assert_axioms Zcash.Snark.ZeroKnowledge.ActionScalarHintBounds
+assert_computable Zcash.Snark.ZeroKnowledge.actionWitnessLeftEncoding
+assert_computable Zcash.Snark.ZeroKnowledge.actionWitnessRightEncoding
+assert_computable Zcash.Snark.ZeroKnowledge.actionWitnessSide
+assert_axioms Zcash.Snark.ZeroKnowledge.ActionWitnessConstructionConditions +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.canonicalActionMerklePath_eq_readings
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessConditions_merkleRoot +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessConditions_merkleHalves +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessConditions_proverAssumptions +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- ActionWitnessHints
+assert_computable Zcash.Snark.ZeroKnowledge.actionWitnessHintData +choice
+assert_computable Zcash.Snark.ZeroKnowledge.actionWitnessHints +choice
+assert_computable Zcash.Snark.ZeroKnowledge.actionWitnessHintEnvironment +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessHints_sibling_read
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessHints_swap_read
+assert_axioms Zcash.Snark.ZeroKnowledge.actionPointHint_eval
+assert_axioms Zcash.Snark.ZeroKnowledge.actionMerkleSibling_eval
+assert_axioms Zcash.Snark.ZeroKnowledge.actionMerkleSwap_eval
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessHints_decode
+
+-- ActionWitnessHintWindows
+assert_computable Zcash.Snark.ZeroKnowledge.actionScalarWindowValues +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.actionScalarWindowValues_digit
+assert_axioms Zcash.Snark.ZeroKnowledge.actionScalarWindowValues_canonical
+assert_axioms Zcash.Snark.ZeroKnowledge.actionScalarWindowValues_reconstruct
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessHintWindows_canonical
+
+-- ActionWitnessRows
+assert_computable Zcash.Snark.ZeroKnowledge.actionWitnessAssignment +choice +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.actionWitnessRows +choice +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.actionWitnessRowBundle +choice +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_environment +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_publicInput +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_hintData +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_hintWindows +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
