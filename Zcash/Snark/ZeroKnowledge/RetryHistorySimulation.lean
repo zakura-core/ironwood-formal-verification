@@ -1,4 +1,5 @@
 import Zcash.Snark.ZeroKnowledge.RetryHistory
+import Zcash.Snark.ZeroKnowledge.DistributionKernel
 
 /-!
 # Simulation of retained retry histories
@@ -14,24 +15,21 @@ namespace Zcash.Snark.ZeroKnowledge
 open Zcash.Common
 open scoped ENNReal
 
-/-- A common probabilistic continuation cannot increase bias in its finite input law. -/
-theorem eventBias_bind_source {A B : Type*} [Fintype A]
+/-- A common probabilistic continuation cannot increase bias in its discrete input law. -/
+theorem eventBias_bind_source {A B : Type*}
     {actual ideal : PMF A} {ε : ℝ≥0∞} (h : PMFEventBiasLE actual ideal ε)
-    (nextFor : A → PMF B) : PMFEventBiasLE (actual.bind nextFor) (ideal.bind nextFor) ε := by
-  intro event
-  simpa only [PMF.toOuterMeasure_bind_apply, tsum_fintype] using
-    h.weightedBiasLE (fun a => (nextFor a).toOuterMeasure event)
-      (fun a => (nextFor a).toOuterMeasure_apply_le_one event)
+    (nextFor : A → PMF B) : PMFEventBiasLE (actual.bind nextFor) (ideal.bind nextFor) ε :=
+  eventBias_bind_kernel h nextFor
 
 /-- Changing one attempt's law costs its bias under the same observable retry policy. -/
-theorem retainedRetryStep_source_bias {A : Type*} [Fintype A]
+theorem retainedRetryStep_source_bias {A : Type*}
     {actual ideal : PMF A} {ε : ℝ≥0∞} (h : PMFEventBiasLE actual ideal ε)
     (retry : Set A) [DecidablePred (fun a => a ∈ retry)] (next : PMF (RetryHistory A)) :
     PMFEventBiasLE (retainedRetryStep actual retry next) (retainedRetryStep ideal retry next) ε :=
   eventBias_bind_source h _
 
 /-- Retaining the first attempt does not remove the retry-probability factor on continuation error. -/
-theorem retainedRetryStep_continuation_error_bound {A : Type*} [Fintype A]
+theorem retainedRetryStep_continuation_error_bound {A : Type*}
     (law : PMF A) (retry : Set A) [DecidablePred (fun a => a ∈ retry)]
     {left right : PMF (RetryHistory A)} {ε : ℝ≥0∞}
     (forward : PMFEventBiasLE left right ε) (reverse : PMFEventBiasLE right left ε) :
@@ -39,10 +37,10 @@ theorem retainedRetryStep_continuation_error_bound {A : Type*} [Fintype A]
         (law.toOuterMeasure retry * ε) ∧
       PMFEventBiasLE (retainedRetryStep law retry right) (retainedRetryStep law retry left)
         (law.toOuterMeasure retry * ε) := by
-  have hmass : (∑ a, law a * (if a ∈ retry then ε else 0)) = law.toOuterMeasure retry * ε := by
-    rw [law.toOuterMeasure_apply_fintype, Finset.sum_mul]
-    apply Finset.sum_congr rfl
-    intro a _
+  have hmass : (∑' a, law a * (if a ∈ retry then ε else 0)) = law.toOuterMeasure retry * ε := by
+    rw [law.toOuterMeasure_apply, ← ENNReal.tsum_mul_right]
+    apply tsum_congr
+    intro a
     by_cases ha : a ∈ retry <;> simp [ha, Set.indicator]
   have liftBias {p q : PMF (RetryHistory A)} (h : PMFEventBiasLE p q ε) (a : A) :
       PMFEventBiasLE
@@ -54,8 +52,8 @@ theorem retainedRetryStep_continuation_error_bound {A : Type*} [Fintype A]
     · simp only [if_neg ha]
       intro event
       simp
-  exact ⟨hmass ▸ PMFEventBiasLE.bind_average (liftBias forward),
-    hmass ▸ PMFEventBiasLE.bind_average (liftBias reverse)⟩
+  exact ⟨hmass ▸ eventBias_bind_average_tsum law (liftBias forward),
+    hmass ▸ eventBias_bind_average_tsum law (liftBias reverse)⟩
 
 /-- The error for a bounded sequence, charging later comparisons only after an earlier retry. -/
 noncomputable def retainedRetryError (ε rate : ℝ≥0∞) : ℕ → ℝ≥0∞
@@ -87,7 +85,7 @@ theorem retainedRetryError_le (ε rate : ℝ≥0∞) (hrate : rate < 1) (n : ℕ
     exact (add_le_add le_rfl (mul_le_mul_right ih rate)).trans_eq hfixed
 
 /-- Every bounded history, including failed prefixes and terminal errors, has the geometric comparison. -/
-theorem retainedRetries_simulation_error_bound {A : Type*} [Fintype A]
+theorem retainedRetries_simulation_error_bound {A : Type*}
     {actual ideal : PMF A} {ε failure : ℝ≥0∞}
     (forward : PMFEventBiasLE actual ideal ε) (reverse : PMFEventBiasLE ideal actual ε)
     (retry : Set A) [DecidablePred (fun a => a ∈ retry)]
@@ -115,7 +113,7 @@ theorem retainedRetries_simulation_error_bound {A : Type*} [Fintype A]
       simpa only [retainedRetries, retainedRetryError, add_comm] using h
 
 /-- One bound covers every finite retry budget while retaining the complete history. -/
-theorem retainedRetries_uniform_error_bound {A : Type*} [Fintype A]
+theorem retainedRetries_uniform_error_bound {A : Type*}
     {actual ideal : PMF A} {ε failure : ℝ≥0∞}
     (forward : PMFEventBiasLE actual ideal ε) (reverse : PMFEventBiasLE ideal actual ε)
     (retry : Set A) [DecidablePred (fun a => a ∈ retry)]

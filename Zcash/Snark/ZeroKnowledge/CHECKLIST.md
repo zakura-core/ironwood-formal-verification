@@ -112,18 +112,25 @@ independence. A particular Rust implementation is a separate correspondence targ
 - [x] Define the observable retry policy and its finite-tape execution in
   [RetryHistory.lean](RetryHistory.lean). Prove a uniform two-sided comparison and
   vanishing exhaustion tails in [RetryHistorySimulation.lean](RetryHistorySimulation.lean).
-- [ ] Construct a normalized distribution of complete stopped histories for an
+- [x] Construct a normalized distribution of complete stopped histories for an
   unlimited stream of independent attempt tapes, keeping the statement and witness
   fixed. Retain every failed prefix, received challenge, verifier tape, and status.
   Retry only a request for fresh randomness; completion and terminal errors stop.
-- [ ] Prove agreement with the finite-budget experiments in the limit and almost-sure
-  termination when `B(m) = F(m) + epsilon(m) < 1`. State the expected-attempt bounds
-  and the supported Action-count condition explicitly.
-- [ ] Lift the finite uniform comparison to every event of the unlimited history
-  distribution, with two-sided error at most `epsilon(m) / (1 - F(m))`.
-- [ ] Instantiate that result with the current Action compiler theorem, canonical
-  codecs, and numerical failure bounds. Use the closed Action masking profile;
-  older generic retry helpers still expose stronger intermediate premises.
+  [RetryTape.lean](RetryTape.lean) gives the normalized stopped-tape weights;
+  [RetryFlow.lean](RetryFlow.lean) proves the independent one-step policy.
+- [x] Prove exact finite-budget projections in [RetryProjection.lean](RetryProjection.lean)
+  and almost-sure termination when `B(m) = F(m) + epsilon(m) < 1`. The geometric
+  length tails tend to zero. [RetryExpectation.lean](RetryExpectation.lean) proves
+  expected attempts `1 / (1 - r)` for actual retry probability `r`.
+- [x] Lift the finite uniform comparison to every event of the unlimited history
+  distribution, with two-sided error at most `epsilon(m) / (1 - F(m))`, in
+  [RetryLimit.lean](RetryLimit.lean).
+- [x] Instantiate that result with the current Action compiler theorem, canonical
+  codecs, and numerical failure bounds in [ActionRetryLimit.lean](ActionRetryLimit.lean).
+  Expected attempts are at most `1 / (1 - F(m))` for the prover and
+  `1 / (1 - B(m))` for the simulator. The capstone supplies `B(m) < 1` from the
+  checked condition `m <= 65535`, without asserting a protocol maximum. It uses
+  the closed Action masking profile and relation.
 
 Closure: a checked theorem compares the complete unlimited-run histories under the
 independent-attempt policy, including terminal errors. Termination alone does not
@@ -157,11 +164,15 @@ they do not by themselves prove Fiat–Shamir ZK.
 
 **Validation and review if an extension is pursued**
 
-- [ ] Build changed modules and their dependent trust boundaries; run the required
+- [x] Build changed modules and their dependent trust boundaries; run the required
   endpoint and axiom checks. Pin every new logical declaration, including helpers
-  outside the endpoint-name census.
-- [ ] Run the full `lake build --wfail` before declaring an extension complete.
-  Record its commit and result; keep local and hosted validation distinct.
+  outside the endpoint-name census. The completed relation/setup, randomness-source,
+  and unlimited-retry milestones have these checks; the latest adds 45 direct pins
+  and passes the 277-endpoint census.
+- [x] Run the full `lake build --wfail` before declaring an extension complete.
+  The unlimited-retry milestone passes locally with 4,195 jobs, and all 755 modules
+  are covered by the default targets. Future theorem commits require their own
+  validation; these local results do not assert hosted CI success.
 - [ ] Review the final theorem statement, simulation experiment, and transitive
   assumptions against the claim. Obtain independent review before describing the
   extensions as independently audited.

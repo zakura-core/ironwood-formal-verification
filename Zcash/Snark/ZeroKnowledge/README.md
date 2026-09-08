@@ -99,8 +99,9 @@ The [full-attempt failure bound](PlonkFailures.lean) is now numerical too. These
 compare unconditioned attempts. The [successful-view capstone](PlonkCompilerSuccess.lean)
 now proves positive normalizers and carries their cost into the conditional comparison.
 The [retained-retry capstone](PlonkCompilerRetry.lean) compares the complete observed
-history for every finite independent attempt budget, with a uniform error bound and
-vanishing exhaustion probabilities. An unlimited-run history law is not yet constructed.
+history for every finite independent attempt budget. The
+[unlimited Action theorem](ActionRetryLimit.lean) now constructs a normalized stopped-history
+law, proves its exact finite projections, and preserves the same uniform error bound.
 The [Vesta specialization](VestaSimulation.lean) now fixes the encodings and derives the
 blinding bijection from nonidentity; all four captured blinding points have kernel-checked
 nonidentity proofs. Its curve-order dependency is recorded in a separate census.
@@ -815,11 +816,34 @@ them. Encoded histories still have arbitrary finite length.
 
 The exhaustion probability is exactly the retry probability raised to `n`, hence at
 most **`F(m)^n`** for the real law and **`B(m)^n`** for the simulator. Both tend to zero
-when `B(m) < 1`, with the same checked certificate for `m ≤ 65535`. These results do not
-yet construct a distribution for an unlimited retry loop. They also do not cover a
-caller which reuses transcript or prover state across attempts. The complete reference
-prover's stage-by-stage causality is proved above; concrete circuit/key and verifier
-correspondence remain separate obligations.
+when `B(m) < 1`, with the same checked certificate for `m ≤ 65535`.
+
+[RetryTape.lean](RetryTape.lean) constructs a normalized law of complete stopped histories
+by summing the independent probabilities of every finite retry prefix followed by a
+terminal attempt. [RetryFlow.lean](RetryFlow.lean) proves that this law follows the
+one-step retry policy, and [RetryProjection.lean](RetryProjection.lean) proves that
+each finite truncation is exactly the established independent-tape execution.
+[RetrySupport.lean](RetrySupport.lean) proves that every supported history is nonempty,
+obeys the retry decisions, and ends in a terminal outcome. No failed prefix is discarded
+or conditioned away.
+
+[RetryLimit.lean](RetryLimit.lean) bounds the difference between a complete history and
+its truncation by the geometric exhaustion tail. Taking both tails to zero extends the
+two-sided **`epsilon(m) / (1 - F(m))`** bound to every event of the complete unlimited
+history. The comparison now applies directly to arbitrary discrete encoded observations;
+it needs no finite-type instance for the history space.
+[RetryExpectation.lean](RetryExpectation.lean) proves that a retry probability `r < 1`
+gives exact expected attempts **`1 / (1 - r)`**.
+
+[ActionRetryLimit.lean](ActionRetryLimit.lean) instantiates these results with the closed
+Action compiler theorem and canonical codecs. Its real and simulated expected attempts
+are at most **`1 / (1 - F(m))`** and **`1 / (1 - B(m))`**, respectively. Its capstone supplies
+the numerical condition for `m ≤ 65535`; this certified arithmetic range is not a protocol
+maximum. The simulator uses only public data and an erased proof of positive stopping
+probability. Both experiments stop almost surely under their specified independent-attempt
+policy. A caller carrying prover or generator state across attempts, or retries sharing
+a Fiat–Shamir oracle, needs a separate connection. Terminal emission still does not assert
+verifier acceptance.
 
 [RunningProductRows.lean](RunningProductRows.lean) gives computable lookup and chained
 permutation ratio scans with `0` mapped to `0` on inversion. It proves the exact condition
@@ -1287,9 +1311,9 @@ generation and the checked compression count. Exceptional challenges remain in t
 simulation experiment and are charged to its numerical error bound.
 The complete reference computation has
 a checked stage-by-stage causality proof on the same private tape and sampling law. The
-successful single-attempt law is now normalized, and finite independent retry histories
-are compared with a uniform bound and vanishing exhaustion tails. An unlimited-run
-history distribution is not yet constructed.
+successful single-attempt law and the unlimited independent retry-history law are now
+normalized. Exact finite projections, vanishing exhaustion tails, expected-attempt bounds,
+and the full unlimited-history comparison are proved for the closed Action construction.
 The attempt observation above now retains the scheduled failures and partial output.
 Its random-bit tape and independent verifier
 challenges are explicit assumptions of the interactive experiment.

@@ -72,6 +72,8 @@ import Zcash.Snark.ZeroKnowledge.SelectorBitPacking
 import Zcash.Snark.ZeroKnowledge.RandomTapeSource
 import Zcash.Snark.ZeroKnowledge.DistributionKernel
 import Zcash.Snark.ZeroKnowledge.PrngReduction
+import Zcash.Snark.ZeroKnowledge.RetryLimit
+import Zcash.Snark.ZeroKnowledge.RetryExpectation
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -1354,6 +1356,42 @@ assert_axioms Zcash.Snark.ZeroKnowledge.observedPlonkRetries_both_exhausted_le
 assert_axioms Zcash.Snark.ZeroKnowledge.observedPlonkRetries_exhausted_tendsto
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkAttemptFailureBound_lt_one
 assert_axioms Zcash.Snark.ZeroKnowledge.wideRetriedCompilerKeygenPlonk_simulation_capstone
+
+-- Normalized unlimited histories, their exact finite projections, and the limiting comparison.
+assert_axioms Zcash.Snark.ZeroKnowledge.event_mass_compl_eq_sub
+assert_axioms Zcash.Snark.ZeroKnowledge.retryTapeWeight
+assert_axioms Zcash.Snark.ZeroKnowledge.retryTapeWeight_tsum
+assert_computable Zcash.Snark.ZeroKnowledge.StoppedRetryTape
+assert_axioms Zcash.Snark.ZeroKnowledge.stoppedRetryWeight
+assert_axioms Zcash.Snark.ZeroKnowledge.stoppedRetryWeight_tsum
+assert_axioms Zcash.Snark.ZeroKnowledge.stoppedRetryTapes
+assert_computable Zcash.Snark.ZeroKnowledge.stoppedRetryTapeHistory
+assert_axioms Zcash.Snark.ZeroKnowledge.unlimitedRetainedRetries
+assert_computable Zcash.Snark.ZeroKnowledge.stoppedRetryTapePrepend
+assert_axioms Zcash.Snark.ZeroKnowledge.stoppedRetryTapeHistory_prepend
+assert_axioms Zcash.Snark.ZeroKnowledge.stoppedRetryWeight_renewal
+assert_axioms Zcash.Snark.ZeroKnowledge.unlimitedRetainedRetries_map_apply
+assert_axioms Zcash.Snark.ZeroKnowledge.unlimitedRetainedRetries_renewal
+assert_axioms Zcash.Snark.ZeroKnowledge.runRetryHistory_idempotent
+assert_axioms Zcash.Snark.ZeroKnowledge.runRetryHistory_append_terminal
+assert_computable Zcash.Snark.ZeroKnowledge.truncateRetryHistory
+assert_axioms Zcash.Snark.ZeroKnowledge.truncateRetryHistory_zero
+assert_axioms Zcash.Snark.ZeroKnowledge.truncateRetryHistory_succ_prepend
+assert_axioms Zcash.Snark.ZeroKnowledge.truncateRetryHistory_succ_stopped
+assert_axioms Zcash.Snark.ZeroKnowledge.truncateRetryHistory_of_length_le
+assert_axioms Zcash.Snark.ZeroKnowledge.truncateRetryHistory_eq_of_stopped
+assert_axioms Zcash.Snark.ZeroKnowledge.retryTapeWeight_mem
+assert_axioms Zcash.Snark.ZeroKnowledge.stoppedRetryTapes_replay
+assert_axioms Zcash.Snark.ZeroKnowledge.unlimitedRetainedRetries_supported
+assert_axioms Zcash.Snark.ZeroKnowledge.unlimitedRetainedRetries_truncate
+assert_axioms Zcash.Snark.ZeroKnowledge.unlimitedRetainedRetries_truncate_exhausted_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.unlimitedRetainedRetries_length_tail
+assert_axioms Zcash.Snark.ZeroKnowledge.eventBias_map_of_agree
+assert_axioms Zcash.Snark.ZeroKnowledge.unlimitedRetainedRetries_truncation_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.unlimitedRetainedRetries_simulation_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.natExpectation_eq_tsum_tail
+assert_axioms Zcash.Snark.ZeroKnowledge.unlimitedRetainedRetries_expected_attempts
+assert_axioms Zcash.Snark.ZeroKnowledge.unlimitedRetainedRetries_expected_attempts_le
 
 -- Causality is pointwise on fixed tapes, without excluding failures or zero challenges.
 assert_computable Zcash.Snark.ZeroKnowledge.protocolPrefix
