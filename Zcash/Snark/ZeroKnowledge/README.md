@@ -74,7 +74,7 @@ checked sampling and oracle-resource bounds; machine-instruction and bit-sampler
 running times are not formalized here. The hash model uses the existing Lean
 protocol's total public-prefix coordinate encoding. Relating concrete BLAKE2b
 to the random oracle remains a cryptographic modeling assumption. This theorem
-covers one attempt; retries sharing the same oracle need their own composition.
+covers one attempt; its finite shared-oracle retry extension is described below.
 
 The [fixed-bit simulator](ActionOracleBits.lean) supplies a second implementation
 that also wide-reduces its private fields. It takes `512 * (132m + 58)` independent
@@ -96,6 +96,29 @@ including programming failure. The `280m + 106` coefficient counts terms in the
 distributional comparison; it is not either program's tape length. The simulator
 uses a fixed number of input bits and at most the same `q_pre + 22 + q_post`
 cache entries. A machine-instruction running-time bound is still separate.
+
+The [finite retry theorem](ActionFiatShamirRetry.lean) now compares complete
+histories while the attempts share one evolving oracle cache. Each attempt uses
+fresh private randomness; the public statement and witness stay fixed. The
+adversary may query before selecting that request and after receiving the entire
+history, with no intervening adversary queries during the internal retry run.
+Only `retryRandomness` continues. Completion, the terminal opening error, and
+simulator programming failure stop; exhaustion of the finite budget stays visible.
+For `m >= 1` Actions and at most `n` attempts the two-sided error is bounded by
+
+```text
+error_retry(m, q_pre, n) = n * epsilon_bits(m, q_pre) + 11n(n-1) / p
+                       <= n * m * 2^-238 + (n * q_pre + 11n(n-1)) / p.
+```
+
+[State-dependent composition](StatefulRetrySimulation.lean) charges the growing
+cache without assuming independent retry decisions. [The tape law](OracleRetryTape.lean)
+proves equality with the deterministic retained-history runner. Every stored
+answer [survives the run](ActionOracleRetryResources.lean), and the final cache
+has at most `q_pre + 22n + q_post` entries. The simulator's complete tape
+allocation has `n * 512 * (132m + 58)` bits. These bounds cover every finite
+budget, including zero, but are not uniform in `n` and establish no unlimited
+shared-oracle termination law.
 
 The current [Action compiler reference theorem](ActionCompilerSimulation.lean) gives a
 numerical statistical honest-verifier simulation bound for a complete encoded reference

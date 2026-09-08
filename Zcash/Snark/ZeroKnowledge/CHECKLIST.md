@@ -8,7 +8,7 @@ and additional experiments below, without reopening the completed interactive
 target. They remain extensions of that target rather than prerequisites for it.
 The one-attempt programmable-random-oracle distribution theorem is also complete,
 including its fixed-bit simulator. The remaining work concerns witness construction,
-PRNG security and state, shared-oracle retries, simulator runtime, and independent
+PRNG security and state, unlimited shared-oracle histories, simulator runtime, and independent
 review. The actual Action circuit connection is already proved.
 
 Checked items have the cited proof or validation evidence. Unchecked items are
@@ -222,16 +222,27 @@ establish verifier acceptance.
   for `m >= 1`. The earlier simulator keeps its sharper bound; these additional
   sampling costs belong only to the new simulator distribution. Fixed bit-input
   length does not assert a machine-instruction running-time bound.
-- [ ] Define finite retained-history retries with a shared oracle cache, fresh
+- [x] Define finite retained-history retries with a shared oracle cache, fresh
   private randomness per attempt, and a fixed statement and witness. Retry only
   `retryRandomness`; completion, terminal opening errors, and simulator programming
-  failure stop. Keep all preceding observed failures and the final cache.
-- [ ] Prove the shared-cache transition and history laws, including the cache
+  failure stop. Keep all preceding observed failures and the final cache. See
+  [StatefulRetry.lean](StatefulRetry.lean), [OracleRetry.lean](OracleRetry.lean),
+  and the [Action retry implementation](ActionOracleRetry.lean).
+- [x] Prove the shared-cache transition and history laws, including the cache
   budget through every attempted proof. Preserve adaptive preprocessing and
   postprocessing in the same oracle experiment.
-- [ ] Derive the two-sided statistical comparison for every finite attempt budget,
+  [OracleRetryTape.lean](OracleRetryTape.lean) proves exact deterministic tape
+  replay; [ActionOracleRetryResources.lean](ActionOracleRetryResources.lean)
+  proves persistent answers and cache growth. Preprocessing selects one fixed
+  request; the internal retry run has no intervening adversary queries.
+- [x] Derive the two-sided statistical comparison for every finite attempt budget,
   including prior-query conflicts, internal retry-cache growth, simulator sampling
-  bias, and explicit exhaustion.
+  bias, and explicit exhaustion. [ActionFiatShamirRetry.lean](ActionFiatShamirRetry.lean)
+  gives `n * epsilon_bits(m, q_pre) + 11n(n-1)/p`; the final cache has at most
+  `q_pre + 22n + q_post` entries. [OracleRetryBounds.lean](OracleRetryBounds.lean)
+  checks the formula and its binary bound. The comparison charges all available
+  attempts and assumes no independence of retry decisions or shared-oracle
+  termination theorem.
 - [ ] For an unlimited shared-oracle extension, define its complete observation
   space and handle possible nontermination. Establish the needed tail or limiting
   theorem in that model; the independent-tape termination theorem cannot supply it.
@@ -240,7 +251,8 @@ Closure for one attempt: the classical programmable-random-oracle distribution
 theorem, its computable simulators, and their sampling/query budgets are checked,
 including a simulator driven by a fixed uniform bit tape.
 The interactive HVZK theorem and its causality proof are inputs to this separate
-oracle argument. Shared-oracle retries and bit-level runtime analysis extend its scope.
+oracle argument. The finite shared-oracle extension is now checked separately;
+unlimited shared-oracle histories and runtime analysis extend its scope further.
 
 **6. Simulator runtime: connect resource counts to execution cost**
 
@@ -282,16 +294,16 @@ tape alone do not prove that running-time statement.
 - [x] Build changed modules and their dependent trust boundaries; run the required
   endpoint and axiom checks. Pin every new logical declaration, including helpers
   outside the endpoint-name census. All completed milestones have these checks.
-  The fixed-bit simulator milestone adds 39 direct pins and passes the
-  297-endpoint census. Its concrete declarations retain only the two existing
+  The finite shared-oracle retry milestone adds 71 direct pins and passes the
+  304-endpoint census. Its concrete declarations retain only the two existing
   Pasta curve-order native certificates.
 - [x] Run the full `lake build --wfail` before declaring an extension complete.
-  The fixed-bit simulator milestone passes locally with 4,234 jobs, and all 794 modules
+  The finite shared-oracle retry milestone passes locally with 4,246 jobs, and all 806 modules
   are covered by the default targets. Future theorem commits require their own
   validation; these local results do not assert hosted CI success.
 
-Next implementation order: finite shared-oracle retries, the computational PRNG
-security interface and finite generator-state replay, witness-construction and
+Next implementation order: the computational PRNG security interface and finite
+generator-state replay, witness-construction and
 runtime refinements, then any unlimited shared-oracle or computational retry
 extension. Prepare the review packet as those statements stabilize. Completed
 theorems remain usable with their current assumptions throughout.
