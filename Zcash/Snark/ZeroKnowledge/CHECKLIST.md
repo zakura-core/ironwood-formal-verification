@@ -138,6 +138,17 @@ establish verifier acceptance.
 
 **5. Fiat–Shamir: prove simulation with transcript-derived challenges**
 
+- [x] Recover the exact raw 512-bit response distribution conditional on each
+  wide-reduced field challenge, using a bounded quotient in
+  [DigestFiber.lean](DigestFiber.lean). Prove the joint tape law in
+  [DigestTape.lean](DigestTape.lean), and retain the same `epsilon(m)` for the
+  complete typed Action view with raw responses in [ActionDigest.lean](ActionDigest.lean).
+- [x] Define and prove injectivity of the scalar, affine-point, and marker byte
+  encoding in [TranscriptBytes.lean](TranscriptBytes.lean). Include the specified
+  personalization, digest reduction, and first statement-prefixed query in
+  [ByteFiatShamir.lean](ByteFiatShamir.lean). Point-emission checks remain the
+  observer's responsibility; this total encoding does not permit an identity
+  point to bypass them.
 - [ ] Define real and simulated noninteractive experiments with a classical,
   query-bounded random-oracle adversary. Specify statement selection, auxiliary
   input, proof count, and oracle access before and after observing the proof.
@@ -167,10 +178,10 @@ they do not by themselves prove Fiat–Shamir ZK.
 - [x] Build changed modules and their dependent trust boundaries; run the required
   endpoint and axiom checks. Pin every new logical declaration, including helpers
   outside the endpoint-name census. The completed relation/setup, randomness-source,
-  and unlimited-retry milestones have these checks; the latest adds 45 direct pins
-  and passes the 277-endpoint census.
+  unlimited-retry, and raw-digest milestones have these checks; the latest adds
+  59 direct pins and passes the 281-endpoint census.
 - [x] Run the full `lake build --wfail` before declaring an extension complete.
-  The unlimited-retry milestone passes locally with 4,195 jobs, and all 755 modules
+  The raw-digest milestone passes locally with 4,204 jobs, and all 764 modules
   are covered by the default targets. Future theorem commits require their own
   validation; these local results do not assert hosted CI success.
 - [ ] Review the final theorem statement, simulation experiment, and transitive

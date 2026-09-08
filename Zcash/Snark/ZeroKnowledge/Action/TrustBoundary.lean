@@ -13,6 +13,7 @@ import Zcash.Snark.ZeroKnowledge.ActionCompressionCertificate
 import Zcash.Snark.ZeroKnowledge.ActionInstantiation
 import Zcash.Snark.ZeroKnowledge.ActionPrng
 import Zcash.Snark.ZeroKnowledge.ActionRetryLimit
+import Zcash.Snark.ZeroKnowledge.ActionDigest
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -545,3 +546,35 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionOrderedSelectorActivations_bits
 assert_axioms Zcash.Snark.ZeroKnowledge.actionOrderedSelectorCount_eq_fifteen
 assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_newFixedCols_eq_fifteen +native(
   CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- The same Action comparison before encoding and with exact raw hash responses.
+assert_axioms Zcash.Snark.ZeroKnowledge.wideActionCompilerTypedReference_simulation_error_bound +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionZkTypedProver +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionZkTypedSimulator +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.wideActionZkTyped_simulation_error_bound +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionZkTypedProver_encoded +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionZkTypedSimulator_encoded +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionZkDigestProver +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionZkDigestSimulator +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionZkTypedProver_digest_law +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.wideActionZkDigest_simulation_error_bound +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt,
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)

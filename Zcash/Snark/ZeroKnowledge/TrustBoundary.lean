@@ -74,6 +74,8 @@ import Zcash.Snark.ZeroKnowledge.DistributionKernel
 import Zcash.Snark.ZeroKnowledge.PrngReduction
 import Zcash.Snark.ZeroKnowledge.RetryLimit
 import Zcash.Snark.ZeroKnowledge.RetryExpectation
+import Zcash.Snark.ZeroKnowledge.ByteFiatShamir
+import Zcash.Snark.ZeroKnowledge.PlonkDigest
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -1778,3 +1780,54 @@ assert_axioms Zcash.Snark.ZeroKnowledge.selectorBitsRows_conflicts
 assert_computable Zcash.Snark.ZeroKnowledge.selectorBitPackingCount
 assert_axioms Zcash.Snark.ZeroKnowledge.selectorBitPackingCount_def
 assert_axioms Zcash.Snark.ZeroKnowledge.selectorPackingCount_eq_bits
+
+-- Raw digest recovery and the lossless Fiat–Shamir byte boundary.
+assert_computable Zcash.Snark.ZeroKnowledge.digestFiberSize
+assert_axioms Zcash.Snark.ZeroKnowledge.digestFiberSize_pos
+assert_axioms Zcash.Snark.ZeroKnowledge.digestFromQuotient_lt
+assert_computable Zcash.Snark.ZeroKnowledge.digestFromQuotient +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.digestFromQuotient_reduce
+assert_axioms Zcash.Snark.ZeroKnowledge.digestFromQuotient_injective
+assert_axioms Zcash.Snark.ZeroKnowledge.digestFromQuotient_range
+assert_axioms Zcash.Snark.ZeroKnowledge.digestFiberSample
+assert_axioms Zcash.Snark.ZeroKnowledge.digestFiberSample_apply
+assert_axioms Zcash.Snark.ZeroKnowledge.fieldSample_mul_digestFiberSample
+assert_axioms Zcash.Snark.ZeroKnowledge.fieldSample_digest_recovery_law
+assert_axioms Zcash.Snark.ZeroKnowledge.digestFiberSample_support
+assert_axioms Zcash.Snark.ZeroKnowledge.digestTapeFiberSample
+assert_axioms Zcash.Snark.ZeroKnowledge.digestTape_recovery_law
+assert_axioms Zcash.Snark.ZeroKnowledge.liftDigestTapeView
+assert_axioms Zcash.Snark.ZeroKnowledge.liftDigestTapeView_error_bound
+assert_axioms Zcash.Snark.ZeroKnowledge.ofDigits_div_pow_mod
+assert_axioms Zcash.Snark.ZeroKnowledge.leos2ip_i2leosp
+assert_axioms Zcash.Snark.ZeroKnowledge.i2leosp_toList_injective
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkScalarCodec_injective
+assert_axioms Zcash.Snark.ZeroKnowledge.vestaCoordinate_lt_two_pow_256
+assert_computable Zcash.Snark.ZeroKnowledge.vestaCoordinateCodec
+assert_axioms Zcash.Snark.ZeroKnowledge.vestaCoordinateCodec_length
+assert_axioms Zcash.Snark.ZeroKnowledge.vestaCoordinateCodec_injective
+assert_computable Zcash.Snark.ZeroKnowledge.vestaAffineCodec +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.vestaAffineCodec_length
+assert_axioms Zcash.Snark.ZeroKnowledge.vestaAffineCodec_injective
+assert_computable Zcash.Snark.ZeroKnowledge.transcriptElementBytes +choice
+assert_computable Zcash.Snark.ZeroKnowledge.transcriptBytes +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.transcriptBytes_append
+assert_axioms Zcash.Snark.ZeroKnowledge.transcriptBytes_eq_nil_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.transcriptElementBytes_append_injective
+assert_axioms Zcash.Snark.ZeroKnowledge.transcriptBytes_injective
+assert_computable Zcash.Snark.ZeroKnowledge.halo2TranscriptPersonalization
+assert_axioms Zcash.Snark.ZeroKnowledge.halo2TranscriptPersonalization_length
+assert_computable Zcash.Snark.ZeroKnowledge.TranscriptHashAddress
+assert_computable Zcash.Snark.ZeroKnowledge.transcriptHashAddress +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.transcriptHashAddress_injective
+assert_axioms Zcash.Snark.ZeroKnowledge.transcriptHashAddress_squeeze
+assert_axioms Zcash.Snark.ZeroKnowledge.transcriptBytes_squeeze_length
+assert_computable Zcash.Snark.ZeroKnowledge.byteFiatShamir +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.byteFiatShamir_squeeze
+assert_axioms Zcash.Snark.ZeroKnowledge.byteFiatShamir_statement_theta
+assert_computable Zcash.Snark.ZeroKnowledge.plonkChallengeFields +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkChallengeFields_fromTape
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkChallengesFromFields
+assert_axioms Zcash.Snark.ZeroKnowledge.attachPlonkDigests
+assert_axioms Zcash.Snark.ZeroKnowledge.rawDigestChallengeExperiment
+assert_axioms Zcash.Snark.ZeroKnowledge.attachPlonkDigests_wideChallenges

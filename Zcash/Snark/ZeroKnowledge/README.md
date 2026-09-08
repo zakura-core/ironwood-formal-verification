@@ -27,6 +27,17 @@ and proves the same additive comparison for a probabilistic view test. It makes
 the generator and seed law explicit and covers one attempt. A computational
 PRNG-security instantiation still needs its resource and auxiliary-input conditions.
 
+The [typed Action comparison](ActionTyped.lean) exposes the same reference law before
+the attempt observer. [Raw digest recovery](ActionDigest.lean) now proves the same
+`epsilon(m)` bound when the view also includes every 512-bit challenge response.
+The simulator samples uniformly from the exact preimage of each field challenge;
+the [joint recovery law](DigestTape.lean) introduces no additional sampling-bias
+term. [Transcript bytes](TranscriptBytes.lean) encode scalars, affine point
+coordinates, and challenge markers injectively, and [the hash boundary](ByteFiatShamir.lean)
+includes the specified personalization and wide reduction. These results concern
+independent raw responses. Connecting them to a consistent queried oracle and
+bounding programming conflicts remain part of the Fiat–Shamir extension.
+
 The current [Action compiler reference theorem](ActionCompilerSimulation.lean) gives a
 numerical statistical honest-verifier simulation bound for a complete encoded reference
 attempt. It assumes original gate, lookup, and copy-value validity, eleven IPA rounds,
