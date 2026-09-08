@@ -31,9 +31,16 @@ preserves public inputs and reconstructs the same canonical compiler environment
 The [source witness-equation bridge](CompiledFixedWitnesses.lean) now discharges
 fixed writes and table contents from the compiled key. A
 [checked dependency collector](WitnessProgramSupport.lean) covers the complete
-structured witness IR. Applying the execution theorem to Action still requires
-the native callbacks' read certificates and a proof that repeated writes preserve
-the values already assigned.
+structured witness IR and its [builder forms](WitnessBuilderSupport.lean).
+The [trace theorem](AdviceWitnessTrace.lean) now allows repeated writes while
+preserving every previously established value. Its [alias checker](AdviceAliasPlan.lean)
+requires semantic copy certificates for every annotated program. The original
+[Action multiplication region](ActionMulNativeCopies.lean) has such native-copy
+certificates, including its actual shared base columns. The
+[complete source-routing theorem](ActionNativeRouting.lean) now proves every
+collected annotation's evaluator semantics through the original Action schedule.
+Applying the execution theorem still requires the complete alias and read-plan
+checks and the native callbacks' read certificates.
 Proving that the generated rows satisfy every gate, lookup, and copy equation is
 still open; the current constructor does not establish `ActionZkRelation`.
 The [raw-source refinement](ActionRandomnessSource.lean) proves exact agreement

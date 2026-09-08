@@ -109,6 +109,19 @@ import Zcash.Snark.ZeroKnowledge.AdviceWitnessAssignment
 import Zcash.Snark.ZeroKnowledge.CompiledFixedWitnesses
 import Zcash.Snark.ZeroKnowledge.WitnessProgramSupport
 
+import Zcash.Snark.ZeroKnowledge.AdviceAliasCollection
+import Zcash.Snark.ZeroKnowledge.AdviceAliasInvariant
+import Zcash.Snark.ZeroKnowledge.AdviceAliasPlan
+import Zcash.Snark.ZeroKnowledge.AdviceReadPlan
+import Zcash.Snark.ZeroKnowledge.AdviceWitnessTrace
+import Zcash.Snark.ZeroKnowledge.NativeArithmeticCopySupport
+import Zcash.Snark.ZeroKnowledge.NativeCopyComposition
+import Zcash.Snark.ZeroKnowledge.NativeCopyLift
+import Zcash.Snark.ZeroKnowledge.NativeCopyLoops
+import Zcash.Snark.ZeroKnowledge.NativeCopyRegions
+import Zcash.Snark.ZeroKnowledge.WitnessBuilderSupport
+import Zcash.Snark.ZeroKnowledge.WitnessCopySemantics
+
 /-!
 # Checked trust boundary of the zero-knowledge development
 
@@ -2330,3 +2343,92 @@ assert_axioms Zcash.Snark.ZeroKnowledge.structuredWitnessReads_eval
 assert_computable Zcash.Snark.ZeroKnowledge.placedWitnessCell
 assert_axioms Zcash.Snark.ZeroKnowledge.adviceReadAgreement_context
 assert_axioms Zcash.Snark.ZeroKnowledge.structuredWitness_readsFrom
+
+-- Repeated advice writes, original copy semantics, and checked source support.
+
+-- AdviceAliasCollection
+assert_computable Zcash.Snark.ZeroKnowledge.NativeAdviceCopySource
+assert_computable Zcash.Snark.ZeroKnowledge.regionAdviceAliases
+assert_computable Zcash.Snark.ZeroKnowledge.circuitAdviceAliases
+assert_axioms Zcash.Snark.ZeroKnowledge.regionAdviceAliases_erase
+assert_axioms Zcash.Snark.ZeroKnowledge.circuitAdviceAliases_erase
+assert_computable Zcash.Snark.ZeroKnowledge.RegionNativeCopiesSound +choice
+assert_computable Zcash.Snark.ZeroKnowledge.CircuitNativeCopiesSound +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.regionAdviceAliases_sources
+assert_axioms Zcash.Snark.ZeroKnowledge.circuitAdviceAliases_sources
+
+-- AdviceAliasInvariant
+assert_computable Zcash.Snark.ZeroKnowledge.AdviceAddress
+assert_axioms Zcash.Snark.ZeroKnowledge.AdviceAliasesWellFormed
+assert_computable Zcash.Snark.ZeroKnowledge.AdviceAliasValues
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceAliasesWellFormed_empty
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceAliasValues_id
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceAliasRoot_ne_fresh
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceAliasesWellFormed_cons
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceAliasesWellFormed_copy
+assert_axioms Zcash.Snark.ZeroKnowledge.runAdviceInstruction_value_frame
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceAliasValues_fresh
+assert_computable Zcash.Snark.ZeroKnowledge.AdviceCopySemantics +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceAliasValues_copy_fresh
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceAliasCopy_eq_self
+
+-- AdviceAliasPlan
+assert_computable Zcash.Snark.ZeroKnowledge.adviceAliasPlan
+assert_computable Zcash.Snark.ZeroKnowledge.AdviceAliasSources +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceAliasPlan_certificate
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevelAdviceAssignment_extendsWitnesses_of_aliasPlan
+
+-- AdviceReadPlan
+assert_computable Zcash.Snark.ZeroKnowledge.adviceCellReadAvailable
+assert_computable Zcash.Snark.ZeroKnowledge.adviceReadPlan
+assert_computable Zcash.Snark.ZeroKnowledge.NativeAdviceReads +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceReadPlan_causal
+
+-- AdviceWitnessTrace
+assert_computable Zcash.Snark.ZeroKnowledge.runAdviceInstruction +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.AdviceTraceCertificate
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceTrace_preserves
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceTrace_readAgreement
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceTrace_satisfies
+assert_axioms Zcash.Snark.ZeroKnowledge.runAdviceInstruction_frame_of_fresh
+assert_axioms Zcash.Snark.ZeroKnowledge.runAdviceInstruction_eq_of_same_value
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevelAdviceAssignment_extendsWitnesses_of_trace
+
+-- NativeArithmeticCopySupport
+assert_axioms Zcash.Snark.ZeroKnowledge.add_nativeCopiesSound
+assert_axioms Zcash.Snark.ZeroKnowledge.mulComplete_round_nativeCopiesSound
+assert_axioms Zcash.Snark.ZeroKnowledge.mulComplete_assign_nativeCopiesSound
+
+-- NativeCopyComposition
+assert_computable Zcash.Snark.ZeroKnowledge.NativeCopyOperationSound +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.regionNativeCopiesSound_iff_operations
+assert_axioms Zcash.Snark.ZeroKnowledge.regionNativeCopiesSound_append
+assert_axioms Zcash.Snark.ZeroKnowledge.regionNativeCopiesSound_cons
+assert_axioms Zcash.Snark.ZeroKnowledge.regionNativeCopiesSound_nil
+assert_axioms Zcash.Snark.ZeroKnowledge.regionNativeCopiesSound_of_none
+
+-- NativeCopyLift
+assert_axioms Zcash.Snark.ZeroKnowledge.circuitNativeCopiesSound_toFormal
+
+-- NativeCopyLoops
+assert_axioms Zcash.Snark.ZeroKnowledge.regionNativeCopiesSound_foldRange
+assert_axioms Zcash.Snark.ZeroKnowledge.nativeCopyOperationSound_toIRScalar
+
+-- NativeCopyRegions
+assert_axioms Zcash.Snark.ZeroKnowledge.circuitNativeCopiesSound_append
+assert_axioms Zcash.Snark.ZeroKnowledge.circuitNativeCopiesSound_outside
+
+-- WitnessBuilderSupport
+assert_computable Zcash.Snark.ZeroKnowledge.valueBuilderReads
+assert_computable Zcash.Snark.ZeroKnowledge.natBuilderReads
+assert_computable Zcash.Snark.ZeroKnowledge.boolBuilderReads
+assert_axioms Zcash.Snark.ZeroKnowledge.valueBuilderReads_eval
+assert_axioms Zcash.Snark.ZeroKnowledge.natBuilderReads_eval
+assert_axioms Zcash.Snark.ZeroKnowledge.boolBuilderReads_eval
+assert_axioms Zcash.Snark.ZeroKnowledge.scalarBuilder_readsFrom
+
+-- WitnessCopySemantics
+assert_computable Zcash.Snark.ZeroKnowledge.witnessCopyCell
+assert_axioms Zcash.Snark.ZeroKnowledge.witnessCopyCell_eval
+assert_computable Zcash.Snark.ZeroKnowledge.witnessCopyAddress
+assert_axioms Zcash.Snark.ZeroKnowledge.witnessCopyAddress_semantics

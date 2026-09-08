@@ -78,16 +78,36 @@ model. Compare strength only after fixing those models and assumptions.
   [AdviceWitnessEquations.lean](AdviceWitnessEquations.lean). The compiler discharges
   all retained fixed-write and table clauses in
   [CompiledFixedWitnesses.lean](CompiledFixedWitnesses.lean). The current execution
-  theorem requires causal reads and distinct write targets.
+  theorem supplies the distinct-target case; the trace refinement below also
+  handles repeated writes.
 - [x] Verify the read-support collectors for field, Nat, and Boolean expressions,
   dynamic indexing, local steps, and vector outputs in
   [WitnessReadSupport.lean](WitnessReadSupport.lean) and
   [WitnessProgramSupport.lean](WitnessProgramSupport.lean). The theorem covers all
   branches and arithmetic values; native callbacks still require their own
-  semantic read certificates.
-- [ ] Discharge the actual Action read and write certificates. Its repeated
-  writes require a value-preservation argument; a distinct-target premise does
-  not apply to this program. Derive `ExtendsWitnesses` for the final assignment.
+  semantic read certificates. [WitnessBuilderSupport.lean](WitnessBuilderSupport.lean)
+  extends these support proofs to the original scalar, Nat, Boolean, and value
+  builders, and [AdviceReadPlan.lean](AdviceReadPlan.lean) checks structured reads
+  against the preceding assignments.
+- [x] Prove preservation of previously assigned values across repeated writes in
+  [AdviceWitnessTrace.lean](AdviceWitnessTrace.lean). The checked alias plan in
+  [AdviceAliasPlan.lean](AdviceAliasPlan.lean) permits a repeated target only for a
+  source-certified copy with the same established value. Its theorem establishes
+  the original full witness equations without assuming distinct targets.
+- [x] Certify the original native base-coordinate callbacks through each round,
+  arbitrary-length loops, and the full multiplication region in
+  [NativeMulCopySupport.lean](NativeMulCopySupport.lean). Instantiate the exact
+  Action base columns and separation in
+  [ActionMulNativeCopies.lean](ActionMulNativeCopies.lean). Structured programs
+  supply their copy sources through [WitnessCopySemantics.lean](WitnessCopySemantics.lean).
+- [x] Connect native copy annotations to the complete original Action in
+  [ActionNativeRouting.lean](ActionNativeRouting.lean). The checked source schedule
+  places the shared-base multiplier at region 297; all other regions have no
+  native annotations. `actionAdviceAliasPrograms_sources` proves the exact
+  evaluator semantics of every collected copy annotation, including structured IR.
+- [ ] Discharge the complete Action alias and read-plan checks, including the
+  native callbacks' read certificates. Derive `ExtendsWitnesses` for the final
+  assignment.
 - [ ] Connect the extracted witness to the normalized application data, then use
   circuit completeness to prove every original gate, lookup tuple, and compiler
   copy equation. Record any additional construction preconditions.
@@ -352,14 +372,15 @@ tape alone do not prove that running-time statement.
 
 - [x] Prepare [the review packet](REVIEW.md), mapping each current claim to its
   exact theorem, real/simulated experiment, validity/setup/randomness assumptions,
-  error formula, failure policy, and runtime scope. It records proof baseline
-  `27b03619b51e29d1af54d86515cb0a2608a8d8a1` and the validation log.
+  error formula, failure policy, and runtime scope. It records an exact proof
+  baseline and links its validation and declaration inventories.
 - [x] Locally check that the recorded theorem inputs and public observations match
   those claims, including auxiliary data, retained prefixes, oracle state, finite
   exhaustion, and the private generator-state boundary. This is a local scope check.
 - [x] Recheck transitive dependencies and every new declaration pin at that proof
-  baseline. The full build and 63-declaration inventory pass, with only the two
-  inherited named curve-order native certificates and no admitted lemma.
+  baseline. The recorded inventories identify every direct pin and transitive
+  native owner; the development retains the inherited named curve-order
+  certificates and no admitted lemma.
 - [ ] Obtain independent review of the packet and record the reviewed commit,
   findings, resolutions, and remaining qualifications. A local self-review or
   passing Lean build does not complete this item.
@@ -369,13 +390,14 @@ tape alone do not prove that running-time statement.
 - [x] Build changed modules and their dependent trust boundaries; run the required
   endpoint and axiom checks. Pin every new logical declaration, including helpers
   outside the endpoint-name census. All completed milestones have these checks.
-  The unlimited seeded-generator milestone adds 62 direct pins and passes the
-  326-endpoint census. Its concrete declarations retain only the two existing
-  Pasta curve-order native certificates.
+  The repeated-write and Action copy-source milestone inventories 91 declarations
+  and passes the 326-endpoint census. Its source-specific declarations use the
+  existing Pallas curve-order certificate; it introduces no native certificate.
 - [x] Run the full `lake build --wfail` before declaring an extension complete.
-  The application constructor milestone passes locally with 4,393 jobs, and all 856 modules
-  are covered by the default targets. Future theorem commits require their own
-  validation; these local results do not assert hosted CI success.
+  The repeated-write and Action copy-source milestone passes locally with 4,421
+  jobs; all 884 modules are covered by the default targets. Future theorem
+  commits require their own validation; these local results do not assert hosted
+  CI success.
 
 Next implementation work: witness construction and runtime refinements. Update the review packet
 when its proof baseline changes. Completed theorems remain usable with their current

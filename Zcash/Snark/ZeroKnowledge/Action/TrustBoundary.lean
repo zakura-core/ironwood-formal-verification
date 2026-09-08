@@ -1,3 +1,4 @@
+import Zcash.Snark.ZeroKnowledge.ActionNativeRouting
 import Zcash.Snark.ZeroKnowledge.ActionSelectorReplacement
 import Zcash.Snark.ZeroKnowledge.ActionTracePlacement
 import Zcash.Snark.ZeroKnowledge.ActionSimulation
@@ -24,6 +25,17 @@ import Zcash.Snark.ZeroKnowledge.ActionOracleStreamTermination
 import Zcash.Snark.ZeroKnowledge.ActionGeneratorStreamTermination
 import Zcash.Meta.AxiomCheck
 import Zcash.Snark.ZeroKnowledge.ActionWitnessRows
+
+import Zcash.Snark.ZeroKnowledge.ActionAdviceAliasPlan
+import Zcash.Snark.ZeroKnowledge.ActionBaseCopySources
+import Zcash.Snark.ZeroKnowledge.ActionMulBaseConfig
+import Zcash.Snark.ZeroKnowledge.ActionMulNativeCopies
+import Zcash.Snark.ZeroKnowledge.ActionNativeCopies
+import Zcash.Snark.ZeroKnowledge.ActionNativeCopyIntervals
+import Zcash.Snark.ZeroKnowledge.NativeBaseCopySupport
+import Zcash.Snark.ZeroKnowledge.NativeBaseGadgetSupport
+import Zcash.Snark.ZeroKnowledge.NativeBaseLoopSupport
+import Zcash.Snark.ZeroKnowledge.NativeMulCopySupport
 
 /-!
 # The actual Action circuit boundary of the zero-knowledge development
@@ -1144,3 +1156,68 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_environment +nat
 assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_publicInput +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_hintData +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_hintWindows +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- Repeated advice writes, original copy semantics, and checked source support.
+
+-- ActionAdviceAliasPlan
+assert_computable Zcash.Snark.ZeroKnowledge.actionNativeAdviceCopySource
+assert_computable Zcash.Snark.ZeroKnowledge.actionAdviceAliasPrograms +choice +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionAdviceAliasPrograms_erase +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- ActionBaseCopySources
+assert_axioms Zcash.Snark.ZeroKnowledge.actionNativeAdviceCopySource_otherRegion
+assert_axioms Zcash.Snark.ZeroKnowledge.actionNativeAdviceCopySource_previous
+assert_axioms Zcash.Snark.ZeroKnowledge.actionNativeAdviceCopySource_outsideRows
+
+-- ActionMulBaseConfig
+assert_axioms Zcash.Snark.ZeroKnowledge.actionMul_hiBaseConfig
+assert_axioms Zcash.Snark.ZeroKnowledge.actionMul_loBaseConfig
+
+-- ActionMulNativeCopies
+assert_axioms Zcash.Snark.ZeroKnowledge.actionMul_nativeCopiesSound +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- ActionNativeCopies
+assert_axioms Zcash.Snark.ZeroKnowledge.mulIncomplete_stepWit_baseX_copy
+assert_axioms Zcash.Snark.ZeroKnowledge.mulIncomplete_stepWit_baseY_copy
+assert_axioms Zcash.Snark.ZeroKnowledge.mulIncomplete_baseX_copySemantics
+assert_axioms Zcash.Snark.ZeroKnowledge.mulIncomplete_baseY_copySemantics
+
+-- ActionNativeCopyIntervals
+assert_axioms Zcash.Snark.ZeroKnowledge.actionNativeCopiesSound_before
+assert_axioms Zcash.Snark.ZeroKnowledge.actionNativeCopiesSound_after
+
+-- NativeBaseCopySupport
+assert_computable Zcash.Snark.ZeroKnowledge.PreviousBaseCopySources
+assert_computable Zcash.Snark.ZeroKnowledge.MulIncompleteBaseSeparated
+assert_axioms Zcash.Snark.ZeroKnowledge.previousBaseCopySources_nonbase
+assert_axioms Zcash.Snark.ZeroKnowledge.mulIncomplete_round_nativeCopiesSound +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- NativeBaseGadgetSupport
+assert_axioms Zcash.Snark.ZeroKnowledge.mulIncomplete_doubleAndAdd_nativeCopiesSound +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- NativeBaseLoopSupport
+assert_axioms Zcash.Snark.ZeroKnowledge.mulIncomplete_loop_nativeCopiesSound +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- NativeMulCopySupport
+assert_axioms Zcash.Snark.ZeroKnowledge.mul_main_nativeCopiesSound +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- Complete original Action copy-source routing.
+assert_axioms Zcash.Snark.ZeroKnowledge.actionMulCall_nativeCopiesSound +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionAddressIntegrity_nativeCopiesSound +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionChecks_nativeCopiesSound +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionBase_nativeCopiesSound +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_nativeCopiesSound +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionAdviceAliasPrograms_sources +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
