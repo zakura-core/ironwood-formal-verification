@@ -85,6 +85,8 @@ import Zcash.Snark.ZeroKnowledge.PlonkSimulatorTape
 import Zcash.Snark.ZeroKnowledge.OracleContinuationResources
 import Zcash.Snark.ZeroKnowledge.AnchorProbability
 import Zcash.Snark.ZeroKnowledge.SimulationAgreement
+import Zcash.Snark.ZeroKnowledge.RawBits
+import Zcash.Snark.ZeroKnowledge.OracleBitBounds
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -1969,3 +1971,25 @@ assert_axioms Zcash.Snark.ZeroKnowledge.protocolQueryAddresses_nodup
 assert_computable Zcash.Snark.ZeroKnowledge.HasTranscriptAnchor +choice
 assert_axioms Zcash.Snark.ZeroKnowledge.protocolQueryAddress_anchor
 assert_axioms Zcash.Snark.ZeroKnowledge.HasTranscriptAnchor.unique
+
+-- Fixed uniform bit tapes and the complete oracle simulator reduction budget.
+-- OracleBitBounds
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkBitSimulationErrorBound
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkBitSimulationErrorBound_expanded
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkBitSimulationErrorBound_queries
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkBitSimulationErrorBound_mono_queries
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkBitSimulationErrorBound_le_actions_mul_one
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkBitSimulationErrorBound_one_lt_two_pow
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkBitSimulationErrorBound_lt_actions_mul_two_pow
+-- RawBits
+assert_computable Zcash.Snark.ZeroKnowledge.rawBitsTapeEquiv +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.rawBitsTapeEquiv_word
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformRawBitsTape
+assert_axioms Zcash.Snark.ZeroKnowledge.rawBitsTape_map
+-- RawFieldTape
+assert_computable Zcash.Snark.ZeroKnowledge.RawFieldTape
+assert_computable Zcash.Snark.ZeroKnowledge.reduceFieldTape +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformRawFieldTape_reduce
+assert_axioms Zcash.Snark.ZeroKnowledge.rawFieldTape_sample_law
+assert_axioms Zcash.Snark.ZeroKnowledge.splitRawFieldTape_sample_law
+assert_axioms Zcash.Snark.ZeroKnowledge.rawFieldTape_error_bound

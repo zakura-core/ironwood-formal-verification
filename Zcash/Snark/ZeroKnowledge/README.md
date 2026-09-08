@@ -76,6 +76,27 @@ protocol's total public-prefix coordinate encoding. Relating concrete BLAKE2b
 to the random oracle remains a cryptographic modeling assumption. This theorem
 covers one attempt; retries sharing the same oracle need their own composition.
 
+The [fixed-bit simulator](ActionOracleBits.lean) supplies a second implementation
+that also wide-reduces its private fields. It takes `512 * (132m + 58)` independent
+uniform bits: 22 words for raw challenges and `132m + 36` words for its field
+draws. [Explicit little-endian packing](RawBits.lean) and
+[raw-tape reduction](RawFieldTape.lean) prove its exact distribution, with no
+rejection sampling. Its own reductions add `(132m + 36) * delta` to the earlier
+comparison; the ideal-field simulator and its sharper bound remain available.
+The [bit-tape Fiat–Shamir theorem](ActionFiatShamirBits.lean) therefore gives
+
+```text
+epsilon_bits(m, q_pre) = (42882m + 4113 + q_pre) / p + (280m + 106) delta
+                      < m * 2^-238 + q_pre / p,  for m >= 1.
+```
+
+The [binary inequality](OracleBitBounds.lean) is kernel checked. This bound
+covers the same adaptive before/proof/after experiment and final oracle cache,
+including programming failure. The `280m + 106` coefficient counts terms in the
+distributional comparison; it is not either program's tape length. The simulator
+uses a fixed number of input bits and at most the same `q_pre + 22 + q_post`
+cache entries. A machine-instruction running-time bound is still separate.
+
 The current [Action compiler reference theorem](ActionCompilerSimulation.lean) gives a
 numerical statistical honest-verifier simulation bound for a complete encoded reference
 attempt. It assumes original gate, lookup, and copy-value validity, eleven IPA rounds,

@@ -191,12 +191,24 @@ establish verifier acceptance.
   budgets; machine-instruction and bit-sampler time bounds are not formalized.
   Relating concrete BLAKE2b to the random oracle remains a cryptographic modeling
   assumption, and the real prover retains its wide-reduced sampling law.
+- [x] Give the simulator a fixed uniform bit tape, eliminating its ideal-field
+  sampling primitive. [RawBits.lean](RawBits.lean) packs the bits explicitly;
+  [ActionOracleBits.lean](ActionOracleBits.lean) executes the simulator on
+  `512 * (132m + 58)` bits. Its `132m + 36` private reductions add that many
+  `delta` terms. [ActionFiatShamirBits.lean](ActionFiatShamirBits.lean) proves the
+  full adaptive oracle comparison and retained cache budget for this implementation.
+  [OracleBitBounds.lean](OracleBitBounds.lean) checks the resulting bound
+  `(42882m + 4113 + q_pre) / p + (280m + 106) delta < m * 2^-238 + q_pre / p`
+  for `m >= 1`. The earlier simulator keeps its sharper bound; these additional
+  sampling costs belong only to the new simulator distribution. Fixed bit-input
+  length does not assert a machine-instruction running-time bound.
 - [ ] If this theorem includes retries, model the shared oracle state across them
   and reprove the retry comparison in that experiment. The independent verifier
   tapes of the interactive retry theorem do not supply this connection.
 
 Closure for one attempt: the classical programmable-random-oracle distribution
-theorem, its computable simulator, and its sampling/query budgets are checked.
+theorem, its computable simulators, and their sampling/query budgets are checked,
+including a simulator driven by a fixed uniform bit tape.
 The interactive HVZK theorem and its causality proof are inputs to this separate
 oracle argument. Shared-oracle retries and bit-level runtime analysis extend its scope.
 
@@ -205,11 +217,11 @@ oracle argument. Shared-oracle retries and bit-level runtime analysis extend its
 - [x] Build changed modules and their dependent trust boundaries; run the required
   endpoint and axiom checks. Pin every new logical declaration, including helpers
   outside the endpoint-name census. All completed milestones have these checks.
-  The one-attempt Action oracle milestone adds 123 direct pins and passes the
-  290-endpoint census. Its concrete declarations retain only the two existing
+  The fixed-bit simulator milestone adds 39 direct pins and passes the
+  297-endpoint census. Its concrete declarations retain only the two existing
   Pasta curve-order native certificates.
 - [x] Run the full `lake build --wfail` before declaring an extension complete.
-  The one-attempt Action oracle milestone passes locally with 4,228 jobs, and all 788 modules
+  The fixed-bit simulator milestone passes locally with 4,234 jobs, and all 794 modules
   are covered by the default targets. Future theorem commits require their own
   validation; these local results do not assert hosted CI success.
 - [ ] Review the final theorem statement, simulation experiment, and transitive
