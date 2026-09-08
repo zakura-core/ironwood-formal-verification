@@ -7,9 +7,11 @@ can remain assumptions of that theorem. The next phase pursues the instantiation
 and additional experiments below, without reopening the completed interactive
 target. They remain extensions of that target rather than prerequisites for it.
 The one-attempt programmable-random-oracle distribution theorem is also complete,
-including its fixed-bit simulator. The remaining work concerns witness construction,
-PRNG security and state, unlimited shared-oracle histories, simulator runtime, and independent
-review. The actual Action circuit connection is already proved.
+including its fixed-bit simulator. Finite shared-oracle retries and the reduction
+for a continuing private generator are also checked. The remaining work concerns
+witness construction, concrete PRNG and runtime instantiations, unlimited
+shared-oracle or computational histories, and independent review. The actual
+Action circuit connection is already proved.
 
 Checked items have the cited proof or validation evidence. Unchecked items are
 future work; adding this checklist does not prove them.
@@ -119,11 +121,24 @@ the [Action trust boundary](Action/TrustBoundary.lean).
   of the complete prover-and-test reduction in the admissible class is an explicit
   premise. Discharging it from runtime bounds remains in section 6; no concrete
   generator security or efficiency theorem is asserted here.
-- [ ] Define continuous generator state across attempts and its finite tape
-  allocation policy. Prove that replay uses the same state evolution rather than
-  silently reseeding, and state whether unused attempt words are discarded.
-- [ ] Prove the finite-retry computational comparison for every replaced tape,
-  retaining all observed failures and accounting for the total randomness budget.
+- [x] Define continuous generator state and prove its finite replay law in
+  [GeneratorTape.lean](GeneratorTape.lean), [GeneratedRetryCoins.lean](GeneratedRetryCoins.lean),
+  and [ActionGeneratorRetry.lean](ActionGeneratorRetry.lean). Each started attempt
+  consumes one full `148m + 46`-word block; unused words in that block are discarded.
+  Terminal results stop before another block is allocated. The private final state
+  advances by the number of started attempts times that width, with no reseeding.
+  It is not part of the verifier's observed output.
+- [x] Prove the full finite Fiat–Shamir computational reduction in
+  [ActionOracleRetryPrng.lean](ActionOracleRetryPrng.lean) and instantiate the
+  continuing-generator execution in [ActionGeneratorPrng.lean](ActionGeneratorPrng.lean).
+  One fresh seed follows adaptive preprocessing; the same oracle cache survives
+  retries and postprocessing. The tested observation has error at most
+  `error_retry(m,q_pre,n) + eta`, where `eta` covers the complete generated prefix
+  and the admitted retry-and-postprocessing reduction. Its exact capacity is
+  `512 * n * (148m + 46)` bits, with the checked encoding in
+  [ActionPrivateRetryBits.lean](ActionPrivateRetryBits.lean). No independence of
+  generated attempt blocks is assumed. Concrete PRNG security and reduction-class
+  membership remain premises; this is a finite-budget computational reduction.
 - [ ] If extending a computational claim to unlimited retries, include a checked
   truncation argument and its exhaustion tail under the stated execution model.
 
@@ -299,16 +314,15 @@ tape alone do not prove that running-time statement.
 - [x] Build changed modules and their dependent trust boundaries; run the required
   endpoint and axiom checks. Pin every new logical declaration, including helpers
   outside the endpoint-name census. All completed milestones have these checks.
-  The PRNG security-game milestone adds 12 direct pins and passes the
-  306-endpoint census. Its concrete declarations retain only the two existing
+  The continuing-generator retry milestone adds 46 direct pins and passes the
+  308-endpoint census. Its concrete declarations retain only the two existing
   Pasta curve-order native certificates.
 - [x] Run the full `lake build --wfail` before declaring an extension complete.
-  The PRNG security-game milestone passes locally with 4,250 jobs, and all 810 modules
+  The continuing-generator retry milestone passes locally with 4,258 jobs, and all 818 modules
   are covered by the default targets. Future theorem commits require their own
   validation; these local results do not assert hosted CI success.
 
-Next implementation order: finite generator-state replay and its computational
-comparison, witness-construction and
-runtime refinements, then any unlimited shared-oracle or computational retry
-extension. Prepare the review packet as those statements stabilize. Completed
-theorems remain usable with their current assumptions throughout.
+Next implementation order: witness-construction and runtime refinements, then any
+unlimited shared-oracle or computational retry extension. Prepare the review packet
+as those statements stabilize. Completed theorems remain usable with their current
+assumptions throughout.

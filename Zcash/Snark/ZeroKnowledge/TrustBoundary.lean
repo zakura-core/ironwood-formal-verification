@@ -92,6 +92,8 @@ import Zcash.Snark.ZeroKnowledge.OracleRetryTape
 import Zcash.Snark.ZeroKnowledge.OracleRetrySimulation
 import Zcash.Snark.ZeroKnowledge.OracleRetryResources
 import Zcash.Snark.ZeroKnowledge.PrngSecurityReduction
+import Zcash.Snark.ZeroKnowledge.GeneratedRetryCoins
+import Zcash.Snark.ZeroKnowledge.RetryTapeSource
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -2065,3 +2067,26 @@ assert_computable Zcash.Snark.ZeroKnowledge.UniformSeedPrngSecure +choice
 assert_axioms Zcash.Snark.ZeroKnowledge.uniformSeedPrngSecure_event_bias
 assert_axioms Zcash.Snark.ZeroKnowledge.auxiliaryPrngGame_reduction_law
 assert_axioms Zcash.Snark.ZeroKnowledge.uniformSeedPrng_simulation_error_bound
+
+-- Continuous generator state, exact private-prefix replay, and the finite PRNG reduction.
+-- GeneratorTape
+assert_computable Zcash.Snark.ZeroKnowledge.drawGeneratorTape
+assert_axioms Zcash.Snark.ZeroKnowledge.drawGeneratorTape_state
+assert_axioms Zcash.Snark.ZeroKnowledge.drawGeneratorTape_at
+assert_axioms Zcash.Snark.ZeroKnowledge.drawGeneratorTape_cast
+assert_computable Zcash.Snark.ZeroKnowledge.drawGeneratorBlocks
+assert_axioms Zcash.Snark.ZeroKnowledge.drawGeneratorBlocks_state
+assert_axioms Zcash.Snark.ZeroKnowledge.drawGeneratorBlocks_at
+-- GeneratedRetryCoins
+assert_computable Zcash.Snark.ZeroKnowledge.runGeneratedCoinRetries
+assert_axioms Zcash.Snark.ZeroKnowledge.runGeneratedCoinRetries_replay
+assert_axioms Zcash.Snark.ZeroKnowledge.runGeneratedCoinRetries_state
+assert_axioms Zcash.Snark.ZeroKnowledge.runGeneratedCoinRetries_length_le
+assert_axioms Zcash.Snark.ZeroKnowledge.runGeneratedCoinRetries_word_state
+assert_axioms Zcash.Snark.ZeroKnowledge.zip_ofFn_pair
+assert_axioms Zcash.Snark.ZeroKnowledge.runStatefulRetries_map
+-- RetryTapeSource
+assert_axioms Zcash.Snark.ZeroKnowledge.independentTapeLaw_toList
+assert_axioms Zcash.Snark.ZeroKnowledge.retryAttemptTape_map
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformRetryTape_source_law
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformRetryTape_source_map_law

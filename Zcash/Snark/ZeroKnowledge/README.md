@@ -126,6 +126,25 @@ allocation has `n * 512 * (132m + 58)` bits. These bounds cover every finite
 budget, including zero, but are not uniform in `n` and establish no unlimited
 shared-oracle termination law.
 
+The [continuing-generator runner](ActionGeneratorRetry.lean) now carries one
+private generator state through those retries. Every started attempt allocates
+its full `148m + 46`-word block, discarding any words that its early-abort path
+does not use. A terminal result stops before allocating another block. The private
+state advances through exactly the started attempts, and the complete observed
+history equals replay from the generator's budget-length prefix. Oracle reply
+slots remain separate from the private generator, and its final state is private.
+
+The [finite PRNG reduction](ActionGeneratorPrng.lean) initializes that generator
+once from a fresh uniform bit seed after adaptive preprocessing. For every
+admitted retry-and-postprocessing test, the simulation error is at most
+`error_retry(m, q_pre, n) + eta`. Here `eta` is the distinguishing bound for the
+whole generated prefix, with [exact capacity](ActionPrivateRetryBits.lean)
+`512 * n * (148m + 46)` bits. The proof assumes no independence of generated
+blocks. It proves equality of the actual execution and security-game observation,
+including retained failures, exhaustion, and the final oracle cache. Concrete
+generator security, reduction-class membership, and a running-time proof remain
+explicit obligations. This allocation policy makes no Rust cursor-parity claim.
+
 The current [Action compiler reference theorem](ActionCompilerSimulation.lean) gives a
 numerical statistical honest-verifier simulation bound for a complete encoded reference
 attempt. It assumes original gate, lookup, and copy-value validity, eleven IPA rounds,
