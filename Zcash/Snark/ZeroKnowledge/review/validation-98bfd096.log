@@ -1,0 +1,32 @@
+Proof baseline: 98bfd0963b4b5b986a48863f9cd31015c3fdade2
+Command: lake build --wfail
+
+✔ [4424/4428] Built Zcash.Snark.ZeroKnowledge.TrustBoundary (16s)
+✔ [4425/4428] Built Zcash.Snark.ZeroKnowledge.Action.TrustBoundary (18s)
+✔ [4427/4428] Built Zcash.CensusCheck (19s)
+Build completed successfully (4428 jobs).
+
+Repository guards
+guard 0
+endpoint census: 326 endpoint declaration(s), all pinned.
+
+guard 1
+build surface: 6 target(s), lakefile.toml and .github/workflows/lean.yml agree.
+build coverage: 891 module(s), all covered by the default targets.
+
+guard 2
+Passed.
+
+guard 3
+csimp census: 1 csimp declaration(s), all covered.
+
+guard 4
+costed group-work census: 2 production modules, 20 host-callback definitions pinned.
+
+guard 5
+Passed.
+
+Declaration inventory: 31 named declarations in seven new modules; exactly one direct pin each.
+No unexpected axiom and no new native certificate owner.
+Documentation: 448 local Markdown links resolve before this review-record update.
+Git staged whitespace check: passed.

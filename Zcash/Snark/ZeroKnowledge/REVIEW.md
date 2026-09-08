@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `e44e33aca8a3a551231afa44917ae8009224f4a5` on `establish-zk` in
+Proof baseline: `98bfd0963b4b5b986a48863f9cd31015c3fdade2` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -212,12 +212,33 @@ the normalized application data; it does not assume that the constructor's extra
 already returns that data. Generated gate, lookup, and copy validity, and hence an
 application-witness-to-`ActionZkRelation` corollary, remain open.
 
+**Byte-cache execution costs**
+
+[ByteEqualityCost.lean](ByteEqualityCost.lean),
+[OracleCacheCost.lean](OracleCacheCost.lean), and
+[OracleProgrammingCost.lean](OracleProgrammingCost.lean) implement the existing
+byte equality, first-match lookup, and collision-rejecting programming operations
+with structural counters. Each erasure theorem preserves the exact return value.
+Counters remain outside failure options, retaining work on every stopped prefix.
+Inputs are materialized finite byte lists and query logs; the cost units charge
+byte comparisons, structural case tests, and cache-cell construction.
+
+The [protocol size bounds](PlonkTranscriptSize.lean) follow the original absorb
+order, allowing all optional permutation evaluations without a well-formedness
+premise. [ActionCacheCost.lean](ActionCacheCost.lean) uses the actual public prefix
+and eleven-round schedule to prove a bound of
+`22 * ((q + 22) * (9490m + 14207) + 4) + 2` for programming one materialized view.
+The parameters are `m` Actions and `q` initially cached entries. No successful
+emission or nonzero-challenge premise is needed. This is a cache-component cost
+proof; public-input preparation, bit packing, field/group/polynomial arithmetic,
+encoding, observation, and full simulator/reduction composition remain outside it.
+
 **Validation and review status**
 
-The [validation record](review/validation-e44e33ac.log) contains the successful
-full default-target build (`lake build --wfail`, 4,421 jobs), repository guards,
-and the [91-declaration dependency inventory](review/axioms-e44e33ac.log) for the
-latest proof milestone. All 884 modules are covered by default targets and all
+The [validation record](review/validation-98bfd096.log) contains the successful
+full default-target build (`lake build --wfail`, 4,428 jobs), repository guards,
+and the [31-declaration dependency inventory](review/axioms-98bfd096.log) for the
+latest proof milestone. All 891 modules are covered by default targets and all
 326 endpoint declarations are pinned. The full [parent](TrustBoundary.lean) and
 [Action](Action/TrustBoundary.lean) boundaries also check the earlier milestones.
 The native dependencies remain exactly the inherited named curve-order certificates:
