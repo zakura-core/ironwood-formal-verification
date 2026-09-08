@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `084ea039bbd7113b177b455274014497c2663133` on `establish-zk` in
+Proof baseline: `f14dc880abdae4f2e7c4e59f874e8050078d0d2f` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -28,6 +28,7 @@ the Boolean output of an admitted test under an explicit security assumption.
 | Complete shared-oracle retry stream for a fixed request, error `C(m,q)` | `wideUnlimitedActionOracle_simulation_capstone` in [ActionOracleStreamSimulation.lean](ActionOracleStreamSimulation.lean) | `actionOracleRetryStream` and `actionOracleBitRetryStream` |
 | One seeded interactive attempt, test error `epsilon(m)+eta` | `uniformSeedActionZk_test_error_bound` in [ActionPrngSecurity.lean](ActionPrngSecurity.lean) | Auxiliary-data mixtures of tested `actionZkProverFromSource` and `actionZkSimulator` |
 | Finite retries from one continuing generator, test error `R(m,q_pre,n)+eta` | `generatedActionFiatShamirRetry_test_error_bound` in [ActionGeneratorPrng.lean](ActionGeneratorPrng.lean) | Tested `actionGeneratedOracleRetryExperiment` and `actionOracleRetrySimulatedExperiment` |
+| Complete seeded retry stream for a fixed request, test error `2(C(m,q)+b(m)^n+eta)` | `generatedUnlimitedActionOracle_simulation_capstone` in [ActionGeneratorStreamPrng.lean](ActionGeneratorStreamPrng.lean) | Tested `actionGeneratedOracleRetryStream` and `actionOracleBitRetryStream` |
 
 The one-attempt ideal-field simulator has an explicit computable tape program;
 `actionOracleSimulatorProgram_law` in [ActionOracleSimulator.lean](ActionOracleSimulator.lean)
@@ -78,8 +79,8 @@ its own additional sampling term and [exact bit-tape law](ActionOracleBits.lean)
   costs at most `b(m)^n` for the simulator and `b(m)^n + C(m,q)` for the real law.
   See [the complete laws](ActionOracleStream.lean) and
   [termination theorems](ActionOracleStreamTermination.lean). This fixed-request
-  theorem does not itself instantiate adaptive before/after processing or a
-  continuing private generator on the infinite stream.
+  theorem does not itself instantiate adaptive before/after processing. The
+  continuing-generator extension has its own PRNG reduction below.
 - The [PRNG game](PrngSecurity.lean) samples a uniform bit seed independently of
   preprocessing and retained auxiliary data. Security is relative to an explicit
   admissible test class. Membership of the entire prover/retry/postprocessing
@@ -91,6 +92,19 @@ its own additional sampling term and [exact bit-tape law](ActionOracleBits.lean)
   Exact replay and state-advance identities hold even for correlated generator
   output. The private final generator state is omitted from the verifier view.
   This is the specified allocation policy, with no Rust cursor correspondence claim.
+- The [complete seeded Action law](ActionGeneratorStream.lean) initializes once
+  from a fresh uniform bit seed and uses an independent infinite public reply
+  stream. Every finite projection is exactly the recorded continuing-generator
+  runner. The request and initial public cache are fixed. At cutoff `n`, both
+  [whole-prefix reductions](ActionOracleRecordedPrng.lean) must be admitted: the
+  test of the clipped complete view and the actual finite exhaustion bit. Their
+  common PRNG advantage `eta` is charged twice. The generated exhaustion and
+  [nontermination mass](ActionGeneratorStreamTermination.lean) are each at most
+  `b(m)^n + C(m,q) + eta`. No per-seed stopping or independent generated-block
+  assumption is introduced, and the infinite nontermination event need not itself
+  belong to the PRNG test class. The tested comparison requires a measurable view
+  test. This theorem does not instantiate adaptive preprocessing/postprocessing
+  on the infinite stream or prove either reduction's machine running time.
 
 **Bounds and resource accounting**
 
@@ -117,6 +131,8 @@ R(m,q,n) = n * epsilon_bits(m,q) + 11n(n-1)/p
 b(m) = B(m) + (132m + 36) delta
 C(m,q) = 2 * epsilon_bits(m,q + 22)
        < 2 * (m*2^-238 + (q + 22)/p), m >= 1
+
+E_seeded_infinite(m,q,n) = 2 * (C(m,q) + b(m)^n + eta)
 ```
 
 `F` bounds failure to finish the emission schedule and hence the retry probability.
@@ -143,11 +159,11 @@ resulting PRNG test-class membership proof remain open.
 
 **Validation and review status**
 
-The [validation record](review/validation-084ea039.log) contains the successful
-full default-target build (`lake build --wfail`, 4,372 jobs), repository guards,
-and the [87-declaration dependency inventory](review/axioms-084ea039.log) for the
-latest proof milestone. All 835 modules are covered by default targets and all
-319 endpoint declarations are pinned. The full [parent](TrustBoundary.lean) and
+The [validation record](review/validation-f14dc880.log) contains the successful
+full default-target build (`lake build --wfail`, 4,384 jobs), repository guards,
+and the [62-declaration dependency inventory](review/axioms-f14dc880.log) for the
+latest proof milestone. All 847 modules are covered by default targets and all
+326 endpoint declarations are pinned. The full [parent](TrustBoundary.lean) and
 [Action](Action/TrustBoundary.lean) boundaries also check the earlier milestones.
 The native dependencies remain exactly the inherited named curve-order certificates:
 
@@ -169,4 +185,5 @@ discharged. The full [checklist](CHECKLIST.md) tracks the remaining extensions.
 An independent review should focus on whether each advertised claim matches its
 experiment, whether auxiliary data and shared state preserve the asserted seed
 independence, whether failed prefixes and stopping branches stay visible, and
-whether future efficiency or unlimited computational claims add the required proofs.
+whether the computational claims charge the actual truncation tail and whether
+future efficiency claims add the required execution-cost proofs.
