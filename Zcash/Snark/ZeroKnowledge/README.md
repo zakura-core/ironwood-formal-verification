@@ -11,6 +11,9 @@ been resolved in the local Bento checkout inspected for this development. This i
 provenance limitation, not evidence that the source is unavailable, and does not block
 proving the protocol described by the pinned note and Lean definitions.
 
+The [ZK checklist](CHECKLIST.md) records the completed interactive theorem and
+optional assumption instantiations, Fiat–Shamir proofs, and unlimited-retry targets.
+
 The current [Action compiler reference theorem](ActionCompilerSimulation.lean) gives a
 numerical statistical honest-verifier simulation bound for a complete encoded reference
 attempt. It assumes original gate, lookup, and copy-value validity, eleven IPA rounds,
