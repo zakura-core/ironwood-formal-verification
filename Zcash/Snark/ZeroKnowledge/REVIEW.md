@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `27b03619b51e29d1af54d86515cb0a2608a8d8a1` on `establish-zk` in
+Proof baseline: `bc821da4f9520be36d62b5ec3dad3274d0b0e92a` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -185,18 +185,28 @@ The interpreter's frame properties are proved in
 [AdviceWitnessExecution.lean](AdviceWitnessExecution.lean) and
 [AdviceWitnessAssignment.lean](AdviceWitnessAssignment.lean).
 
-The final assignment's read dependencies, witness equations, and extracted private
-data still need their correctness proofs. The semantic precondition theorem concerns
+[AdviceWitnessEquations.lean](AdviceWitnessEquations.lean) now identifies the
+collected advice equations with the original source witness clauses. The canonical
+compiler discharges every remaining fixed-write and table clause in
+[CompiledFixedWitnesses.lean](CompiledFixedWitnesses.lean). The resulting execution
+theorem requires causal reads and distinct write targets. The
+[structured-program dependency theorem](WitnessProgramSupport.lean) verifies the
+collectors through local steps, branches, dynamic indexing, and vector outputs.
+
+The actual Action still needs native callback read certificates and a proof that
+its repeated writes preserve established values; the distinct-target premise
+does not apply to the complete Action program. Its final witness equations and
+extracted private data therefore still need their correctness proofs. The semantic precondition theorem concerns
 the normalized application data; it does not assume that the constructor's extractor
 already returns that data. Generated gate, lookup, and copy validity, and hence an
 application-witness-to-`ActionZkRelation` corollary, remain open.
 
 **Validation and review status**
 
-The [validation record](review/validation-27b03619.log) contains the successful
-full default-target build (`lake build --wfail`, 4,393 jobs), repository guards,
-and the [63-declaration dependency inventory](review/axioms-27b03619.log) for the
-latest proof milestone. All 856 modules are covered by default targets and all
+The [validation record](review/validation-bc821da4.log) contains the successful
+full default-target build (`lake build --wfail`, 4,398 jobs), repository guards,
+and the [45-declaration dependency inventory](review/axioms-bc821da4.log) for the
+latest proof milestone. All 861 modules are covered by default targets and all
 326 endpoint declarations are pinned. The full [parent](TrustBoundary.lean) and
 [Action](Action/TrustBoundary.lean) boundaries also check the earlier milestones.
 The native dependencies remain exactly the inherited named curve-order certificates:
