@@ -156,38 +156,60 @@ establish verifier acceptance.
   including private-randomness mixtures. [OracleResources.lean](OracleResources.lean)
   bounds query-trace length and cache growth; these are not running-time bounds
   for arbitrary supplied computations.
-- [ ] Define real and simulated noninteractive experiments with a classical,
-  query-bounded random-oracle adversary. Specify statement selection, auxiliary
-  input, proof count, and oracle access before and after observing the proof.
-- [ ] Connect the reference message sequence to
+- [x] Define real and simulated noninteractive experiments with a classical,
+  query-bounded random-oracle adversary in
+  [ActionOracleAdversary.lean](ActionOracleAdversary.lean). One attempt follows
+  adaptive selection of a valid statement/witness pair and arbitrary auxiliary
+  state. The simulator erases the witness; oracle access continues after the
+  proof with the same retained table. Private prover tapes are sampled freshly
+  after selection, independently of the preceding execution.
+- [x] Connect the reference message sequence to
   [the verifier's Fiat–Shamir schedule](../Verifier/FiatShamir.lean), including the
   verifying-key representation, public-instance prefix, domain separators, canonical
-  point/scalar encoding, squeeze order, and digest-to-field conversion.
-- [ ] Apply the cached-oracle programming theorem to the witness-free Action
-  simulator and actual challenge schedule. Prove the required transcript entropy
-  and bound prior-query conflicts and other programming failures at every stage.
-- [ ] Compose with the joint PLONK and IPA simulation and exceptional-event bounds.
-  Prove an explicit final error as a function of Action count and oracle-query
-  budget, accounting for wide reduction without charging the same hybrid twice.
-- [ ] State the resulting ZK theorem for the proof and the adversary's oracle view,
-  with the simulator's resource bound and all model assumptions exposed. Relating
-  concrete BLAKE2b to the random oracle remains a cryptographic modeling assumption.
+  point/scalar encoding, squeeze order, and digest-to-field conversion. The
+  [online reference driver](PlonkOracle.lean) uses the existing causality theorem
+  and abort checks. [PlonkQuerySchedule.lean](PlonkQuerySchedule.lean) seals all
+  twenty-two queries; [ActionFiatShamir.lean](ActionFiatShamir.lean) supplies the
+  actual Action instance prefix and specified total coordinate encoding.
+- [x] Apply the cached-oracle programming theorem to the witness-free Action
+  simulator and actual challenge schedule in
+  [ActionOracleModel.lean](ActionOracleModel.lean). The
+  [first advice commitment is exactly uniform](PlonkAnchor.lean) and anchors
+  every query. [ActionOracleConflicts.lean](ActionOracleConflicts.lean) proves
+  no internal query repeats and bounds all prior-query conflicts by `q_pre / p`.
+- [x] Compose with the joint PLONK and IPA simulation and exceptional-event bounds.
+  [SimulationAgreement.lean](SimulationAgreement.lean) charges the existing
+  `epsilon(m)` once. The complete one-attempt oracle experiment has two-sided
+  error `epsilon(m) + q_pre / p`, including incomplete attempts and simulator
+  programming failure, for `m > 0`.
+- [x] State the resulting one-attempt simulation theorem for the proof and the
+  adversary's final oracle view in [ActionFiatShamir.lean](ActionFiatShamir.lean).
+  The [computable simulator](ActionOracleSimulator.lean) has exactly that law,
+  with 22 raw challenge words and `132m + 36` uniform field draws.
+  [ActionOracleResources.lean](ActionOracleResources.lean) bounds both final
+  caches by `q_pre + 22 + q_post`. These are primitive sampling and oracle-query
+  budgets; machine-instruction and bit-sampler time bounds are not formalized.
+  Relating concrete BLAKE2b to the random oracle remains a cryptographic modeling
+  assumption, and the real prover retains its wide-reduced sampling law.
 - [ ] If this theorem includes retries, model the shared oracle state across them
   and reprove the retry comparison in that experiment. The independent verifier
   tapes of the interactive retry theorem do not supply this connection.
 
-Closure: a random-oracle ZK theorem with its own simulator and quantified error.
-The interactive HVZK theorem and its causality proof are inputs to this work;
-they do not by themselves prove Fiat–Shamir ZK.
+Closure for one attempt: the classical programmable-random-oracle distribution
+theorem, its computable simulator, and its sampling/query budgets are checked.
+The interactive HVZK theorem and its causality proof are inputs to this separate
+oracle argument. Shared-oracle retries and bit-level runtime analysis extend its scope.
 
 **Validation and review if an extension is pursued**
 
 - [x] Build changed modules and their dependent trust boundaries; run the required
   endpoint and axiom checks. Pin every new logical declaration, including helpers
   outside the endpoint-name census. All completed milestones have these checks.
-  The cached-oracle milestone adds 31 direct pins and passes the 283-endpoint census.
+  The one-attempt Action oracle milestone adds 123 direct pins and passes the
+  290-endpoint census. Its concrete declarations retain only the two existing
+  Pasta curve-order native certificates.
 - [x] Run the full `lake build --wfail` before declaring an extension complete.
-  The cached-oracle milestone passes locally with 4,208 jobs, and all 768 modules
+  The one-attempt Action oracle milestone passes locally with 4,228 jobs, and all 788 modules
   are covered by the default targets. Future theorem commits require their own
   validation; these local results do not assert hosted CI success.
 - [ ] Review the final theorem statement, simulation experiment, and transitive

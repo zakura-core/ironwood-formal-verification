@@ -35,16 +35,46 @@ the [joint recovery law](DigestTape.lean) introduces no additional sampling-bias
 term. [Transcript bytes](TranscriptBytes.lean) encode scalars, affine point
 coordinates, and challenge markers injectively, and [the hash boundary](ByteFiatShamir.lean)
 includes the specified personalization and wide reduction. These results concern
-independent raw responses. Connecting them to a consistent queried oracle and
-bounding programming conflicts remain part of the Fiat–Shamir extension.
+the full joint raw-response distribution, which is used in the oracle comparison below.
 The [cached oracle](CachedOracle.lean) now has exact independent-tape semantics,
 with one stored answer for each address. [Conflict-checked programming](OracleProgrammingBias.lean)
 preserves those answers and gives a generic two-sided comparison whose error is
 the programming-conflict probability, including for privately randomized oracle
-computations. Applying this comparison to the reference prover and bounding its
-conflict event are still required. The [resource lemmas](OracleResources.lean)
-bound recorded queries and cache growth, without asserting a time bound for an
-arbitrary continuation.
+computations.
+
+The [Fiat–Shamir capstone](ActionFiatShamir.lean) proves single-attempt statistical
+simulation in a programmable classical random oracle. For `m > 0` Actions and
+at most `q_pre` oracle queries before the proof, its two-sided error is
+`epsilon(m) + q_pre / p`. The [adversary experiment](ActionOracleAdversary.lean)
+permits adaptive selection of the public inputs and a valid witness, arbitrary
+retained auxiliary state, and further adaptive queries after the attempt. The
+simulator receives the public request, auxiliary state, and cache; the selected
+witness is erased. The comparison includes the complete observed attempt and
+the final cache, including failed prefixes and explicit programming failure.
+The setup remains fixed, with eleven rounds and nonidentity `W`, and private
+prover bits are fresh and independent of the adversary's preceding execution.
+
+The [causal oracle driver](PlonkOracle.lean) runs the same full reference prover
+and abort checks. [Every query prefix](PlonkQuerySchedule.lean) agrees with the
+existing verifier's eleven pre-IPA squeezes and all eleven IPA rounds; the Action
+corollary includes the compiler's public instance commitments. The
+[conflict bound](ActionOracleConflicts.lean) uses the simulator's exactly uniform
+first advice commitment, which occurs in every prover query. Each prior address
+can name at most one such point, while internal query addresses are distinct.
+The comparison therefore charges `q_pre / p` once and preserves the existing
+`epsilon(m)` without another wide-reduction term.
+
+The [executable simulator](ActionOracleSimulator.lean) has exactly the same law:
+it samples 22 raw 512-bit challenge words, uses
+[132m + 36 uniform field draws](PlonkSimulatorTape.lean), and runs the computable
+public PLONK and IPA simulator. The real prover still uses its original
+`148m + 46` wide-reduced private fields. Both experiments have at most
+[`q_pre + 22 + q_post` cache entries](ActionOracleResources.lean). These are
+checked sampling and oracle-resource bounds; machine-instruction and bit-sampler
+running times are not formalized here. The hash model uses the existing Lean
+protocol's total public-prefix coordinate encoding. Relating concrete BLAKE2b
+to the random oracle remains a cryptographic modeling assumption. This theorem
+covers one attempt; retries sharing the same oracle need their own composition.
 
 The current [Action compiler reference theorem](ActionCompilerSimulation.lean) gives a
 numerical statistical honest-verifier simulation bound for a complete encoded reference
@@ -1337,8 +1367,9 @@ The attempt observation above now retains the scheduled failures and partial out
 Its random-bit tape and independent verifier
 challenges are explicit assumptions of the interactive experiment.
 
-A Fiat–Shamir ZK claim requires a separate hash-model and simulation argument. A theorem
-about a particular executable would additionally require implementation correspondence;
+The [one-attempt Fiat–Shamir theorem](ActionFiatShamir.lean) supplies the separate
+classical random-oracle simulation argument and its `epsilon(m) + q_pre / p` bound.
+A theorem about a particular executable would additionally require implementation correspondence;
 the available Rust quotient implementations have not been proved equivalent to these
 polynomial computations. Neither whole-program Rust parity nor a concrete PRNG proof is
 a prerequisite for the protocol-level statistical HVZK target.

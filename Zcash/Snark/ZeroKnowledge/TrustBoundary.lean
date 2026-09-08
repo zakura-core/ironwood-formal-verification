@@ -78,6 +78,13 @@ import Zcash.Snark.ZeroKnowledge.ByteFiatShamir
 import Zcash.Snark.ZeroKnowledge.PlonkDigest
 import Zcash.Snark.ZeroKnowledge.OracleProgrammingBias
 import Zcash.Snark.ZeroKnowledge.OracleResources
+import Zcash.Snark.ZeroKnowledge.PlonkOracle
+import Zcash.Snark.ZeroKnowledge.PlonkAnchor
+import Zcash.Snark.ZeroKnowledge.PlonkQuerySchedule
+import Zcash.Snark.ZeroKnowledge.PlonkSimulatorTape
+import Zcash.Snark.ZeroKnowledge.OracleContinuationResources
+import Zcash.Snark.ZeroKnowledge.AnchorProbability
+import Zcash.Snark.ZeroKnowledge.SimulationAgreement
 import Zcash.Meta.AxiomCheck
 
 /-!
@@ -1866,3 +1873,99 @@ assert_axioms Zcash.Snark.ZeroKnowledge.oracleProgramming_family_error_bound
 assert_axioms Zcash.Snark.ZeroKnowledge.freshOracleRunTape_length_le
 assert_axioms Zcash.Snark.ZeroKnowledge.programOracleTrace_length
 assert_axioms Zcash.Snark.ZeroKnowledge.cachedOracleRunTape_cache_length_le
+
+-- Single-attempt classical oracle simulation, executable tapes, and resource bounds.
+-- AnchorProbability
+assert_axioms Zcash.Snark.ZeroKnowledge.transcriptAnchor_mass_le
+assert_axioms Zcash.Snark.ZeroKnowledge.transcriptAnchorList_mass_le
+-- OracleContinuation
+assert_axioms Zcash.Snark.ZeroKnowledge.eventBias_bind_support
+assert_axioms Zcash.Snark.ZeroKnowledge.cachedOracleLaw_cache_length_le
+assert_axioms Zcash.Snark.ZeroKnowledge.oracleAttemptContinue
+assert_axioms Zcash.Snark.ZeroKnowledge.oracleAttemptContinue_error_bound
+-- OracleContinuationResources
+assert_computable Zcash.Snark.ZeroKnowledge.oracleAttemptCache
+assert_axioms Zcash.Snark.ZeroKnowledge.programOracleView_cache_length_le
+assert_axioms Zcash.Snark.ZeroKnowledge.oracleAttemptContinue_cache_length_le
+-- OracleSchedule
+assert_computable Zcash.Snark.ZeroKnowledge.replayOracleSchedule
+assert_axioms Zcash.Snark.ZeroKnowledge.replayOracleSchedule_queries_prefix
+assert_axioms Zcash.Snark.ZeroKnowledge.replayOracleSchedule_result
+assert_axioms Zcash.Snark.ZeroKnowledge.replayOracleSchedule_queries_nodup
+assert_computable Zcash.Snark.ZeroKnowledge.oracleHistoryTape
+assert_axioms Zcash.Snark.ZeroKnowledge.oracleHistoryTape_snoc_agrees
+assert_computable Zcash.Snark.ZeroKnowledge.prefixOracleComp
+assert_axioms Zcash.Snark.ZeroKnowledge.prefixOracleComp_queryBound
+assert_axioms Zcash.Snark.ZeroKnowledge.prefixOracleComp_replay
+-- OracleTableResources
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolOracleView_queries_length_le
+assert_axioms Zcash.Snark.ZeroKnowledge.programOracleView_cache_length
+-- PlonkAnchor
+assert_axioms Zcash.Snark.ZeroKnowledge.attachPlonkDigests_forget
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAttemptTrace_firstAdvice
+assert_axioms Zcash.Snark.ZeroKnowledge.preIpaMaskSimulator_points
+assert_axioms Zcash.Snark.ZeroKnowledge.idealPlonkJointSimulator_points
+assert_axioms Zcash.Snark.ZeroKnowledge.idealPlonkVerifierSimulator_advice
+assert_axioms Zcash.Snark.ZeroKnowledge.freshPlonkVerifierSimulator_advice
+assert_axioms Zcash.Snark.ZeroKnowledge.digestPlonkVerifierSimulator_advice
+-- PlonkOracle
+assert_computable Zcash.Snark.ZeroKnowledge.plonkRawOracleView +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkRawOracleView_result
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkRawOracleView_queries_nodup
+assert_computable Zcash.Snark.ZeroKnowledge.plonkReferenceOracleTrace +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkReferenceOracleTrace_causal
+assert_computable Zcash.Snark.ZeroKnowledge.plonkReferenceOracleComp +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkReferenceOracleComp_queryBound
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkReferenceOracleComp_replay
+-- PlonkQuerySchedule
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkStageBlocks_split
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPreIpaBlocks_transcript
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkQueryPrefix_preIpa
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkQueryPrefix_ipaRound
+assert_axioms Zcash.Snark.ZeroKnowledge.deriveChallenges_protocolQuery_preIpa
+assert_axioms Zcash.Snark.ZeroKnowledge.deriveChallenges_protocolQuery
+assert_axioms Zcash.Snark.ZeroKnowledge.byteFiatShamir_protocolQuery
+-- PlonkSimulatorTape
+assert_computable Zcash.Snark.ZeroKnowledge.plonkMaskSimulatorSampleCount
+assert_computable Zcash.Snark.ZeroKnowledge.plonkMaskSimulatorTapeEquiv +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkSimulatorSampleCount
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkSimulatorSampleCount_eq
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkSimulatorSampleCount_eleven
+assert_computable Zcash.Snark.ZeroKnowledge.plonkSimulatorTapeEquiv +choice
+assert_computable Zcash.Snark.ZeroKnowledge.plonkVerifierSimulatorFromTape +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierSimulatorFromTape_law
+-- ProtocolOracle
+assert_computable Zcash.Snark.ZeroKnowledge.protocolAttemptContinues
+assert_computable Zcash.Snark.ZeroKnowledge.protocolOracleReport +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolOracleReport_stopped
+assert_computable Zcash.Snark.ZeroKnowledge.protocolOracleView +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolOracleView_result
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolOracleView_queries_nodup
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolOracleView_queries_anchor
+assert_computable Zcash.Snark.ZeroKnowledge.protocolOracleComp +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolOracleComp_queryBound
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolOracleComp_replay
+-- RawChallenges
+assert_computable Zcash.Snark.ZeroKnowledge.extendDigestTape +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.extendDigestTape_fin
+assert_computable Zcash.Snark.ZeroKnowledge.plonkChallengesFromDigests +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkChallengesFromDigests_read
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkChallengesFromDigests_prefix
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkChallengesFromDigests_extend
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkChallengesFromDigests_extend_read
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAfterDigests_causal
+-- SimulationAgreement
+assert_axioms Zcash.Snark.ZeroKnowledge.simulation_map_of_agree
+-- StageQuery
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolStagesTrace_queryPrefix
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolQueryPrefix_stages
+-- TranscriptQuery
+assert_computable Zcash.Snark.ZeroKnowledge.protocolQueryPrefix
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolQueryPrefix_challengeCount
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolQueryPrefix_inj
+assert_computable Zcash.Snark.ZeroKnowledge.protocolQueryAddress +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolQueryAddress_inj
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolQueryAddresses_nodup
+assert_computable Zcash.Snark.ZeroKnowledge.HasTranscriptAnchor +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.protocolQueryAddress_anchor
+assert_axioms Zcash.Snark.ZeroKnowledge.HasTranscriptAnchor.unique
