@@ -466,6 +466,10 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   [scalar case test](IpaScalarCost.lean), all round points and commitment arithmetic,
   and both responses. It covers every challenge value and does not leave work
   hidden behind function-valued transcript fields.
+- [x] Construct and fully materialize the counted [PLONK mask view](PlonkMaskSimulatorCost.lean),
+  including every commitment-point multiplication, every five-field observation
+  vector, and both extra scalars. Erasure is the existing simulator's complete
+  finite view, with all coin and setup-reader costs retained.
 - [x] Count the actual [expression evaluator](ExpressionCost.lean),
   [lookup compression](ExpressionCompressionCost.lean), all five
   [lookup constraints](LookupExpressionsCost.lean), and both
@@ -490,6 +494,14 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   The [commitment-entry readers](CommitmentEntryCost.lean) preserve every column,
   linear-mask, quotient-piece, and quotient-prime slot. Bounds include complete
   supplied entry costs; missing columns retain their original zero fallback.
+- [x] Construct the actual [public and private opening layouts](OpeningGroupLayoutCost.lean)
+  and [fixed/advice query tables](QueryOrderCost.lean), with exact source-order
+  identities. [Private opening evaluations](PrivateOpeningEvaluationCost.lean)
+  include column routing and the full Horner fold. The complete
+  [public first-group claims](PublicOpeningClaimsCost.lean) include row-polynomial
+  preparation and actual fixed-query routing. The
+  [collapsed quotient point](CollapsedQuotientPointCost.lean) counts all eight
+  piece reads, power loops, and group operations.
 - [x] Count loading canonical polynomial coefficients, their
   [Horner evaluation](PolynomialArithmeticCost.lean), and the full generator sweep
   and ordered claim folds in [CommitmentArithmeticCost.lean](CommitmentArithmeticCost.lean).

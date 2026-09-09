@@ -227,6 +227,11 @@ retain every generator, coefficient, and challenge access.
 counted inverse DFT and proved equal to the canonical interpolant's coefficients.
 The [row evaluation and commitment algorithms](RowPolynomialCost.lean) include
 that preparation and retain the complete supplied row-provider costs.
+The [PLONK mask simulator](PlonkMaskSimulatorCost.lean) now has a complete
+materialized cost bound. [Private opening evaluations](PrivateOpeningEvaluationCost.lean)
+include group construction, column routing, and Horner arithmetic;
+[public opening claims](PublicOpeningClaimsCost.lean) also include their actual
+query-table routing and public polynomial preparation.
 The model prices field and group primitives explicitly and counts structural
 operations; it is not a machine-code correspondence theorem. The complete
 PLONK opening, concrete public-row and query providers, quotient composition, encoding,
