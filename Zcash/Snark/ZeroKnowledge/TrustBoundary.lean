@@ -1,3 +1,5 @@
+import Zcash.Snark.ZeroKnowledge.StoredChallengePrices
+import Zcash.Snark.ZeroKnowledge.PlonkJointPriceBudget
 import Zcash.Snark.ZeroKnowledge.PlonkCoinReadCost
 import Zcash.Snark.ZeroKnowledge.PlonkCoinReadBound
 import Zcash.Snark.ZeroKnowledge.PlonkChallengeReadCost
@@ -3704,3 +3706,12 @@ assert_computable Zcash.Snark.ZeroKnowledge.plonkStoredTapeReadBudget
 assert_axioms Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted_readBound
 assert_computable Zcash.Snark.ZeroKnowledge.plonkStoredTapeCostBudget
 assert_axioms Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted_cost_le
+
+/-! ## Complete algebraic simulation from stored bits -/
+
+assert_axioms Zcash.Snark.ZeroKnowledge.getDListCosted_cost_of_lt
+assert_axioms Zcash.Snark.ZeroKnowledge.storedPlonkFieldReadCosted_cost_of_lt
+assert_computable Zcash.Snark.ZeroKnowledge.Challenges.readPrices
+assert_computable Zcash.Snark.ZeroKnowledge.storedPlonkChallengePriceModel +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted_challenge_prices
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkJointSimulatorCostBudget_congr_prices

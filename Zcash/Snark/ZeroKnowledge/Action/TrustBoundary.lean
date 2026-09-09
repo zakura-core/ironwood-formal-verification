@@ -1,3 +1,5 @@
+import Zcash.Snark.ZeroKnowledge.StoredActionTapeJointCost
+import Zcash.Snark.ZeroKnowledge.StoredActionTapeJointBound
 import Zcash.Snark.ZeroKnowledge.StoredActionJointCostBound
 import Zcash.Snark.ZeroKnowledge.StoredActionJointCost
 import Zcash.Snark.ZeroKnowledge.ActionPublicInputCost
@@ -1258,3 +1260,15 @@ assert_computable Zcash.Snark.ZeroKnowledge.storedActionJointInputBudget
 
 -- StoredActionJointCostBound
 assert_axioms Zcash.Snark.ZeroKnowledge.storedActionJointSimulatorCosted_cost_le
+
+/-! ## Complete algebraic simulation from stored bits -/
+
+assert_axioms Zcash.Snark.ZeroKnowledge.StoredPlonkJointOutput
+assert_computable Zcash.Snark.ZeroKnowledge.storedActionTapeJointCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionTapeJointCosted_raw
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionTapeJointCosted_challenges
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionTapeJointCosted_result +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionTapeJointCosted_cost_le
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionTapeJointInputBudget_eleven
+assert_computable Zcash.Snark.ZeroKnowledge.storedActionTapeJointCostBudget +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionTapeJointCosted_cost_le_fixed

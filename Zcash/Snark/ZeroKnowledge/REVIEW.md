@@ -451,8 +451,14 @@ complete costs. Shared intermediate work may be conservatively counted more than
 once. The [public row coefficient construction](RowCoefficientCost.lean) uses the
 proved inverse-DFT formula. [Row evaluations and commitments](RowPolynomialCost.lean)
 include every coefficient calculation and retain full row-provider costs.
-The complete algebraic simulation still needs challenge/private-tape routing,
-proof-field routing, codecs, and transcript observation composed into
+The [bit-driven joint simulator](StoredActionTapeJointCost.lean) now composes
+the complete tape producer with all algebraic work. Its erasure theorem retains
+the original tape split, challenge values, and private coins. The
+[fixed runtime envelope](StoredActionTapeJointBound.lean) has no reader-price
+premises and does not depend on sampled values: the exact stored challenge-read
+prices follow from their valid positions. The Action input-read envelope is
+`553m + 4R_read + 4457`. Proof-field routing, codecs, and oracle observation still
+need to be composed into
 `actionOracleSimulatorFromBits`. A PRNG reduction
 executes the real prover and the supplied view test, so its admissibility needs
 those runtime bounds in addition to simulator efficiency.
@@ -473,8 +479,8 @@ challenge values are functions of the same original bits; no independence is
 introduced between them. [PlonkStoredTapeBound.lean](PlonkStoredTapeBound.lean)
 adds all eager scalar reads and derives every later indexed reader's bound from
 the generated field-list length. Its common bound is `4N + 2R + 25`, including
-both field reads in each IPA-round coin pair. Connecting that producer to the
-complete proof and oracle observer remains separate composition work.
+both field reads in each IPA-round coin pair. Its connection to algebraic
+simulation is now proved above; proof fields and the oracle observer remain.
 
 [RawBitPackingCost.lean](RawBitPackingCost.lean) counts little-endian packing from a
 reader that supplies its complete bit-access costs. [WideBitReductionCost.lean](WideBitReductionCost.lean)

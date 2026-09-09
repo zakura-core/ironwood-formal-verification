@@ -575,8 +575,15 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   [stored Action adapter](StoredActionJointCost.lean) and its
   [concrete bound](StoredActionJointCostBound.lean). Public-row, generator, and
   setup-read premises follow from the original Action input layout and stored
-  dimensions. Challenge/private-coin producers, proof-field routing, encoding,
-  and transcript observation remain to be composed with the fixed-bit stage.
+  dimensions.
+- [x] Compose the [stored bit-tape producer with complete Action joint simulation](StoredActionTapeJointCost.lean).
+  The exact-result theorem recovers the original raw-tape split, field challenges,
+  private coins, public input rows, and entire PLONK/IPA view. The
+  [fixed cost envelope](StoredActionTapeJointBound.lean) applies to every bit tape
+  without reader-price premises: [exact positional prices](StoredChallengePrices.lean)
+  remove sampled values from the budget. The common Action input-read envelope
+  is `553m + 4R_read + 4457`. Proof-field routing, encoding, and oracle observation
+  remain to be composed.
 - [ ] Specify the runtime model and input representations, including access to
   public inputs and setup, bit packing, field reduction, group arithmetic,
   polynomial operations, transcript encoding, and cache lookup/programming.

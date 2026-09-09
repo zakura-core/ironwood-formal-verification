@@ -196,8 +196,7 @@ fixed-tape conversion. The [complete tape producer](PlonkStoredTapeCost.lean)
 also recovers the original challenge/private split and every private-coin position.
 Raw replies and reduced fields come from the same bits, preserving their correlation.
 Its [bound](PlonkStoredTapeBound.lean) includes both packing passes, eager scalar
-loads, and full subsequent indexed reads. Composing these producers with the whole
-simulator remains separate work.
+loads, and full subsequent indexed reads.
 
 Concrete [row readers](StoredRowsCost.lean), [Action input serialization](ActionPublicInputCost.lean),
 [stored setup vectors](StoredPlonkSetupCost.lean), and [stored key readers](StoredPlonkKeyCost.lean)
@@ -212,9 +211,12 @@ simulator at all challenge values. The [total bound](PlonkJointSimulatorCostBoun
 retains every preparation stage and derives the generated readers' sizes and
 access costs from the mask constructor. The [stored Action adapter](StoredActionJointCost.lean)
 and its [bound](StoredActionJointCostBound.lean) instantiate public rows and setup
-accesses using their concrete representations. Composing challenge/private-coin
-routing, proof fields, codecs, and transcript observation with the fixed-bit
-input remains necessary for the complete oracle-simulator runtime theorem.
+accesses using their concrete representations. The [bit-driven composition](StoredActionTapeJointCost.lean)
+now connects the complete bit producer to this joint computation. Its
+[fixed bound](StoredActionTapeJointBound.lean) depends only on input sizes, stored
+key structure, and primitive operation prices, for every possible bit tape.
+Proof-field routing, codecs, and oracle observation remain necessary for the
+complete oracle-simulator runtime theorem.
 
 The [counted IPA simulator](IpaSimulatorCost.lean) now constructs and materializes
 every round point, the mask commitment, and both scalar responses. Its erasure
