@@ -191,6 +191,11 @@ model. Compare strength only after fixing those models and assumptions.
 - [x] Derive all actual Action gate rows in [ActionGateValues.lean](ActionGateValues.lean)
   and preserve gate and paired lookup relations through the reference-key shape
   in [ActionRowRelations.lean](ActionRowRelations.lean).
+- [x] Compose the gate, lookup, and actual packed-copy bridges into
+  `ActionZkRelation` in [ActionConstraintsRelation.lean](ActionConstraintsRelation.lean).
+  This intermediate theorem takes original operation constraints and the two
+  explicit activation-coverage checks; the complete source certificates must
+  still supply those premises for the application constructor.
 - [ ] Discharge the complete witness equations and the actual gate and lookup
   activation-coverage checks.
 - [ ] Package that evidence as `ActionZkRelation` and derive application-level
@@ -449,6 +454,22 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   conversion. A 512-bit word costs at most `512R + 264193` structural units when
   each input read costs at most `R`. The model charges bounded-width arithmetic
   and reader-index adapters; whole-tape access and simulator composition remain open.
+- [x] Construct and fully materialize the counted [IPA simulator](IpaSimulatorCost.lean),
+  with exact erasure to the existing transcript. The bound includes the complete
+  supplied input accesses, both [public folds](PublicFoldCost.lean), the
+  [scalar case test](IpaScalarCost.lean), all round points and commitment arithmetic,
+  and both responses. It covers every challenge value and does not leave work
+  hidden behind function-valued transcript fields.
+- [x] Count the actual [expression evaluator](ExpressionCost.lean),
+  [lookup compression](ExpressionCompressionCost.lean), all five
+  [lookup constraints](LookupExpressionsCost.lean), and both
+  [permutation-chunk folds](PermutationChunkCost.lean), preserving their original
+  results and all supplied query-reader costs.
+- [x] Count loading canonical polynomial coefficients, their
+  [Horner evaluation](PolynomialArithmeticCost.lean), and the full generator sweep
+  and ordered claim folds in [CommitmentArithmeticCost.lean](CommitmentArithmeticCost.lean).
+  The erasure proofs identify the existing polynomial and commitment operations;
+  constructing the input polynomials remains separate work.
 - [ ] Specify the runtime model and input representations, including access to
   public inputs and setup, bit packing, field reduction, group arithmetic,
   polynomial operations, transcript encoding, and cache lookup/programming.
@@ -460,8 +481,10 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
 - [ ] Prove the resulting running-time bound in the Action count, prior cache
   size, and explicit input sizes. State primitive-cost assumptions and distinguish
   a cost-model theorem from compiler or machine-code correspondence.
-- [ ] Use the checked runtime bound to discharge the PRNG reduction's resource
-  conditions wherever that computational instantiation is claimed.
+- [ ] Discharge the PRNG reduction's resource conditions wherever that
+  computational instantiation is claimed. This requires bounds for the actual
+  real-prover-and-test reduction, including retained auxiliary data and any retry
+  or postprocessing work; the simulator's runtime bound alone does not supply them.
 
 Closure: a bound on the same simulator's execution cost follows from a specified
 cost model and explicit primitive assumptions. Computability and a fixed random

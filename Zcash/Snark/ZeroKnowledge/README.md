@@ -181,15 +181,38 @@ keeps the cost of the preceding work. For materialized query logs, the
 `22 * ((q + 22) * (9490m + 14207) + 4) + 2` units from the original 22-query
 schedule and its [linear transcript-size bound](PlonkTranscriptSize.lean).
 Here `q` is the initial cache length and `m` is the Action count. The units count
-byte comparisons, structural case tests, and cache-cell construction. Producing
-the view, including public commitments, simulator arithmetic, codecs, and the
-observer, still needs separate costed implementations and a composition proof.
+byte comparisons, structural case tests, and cache-cell construction. The
+surrounding proof construction, codecs, and observer require their own costs and
+a composition proof.
 The counted [bit packer](RawBitPackingCost.lean) and
 [wide reducer](WideBitReductionCost.lean) now reproduce exactly the existing
 raw-word and field-tape conversions. Each 512-bit word costs at most
 `512R + 264193` structural units for a reader with access bound `R`, including
 successor-index adapters and bounded-width arithmetic. This component does not
 yet account for the complete simulator's tape-access pattern or compose its runtime.
+
+The [counted IPA simulator](IpaSimulatorCost.lean) now constructs and materializes
+every round point, the mask commitment, and both scalar responses. Its erasure
+theorem gives exactly the existing simulator's complete finite observation;
+its cost bound retains the supplied public-input and coin-reader costs, both
+[public folds](PublicFoldCost.lean), the [scalar case test](IpaScalarCost.lean),
+and all [IPA arithmetic](IpaArithmeticCost.lean). It applies at exceptional
+challenge values too. Materialization pays for all output fields before any
+later encoder failure; shared work may be conservatively charged more than once.
+
+Further counted components cover the actual [expression AST](ExpressionCost.lean),
+[lookup compression](ExpressionCompressionCost.lean), all five
+[lookup constraints](LookupExpressionsCost.lean), and both
+[permutation-chunk product folds](PermutationChunkCost.lean).
+[Polynomial evaluation](PolynomialArithmeticCost.lean) loads the actual canonical
+coefficient array and proves its counted Horner result equals the existing
+evaluator. [Coefficient commitments and claim folds](CommitmentArithmeticCost.lean)
+retain every generator, coefficient, and challenge access. The model prices field
+and group primitives explicitly and counts structural operations; it is not a
+machine-code correspondence theorem. Public polynomial construction, the complete
+PLONK opening and quotient calculation, encoding, and the final Action composition
+remain to be counted. PRNG-class membership additionally needs the cost of the
+real prover and the supplied verifier-view test.
 
 The [finite retry theorem](ActionFiatShamirRetry.lean) now compares complete
 histories while the attempts share one evolving oracle cache. Each attempt uses

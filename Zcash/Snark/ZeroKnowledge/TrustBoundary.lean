@@ -1,4 +1,18 @@
+import Zcash.Snark.ZeroKnowledge.IpaScalarCost
+import Zcash.Snark.ZeroKnowledge.FiniteArithmeticCost
+import Zcash.Snark.ZeroKnowledge.IpaArithmeticCost
+import Zcash.Snark.ZeroKnowledge.IpaSimulatorCost
+import Zcash.Snark.ZeroKnowledge.ExpressionCost
+import Zcash.Snark.ZeroKnowledge.ListFoldCost
+import Zcash.Snark.ZeroKnowledge.PolynomialArithmeticCost
+import Zcash.Snark.ZeroKnowledge.CommitmentArithmeticCost
+import Zcash.Snark.ZeroKnowledge.FieldArithmeticCost
+import Zcash.Snark.ZeroKnowledge.ExpressionCompressionCost
+import Zcash.Snark.ZeroKnowledge.LookupExpressionsCost
+import Zcash.Snark.ZeroKnowledge.PermutationChunkCost
 import Zcash.Snark.ZeroKnowledge.ActionGateValues
+import Zcash.Snark.ZeroKnowledge.ActionConstraintsRelation
+import Zcash.Snark.ZeroKnowledge.PublicFoldCost
 import Zcash.Snark.ZeroKnowledge.ActionRowRelations
 import Zcash.Snark.ZeroKnowledge.ActionLookupValues
 import Zcash.Snark.ZeroKnowledge.PlonkCopyValues
@@ -2922,3 +2936,150 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionLookup_tuple_of_constraints
   +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessRows_lookups_of_constraints
   +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- All three source-constraint bridges compose into the actual reference relation.
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessRows_relation_of_constraints
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- Public IPA folds retain the complete reader and group-operation costs.
+assert_computable Zcash.Snark.ZeroKnowledge.powTwoCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.powTwoCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.powTwoCosted_cost
+assert_computable Zcash.Snark.ZeroKnowledge.loHalfCosted
+assert_computable Zcash.Snark.ZeroKnowledge.hiHalfCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.loHalfCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.hiHalfCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.loHalfCosted_cost_le
+assert_axioms Zcash.Snark.ZeroKnowledge.hiHalfCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.publicFoldCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.publicFoldCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.publicFoldCosted_cost_le
+
+-- Direct declaration inventory: IpaScalarCost.
+assert_computable Zcash.Snark.ZeroKnowledge.allFinCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.allFinCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.allFinCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.squarePowerCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.squarePowerCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.squarePowerCosted_cost
+assert_computable Zcash.Snark.ZeroKnowledge.chooseIpaScalarCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.chooseIpaScalarCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.chooseIpaScalarCosted_cost_le
+
+-- Direct declaration inventory: FiniteArithmeticCost.
+assert_computable Zcash.Snark.ZeroKnowledge.ofFnCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.ofFnCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.ofFnCosted_length
+assert_axioms Zcash.Snark.ZeroKnowledge.ofFnCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.mapListCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.mapListCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.mapListCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.sumFinCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.sumFinCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.sumFinCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.fieldPowerCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.fieldPowerCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.fieldPowerCosted_cost
+
+-- Direct declaration inventory: IpaArithmeticCost.
+assert_axioms Zcash.Snark.ZeroKnowledge.IpaOperationCosts
+assert_axioms Zcash.Snark.ZeroKnowledge.IpaPublicCosted
+assert_computable Zcash.Snark.ZeroKnowledge.IpaPublicCosted.erase
+assert_computable Zcash.Snark.ZeroKnowledge.ipaMessageSumCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaMessageSumCosted_result
+assert_computable Zcash.Snark.ZeroKnowledge.ipaMessageSumCostBudget
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaMessageSumCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.ipaPublicResponseCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaPublicResponseCosted_result
+assert_computable Zcash.Snark.ZeroKnowledge.ipaPublicResponseCostBudget
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaPublicResponseCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.completeIpaMaskCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.completeIpaMaskCosted_result
+assert_computable Zcash.Snark.ZeroKnowledge.completeIpaMaskCostBudget
+assert_axioms Zcash.Snark.ZeroKnowledge.completeIpaMaskCosted_cost_le
+
+-- Direct declaration inventory: IpaSimulatorCost.
+assert_computable Zcash.Snark.ZeroKnowledge.IpaTranscript.eraseCosts
+assert_axioms Zcash.Snark.ZeroKnowledge.MaterializedIpaTranscript
+assert_computable Zcash.Snark.ZeroKnowledge.materializedIpaTranscript
+assert_computable Zcash.Snark.ZeroKnowledge.materializeIpaCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.materializeIpaCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.materializeIpaCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.ipaSimulatorRoundCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaSimulatorRoundCosted_result
+assert_computable Zcash.Snark.ZeroKnowledge.ipaSimulatorFromCoinsCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.ipaSimulatorFromCoinsCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.materializedIpaSimulatorCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.IpaPublicCosted.ReadBound
+assert_computable Zcash.Snark.ZeroKnowledge.ipaSimulatorScalarCostBudget
+assert_computable Zcash.Snark.ZeroKnowledge.ipaSimulatorCostBudget
+assert_axioms Zcash.Snark.ZeroKnowledge.materializedIpaSimulatorCosted_cost_le
+
+-- Direct declaration inventory: ExpressionCost.
+assert_computable Zcash.Snark.ZeroKnowledge.exprNodeCount
+assert_computable Zcash.Snark.ZeroKnowledge.exprEvalCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.exprEvalCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.exprEvalCosted_cost_le
+
+-- Direct declaration inventory: ListFoldCost.
+assert_computable Zcash.Snark.ZeroKnowledge.foldlCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.foldlCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.foldlCosted_invariant
+assert_axioms Zcash.Snark.ZeroKnowledge.foldlCosted_cost_le_sum
+
+-- Direct declaration inventory: PolynomialArithmeticCost.
+assert_computable Zcash.Snark.ZeroKnowledge.polynomialCoeffCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.polynomialCoeffCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.polynomialCoeffCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.polynomialArrayCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.polynomialArrayCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.polynomialArrayCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.listHornerCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.listHornerCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.listHornerCosted_cost
+assert_computable Zcash.Snark.ZeroKnowledge.polynomialEvalCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.polynomialEvalCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.polynomialEvalCosted_cost_le
+
+-- Direct declaration inventory: CommitmentArithmeticCost.
+assert_computable Zcash.Snark.ZeroKnowledge.polynomialCommitmentCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.polynomialCommitmentCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.polynomialCommitmentCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.commitmentHornerFoldCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.commitmentHornerFoldCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.commitmentHornerFoldCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.plonkScalarFoldCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkScalarFoldCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkScalarFoldCosted_cost_le
+
+-- Direct declaration inventory: FieldArithmeticCost.
+assert_axioms Zcash.Snark.ZeroKnowledge.FieldOperationCosts
+assert_computable Zcash.Snark.ZeroKnowledge.fieldAddCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.fieldAddCosted_result
+assert_computable Zcash.Snark.ZeroKnowledge.fieldNegateCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.fieldNegateCosted_result
+assert_computable Zcash.Snark.ZeroKnowledge.fieldSubtractCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.fieldSubtractCosted_result
+assert_computable Zcash.Snark.ZeroKnowledge.fieldMultiplyCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.fieldMultiplyCosted_result
+assert_computable Zcash.Snark.ZeroKnowledge.fieldInverseCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.fieldInverseCosted_result
+assert_computable Zcash.Snark.ZeroKnowledge.fieldDivideCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.fieldDivideCosted_result
+
+-- Direct declaration inventory: ExpressionCompressionCost.
+assert_computable Zcash.Snark.ZeroKnowledge.compressExprsCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.compressExprsCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.compressExprsCosted_cost_le
+
+-- Direct declaration inventory: LookupExpressionsCost.
+assert_computable Zcash.Snark.ZeroKnowledge.lookupCompressionCostBudget
+assert_computable Zcash.Snark.ZeroKnowledge.lookupExpressionsCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupExpressionsCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupEvalReadBound
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupExpressionsCosted_cost_le
+
+-- Direct declaration inventory: PermutationChunkCost.
+assert_computable Zcash.Snark.ZeroKnowledge.permChunkExpressionCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.permChunkExpressionCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.permChunkExpressionCosted_cost_le
