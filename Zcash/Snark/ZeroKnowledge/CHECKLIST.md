@@ -502,6 +502,18 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   preparation and actual fixed-query routing. The
   [collapsed quotient point](CollapsedQuotientPointCost.lean) counts all eight
   piece reads, power loops, and group operations.
+- [x] Reconstruct and materialize all five [opening commitments](OpeningCommitmentVectorCost.lean),
+  including full public polynomial preparation and every private group fold.
+  The [node and group-value vectors](OpeningScalarVectorsCost.lean) retain all
+  routed scalar reads and original node counts. The [point-set construction](OpeningPointSetsCost.lean)
+  counts the original products, inverses, sixth power, and node-index routing.
+- [x] Compose that preparation into the [complete public opening](PublicOpeningCost.lean)
+  and prove its [total cost bound](PublicOpeningCostBound.lean). Erasure is the
+  reference public opening after evaluation of its symbolic MSM. The algorithm
+  includes interpolation, the final point/scalar fold, every materialized input
+  list, and all supplied reader costs. The quotient evaluation remains a supplied
+  scalar with its complete cost; its computation still needs the query-provider
+  and constraint composition below.
 - [x] Count loading canonical polynomial coefficients, their
   [Horner evaluation](PolynomialArithmeticCost.lean), and the full generator sweep
   and ordered claim folds in [CommitmentArithmeticCost.lean](CommitmentArithmeticCost.lean).

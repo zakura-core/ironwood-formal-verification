@@ -372,6 +372,19 @@ include the complete row-polynomial preparation and fixed-query routing.
 The [collapsed quotient point](CollapsedQuotientPointCost.lean) counts every
 original piece weight and point read.
 
+[PublicOpeningCost.lean](PublicOpeningCost.lean) composes the complete public
+opening. It reconstructs all five [group commitments](OpeningCommitmentVectorCost.lean),
+all [node and group scalars](OpeningScalarVectorsCost.lean), and the original
+[point sets](OpeningPointSetsCost.lean), then executes interpolation and the
+final point/scalar fold. Erasure identifies the existing public opening after
+evaluation of its symbolic MSM. [PublicOpeningCostBound.lean](PublicOpeningCostBound.lean)
+substitutes the checked component budgets into one explicit bound. All public
+row-polynomial preparation, materialized vector construction, indexed reads,
+and field/group operations remain in that bound. Exceptional field values and
+zero defaults retain the reference semantics. The inferred quotient value is
+a supplied scalar with its complete cost; its calculation is still a separate
+composition layer.
+
 The model uses materialized arrays and lists, bounded-width structural indexing,
 and explicit prices for field and group primitives. Callback readers carry their
 complete costs. Shared intermediate work may be conservatively counted more than
@@ -379,7 +392,7 @@ once. The [public row coefficient construction](RowCoefficientCost.lean) uses th
 proved inverse-DFT formula. [Row evaluations and commitments](RowPolynomialCost.lean)
 include every coefficient calculation and retain full row-provider costs.
 These component proofs do not supply concrete public-row providers, the
-complete PLONK opening, concrete query-provider and quotient composition, codecs, transcript observation,
+concrete query-provider and quotient composition, codecs, transcript observation,
 or their composition into `actionOracleSimulatorFromBits`. A PRNG reduction
 executes the real prover and the supplied view test, so its admissibility needs
 those runtime bounds in addition to simulator efficiency.

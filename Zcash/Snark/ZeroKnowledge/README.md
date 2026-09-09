@@ -232,9 +232,17 @@ materialized cost bound. [Private opening evaluations](PrivateOpeningEvaluationC
 include group construction, column routing, and Horner arithmetic;
 [public opening claims](PublicOpeningClaimsCost.lean) also include their actual
 query-table routing and public polynomial preparation.
+The [complete public opening](PublicOpeningCost.lean) now joins all five
+[commitments](OpeningCommitmentVectorCost.lean), fully materialized
+[node and group scalars](OpeningScalarVectorsCost.lean), the original
+[point sets](OpeningPointSetsCost.lean), interpolation, and the final commitment
+and scalar fold. Its erasure is the existing public reconstruction with its
+symbolic MSM evaluated. The [total bound](PublicOpeningCostBound.lean) retains
+all polynomial preparation, indexed reads, and list construction, together with
+the full costs of the supplied quotient scalar and other input readers.
 The model prices field and group primitives explicitly and counts structural
-operations; it is not a machine-code correspondence theorem. The complete
-PLONK opening, concrete public-row and query providers, quotient composition, encoding,
+operations; it is not a machine-code correspondence theorem. Concrete
+public-row and query providers, quotient composition, encoding,
 and the final Action composition remain to be counted. PRNG-class membership
 additionally needs the cost of the
 real prover and the supplied verifier-view test.
