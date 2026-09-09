@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `bb756ffca3055f7d7912e8ffb02dec111506cb5f` on `establish-zk` in
+Proof baseline: `d87d93ed51ad39c3a680c6959293b40d77b01801` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -494,6 +494,16 @@ PLONK mask view is materialized with a checked cost bound. Opening layouts,
 exact query tables, complete private-group evaluations, public first-group claims,
 and the collapsed quotient point retain their actual preparation and routing costs.
 Commitment and node reconstruction and the final simulator composition remain open.
+
+The complete public-opening checkpoint passed the
+[focused 3,767-job build and guards](review/validation-d87d93ed.log). All
+[66 declarations across eleven modules](review/axioms-d87d93ed.log) have direct
+pins and separate inventories containing only standard axioms. The counted
+construction includes all polynomial, commitment, node, and group preparation,
+interpolation, and the final commitment/scalar fold. Its result equals the
+reference public opening and satisfies an explicit total cost bound. Concrete
+query providers, quotient calculation, codecs, and full simulator composition
+remain open, together with the unfinished Action source scans.
 
 The native dependencies remain exactly the inherited named curve-order certificates:
 
