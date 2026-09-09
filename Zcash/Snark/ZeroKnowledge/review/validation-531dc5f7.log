@@ -1,0 +1,31 @@
+Proof baseline: 531dc5f78c5b09b65deb6f82bb59b83b0b7ce5ef
+Exact staged tree: 823d3decbce9aeb23f9491ff1c6bb164189eedbd (identical to committed tree)
+Branch: establish-zk
+Push destination: https://github.com/TalDerei/ironwood-private.git
+
+Focused validation; this checkpoint does not claim a full workspace build.
+
+lake build --wfail Zcash.Snark.ZeroKnowledge.TrustBoundary
+Build completed successfully (3940 jobs).
+
+All new opening-material modules built with warnings treated as errors.
+Separate warning-as-error axiom inventory: 85 declarations across 21 modules.
+Every declaration has exactly one direct pin in ZeroKnowledge.TrustBoundary.
+Transitive axioms for these declarations: propext, Classical.choice, Quot.sound.
+No native certificate or admitted lemma in these new declarations.
+
+Repository guards were run against this exact staged tree, exported with git archive.
+The no-umbrella check uses the staged tracked-file inventory in the source checkout.
+Endpoint census: 331 declarations, all pinned.
+Build coverage: 1205 modules, all covered by 6 matching default/CI targets.
+No umbrella imports: passed.
+Csimp census: 1 declaration, covered.
+Costed group-work census: 2 production modules, 20 host callbacks pinned.
+Fixture manifest: 6 artifacts, digests and provenance match.
+Staged whitespace and documentation-link checks: passed.
+
+Scope: original-row opening polynomials, all actual inherited opening blinds,
+complete stored groups, totalized interpolation and opening quotients, and
+complete final multi-opening polynomial. Repeated and exceptional inputs retained.
+Real IPA and complete prover/retry/test resource composition remain open.
+Independent review remains pending.
