@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `d87d93ed51ad39c3a680c6959293b40d77b01801` on `establish-zk` in
+Proof baseline: `e3bc4f813caea4f735187651f1a1a56c92c86857` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -537,3 +537,11 @@ independence, whether failed prefixes and stopping branches stay visible, and
 whether the computational claims charge the actual truncation tail, whether the
 application constructor premises and extraction boundary are accurately stated,
 and whether future efficiency claims add the required execution-cost proofs.
+
+**Bounded map-scan checkpoint**
+
+The [validation record](review/validation-e3bc4f81.log) covers the exact
+map-policy refinements, bounded kernel checker, and adversarial checks. The
+[axiom inventory](review/axioms-e3bc4f81.log) contains only the standard Lean
+logical axioms. The trust-boundary build passed with 3768 jobs and the regression
+build passed with 2566 jobs. Full Action source scans remain in progress.

@@ -1,0 +1,11 @@
+Bounded kernel checks for the original advice-map scans
+Proof baseline: e3bc4f813caea4f735187651f1a1a56c92c86857.
+Focused trust-boundary build passed: lake build --wfail Zcash.Snark.ZeroKnowledge.TrustBoundary (3768 jobs).
+Checker build passed (2559 jobs). Adversarial regression build passed (2566 jobs).
+Six mathematical declarations and eleven regression declarations each have exactly one direct pin. A separate transitive inventory for the six production declarations contains only propext, Classical.choice, and Quot.sound. The three executable definitions retain choice in their computability pins. No new axiom, native certificate, or admission.
+The read and alias step scans are proved equal to their existing Boolean policies for all inputs, including rejection. Every continuation retains exact source entries, its incoming map, and its remaining scan proposition. Intermediate maps and continuations are ordinary synchronous kernel-checked definitions. The final proof composes the checked pieces.
+Regression tests force a boundary after each entry. Earlier advice reads, equal-root copies, and immutable public sources succeed. Future reads, duplicate fresh writes, conflicting alias roots, and unavailable copy sources are rejected, including after earlier pieces have been checked.
+Endpoint census: 326 declarations, all pinned. Build coverage: 1015 workspace modules, all covered by the six matching default targets; unfinished Action source and claim-cost files are included in that coverage count, not claimed compiled by this checkpoint.
+Umbrella-import guard passed. csimp census passed (1 declaration). Costed group-work census passed (2 modules, 20 callbacks). All 6 fixture manifest entries matched; local Perl emitted locale fallback warnings and exited successfully.
+Local Markdown links: 674 checked before this review-record update. Whitespace checks passed for the worktree and staged checkpoint.
+Full workspace build: not claimed. The latest full successful build remains b3b22e26 (4465 jobs). Complete Action source construction and global scan instantiation remain unfinished; this checkpoint validates the bounded checking mechanism.
