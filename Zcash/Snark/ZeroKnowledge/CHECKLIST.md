@@ -130,6 +130,13 @@ model. Compare strength only after fixing those models and assumptions.
   [read-map refinement](AdviceSupportMapPlan.lean) now preserve all original
   checker results, including rejection. Their map representation retains column
   kind, index, and signed row, and supplies the same witness-equation theorem.
+- [x] Keep read annotations and original copy tags in one
+  [source-indexed certificate](AdviceSourceCertificate.lean). Proven source
+  equalities change proof metadata while retaining directly evaluable scan data;
+  generation supplies semantic read proofs and preserves every original instruction.
+- [x] Certify the original [eight-region witness-loading stage](ActionWitnessLoadCertificate.lean),
+  including all eleven source instructions and both finite scans at the proved
+  Action placement. The certificate is a kernel-evaluated proof artifact.
 - [ ] Build the certified annotations for the complete Action and discharge its
   global alias and read-plan checks. Derive `ExtendsWitnesses` for the final
   assignment.
@@ -391,6 +398,13 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   [Action cache-phase bound](ActionCacheCost.lean):
   `22 * ((q + 22) * (9490m + 14207) + 4) + 2` for `m` Actions and `q` initial
   cache entries. Constructing the view remains outside this component's cost.
+- [x] Give exact counted implementations of
+  [little-endian bit packing](RawBitPackingCost.lean) and
+  [wide field reduction](WideBitReductionCost.lean). Both retain the complete
+  supplied bit-reader cost and prove equality with the simulator's existing tape
+  conversion. A 512-bit word costs at most `512R + 264193` structural units when
+  each input read costs at most `R`. The model charges bounded-width arithmetic
+  and reader-index adapters; whole-tape access and simulator composition remain open.
 - [ ] Specify the runtime model and input representations, including access to
   public inputs and setup, bit packing, field reduction, group arithmetic,
   polynomial operations, transcript encoding, and cache lookup/programming.

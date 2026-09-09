@@ -51,6 +51,13 @@ The [address projection](AdviceAliasAddressPlan.lean) discards witness function
 bodies from the alias calculation. The [finite-map alias check](AdviceAliasMapPlan.lean)
 and [finite-map read check](AdviceSupportMapPlan.lean) preserve every result of
 the original checks and feed the same compiler witness-equation theorem.
+The [source certificate](AdviceSourceCertificate.lean) retains original copy tags
+beside the read annotations. Its finite-data constructor requires proved equality
+to the original addresses, reads, and tags; it keeps those data directly evaluable.
+The original [witness-loading stage](ActionWitnessLoadCertificate.lean) has a
+complete eleven-instruction certificate and successful kernel-checked read and
+alias scans. This static proof artifact is separate from the executable witness
+constructor.
 Applying it to the Action still requires the complete annotation list and the
 global alias and read-plan checks.
 The [extraction observation theorem](ActionWitnessObservation.lean) retains all
@@ -158,6 +165,12 @@ Here `q` is the initial cache length and `m` is the Action count. The units coun
 byte comparisons, structural case tests, and cache-cell construction. Producing
 the view, including public commitments, simulator arithmetic, codecs, and the
 observer, still needs separate costed implementations and a composition proof.
+The counted [bit packer](RawBitPackingCost.lean) and
+[wide reducer](WideBitReductionCost.lean) now reproduce exactly the existing
+raw-word and field-tape conversions. Each 512-bit word costs at most
+`512R + 264193` structural units for a reader with access bound `R`, including
+successor-index adapters and bounded-width arithmetic. This component does not
+yet account for the complete simulator's tape-access pattern or compose its runtime.
 
 The [finite retry theorem](ActionFiatShamirRetry.lean) now compares complete
 histories while the attempts share one evolving oracle cache. Each attempt uses

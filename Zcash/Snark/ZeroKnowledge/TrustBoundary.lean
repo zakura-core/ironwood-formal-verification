@@ -1,4 +1,7 @@
 import Zcash.Snark.ZeroKnowledge.ActionWitnessObservation
+import Zcash.Snark.ZeroKnowledge.ActionWitnessLoadCertificate
+import Zcash.Snark.ZeroKnowledge.AdviceSourceCertificate
+import Zcash.Snark.ZeroKnowledge.WideBitReductionCost
 import Zcash.Snark.ZeroKnowledge.AdviceAliasAddressPlan
 import Zcash.Snark.ZeroKnowledge.AdviceAliasMap
 import Zcash.Snark.ZeroKnowledge.AdviceAliasMapPlan
@@ -2660,3 +2663,39 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessObservation_proverAssumptio
 assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessObservation_normalize
 assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessConditions_proverAssumptions_of_observation
   +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- Source-preserving read and copy certificates.
+assert_axioms Zcash.Snark.ZeroKnowledge.AdviceSupportCertificate
+assert_computable Zcash.Snark.ZeroKnowledge.AdviceSupportCertificate.nil +choice
+assert_computable Zcash.Snark.ZeroKnowledge.AdviceSupportCertificate.cons +choice
+assert_computable Zcash.Snark.ZeroKnowledge.AdviceSupportCertificate.append +choice
+assert_computable Zcash.Snark.ZeroKnowledge.AdviceSupportCertificate.transport +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevelAdviceAssignment_extendsWitnesses_of_certificate
+assert_axioms Zcash.Snark.ZeroKnowledge.AdviceSourceCertificate
+assert_computable Zcash.Snark.ZeroKnowledge.AdviceSourceCertificate.nil +choice
+assert_computable Zcash.Snark.ZeroKnowledge.AdviceSourceCertificate.cons +choice
+assert_computable Zcash.Snark.ZeroKnowledge.adviceSourceEntryData
+assert_computable Zcash.Snark.ZeroKnowledge.AdviceSourceCertificate.consWithData +choice
+assert_computable Zcash.Snark.ZeroKnowledge.AdviceSourceCertificate.append +choice
+assert_computable Zcash.Snark.ZeroKnowledge.AdviceSourceCertificate.transport +choice
+assert_computable Zcash.Snark.ZeroKnowledge.AdviceSourceCertificate.readCertificate +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevelAdviceAssignment_extendsWitnesses_of_sourceCertificate
+assert_axioms Zcash.Snark.ZeroKnowledge.sinsemilla_zWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessLoadSourceCertificate
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessLoad_readPlan
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessLoad_aliasPlan
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessLoad_annotationCount
+
+-- Exact counted implementations of the simulator's input packing and wide reduction.
+assert_computable Zcash.Snark.ZeroKnowledge.packBitsLECosted
+assert_axioms Zcash.Snark.ZeroKnowledge.packBitsLECosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.packBitsLECosted_lt
+assert_axioms Zcash.Snark.ZeroKnowledge.packBitsLECosted_cost_le
+assert_axioms Zcash.Snark.ZeroKnowledge.packBitsLECosted_raw_word
+assert_axioms Zcash.Snark.ZeroKnowledge.packBitsLECosted_raw_word_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.wideReduceBitsLECosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.wideReduceBitsLECosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.wideReduceBitsLECosted_cost
+assert_axioms Zcash.Snark.ZeroKnowledge.wideReduceBitsLECosted_cost_le
+assert_axioms Zcash.Snark.ZeroKnowledge.wideReduceBitsLECosted_raw_word
+assert_axioms Zcash.Snark.ZeroKnowledge.wideReduceBitsLECosted_raw_word_cost_le

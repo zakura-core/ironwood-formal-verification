@@ -43,6 +43,15 @@ theorem sinsemilla_initXPWit_support (generators : Specs.Sinsemilla.Generators) 
   simpa only [Sinsemilla.HashPiece.initXPWit_eval] using
     congrArg (fun value => (generators.S (Sinsemilla.pieceWord value 0)).x) hp
 
+/-- The structured running-sum witness reads only its original piece cell. -/
+theorem sinsemilla_zWit_support (piece : AssignedCell Fp) (word : ℕ) :
+    WitnessFunctionSupport [piece]
+      (fun env => ((Sinsemilla.HashPiece.zWit piece word).eval env)[0]) := by
+  intro left right agreement
+  have hp := agreement.cellValues piece (List.mem_singleton_self _)
+  simpa only [Sinsemilla.HashPiece.zWit_eval] using
+    congrArg (fun value => Sinsemilla.pieceZ value word) hp
+
 /-- An original state-step callback reads its entering state and piece cell. -/
 theorem sinsemilla_stepWit_support (generators : Specs.Sinsemilla.Generators)
     (piece : AssignedCell Fp) (state : Sinsemilla.HashPiece.State (AssignedCell Fp)) (word : ℕ)
