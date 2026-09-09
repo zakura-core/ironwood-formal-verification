@@ -981,3 +981,20 @@ Only the existing named Pasta curve-order owners occur beyond the standard
 logical axioms. The exact committed tree passes the 331-endpoint and 1,266-module
 coverage checks and all remaining repository guards. Online cache/retry/test
 resource composition and independent review remain open.
+
+The [complete cached real attempt](StoredActionCachedRawCost.lean) now erases
+exactly to `actionOracleRunTape` on the actual Action key, stored witness, and
+raw tapes. The [combined bound](StoredActionCachedRawBound.lean) charges the
+entire real prover at each reachable history, actual query bytes, first-match
+cache lookup, hits, misses, reply reads, codecs, and initialization. The source
+theorem includes all challenge values and failure statuses. Every attempt adds
+at most 22 cache entries. Retained retries, the distinguishing test, and complete
+PRNG resource admissibility still require their own composition; independent
+review remains pending.
+
+The generic trust boundary has also been reconciled with its stated policy:
+74 older witness/compiler pins from 20 modules now live in the Action boundary,
+including all 48 remaining pins with the existing Pallas native dependency.
+This changes their location, not their permitted axioms. The earlier bit-tape
+validation note incorrectly said that moving its two pins had removed every
+generic native exemption; this checkpoint checks the complete census.

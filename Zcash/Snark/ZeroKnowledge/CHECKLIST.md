@@ -766,6 +766,14 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   raw replies, and stopping checks, with a [complete bound](StoredActionHonestOracleViewBound.lean).
   This is the independent-reply view. Online cache reuse, retries, and the final
   distinguishing test remain part of the resource item below.
+- [x] Execute the [actual cached Action attempt](StoredActionCachedRawCost.lean)
+  from stored raw private and verifier tapes, with exact equality to
+  `actionOracleRunTape`. Its [complete bound](StoredActionCachedRawBound.lean)
+  charges public initialization, wide reduction, every history-dependent real
+  proof, codecs, query construction, byte comparisons, and all cache hits and
+  misses. The actual Action compiler discharges the source conditions. The
+  generic [cached prefix runner](CachedPrefixCost.lean) has both source erasure
+  and a [full cost and state-growth bound](CachedPrefixBound.lean).
 - [ ] Discharge the PRNG reduction's resource conditions wherever that
   computational instantiation is claimed. This requires bounds for the actual
   real-prover-and-test reduction, including retained auxiliary data and any retry
