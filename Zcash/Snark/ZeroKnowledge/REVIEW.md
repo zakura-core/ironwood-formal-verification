@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `f4708f711abbd8384b717452fd3e9bd55fb62968` on `establish-zk` in
+Proof baseline: `b304a744a8e55f1478759d31344791f522ae4060` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -973,3 +973,11 @@ source equality and a [full structural bound](StoredActionHonestOracleViewBound.
 including actual codecs, raw replies, and failure checks. This view uses
 independent raw replies; the online cache, retry, and distinguishing-test
 composition remains part of the PRNG resource obligation.
+
+The real bit-tape and canonical-view checkpoint passes the [focused 4,075-job
+check of both trust boundaries](review/validation-b304a744.log), with [53
+separately inventoried declarations](review/axioms-b304a744.log) across 22 modules.
+Only the existing named Pasta curve-order owners occur beyond the standard
+logical axioms. The exact committed tree passes the 331-endpoint and 1,266-module
+coverage checks and all remaining repository guards. Online cache/retry/test
+resource composition and independent review remain open.
