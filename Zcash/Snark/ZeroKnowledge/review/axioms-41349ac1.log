@@ -1,0 +1,8 @@
+PIN|Zcash.Snark.ZeroKnowledge.actionWitnessObservation|true||
+PIN|Zcash.Snark.ZeroKnowledge.actionWitnessObservation_merklePath|true||
+PIN|Zcash.Snark.ZeroKnowledge.actionWitnessObservation_firstHalf|true||
+PIN|Zcash.Snark.ZeroKnowledge.actionWitnessObservation_secondHalf|true||
+PIN|Zcash.Snark.ZeroKnowledge.actionWitnessObservation_spec_iff|true|CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt|
+PIN|Zcash.Snark.ZeroKnowledge.actionWitnessObservation_proverAssumptions_iff|true||
+PIN|Zcash.Snark.ZeroKnowledge.actionWitnessObservation_normalize|true||
+PIN|Zcash.Snark.ZeroKnowledge.actionWitnessConditions_proverAssumptions_of_observation|true|CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt|

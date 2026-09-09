@@ -1,0 +1,15 @@
+Action extraction observations
+Proof baseline: 41349ac14db01d68e36d8dc227c4bd84a4a6a4dc.
+Full build: lake build --wfail; passed (4446 jobs).
+Endpoint census: 326 endpoint declarations, all pinned.
+Build coverage: 909 modules, all covered by default targets.
+Build surface: 6 targets; lakefile.toml and CI agree.
+Umbrella-import guard: passed.
+csimp census: 1 declaration, covered.
+Costed group-work census: 2 production modules, 20 host callbacks pinned.
+Declaration inventory: 8 new declarations in 1 module; exactly one direct pin each.
+Transitive axiom inventory: no unexpected axioms. Two declarations retain the existing Pallas q_nsmul_Gpt native dependency through the application specification; no new native certificate was added.
+Local Markdown links: 483 checked before this review-record update.
+Whitespace: git diff --check passed.
+Scope: preserve every witness field and the 32 used Merkle readings; exact specification and honest-prover-precondition invariance; transfer constructor preconditions under observation agreement.
+Not claimed: actual extractor observation agreement, complete Action alias/read certificates, final witness extension, application row validity, or complete simulator runtime.

@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `abaedaec8189313f21d53ed66f6cdce1338f8ef0` on `establish-zk` in
+Proof baseline: `41349ac14db01d68e36d8dc227c4bd84a4a6a4dc` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -225,11 +225,19 @@ scans, including rejection, and supply the same compiler witness-equation
 interface. These are checker refinements; they do not assume a successful Action
 certificate or change its source program.
 
+[ActionWitnessObservation.lean](ActionWitnessObservation.lean) identifies the
+extraction agreement needed for completeness. It retains every witness field and
+exactly the 32 auxiliary Merkle readings used by the two 16-layer computations.
+Truncating the unused tail preserves the application specification and the
+existing honest-prover preconditions. Agreement with the normalized application
+observations transfers the constructor's proved preconditions to the extracted
+data; that agreement remains to be established for the actual assignment.
+
 The actual Action still needs the complete certified annotation list and both
 global checks. Its final witness equations and extracted private data therefore
 still need their correctness proofs. The semantic precondition theorem concerns
 the normalized application data; it does not assume that the constructor's extractor
-already returns that data. Generated gate, lookup, and copy validity, and hence an
+already has those observations. Generated gate, lookup, and copy validity, and hence an
 application-witness-to-`ActionZkRelation` corollary, remain open.
 
 **Byte-cache execution costs**
@@ -255,11 +263,12 @@ encoding, observation, and full simulator/reduction composition remain outside i
 
 **Validation and review status**
 
-The [validation record](review/validation-abaedaec.log) contains the successful
-full default-target build (`lake build --wfail`, 4,445 jobs), repository guards,
-and the [31-declaration dependency inventory](review/axioms-abaedaec.log) for the
-latest proof milestone; those declarations introduce no native or unexpected
-axioms. All 908 modules are covered by default targets and all
+The [validation record](review/validation-41349ac1.log) contains the successful
+full default-target build (`lake build --wfail`, 4,446 jobs), repository guards,
+and the [eight-declaration dependency inventory](review/axioms-41349ac1.log) for the
+latest proof milestone. Two of those declarations retain the existing Pallas
+group-order dependency through the application specification; no new native
+certificate or unexpected axiom was added. All 909 modules are covered by default targets and all
 326 endpoint declarations are pinned. The full [parent](TrustBoundary.lean) and
 [Action](Action/TrustBoundary.lean) boundaries also check the earlier milestones.
 The native dependencies remain exactly the inherited named curve-order certificates:
