@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `064c3f1bc76af8692cbbc290337173a36644df5b` on `establish-zk` in
+Proof baseline: `3b8f04a7b2f136095aae3b349f770813bd905f40` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -1011,3 +1011,5 @@ is the original recorded reference experiment for every whole candidate private
 prefix. The runtime bound therefore covers correlated private tapes without a
 reset or independence premise. Executable distinguishing tests and their full
 PRNG admissibility composition, and independent review, remain open.
+
+The complete recorded-retry checkpoint passes the [focused 4,101-job build of both trust boundaries](review/validation-3b8f04a7.log), with [37 separately inventoried declarations](review/axioms-3b8f04a7.log) across 11 modules. The exact tree passes all repository guards, covering 331 endpoints and 1,292 modules. Test-program and PRNG admissibility composition, and independent review, remain open.
