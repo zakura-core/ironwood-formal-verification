@@ -1,0 +1,29 @@
+Proof head: f4708f711abbd8384b717452fd3e9bd55fb62968
+Tree: 226a70429df8367daaca8c5bf3371db02cc73133
+Validated staged tree equals the committed tree; private establish-zk head verified equal.
+
+Focused capstones: source equality, complete joint bound, and output dimensions.
+✔ [3158/3158] Built Zcash.Snark.ZeroKnowledge.HonestJointRowsBound (30s)
+Build completed successfully (3158 jobs).
+
+Focused trust boundary:
+✔ [3979/3979] Built Zcash.Snark.ZeroKnowledge.TrustBoundary (49s)
+Build completed successfully (3979 jobs).
+
+Declaration inventory: 76 declarations, 24 modules, exactly one direct pin and import each.
+Transitive axioms: propext, Classical.choice, Quot.sound only; no native certificate.
+All warning-as-error builds and the separate inventory passed.
+
+Guards on the staged source archive (except tracked-file import guard on staged checkout):
+endpoint census: 331 endpoint declarations, all pinned.
+build surface: 6 matching default and CI targets; 1244 modules, all covered.
+umbrella import guard: passed.
+csimp census: 1 declaration, all covered.
+costed group-work census: 2 production modules, 20 host callbacks pinned.
+fixture manifest: 6 artifacts, digests and provenance matched.
+Local REVIEW.md and CHECKLIST.md links: all resolved.
+Staged whitespace check: passed.
+
+This is focused component validation. The last full workspace build remains
+2872c72f01a774e0cb37acb8fef97e61a3d6b26d. No hosted CI result is asserted.
+Whole prover/retry/test resource admissibility and independent review remain open.

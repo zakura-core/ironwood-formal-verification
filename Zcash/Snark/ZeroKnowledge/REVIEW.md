@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `eeb9dc0729463883810f050af095d19d1cc71754` on `establish-zk` in
+Proof baseline: `f4708f711abbd8384b717452fd3e9bd55fb62968` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -958,3 +958,5 @@ The [prepared IPA connection](PreparedHonestIpaSource.lean) preserves both the
 original commitment and verifier-reconstructed claimed value without a challenge
 exclusion. Generated dimensions are checked. Complete private-tape, observer,
 retry, and test composition remains part of the open PRNG resource item.
+
+The real joint-prover checkpoint passes the [focused 3,979-job trust-boundary build](review/validation-f4708f71.log), with [76 separately inventoried declarations](review/axioms-f4708f71.log) across 24 modules. All use only the standard logical axioms. The exact committed tree passes the 331-endpoint and 1,244-module coverage checks and the remaining repository guards. Complete real-prover/retry/test resource composition and independent review remain open.
