@@ -193,6 +193,22 @@ selection uses only the proved public layout. Its
 decoding, construction, masking, and stored-history work. The remaining real
 polynomial, IPA, and reduction composition still belongs to the open resource item.
 
+The [complete constraint-numerator constructor](PlonkNumeratorCoefficientsCost.lean)
+has a [full structural cost bound](PlonkNumeratorCoefficientsBound.lean). It computes
+32768 fixed coset evaluations from the actual row readers and stored key, materializes
+them once, interpolates their coefficients, and undoes the coset shift. The bound
+concerns this stored implementation of the reference function. The
+[Action compiler specialization](ActionNumeratorCoefficientsCost.lean) supplies all
+domain and degree premises. Its erasure theorem holds for every private row state
+and verifier challenge; the internal interpolation domain adds no verifier
+challenge exclusion. Stored polynomial arithmetic, root/domain division, and
+coefficient-block extraction also have exact-result and size/cost theorems.
+Division covers nonzero remainders, and opening-divisor construction preserves the
+source's deduplication of repeated points. Whole opening-polynomial, real IPA, and
+retry/test composition remain part of the open resource item. The Action
+specialization inherits the existing Pallas generator-order native certificate,
+which is explicitly named in its direct trust-boundary pin.
+
 **Application witness construction**
 
 [ActionWitnessConditions.lean](ActionWitnessConditions.lean) starts from

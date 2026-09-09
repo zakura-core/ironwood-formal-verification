@@ -701,6 +701,20 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   includes schedule preparation, every selected word, all column construction,
   retained history, and failures. The decoder uses only public mask boundaries;
   its source-equivalence theorem permits every actual witness-dependent constructor.
+- [x] Materialize the [complete actual constraint numerator](PlonkNumeratorCoefficientsCost.lean)
+  with its [full cost bound](PlonkNumeratorCoefficientsBound.lean). The computation
+  constructs a fixed coset of 32768 nodes outside the original row domain, charges
+  all private/public row evaluations and actual key-selected constraints, stores
+  those values once, and performs the complete inverse DFT and inverse rotation.
+  The [Action compiler specialization](ActionNumeratorCoefficientsCost.lean)
+  discharges the domain and degree premises for every row state and verifier
+  challenge. No new verifier challenge exclusion is imposed.
+- [x] Prove stored-coefficient arithmetic and size bounds for addition, subtraction,
+  multiplication, scaling, rotation, [linear division](DensePolynomialDivision.lean),
+  [domain division](DenseDomainDivision.lean), and [coefficient blocks](DenseCoefficientBlocks.lean).
+  Quotient erasure holds without a divisibility assumption. Opening-divisor
+  construction [retains the source's point deduplication](DenseVanishingDivision.lean),
+  including coincident points. These remain components of the full real-prover bound.
 - [ ] Discharge the PRNG reduction's resource conditions wherever that
   computational instantiation is claimed. This requires bounds for the actual
   real-prover-and-test reduction, including retained auxiliary data and any retry
