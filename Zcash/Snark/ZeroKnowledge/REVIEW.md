@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `454c38c8fb52dfe7e91104baa0416b46cf02e3d8` on `establish-zk` in
+Proof baseline: `a5ad741f2c6389f40d38bf3e9471820f71fb90e4` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -656,3 +656,12 @@ inventory, using only standard Lean axioms. The raw-response prefix and every
 private-coin slot are connected to the existing bit-tape split, and all production
 and indexed-read costs are included. The joint-simulator, proof-field, codec,
 and oracle-observer composition remains the next runtime layer.
+
+The bit-driven joint-simulator checkpoint passed its [3,344-job result/bound
+build, 3,346-job fixed-envelope build, and both trust boundaries with 3,848
+jobs](review/validation-a5ad741f.log). All [15 declarations across four
+modules](review/axioms-a5ad741f.log) have exact direct pins and a separate transitive
+inventory. Only the complete Action erasure theorem inherits the existing Pallas
+certificate. The cost envelope covers every input tape without sampled-value or
+reader-price premises. Proof-field routing, codecs, and oracle observation are
+still separate composition work.
