@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `059f0df781352449c9606a2d4cec0e1c619e48de` on `establish-zk` in
+Proof baseline: `fcb1d6a6b3d062b0e68b7673df0e64cff969a126` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -768,3 +768,11 @@ uses explicit primitive prices and materialized inputs; setup/key generation and
 compiler or machine-code correspondence are outside this cost model. Runtime of
 the real-prover-and-test reduction remains necessary to instantiate its PRNG
 admissibility premise. Independent review is still pending.
+
+The complete runtime milestone passed [all nine focused builds and both trust
+boundaries with 3,890 jobs](review/validation-fcb1d6a6.log). The
+[25-declaration inventory](review/axioms-fcb1d6a6.log) records exact direct pins and
+only standard Lean logical axioms plus the existing named Pallas/Vesta dependencies.
+All repository guards and local Markdown links passed. This milestone closes the
+complete simulator composition and structural runtime items; it does not close
+the application witness, concrete PRNG reduction, or independent review items.
