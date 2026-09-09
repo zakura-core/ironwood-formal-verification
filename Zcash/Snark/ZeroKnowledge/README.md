@@ -39,8 +39,16 @@ requires semantic copy certificates for every annotated program. The original
 certificates, including its actual shared base columns. The
 [complete source-routing theorem](ActionNativeRouting.lean) now proves every
 collected annotation's evaluator semantics through the original Action schedule.
-Applying the execution theorem still requires the complete alias and read-plan
-checks and the native callbacks' read certificates.
+The [function-support interface](WitnessFunctionSupport.lean) now certifies the
+original native witness functions for Poseidon, incomplete and fixed-base
+multiplication, note commitment and canonicity, CommitIvk, Sinsemilla, and Merkle
+layers. Nested callback requirements remain explicit. The
+[fixed Action hint programs](ActionHintReadSupport.lean), including scalar windows
+and Merkle swap callbacks, read no advice cells. The
+[certified annotation checker](AdviceSupportPlan.lean) combines these semantic
+certificates with a finite read-availability check and exact source erasure.
+Applying it to the Action still requires the complete annotation list and the
+global alias and read-plan checks.
 Proving that the generated rows satisfy every gate, lookup, and copy equation is
 still open; the current constructor does not establish `ActionZkRelation`.
 The [raw-source refinement](ActionRandomnessSource.lean) proves exact agreement

@@ -105,8 +105,29 @@ model. Compare strength only after fixing those models and assumptions.
   places the shared-base multiplier at region 297; all other regions have no
   native annotations. `actionAdviceAliasPrograms_sources` proves the exact
   evaluator semantics of every collected copy annotation, including structured IR.
-- [ ] Discharge the complete Action alias and read-plan checks, including the
-  native callbacks' read certificates. Derive `ExtendsWitnesses` for the final
+- [x] Certify the original native witness functions' read dependencies through
+  [WitnessFunctionSupport.lean](WitnessFunctionSupport.lean), with proofs for
+  [Poseidon](PoseidonWitnessSupport.lean),
+  [incomplete multiplication](MulIncompleteWitnessSupport.lean),
+  [fixed-base multiplication](FixedBaseWitnessSupport.lean),
+  [fixed-base canonicity](FixedCanonicityWitnessSupport.lean),
+  [note commitment](NoteWitnessSupport.lean),
+  [note canonicity](NoteCanonicityWitnessSupport.lean),
+  [CommitIvk](CommitIvkWitnessSupport.lean),
+  [Sinsemilla](SinsemillaWitnessSupport.lean),
+  [Merkle layers](MerkleWitnessSupport.lean), and
+  [scalar wrappers](NativeScalarWitnessSupport.lean). Nested callbacks retain
+  explicit support premises. These are semantic certificates for the original
+  functions, not yet a certificate enumerating every Action occurrence.
+- [x] Prove that the [fixed Action hint programs](ActionHintReadSupport.lean),
+  every scalar window, and the original Merkle sibling and swap callbacks read
+  no cells. Their values depend on the immutable hint store.
+- [x] Connect certified native and structured annotations to the witness equations
+  in [AdviceSupportPlan.lean](AdviceSupportPlan.lean). A successful availability
+  check proves causality; exact source erasure, semantic copy provenance, and
+  a successful alias check then imply the original `ExtendsWitnesses` predicate.
+- [ ] Build the certified annotations for the complete Action and discharge its
+  global alias and read-plan checks. Derive `ExtendsWitnesses` for the final
   assignment.
 - [ ] Connect the extracted witness to the normalized application data, then use
   circuit completeness to prove every original gate, lookup tuple, and compiler

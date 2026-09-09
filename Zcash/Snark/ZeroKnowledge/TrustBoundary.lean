@@ -1,3 +1,16 @@
+import Zcash.Snark.ZeroKnowledge.WitnessFunctionSupport
+import Zcash.Snark.ZeroKnowledge.PoseidonWitnessSupport
+import Zcash.Snark.ZeroKnowledge.MulIncompleteWitnessSupport
+import Zcash.Snark.ZeroKnowledge.FixedBaseWitnessSupport
+import Zcash.Snark.ZeroKnowledge.FixedCanonicityWitnessSupport
+import Zcash.Snark.ZeroKnowledge.NoteWitnessSupport
+import Zcash.Snark.ZeroKnowledge.NoteCanonicityWitnessSupport
+import Zcash.Snark.ZeroKnowledge.CommitIvkWitnessSupport
+import Zcash.Snark.ZeroKnowledge.SinsemillaWitnessSupport
+import Zcash.Snark.ZeroKnowledge.MerkleWitnessSupport
+import Zcash.Snark.ZeroKnowledge.NativeScalarWitnessSupport
+import Zcash.Snark.ZeroKnowledge.AdviceSupportPlan
+import Zcash.Snark.ZeroKnowledge.ActionHintReadSupport
 import Zcash.Snark.ZeroKnowledge.ProtocolCacheCost
 import Zcash.Snark.ZeroKnowledge.SelectorTraceFold
 import Zcash.Snark.ZeroKnowledge.SelectorInitialTrace
@@ -2475,3 +2488,117 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonkQueryAddress_bytes_le
 -- ProtocolCacheCost
 assert_axioms Zcash.Snark.ZeroKnowledge.protocolOracleView_programming_cost_le
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkRawOracleView_programming_cost_le
+
+-- Semantic support of original witness functions and checked advice annotations.
+
+-- WitnessFunctionSupport
+assert_computable Zcash.Snark.ZeroKnowledge.WitnessFunctionSupport
+assert_axioms Zcash.Snark.ZeroKnowledge.WitnessFunctionSupport.mono
+assert_axioms Zcash.Snark.ZeroKnowledge.WitnessFunctionSupport.map
+assert_axioms Zcash.Snark.ZeroKnowledge.WitnessFunctionSupport.pair
+assert_axioms Zcash.Snark.ZeroKnowledge.witnessFunctionSupport_const
+assert_axioms Zcash.Snark.ZeroKnowledge.witnessFunctionSupport_readCell
+assert_axioms Zcash.Snark.ZeroKnowledge.witnessFunctionSupport_valueBuilder
+assert_axioms Zcash.Snark.ZeroKnowledge.witnessFunctionSupport_natBuilder
+assert_axioms Zcash.Snark.ZeroKnowledge.witnessFunctionSupport_boolBuilder
+assert_axioms Zcash.Snark.ZeroKnowledge.witnessFunctionSupport_readsFrom
+
+-- PoseidonWitnessSupport
+assert_axioms Zcash.Snark.ZeroKnowledge.poseidon_constWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.poseidon_addWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.poseidon_readCellWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.poseidon_rowWit_support
+
+-- MulIncompleteWitnessSupport
+assert_computable Zcash.Snark.ZeroKnowledge.mulIncompleteStateReads
+assert_axioms Zcash.Snark.ZeroKnowledge.mulIncomplete_readsValue_support
+assert_axioms Zcash.Snark.ZeroKnowledge.mulIncomplete_readWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.mulIncomplete_stepWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.mulIncomplete_stepWit_baseX_support
+assert_axioms Zcash.Snark.ZeroKnowledge.mulIncomplete_stepWit_baseY_support
+assert_axioms Zcash.Snark.ZeroKnowledge.mulIncomplete_initLambdaWit_support
+
+-- FixedBaseWitnessSupport
+assert_axioms Zcash.Snark.ZeroKnowledge.mulFixed_windowVal_support
+assert_axioms Zcash.Snark.ZeroKnowledge.mulFixed_xPWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.mulFixed_yPWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.mulFixed_uWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.mulFixed_hintWindowVal_support
+assert_axioms Zcash.Snark.ZeroKnowledge.mulFixed_xPWitH_support
+assert_axioms Zcash.Snark.ZeroKnowledge.mulFixed_yPWitH_support
+assert_axioms Zcash.Snark.ZeroKnowledge.mulFixed_uWitH_support
+
+-- FixedCanonicityWitnessSupport
+assert_axioms Zcash.Snark.ZeroKnowledge.mulFixed_alphaZeroPrimeWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.mulFixed_alpha1Wit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.mulFixed_alpha2Wit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.mulFixed_yVarWit_support
+
+-- NoteWitnessSupport
+assert_axioms Zcash.Snark.ZeroKnowledge.note_brWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.note_bWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.note_dWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.note_eWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.note_gWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.note_hWit_support
+
+-- NoteCanonicityWitnessSupport
+assert_axioms Zcash.Snark.ZeroKnowledge.note_aPrimeWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.note_b3CPrimeWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.note_e1FPrimeWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.note_g1G2PrimeWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.note_k0Wit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.note_k2Wit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.note_k3Wit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.note_jPrimeWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.note_jWit_support
+
+-- CommitIvkWitnessSupport
+assert_axioms Zcash.Snark.ZeroKnowledge.commitIvk_bWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.commitIvk_dWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.commitIvk_aPrimeWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.commitIvk_b2CPrimeWit_support
+
+-- SinsemillaWitnessSupport
+assert_computable Zcash.Snark.ZeroKnowledge.sinsemillaStateReads
+assert_axioms Zcash.Snark.ZeroKnowledge.sinsemilla_readsValue_support
+assert_axioms Zcash.Snark.ZeroKnowledge.sinsemilla_initXPWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.sinsemilla_stepWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.sinsemilla_exitXAWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.sinsemilla_initLWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.sinsemilla_boundaryYA_support
+assert_axioms Zcash.Snark.ZeroKnowledge.sinsemilla_finalYAWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.sinsemilla_zeroWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.sinsemilla_constWit_support
+
+-- MerkleWitnessSupport
+assert_axioms Zcash.Snark.ZeroKnowledge.merkle_waWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.merkle_wb1Wit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.merkle_wb2Wit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.merkle_wbWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.merkle_wcWit_support
+
+-- NativeScalarWitnessSupport
+assert_axioms Zcash.Snark.ZeroKnowledge.nativeScalar_support
+assert_axioms Zcash.Snark.ZeroKnowledge.nativeConstant_support
+assert_axioms Zcash.Snark.ZeroKnowledge.nativeBoolean_support
+assert_axioms Zcash.Snark.ZeroKnowledge.addChip_sumWit_support
+
+-- AdviceSupportPlan
+assert_axioms Zcash.Snark.ZeroKnowledge.SupportedAdviceProgram
+assert_computable Zcash.Snark.ZeroKnowledge.supportedAdviceProgram +choice
+assert_computable Zcash.Snark.ZeroKnowledge.supportedStructuredAdvice +choice
+assert_computable Zcash.Snark.ZeroKnowledge.adviceSupportPlan +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceSupportPlan_causal
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevelAdviceAssignment_extendsWitnesses_of_supportPlan
+
+-- ActionHintReadSupport
+assert_computable Zcash.Snark.ZeroKnowledge.actionFieldHintPrograms +choice
+assert_computable Zcash.Snark.ZeroKnowledge.actionPointHintPrograms +choice
+assert_computable Zcash.Snark.ZeroKnowledge.actionScalarHintPrograms +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.actionFieldHintPrograms_reads_nil
+assert_axioms Zcash.Snark.ZeroKnowledge.actionPointHintPrograms_reads_nil
+assert_axioms Zcash.Snark.ZeroKnowledge.actionScalarHintPrograms_reads_nil
+assert_axioms Zcash.Snark.ZeroKnowledge.actionScalarWindow_reads_nil
+assert_axioms Zcash.Snark.ZeroKnowledge.actionMerkleSiblingHint_support
+assert_axioms Zcash.Snark.ZeroKnowledge.actionMerkleSwapHint_support
