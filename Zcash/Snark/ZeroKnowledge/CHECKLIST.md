@@ -610,6 +610,19 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   `8m^2 + (72m + 85)R + 1300m + 2200` for eleven IPA rounds, where `R` bounds
   every field's complete producer. The original schedule and its linear item
   envelope are preserved without a successful-emission premise.
+- [x] Compose the [stored joint view with actual proof routing](StoredJointProofCost.lean)
+  and the [complete transcript](StoredJointTraceCost.lean). The
+  [full stored-bit producer](StoredActionTapeTraceCost.lean) erases to the original
+  flat-tape simulator's complete schedule. Its [fixed envelope](StoredActionTapeTraceBound.lean)
+  derives generated dimensions and every reader price, including both full
+  packing passes and every private/public polynomial calculation.
+- [x] Count the [complete canonical observer](CanonicalObserverCost.lean) and
+  [oracle reports](CanonicalOracleReportCost.lean), preserving proof bytes,
+  received values, and all original failure checks. The
+  [query-address producer](QueryAddressCost.lean) includes every copied prefix
+  and encoded byte. The [stored raw reader](StoredDigestPrefixCost.lean) recovers
+  the exact zero-extended public reply tape and its agreement with the field
+  challenges, without exposing words from the private suffix.
 - [ ] Specify the runtime model and input representations, including access to
   public inputs and setup, bit packing, field reduction, group arithmetic,
   polynomial operations, transcript encoding, and cache lookup/programming.

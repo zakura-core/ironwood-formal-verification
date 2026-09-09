@@ -218,8 +218,11 @@ key structure, and primitive operation prices, for every possible bit tape.
 The actual [scalar codec](ScalarEncodingCost.lean), [point codecs](PointEncodingCost.lean),
 and [transcript encoder](TranscriptEncodingCost.lean) now have exact-result and
 complete cost theorems. They preserve canonical bytes and identity rejection.
-Proof-field routing, message scheduling, and oracle observation remain to
-compose for the complete oracle-simulator runtime theorem.
+The [complete stored-bit transcript](StoredActionTapeTraceCost.lean) now composes
+proof routing and message scheduling, with a [fixed cost envelope](StoredActionTapeTraceBound.lean).
+The [canonical observer](CanonicalObserverCost.lean) retains the original bytes,
+received challenges, and abort checks. Public initialization, complete oracle
+replay, and cache programming remain to compose into the full simulator.
 
 The [counted IPA simulator](IpaSimulatorCost.lean) now constructs and materializes
 every round point, the mask commitment, and both scalar responses. Its erasure
@@ -1715,5 +1718,15 @@ message schedule. At eleven IPA rounds its
 `8m^2 + (72m + 85)R + 1300m + 2200`, where `R` bounds every field's complete
 producer. This includes optional claims and all final responses, even when later
 observation stops early. Whole-simulator and oracle-observer composition remain
-separate runtime steps; these structural costs do not change the statistical
-simulation error.
+separate runtime steps at that checkpoint; these structural costs do not change
+the statistical simulation error.
+
+The [stored-joint proof constructor](StoredJointProofCost.lean) now feeds that
+schedule directly. Its [complete tape-to-transcript theorem](StoredActionTapeTraceCost.lean)
+recovers the original flat-tape simulator, and its [fixed bound](StoredActionTapeTraceBound.lean)
+derives all reader prices and generated dimensions. Canonical observation and
+[pre-challenge reports](CanonicalOracleReportCost.lean) include every actual
+codec and failure check. [Query-address construction](QueryAddressCost.lean)
+counts all prefix copies and encoded bytes. The [raw reply reader](StoredDigestPrefixCost.lean)
+exposes exactly the zero-extended public prefix, preserving its agreement with
+the reduced challenges while keeping the private suffix internal.

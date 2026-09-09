@@ -457,8 +457,11 @@ the original tape split, challenge values, and private coins. The
 [fixed runtime envelope](StoredActionTapeJointBound.lean) has no reader-price
 premises and does not depend on sampled values: the exact stored challenge-read
 prices follow from their valid positions. The Action input-read envelope is
-`553m + 4R_read + 4457`. Proof-field routing, codecs, and oracle observation still
-need to be composed into
+`553m + 4R_read + 4457`. The [complete bit-to-transcript construction](StoredActionTapeTraceCost.lean)
+now includes original proof routing and scheduling, with a
+[fixed cost envelope](StoredActionTapeTraceBound.lean). The canonical observer
+and raw reply prefix also have complete counted implementations. Public
+initialization, oracle replay, and cache programming still need to compose into
 `actionOracleSimulatorFromBits`. A PRNG reduction
 executes the real prover and the supplied view test, so its admissibility needs
 those runtime bounds in addition to simulator efficiency.
@@ -721,3 +724,13 @@ and 3,809-job trust-boundary build](review/validation-af86fb24.log). The
 [68-declaration inventory](review/axioms-af86fb24.log) has exact direct pins and
 only standard Lean logical axioms. Whole-simulator composition and observation
 remain separate runtime obligations.
+
+The complete stored-bit transcript and observer checkpoint adds 58 declarations
+across sixteen modules. [Exact tape-to-transcript erasure](StoredActionTapeTraceCost.lean)
+and the [fixed envelope](StoredActionTapeTraceBound.lean) retain complete bit,
+joint, proof-preparation, and schedule costs. The canonical observer and oracle
+reports preserve original codecs and abort checks. Raw reply reads expose only
+the declared public prefix; their field reductions agree with the same prepared
+challenge record. The separate axiom inventory finds only standard Lean logical
+axioms and the existing named Pallas curve-order dependency in three Action
+theorems. Full public initialization, oracle replay, and cache composition remain.
