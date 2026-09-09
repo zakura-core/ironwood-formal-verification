@@ -170,8 +170,12 @@ now has a complete input-size bound covering sorting, reservations, reverse fill
 and failures. The [lookup and permutation ratio scans](RunningProductCost.lean)
 retain every row-provider cost and inherited chunk, including zero denominators.
 Their results equal the original computations for every input. Composing those
-components into the real-prover-and-test runtime needed for PRNG test-class
-membership remains open; no machine-code correspondence is asserted.
+components with the [actual lookup compression and sorting](PlonkLookupSortCost.lean)
+and [lookup-product row constructor](PlonkLookupProductCostBound.lean) now discharges
+their complete row-reader costs. This includes original query routing, missing-column
+defaults, full row-polynomial preparation and evaluation, expression trees, and
+all exceptional inputs. The complete real-prover-and-test runtime needed for PRNG
+test-class membership remains open; no machine-code correspondence is asserted.
 
 **Application witness construction**
 

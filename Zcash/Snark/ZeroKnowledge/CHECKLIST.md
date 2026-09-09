@@ -676,6 +676,12 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   is proved equal to the original canonical merge sort. The ratio bounds retain
   every numerator, denominator, challenge read, and inherited chunk computation,
   including zero denominators. These are components of the real-prover bound.
+- [x] Connect the real prover's [lookup sorting](PlonkLookupSortCost.lean) and
+  [lookup-product construction](PlonkLookupProductCostBound.lean) to their complete
+  counted row providers. The bounds include the actual fixed/advice/instance
+  query tables, missing-column and out-of-range defaults, polynomial interpolation
+  and evaluation, expression-tree compression, challenge reads, and all failures.
+  Their erasure theorems identify the original constructors for every input.
 - [ ] Discharge the PRNG reduction's resource conditions wherever that
   computational instantiation is claimed. This requires bounds for the actual
   real-prover-and-test reduction, including retained auxiliary data and any retry
