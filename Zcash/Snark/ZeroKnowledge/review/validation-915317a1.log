@@ -1,0 +1,17 @@
+Source certificates and input conversion costs
+Proof baseline: 915317a16740cbe176ae694bf9f3c2e85fa1a418.
+Full build: lake build --wfail; passed (4454 jobs).
+Focused boundary and regression build: passed (3660 jobs).
+Endpoint census: 326 endpoint declarations, all pinned.
+Build coverage: 917 modules, all covered by default targets.
+Build surface: 6 targets; lakefile.toml and CI agree.
+Umbrella-import guard: passed.
+csimp census: 1 declaration, covered.
+Costed group-work census: 2 production modules, 20 host callbacks pinned.
+Declaration inventory: 32 new mathematical declarations; exactly one direct pin each. Seven metaprogram regression declarations carry their own direct pins.
+Transitive axiom inventory: only propext, Classical.choice, and Quot.sound for the new mathematical declarations; no admission, new native certificate, or unexpected axiom.
+Local Markdown links: 431 checked in README and CHECKLIST before this review-record update.
+Whitespace: git diff --check passed.
+Scope: exact source and finite-data certificates; the actual eight-region, eleven-instruction loading stage and both finite scans; cost-erasing little-endian packing and wide field reduction with charged input accesses.
+Proof artifact: the concrete loading certificate is kernel evaluated and has code generation disabled for expanded kernel-only source auxiliaries. The original executable witness constructor is unchanged.
+Not claimed: complete Action source annotations or global scans, final witness extension, actual extractor agreement, application row validity, whole-simulator runtime, PRNG resource-class membership, or independent review.

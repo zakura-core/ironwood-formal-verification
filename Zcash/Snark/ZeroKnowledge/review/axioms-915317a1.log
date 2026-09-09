@@ -1,0 +1,46 @@
+'Zcash.Snark.ZeroKnowledge.AdviceSupportCertificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.AdviceSupportCertificate.nil' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.AdviceSupportCertificate.cons' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.AdviceSupportCertificate.append' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.AdviceSupportCertificate.transport' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.topLevelAdviceAssignment_extendsWitnesses_of_certificate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.AdviceSourceCertificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.AdviceSourceCertificate.nil' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.AdviceSourceCertificate.cons' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.adviceSourceEntryData' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.AdviceSourceCertificate.consWithData' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.AdviceSourceCertificate.append' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.AdviceSourceCertificate.transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.AdviceSourceCertificate.readCertificate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.topLevelAdviceAssignment_extendsWitnesses_of_sourceCertificate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.actionWitnessLoadSourceCertificate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.actionWitnessLoad_readPlan' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.actionWitnessLoad_aliasPlan' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.actionWitnessLoad_annotationCount' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.packBitsLECosted' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.packBitsLECosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.packBitsLECosted_lt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.packBitsLECosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.packBitsLECosted_raw_word' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.packBitsLECosted_raw_word_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.wideReduceBitsLECosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.wideReduceBitsLECosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.wideReduceBitsLECosted_cost' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.wideReduceBitsLECosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.wideReduceBitsLECosted_raw_word' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.wideReduceBitsLECosted_raw_word_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.sinsemilla_zWit_support' depends on axioms: [propext, Classical.choice, Quot.sound]

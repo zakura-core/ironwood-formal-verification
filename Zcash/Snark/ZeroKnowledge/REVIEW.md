@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `41349ac14db01d68e36d8dc227c4bd84a4a6a4dc` on `establish-zk` in
+Proof baseline: `915317a16740cbe176ae694bf9f3c2e85fa1a418` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -225,6 +225,21 @@ scans, including rejection, and supply the same compiler witness-equation
 interface. These are checker refinements; they do not assume a successful Action
 certificate or change its source program.
 
+[AdviceSourceCertificate.lean](AdviceSourceCertificate.lean) retains the original
+instructions and copy tags with their semantic read annotations. Its finite-data
+constructor requires equality to the original addresses, reads, and tags. Source
+transport changes proof metadata while leaving the stored data directly evaluable.
+The [proof-producing elaborator](../../Meta/AdviceSourceCertificate.lean) applies
+source equations and support lemmas; its completed certificate is checked by the
+kernel. [Adversarial checks](../../Meta/Tests/AdviceSourceCertificate.lean) reject
+omitted reads, unavailable reads, and changed source addresses.
+
+[ActionWitnessLoadCertificate.lean](ActionWitnessLoadCertificate.lean) instantiates
+that interface for all eleven original instructions in the eight-region loading
+stage. Both finite scans are kernel checked at the proved Action placement. This
+is a static proof artifact with code generation disabled for expanded kernel-only
+source auxiliaries; the original witness constructor remains executable.
+
 [ActionWitnessObservation.lean](ActionWitnessObservation.lean) identifies the
 extraction agreement needed for completeness. It retains every witness field and
 exactly the 32 auxiliary Merkle readings used by the two 16-layer computations.
@@ -261,16 +276,35 @@ emission or nonzero-challenge premise is needed. This is a cache-component cost
 proof; public-input preparation, bit packing, field/group/polynomial arithmetic,
 encoding, observation, and full simulator/reduction composition remain outside it.
 
+**Input conversion costs**
+
+[RawBitPackingCost.lean](RawBitPackingCost.lean) counts little-endian packing from a
+reader that supplies its complete bit-access costs. [WideBitReductionCost.lean](WideBitReductionCost.lean)
+uses field Horner evaluation and proves exactly the same result as packing followed
+by the specified modular reduction. The word-level results equal the existing
+`rawBitsTapeEquiv` and `reduceFieldTape` values for every input tape. The algorithms
+retain reader costs and successor-index adapter costs; case tests, Boolean branches,
+and the two bounded-width arithmetic operations per bit each cost one unit.
+
+For a 512-bit word and reader accesses bounded by `R`, either component costs at
+most `512R + 264193` structural units. The field reducer uses fixed Pasta-field
+addition units. Counters are accounting metadata. A concrete reader representation,
+primitive-to-machine cost correspondence, the complete tape-access pattern, and
+composition with the full simulator still require their own proofs. These results
+do not discharge the PRNG test-class resource premise.
+
 **Validation and review status**
 
-The [validation record](review/validation-41349ac1.log) contains the successful
-full default-target build (`lake build --wfail`, 4,446 jobs), repository guards,
-and the [eight-declaration dependency inventory](review/axioms-41349ac1.log) for the
-latest proof milestone. Two of those declarations retain the existing Pallas
-group-order dependency through the application specification; no new native
-certificate or unexpected axiom was added. All 909 modules are covered by default targets and all
-326 endpoint declarations are pinned. The full [parent](TrustBoundary.lean) and
-[Action](Action/TrustBoundary.lean) boundaries also check the earlier milestones.
+The [validation record](review/validation-915317a1.log) contains the successful
+full default-target build (`lake build --wfail`, 4,454 jobs), repository guards,
+and the [32-declaration dependency inventory](review/axioms-915317a1.log) for the
+latest proof milestone. Every new mathematical declaration has one direct pin;
+the seven metaprogram regression declarations are pinned in their test module.
+The new milestone uses only `propext`, `Classical.choice`, and `Quot.sound`, with
+no admission or native-evaluation certificate. All 917 modules are covered by
+default targets and all 326 endpoint declarations are pinned. The full
+[parent](TrustBoundary.lean) and [Action](Action/TrustBoundary.lean) boundaries also
+check the earlier milestones.
 The native dependencies remain exactly the inherited named curve-order certificates:
 
 ```text
