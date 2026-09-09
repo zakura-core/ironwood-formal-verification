@@ -687,6 +687,13 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   charges all column-name powers and indexed factor reads, and carries every
   preceding chunk's terminal state into the next scan. Exact erasure and the
   combined bound hold for every row and field value, including zero factors.
+- [x] Construct and mask [all stored private columns](PlonkStoredColumnsCost.lean)
+  in the original order, with a [complete combined bound](PlonkStoredColumnsCostBound.lean).
+  Each of the 22 columns per Action is materialized before entering the retained
+  history. The result equals the reference constructor on the identical selected
+  row-mask subsequence, including totalized lookup failures. Preparation, stored
+  reads, masking, and every history dependency are counted. Decoding that
+  subsequence from the full batched tape remains part of the surrounding prover.
 - [ ] Discharge the PRNG reduction's resource conditions wherever that
   computational instantiation is claimed. This requires bounds for the actual
   real-prover-and-test reduction, including retained auxiliary data and any retry

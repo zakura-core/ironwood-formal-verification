@@ -180,6 +180,13 @@ The [real permutation-row constructor](PlonkPermutationProductCostBound.lean) no
 also has a complete bound covering the original packed column/sigma queries,
 all identity-name powers, indexed products, and inherited three-chunk scans.
 Its exact-result theorem retains every row and zero-factor case.
+The [complete stored column runner](PlonkStoredColumnsCost.lean) executes the
+original 22-column schedule per Action, retaining earlier masked columns and the
+exact offsets of the selected row-mask tape. Its
+[combined bound](PlonkStoredColumnsCostBound.lean) includes all constructor work,
+materialization, masking, and stored-history reads, including totalized failures.
+The full batched-tape decoder and remaining real-prover composition are separate
+parts of the open PRNG resource item.
 
 **Application witness construction**
 
