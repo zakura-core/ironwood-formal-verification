@@ -1000,3 +1000,14 @@ validation note incorrectly said that moving its two pins had removed every
 generic native exemption; this checkpoint checks the complete census.
 
 The complete cached-prover checkpoint passes the [focused 4,090-job build of both trust boundaries](review/validation-064c3f1b.log), with [53 separately inventoried declarations](review/axioms-064c3f1b.log) across 15 modules. The exact committed tree passes all repository guards, covering 331 endpoints and 1,281 modules. The validation record also corrects the earlier generic-native census statement. Complete retained-retry/test resource admissibility and independent review remain open.
+
+The [complete counted retry runner](StoredActionRecordedCost.lean) now preserves
+the original retained history, every intermediate public cache, the final cache,
+and the exhaustion flag. The [combined bound](StoredActionRecordedBound.lean)
+accounts for cumulative cache growth and all real attempts. The
+[stored-bit wrapper](StoredActionRecordedBits.lean) also charges complete raw-word
+decoding and tape pairing. Its [exact probability law](StoredActionRecordedBitsLaw.lean)
+is the original recorded reference experiment for every whole candidate private
+prefix. The runtime bound therefore covers correlated private tapes without a
+reset or independence premise. Executable distinguishing tests and their full
+PRNG admissibility composition, and independent review, remain open.

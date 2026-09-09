@@ -1,3 +1,9 @@
+import Zcash.Snark.ZeroKnowledge.StoredActionRawStepCost
+import Zcash.Snark.ZeroKnowledge.StoredActionRawStepBound
+import Zcash.Snark.ZeroKnowledge.StoredActionRecordedCost
+import Zcash.Snark.ZeroKnowledge.StoredActionRecordedBound
+import Zcash.Snark.ZeroKnowledge.StoredActionRecordedBits
+import Zcash.Snark.ZeroKnowledge.StoredActionRecordedBitsLaw
 import Zcash.Snark.ZeroKnowledge.SourceGateCompleteness
 import Zcash.Snark.ZeroKnowledge.ScalarWitnessRouting
 import Zcash.Snark.ZeroKnowledge.ScalarWitnessExtraction
@@ -1554,3 +1560,20 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessRows_lookups_of_constraints
   +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessRows_relation_of_constraints
   +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+/- Complete counted real retries and their exact verifier-bit law. -/
+assert_axioms Zcash.Snark.ZeroKnowledge.StoredActionRetryTape
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionRawStepCosted_result +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionRawStepCosted_cache_length_le +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionRawStepCosted_cost_le +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionRecordedStepCosted_cost_le +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.storedActionRecordedRetryCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionRecordedRetryCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionRecordedRetryCosted_cost_le
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionRecordedCosted_result +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.storedActionRecordedCostBudget +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionRecordedCosted_cost_le +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionRecordedBitsCosted_result +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.storedActionRecordedBitsCostBudget +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionRecordedBitsCosted_cost_le +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionRecordedBitsCosted_law +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)

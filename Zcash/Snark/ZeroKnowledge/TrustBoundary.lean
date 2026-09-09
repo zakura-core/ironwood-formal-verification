@@ -1,3 +1,8 @@
+import Zcash.Snark.ZeroKnowledge.StatefulRetryCost
+import Zcash.Snark.ZeroKnowledge.StatefulRetryCostBound
+import Zcash.Snark.ZeroKnowledge.OracleRetryCost
+import Zcash.Snark.ZeroKnowledge.StoredRawMatrixCost
+import Zcash.Snark.ZeroKnowledge.StoredRetryTapePairing
 import Zcash.Snark.ZeroKnowledge.HintCellExtraction
 import Zcash.Snark.ZeroKnowledge.CachedPrefixBound
 import Zcash.Snark.ZeroKnowledge.CachedPrefixCost
@@ -4717,3 +4722,27 @@ assert_axioms Zcash.Snark.ZeroKnowledge.storedRawFieldsCosted_result
 assert_axioms Zcash.Snark.ZeroKnowledge.storedRawFieldsCosted_length
 assert_axioms Zcash.Snark.ZeroKnowledge.storedRawFieldsCosted_ofFn_result
 assert_axioms Zcash.Snark.ZeroKnowledge.storedRawFieldsCosted_cost_le
+
+/- Complete counted real retries and their exact verifier-bit law. -/
+assert_computable Zcash.Snark.ZeroKnowledge.runStatefulRetriesCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.runStatefulRetriesCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.runStatefulRetries_map_tape
+assert_axioms Zcash.Snark.ZeroKnowledge.runStatefulRetries_congr_retry
+assert_axioms Zcash.Snark.ZeroKnowledge.runStatefulRetriesCosted_length_le
+assert_axioms Zcash.Snark.ZeroKnowledge.runStatefulRetriesCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.oracleAttemptStateCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.oracleAttemptStateCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.oracleAttemptStateCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.oracleRetryRequestedCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.oracleRetryRequestedCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.oracleRetryRequestedCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.rawMatrixBitsEquiv +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.rawMatrixBitsEquiv_apply
+assert_axioms Zcash.Snark.ZeroKnowledge.uniformRawMatrixBits
+assert_computable Zcash.Snark.ZeroKnowledge.storedRawMatrixCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.storedRawMatrixCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.storedRawMatrixCosted_shape
+assert_computable Zcash.Snark.ZeroKnowledge.storedRawMatrixCostBudget
+assert_axioms Zcash.Snark.ZeroKnowledge.storedRawMatrixCosted_cost_le
+assert_axioms Zcash.Snark.ZeroKnowledge.zipListCosted_ofFn_result
+assert_axioms Zcash.Snark.ZeroKnowledge.zipListCosted_shape

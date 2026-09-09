@@ -774,6 +774,14 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   misses. The actual Action compiler discharges the source conditions. The
   generic [cached prefix runner](CachedPrefixCost.lean) has both source erasure
   and a [full cost and state-growth bound](CachedPrefixBound.lean).
+- [x] Compose the [complete recorded retry runner](StoredActionRecordedCost.lean)
+  with [a full execution bound](StoredActionRecordedBound.lean), retaining each
+  intermediate cache, result, and exhaustion flag. The
+  [stored-bit implementation](StoredActionRecordedBits.lean) charges decoding
+  and pairing all verifier tapes and then the complete real retry execution.
+  Its [exact law](StoredActionRecordedBitsLaw.lean) recovers the existing
+  recorded experiment for every candidate private prefix, including correlated
+  PRNG output. Generated state-size and tape-shape conditions are discharged.
 - [ ] Discharge the PRNG reduction's resource conditions wherever that
   computational instantiation is claimed. This requires bounds for the actual
   real-prover-and-test reduction, including retained auxiliary data and any retry
