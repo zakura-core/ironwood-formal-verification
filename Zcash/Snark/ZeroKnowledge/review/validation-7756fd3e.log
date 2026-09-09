@@ -1,0 +1,17 @@
+Public opening evaluation and routing costs
+Proof baseline: 7756fd3eb17daea360d3afbc7f82b7fb9ca50edb.
+Focused build: lake build --wfail Zcash.Snark.ZeroKnowledge.TrustBoundary; passed (3747 jobs).
+Declaration inventory: all 62 mathematical declarations across eight modules have exactly one direct axiom or computability pin. A separate Lean axiom inventory passed and contains only propext, Classical.choice, and Quot.sound; no new axiom, native certificate, or admission.
+The nine explicitly choice-dependent computability pins cover interpolation weight steps and folds, Lagrange summands and evaluation, multi-opening denominator/set/evaluation steps and folds, and private-column view routing.
+Endpoint census: 326 endpoint declarations, all pinned.
+Build coverage: all 987 workspace modules covered, including the three unfinished Action source certificates. Six default targets agree between lakefile.toml and CI.
+Umbrella-import guard: passed.
+csimp census: 1 declaration, covered.
+Costed group-work census: 2 production modules, 20 host callbacks pinned.
+Fixture manifest: all 6 artifacts match their digests and provenance entries.
+Local Markdown links: 620 checked across README, CHECKLIST, and REVIEW before this review-record update.
+Whitespace: git diff --check and git diff --cached --check passed.
+Scope: both nested Lagrange interpolation loops, full multi-opening scalar evaluation, commitment/scalar combination, construction and search of the actual private-column order, disclosed-value routing, and every commitment-entry slot. Erasure matches the existing formulas and symbolic-MSM evaluation, including coincident points, out-of-range defaults, empty lists, and stopped later encoding. Every selected callback retains its full supplied cost.
+The model uses explicit field/group primitive prices, materialized inputs, and bounded-width structural indexing. It does not assert compiler or machine-code correspondence.
+Remaining runtime composition: public polynomial construction, complete PLONK opening assembly, concrete query providers and quotient composition, codecs and transcript observation, whole fixed-bit simulator cost, and real-prover-and-test PRNG reductions.
+Full workspace build: not claimed for this checkpoint. The complete Action gate-source certificate passed separately (3314 jobs); the advice check identified an unsupported original complete-multiplication callback, and the lookup check remains in progress. The application-level corollary remains open. The latest successful full workspace build remains b3b22e26 (4465 jobs).

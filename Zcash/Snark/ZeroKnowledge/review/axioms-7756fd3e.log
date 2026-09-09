@@ -1,0 +1,70 @@
+'Zcash.Snark.ZeroKnowledge.rangeListCosted' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.rangeListCosted_result' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.rangeListCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.interpolationWeightStepCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.interpolationWeightStepCosted_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.interpolationWeightStepCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.interpolationWeightCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.interpolationWeightCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.interpolationWeightCostBudget' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.interpolationWeightCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.lagrangeSummandStepCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.lagrangeSummandStepCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.lagrangeSummandStepCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.lagrangeEvalCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.lagrangeEvalCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.lagrangeEvalCostBudget' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.lagrangeEvalCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.multiopenDenominatorStepCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.multiopenDenominatorStepCosted_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.multiopenDenominatorStepCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.multiopenSetEvalCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.multiopenSetEvalCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.multiopenSetEvalCostBudget' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.multiopenSetEvalCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.multiopenEvalStepCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.multiopenEvalCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.multiopenEvalCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.multiopenEvalCostBudget' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.multiopenEvalCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.multiopenPointStepCosted' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.multiopenPointFoldCosted' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.multiopenPointFoldCosted_result' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.multiopenPointFoldCosted_msm' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.multiopenPointFoldCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.idxOfListCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.idxOfListCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.idxOfListCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.flattenFinCosted_length_eq' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.privateColumnOrderCosted' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.privateColumnOrderCosted_result' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.privateColumnOrderCosted_length' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.privateColumnOrderCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.getDListCosted_property' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.privateColumnIndexCosted' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.privateColumnIndexCosted_result' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.privateColumnIndexCosted_lt' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.privateColumnIndexCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.privateColumnViewCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.privateColumnViewCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.privateColumnViewCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkColumnEntryCosted' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkColumnEntryCosted_result' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkColumnEntryCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkLinearEntryCosted' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.plonkLinearEntryCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.plonkLinearEntryCosted_cost_le' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.plonkPieceEntryCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.plonkPieceEntryCosted_result' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.plonkPieceEntryCosted_cost_le' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.plonkQuotientPrimeEntryCosted' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.plonkQuotientPrimeEntryCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.plonkQuotientPrimeEntryCosted_cost_le' depends on axioms: [propext]

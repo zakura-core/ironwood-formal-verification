@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `c55b3ea1c600b08f64a2e4ef57c87d63eb51577e` on `establish-zk` in
+Proof baseline: `7756fd3eb17daea360d3afbc7f82b7fb9ca50edb` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -351,6 +351,15 @@ and [cross-Action collection](ConstraintCollectionCost.lean) preserve the entire
 ordered list and retain all provider costs. The [Lagrange basis](LagrangeBasisCost.lean),
 [quotient fold](QuotientEvaluationCost.lean), and [query routers](QueryRoutingCost.lean)
 also have exact counted implementations, including exceptional values and defaults.
+The [full Lagrange interpolant](LagrangeEvaluationCost.lean) and
+[multi-opening scalar evaluation](MultiopenEvaluationCost.lean) include both
+interpolation loops and the denominator product. A
+[direct commitment/scalar fold](MultiopenCombinationCost.lean) is proved equal
+to evaluating the existing symbolic MSM combination. The
+[actual private-column schedule](PrivateColumnOrderCost.lean),
+[disclosed-value routing](PrivateColumnRoutingCost.lean), and
+[commitment-entry routing](CommitmentEntryCost.lean) charge schedule construction,
+equality search, and the complete selected readers.
 
 The model uses materialized arrays and lists, bounded-width structural indexing,
 and explicit prices for field and group primitives. Callback readers carry their
@@ -432,6 +441,14 @@ one direct pin and a separate inventory containing only standard axioms. Both
 original stage certificates and all source-certificate regressions passed after
 switching to synchronously checked proof pieces. The full Action source
 certificates remain in progress, so this checkpoint does not claim a full build.
+
+The opening-cost checkpoint passed the
+[focused 3,747-job build and guards](review/validation-7756fd3e.log). All
+[62 declarations across eight modules](review/axioms-7756fd3e.log) have exactly
+one direct pin and a separate inventory containing only standard axioms. This
+adds both Lagrange interpolation loops, complete multi-opening scalar evaluation,
+the direct commitment/scalar combination, and actual private-column and entry
+routing. Complete opening assembly and whole-program costs remain open.
 
 The native dependencies remain exactly the inherited named curve-order certificates:
 
