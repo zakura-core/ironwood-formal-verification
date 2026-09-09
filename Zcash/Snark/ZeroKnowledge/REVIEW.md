@@ -285,11 +285,19 @@ unused suffix without requiring agreement of wrapped private reads.
 
 [CopySourceCompleteness.lean](CopySourceCompleteness.lean) proves every equation
 of the ordered raw compiler copy stream. Deferred constants retain their
-positional allocation and the exact value in the actual fixed environment. The
-lookup-tuple bridge and identification of these copy values with the prover's
-packed cells remain open, as does the application-witness-to-`ActionZkRelation`
-corollary. The existing circuit-level simulation theorem and validity relation
-are unchanged.
+positional allocation and the exact value in the actual fixed environment.
+[ActionCopyValues.lean](ActionCopyValues.lean) identifies those values with the
+prover's actual packed cells using the complete query routes.
+[ActionLookupValues.lean](ActionLookupValues.lean) carries paired lookup tuples
+through selector compression and query compilation. Active rows use an explicit
+source-coverage premise; inactive rows use the actual zero-index table entry,
+including the Sinsemilla generator coordinates.
+[ActionGateValues.lean](ActionGateValues.lean) establishes every compiled gate
+row, and [ActionRowRelations.lean](ActionRowRelations.lean) preserves both kinds
+of row relation through the reference-key shape. The complete advice scans,
+actual gate and lookup activation coverage, and final application-level
+`ActionZkRelation` corollary remain open. The existing circuit-level simulation
+theorem and validity relation are unchanged.
 
 **Byte-cache execution costs**
 

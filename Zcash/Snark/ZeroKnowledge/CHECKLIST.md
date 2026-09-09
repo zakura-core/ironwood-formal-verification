@@ -178,9 +178,21 @@ model. Compare strength only after fixing those models and assumptions.
 - [x] Prove that the original operation constraints imply the
   [complete ordered compiler copy stream](CopySourceCompleteness.lean), including
   positional constant allocations and their actual fixed-column values.
-- [ ] Discharge the witness equations and the actual gate activation-coverage
-  check, complete the lookup-tuple bridge, and identify compiler copy values with
-  the prover's packed permutation cells.
+- [x] Identify every prover permutation-cell value with its original compiler
+  endpoint in [ActionCopyValues.lean](ActionCopyValues.lean), using the exact
+  instance, advice, and fixed query routes. The original operation constraints
+  then imply every packed copy equation.
+- [x] Carry source lookup tuples through selector compression and the actual
+  verifier queries in [CompiledLookupCompleteness.lean](CompiledLookupCompleteness.lean)
+  and [ActionLookupValues.lean](ActionLookupValues.lean). Active rows retain an
+  explicit source-coverage premise; inactive rows select their proved actual
+  [zero-index table entry](ActionLookupFallback.lean), including Sinsemilla's
+  nonzero coordinate values.
+- [x] Derive all actual Action gate rows in [ActionGateValues.lean](ActionGateValues.lean)
+  and preserve gate and paired lookup relations through the reference-key shape
+  in [ActionRowRelations.lean](ActionRowRelations.lean).
+- [ ] Discharge the complete witness equations and the actual gate and lookup
+  activation-coverage checks.
 - [ ] Package that evidence as `ActionZkRelation` and derive application-level
   interactive and one-attempt oracle simulation corollaries.
 

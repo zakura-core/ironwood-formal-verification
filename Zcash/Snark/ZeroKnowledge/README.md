@@ -77,9 +77,15 @@ polynomials from the original equations under explicit activation coverage.
 [Actual query-row interpretation](ActionQueryRows.lean) and
 [inactive-row handling](InactiveGateCompleteness.lean) retain the cyclic boundary
 behavior. The [copy compiler bridge](CopySourceCompleteness.lean) preserves every
-ordinary and deferred constant equation. The complete source scans, actual gate
-coverage, lookup tuples, and packed copy-value routing still need to be composed
-before the constructor establishes `ActionZkRelation`.
+ordinary and deferred constant equation, and [ActionCopyValues.lean](ActionCopyValues.lean)
+identifies those values with the prover's actual packed permutation cells.
+[ActionLookupValues.lean](ActionLookupValues.lean) derives paired lookup tuples
+through the exact query compiler, including the actual fallback table values on
+inactive rows. [ActionGateValues.lean](ActionGateValues.lean) and
+[ActionRowRelations.lean](ActionRowRelations.lean) retain the gate and lookup
+equations through the reference-key shape. The complete witness-equation scans
+and actual gate and lookup activation coverage remain necessary before the
+constructor establishes `ActionZkRelation`.
 The [raw-source refinement](ActionRandomnessSource.lean) proves exact agreement
 between uniform 512-bit private tapes and the existing wide-reduced reference law.
 Replacing that entire source by a distribution within `eta` adds `eta` to the
