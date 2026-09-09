@@ -240,9 +240,17 @@ and scalar fold. Its erasure is the existing public reconstruction with its
 symbolic MSM evaluated. The [total bound](PublicOpeningCostBound.lean) retains
 all polynomial preparation, indexed reads, and list construction, together with
 the full costs of the supplied quotient scalar and other input readers.
+[Complete claim preparation](PlonkClaimConstraintsCost.lean) now constructs
+the original queries, permutation records and column pairs, and lookup inputs,
+then evaluates every constraint. Its [cost bound](PlonkClaimConstraintsCostBound.lean)
+derives the required record and list bounds from their constructors and actual
+key sizes. The [complete inferred quotient](PlonkVerifierHxCost.lean) adds domain
+powering, all Lagrange values, output materialization, and the final fold and
+division. Its [total bound](PlonkVerifierHxCostBound.lean) covers the same reference
+calculation at every challenge value.
 The model prices field and group primitives explicitly and counts structural
 operations; it is not a machine-code correspondence theorem. Concrete
-public-row and query providers, quotient composition, encoding,
+public-row and setup representations, encoding,
 and the final Action composition remain to be counted. PRNG-class membership
 additionally needs the cost of the
 real prover and the supplied verifier-view test.

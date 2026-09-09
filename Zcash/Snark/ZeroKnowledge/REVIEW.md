@@ -391,8 +391,25 @@ substitutes the checked component budgets into one explicit bound. All public
 row-polynomial preparation, materialized vector construction, indexed reads,
 and field/group operations remain in that bound. Exceptional field values and
 zero defaults retain the reference semantics. The inferred quotient value is
-a supplied scalar with its complete cost; its calculation is still a separate
-composition layer.
+a supplied scalar with its complete cost; the following layer computes it.
+
+[PlonkClaimConstraintsCost.lean](PlonkClaimConstraintsCost.lean) constructs the
+actual fixed, advice, instance, and sigma queries, all three permutation records,
+their resolved column pairs, and all three lookup inputs. Its result is the
+existing verifier constraint list at the original claim proof.
+[PlonkClaimInputBounds.lean](PlonkClaimInputBounds.lean) derives stored-field
+access and list sizes from those constructors. The
+[complete constraint bound](PlonkClaimConstraintsCostBound.lean) uses the actual
+gate trees, lookup trees, and key layout, retaining all preparation costs.
+
+[PlonkVerifierHxCost.lean](PlonkVerifierHxCost.lean) composes domain powering,
+all Lagrange values, complete claim and constraint preparation, output-list
+materialization, and the final quotient fold and division. Erasure is exactly
+`plonkVerifierHx` for the original public row polynomials and disclosed columns.
+The [total quotient bound](PlonkVerifierHxCostBound.lean) counts this same
+computation, including exceptional challenge values. Supplied row, key-tree,
+observation, and challenge readers retain their complete costs; concrete stored
+input/setup representations and whole-simulator composition remain separate.
 
 The model uses materialized arrays and lists, bounded-width structural indexing,
 and explicit prices for field and group primitives. Callback readers carry their

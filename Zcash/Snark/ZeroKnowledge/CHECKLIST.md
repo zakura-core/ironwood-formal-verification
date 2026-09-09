@@ -490,7 +490,7 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
 - [x] Count the [Lagrange basis values](LagrangeBasisCost.lean), signed field powers,
   [quotient evaluation fold](QuotientEvaluationCost.lean), and
   [scalar query routing](QueryRoutingCost.lean), including out-of-range zero defaults.
-  The concrete query providers and complete quotient calculation still need composition.
+  Their complete query-provider and quotient composition is recorded below.
 - [x] Count both [Lagrange interpolation loops](LagrangeEvaluationCost.lean) and
   the complete [multi-opening scalar evaluation](MultiopenEvaluationCost.lean),
   preserving coincident-point division and missing-evaluation defaults. The
@@ -518,9 +518,25 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   and prove its [total cost bound](PublicOpeningCostBound.lean). Erasure is the
   reference public opening after evaluation of its symbolic MSM. The algorithm
   includes interpolation, the final point/scalar fold, every materialized input
-  list, and all supplied reader costs. The quotient evaluation remains a supplied
-  scalar with its complete cost; its computation still needs the query-provider
-  and constraint composition below.
+  list, and all supplied reader costs. The supplied quotient scalar's computation
+  is accounted for by the complete quotient calculation below.
+- [x] Construct the [original claim queries](PlonkClaimQueriesCost.lean),
+  [permutation inputs](PermutationQueryPreparationCost.lean), and
+  [lookup inputs](PlonkLookupInputsCost.lean), retaining their full preparation
+  costs. [Input bounds](PlonkClaimInputBounds.lean) derive stored-field access,
+  chunk sizes, and lookup-tree sizes from those constructors.
+- [x] Compose those providers into the exact
+  [complete claim constraint list](PlonkClaimConstraintsCost.lean) and its
+  [total cost bound](PlonkClaimConstraintsCostBound.lean). The actual key trees
+  and column layout determine the budget; provider correctness and output sizes
+  are proved, rather than supplied as separate constraint-budget premises.
+- [x] Compute the [complete inferred quotient](PlonkVerifierHxCost.lean),
+  including domain powering, all basis values, input and constraint preparation,
+  list materialization, and the final fold and division. Its
+  [cost bound](PlonkVerifierHxCostBound.lean) retains every supplied row, key,
+  observation, and challenge cost. Erasure is the existing `plonkVerifierHx`,
+  including exceptional field values. Concrete stored public-input and setup
+  representations, encoding, and whole-simulator composition remain below.
 - [x] Count loading canonical polynomial coefficients, their
   [Horner evaluation](PolynomialArithmeticCost.lean), and the full generator sweep
   and ordered claim folds in [CommitmentArithmeticCost.lean](CommitmentArithmeticCost.lean).
