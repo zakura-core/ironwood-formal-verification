@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `2bcc329a1666b105e8608a10483f87aa905bcc28` on `establish-zk` in
+Proof baseline: `a3d5091685b73e01158535339fde888b74d83bdd` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -867,3 +867,9 @@ passed its 3,054-job focused build and 3,854-job trust-boundary build. All
 [33 declarations across eleven modules](review/axioms-2bcc329a.log) have exact direct
 pins and only standard Lean logical dependencies. Its combined bound includes
 original packed-pair queries, identity-name powers, and every inherited chunk.
+
+The [complete stored-column milestone](review/validation-a3d50916.log) passed its
+3,084-job focused build and 3,871-job trust-boundary build. All
+[51 declarations across seventeen modules](review/axioms-a3d50916.log) have exact
+direct pins and only standard Lean logical dependencies. The result and bound
+cover the full original column schedule on the identical selected row-mask tape.
