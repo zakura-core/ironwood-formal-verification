@@ -1,3 +1,6 @@
+import Zcash.Snark.ZeroKnowledge.ActionAdviceSourceData
+import Zcash.Snark.ZeroKnowledge.ActionGateSourceCertificate
+import Zcash.Snark.ZeroKnowledge.ActionLookupSourceCertificate
 import Zcash.Snark.ZeroKnowledge.StoredActionTapeJointCost
 import Zcash.Snark.ZeroKnowledge.StoredActionTapeJointBound
 import Zcash.Snark.ZeroKnowledge.StoredActionJointCostBound
@@ -1272,3 +1275,20 @@ assert_axioms Zcash.Snark.ZeroKnowledge.storedActionTapeJointCosted_cost_le
 assert_axioms Zcash.Snark.ZeroKnowledge.storedActionTapeJointInputBudget_eleven
 assert_computable Zcash.Snark.ZeroKnowledge.storedActionTapeJointCostBudget +choice
 assert_axioms Zcash.Snark.ZeroKnowledge.storedActionTapeJointCosted_cost_le_fixed
+
+/-! ## Complete original Action sources -/
+
+assert_computable Zcash.Snark.ZeroKnowledge.actionAdviceSourcePrograms +choice +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionAdviceSourcePrograms_eq +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionAdviceSourceCertificateRaw +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionAdviceSourceCertificate +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.actionGateSourceLabels +choice +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionGateSourceLabels_eq +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionGateSourceCertificateRaw +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionGateActivationSourceCertificate +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_gateLabels_nodup +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.actionLookupSourceLabels +choice +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionLookupSourceLabels_eq +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionLookupSourceCertificateRaw +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionLookupActivationSourceCertificate +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_lookupMasters_nodup +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)

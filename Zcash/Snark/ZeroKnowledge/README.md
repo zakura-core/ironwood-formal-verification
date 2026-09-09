@@ -1694,3 +1694,10 @@ censuses name their inherited curve-order certificates separately. The sampling 
 canonical observer, and Action public-data construction are also pinned as computable.
 This directory is included in the default library build, and all three trust boundaries
 are imported by `CensusCheck`.
+
+The [complete Action advice source](ActionAdviceSourceData.lean),
+[gate activations](ActionGateSourceCertificate.lean), and
+[lookup activations](ActionLookupSourceCertificate.lean) now have checked source
+certificates. They preserve 18,403 witness instructions, 4,058 gate entries, and
+2,424 lookup entries. This supplies the original data for the remaining global
+witness-execution and activation-coverage checks.

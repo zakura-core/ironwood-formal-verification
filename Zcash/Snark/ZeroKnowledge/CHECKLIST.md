@@ -160,9 +160,14 @@ model. Compare strength only after fixing those models and assumptions.
   inputs. The certificate includes the short multiplication, full-width blinding
   multiplication, and complete addition. Structured wrappers retain all IR read
   dependencies; the complete Action scan must still establish their availability.
-- [ ] Build the certified annotations for the complete Action and discharge its
-  global alias and read-plan checks. Derive `ExtendsWitnesses` for the final
-  assignment.
+- [x] Build the [complete original Action advice certificate](ActionAdviceSourceData.lean):
+  all 18,403 instructions retain their original programs, copy tags, and semantic
+  read proofs. Separate [gate](ActionGateSourceCertificate.lean) and
+  [lookup](ActionLookupSourceCertificate.lean) certificates retain all 4,058 and
+  2,424 original activation entries at the certified placement. The actual
+  configured gate labels and lookup masters satisfy their required uniqueness checks.
+- [ ] Discharge the complete Action's global alias and read-plan checks and derive
+  `ExtendsWitnesses` for the final assignment.
 - [x] Identify the exact private readings of the original completeness preconditions
   in [ActionWitnessReadings.lean](ActionWitnessReadings.lean): eight fields, six
   points, five scalar/window pairs, and 32 Merkle readings. Agreement preserves

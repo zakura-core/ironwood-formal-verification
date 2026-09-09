@@ -677,3 +677,10 @@ The canonical-encoding checkpoint passed its [three focused builds and the
 [25-declaration inventory](review/axioms-45f586ac.log) has exact direct pins and
 only standard Lean logical axioms. These codec results preserve the actual
 proof and transcript formats, including the point codec's identity rejection.
+
+The complete original Action source certificates now preserve all 18,403 advice
+instructions, 4,058 gate activation entries, and 2,424 lookup activation entries.
+Their 14 declarations are directly pinned and have a separate transitive axiom
+inventory. They inherit the existing Pallas curve-order certificate, with no new
+axiom or native-evaluation certificate. Full read/write scans and activation
+coverage remain separate checks on this certified original data.
