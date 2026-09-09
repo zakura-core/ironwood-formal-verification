@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `98bfd0963b4b5b986a48863f9cd31015c3fdade2` on `establish-zk` in
+Proof baseline: `1508aa53494dac38e4db8d89ceeca5ba85f98437` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -205,8 +205,19 @@ copy semantics for every environment; the structured IR recognizer supplies the
 remaining copy sources. This certificate neither proves nor assumes successful
 execution of the global alias and read plans.
 
-The actual Action still needs those global checks and native callback read
-certificates. Its final witness equations and extracted private data therefore
+The [function-support certificates](WitnessFunctionSupport.lean) cover the
+original native witness functions for Poseidon, incomplete and fixed-base
+multiplication, note commitment and canonicity, CommitIvk, Sinsemilla, and Merkle
+layers. Each proof keeps the actual source function and all arithmetic values;
+nested callbacks retain explicit support premises. The
+[fixed Action hints](ActionHintReadSupport.lean), scalar windows, and original
+Merkle sibling and swap callbacks read no cells. The
+[annotation checker](AdviceSupportPlan.lean) proves causality from a successful
+availability scan and derives the original witness equations when exact source
+erasure, alias checking, and semantic copy provenance also hold.
+
+The actual Action still needs the complete certified annotation list and both
+global checks. Its final witness equations and extracted private data therefore
 still need their correctness proofs. The semantic precondition theorem concerns
 the normalized application data; it does not assume that the constructor's extractor
 already returns that data. Generated gate, lookup, and copy validity, and hence an
@@ -235,10 +246,11 @@ encoding, observation, and full simulator/reduction composition remain outside i
 
 **Validation and review status**
 
-The [validation record](review/validation-98bfd096.log) contains the successful
-full default-target build (`lake build --wfail`, 4,428 jobs), repository guards,
-and the [31-declaration dependency inventory](review/axioms-98bfd096.log) for the
-latest proof milestone. All 891 modules are covered by default targets and all
+The [validation record](review/validation-1508aa53.log) contains the successful
+full default-target build (`lake build --wfail`, 4,441 jobs), repository guards,
+and the [86-declaration dependency inventory](review/axioms-1508aa53.log) for the
+latest proof milestone; those declarations introduce no native or unexpected
+axioms. All 904 modules are covered by default targets and all
 326 endpoint declarations are pinned. The full [parent](TrustBoundary.lean) and
 [Action](Action/TrustBoundary.lean) boundaries also check the earlier milestones.
 The native dependencies remain exactly the inherited named curve-order certificates:
