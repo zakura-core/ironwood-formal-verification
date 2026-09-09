@@ -15,6 +15,9 @@ namespace Zcash.Meta.Tests.AdviceSourceCertificate
 
 open Halo2 Witgen Zcash.Circuits Zcash.Snark.ZeroKnowledge
 
+-- Force piece boundaries so rejection and computability checks cover composition.
+set_option Zcash.sourceCertificate.chunkSteps 1
+
 /-- The actual nested initial-slope callback can retain a constant virtual y. -/
 def nestedInitialSlope (generators : Specs.Sinsemilla.Generators)
     (piece x : AssignedCell Fp) (point : Point Fp)

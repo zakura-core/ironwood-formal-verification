@@ -1,4 +1,5 @@
 import Zcash.Meta.SourceReduction
+import Zcash.Meta.CertificateChunks
 import Zcash.Snark.ZeroKnowledge.AdviceSourceCertificate
 
 /-!
@@ -39,19 +40,32 @@ elab "certify_source_advice" : tactic =>
     let originalTarget ← originalGoal.getType
     unless originalTarget.isAppOf ``AdviceSourceCertificate do
       throwError "expected an AdviceSourceCertificate goal"
-    let mut goal := originalGoal
+    let savedMCtx ← getMCtx
+    let compilePieces := !(← readThe Term.Context).isNoncomputableSection &&
+      !(← Term.getDeclName?).any (Lean.isNoncomputable (← getEnv))
+    let mut first ← mkFreshExprMVar originalTarget
+    let mut goal := first.mvarId!
+    let mut chunks : Array Expr := #[]
+    let chunkSteps := max 1 (Zcash.sourceCertificate.chunkSteps.get (← getOptions))
     let mut currentSource := originalTarget.getAppArgs.back!
     let mut count := 0
     for step in [:200000] do
       if step % 1000 == 0 then sourceCertificateProgress s!"step {step}: {count} annotated instructions"
+      if step > 0 && step % chunkSteps == 0 then
+        let nextTarget ← instantiateMVars (← goal.getType)
+        chunks := chunks.push (← checkCertificateChunk first.mvarId! goal compilePieces)
+        if nextTarget.hasMVar || chunks.back!.hasMVar then
+          throwError "unresolved advice chunk boundary"
+        setMCtx savedMCtx
+        resetCache
+        first ← mkFreshExprMVar nextTarget
+        goal := first.mvarId!
       let reduced ← withTransparency .all (whnf currentSource)
       if reduced.isAppOf ``List.nil then
         goal.assign (mkConst ``nilFpCertificate)
-        let value ← instantiateMVars (mkMVar originalGoal)
-        if value.hasMVar then throwError "unresolved certificate values"
-        let name ← mkAuxDeclName
-        let _ ← withOptions (Elab.async.set · false) do
-          mkAuxDefinition name originalTarget value (compile := false)
+        let mut value ← checkCertificateValue first.mvarId! compilePieces
+        for chunk in chunks.reverse do value := mkApp chunk value
+        originalGoal.assign value
         sourceCertificateProgress s!"kernel checked {count} original instructions"
         replaceMainGoal []
         return

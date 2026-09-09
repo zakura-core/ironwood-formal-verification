@@ -1,4 +1,5 @@
 import Zcash.Meta.SourceReduction
+import Zcash.Meta.CertificateChunks
 import Zcash.Snark.ZeroKnowledge.SourceListCertificate
 
 /-!
@@ -28,19 +29,32 @@ elab "certify_source_list" : tactic =>
     unless originalTarget.isAppOf ``SourceListCertificate do
       throwError "expected a SourceListCertificate goal"
     let elementType := originalTarget.getAppArgs[0]!
-    let mut goal := originalGoal
+    let savedMCtx ← getMCtx
+    let compilePieces := !(← readThe Term.Context).isNoncomputableSection &&
+      !(← Term.getDeclName?).any (Lean.isNoncomputable (← getEnv))
+    let mut first ← mkFreshExprMVar originalTarget
+    let mut goal := first.mvarId!
+    let mut chunks : Array Expr := #[]
+    let chunkSteps := max 1 (Zcash.sourceCertificate.chunkSteps.get (← getOptions))
     let mut currentSource := originalTarget.getAppArgs.back!
     let mut count := 0
     for step in [:200000] do
       if step % 1000 == 0 then listCertificateProgress s!"step {step}: {count} entries"
+      if step > 0 && step % chunkSteps == 0 then
+        let nextTarget ← instantiateMVars (← goal.getType)
+        chunks := chunks.push (← checkCertificateChunk first.mvarId! goal compilePieces)
+        if nextTarget.hasMVar || chunks.back!.hasMVar then
+          throwError "unresolved source-list chunk boundary"
+        setMCtx savedMCtx
+        resetCache
+        first ← mkFreshExprMVar nextTarget
+        goal := first.mvarId!
       let reduced ← withTransparency .all (whnf currentSource)
       if reduced.isAppOf ``List.nil then
         goal.assign (← mkAppOptM ``SourceListCertificate.nil #[some elementType])
-        let value ← instantiateMVars (mkMVar originalGoal)
-        if value.hasMVar then throwError "unresolved source-list certificate values"
-        let name ← mkAuxDeclName
-        let _ ← withOptions (Elab.async.set · false) do
-          mkAuxDefinition name originalTarget value (compile := false)
+        let mut value ← checkCertificateValue first.mvarId! compilePieces
+        for chunk in chunks.reverse do value := mkApp chunk value
+        originalGoal.assign value
         listCertificateProgress s!"kernel checked {count} source entries"
         replaceMainGoal []
         return

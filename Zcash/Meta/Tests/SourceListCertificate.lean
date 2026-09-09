@@ -8,6 +8,9 @@ namespace Zcash.Meta.Tests.SourceListCertificate
 
 open Zcash.Snark.ZeroKnowledge
 
+-- Exercise checked piece composition across opaque equations and local parameters.
+set_option Zcash.sourceCertificate.chunkSteps 2
+
 def originalMetadata (row : ℕ) : List (ℕ × String) :=
   [(row, "range"), (row, "coordinates"), (row + 1, "tail")]
 
