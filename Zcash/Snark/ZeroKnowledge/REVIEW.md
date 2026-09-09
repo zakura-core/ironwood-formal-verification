@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `6fba827186f492a29ae98333f05ee7edcf0d09d8` on `establish-zk` in
+Proof baseline: `fb1c737e5b61fb896ea81b1074dd56522d0f48a8` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -368,6 +368,13 @@ shared reflection change. This checkpoint has no new axiom or native owner.
 The complete Action source certificates are still under construction, so this
 record claims a focused build; the latest full workspace build remains the
 preceding extraction checkpoint.
+
+The Action row checkpoint passed the
+[focused 3,700-job build and guards](review/validation-fb1c737e.log). All
+[35 new declarations across nine modules](review/axioms-fb1c737e.log) have direct
+pins and a separate dependency inventory. This closes the actual lookup-tuple
+and packed-copy bridges under the stated source premises. Its only native
+owner is the existing Pallas certificate; the full source scans remain pending.
 
 The native dependencies remain exactly the inherited named curve-order certificates:
 
