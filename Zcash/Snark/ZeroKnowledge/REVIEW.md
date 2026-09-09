@@ -273,10 +273,23 @@ top-level completeness theorem. Its conclusion is the original operation
 constraints, under the same witness-equation premise.
 
 The complete certified annotation list and global scans must still discharge
-that premise. The converse compiler bridges from operation constraints to all
-PLONK gates, lookup tuples, and copy equations also remain open, as does the
-application-witness-to-`ActionZkRelation` corollary. The existing circuit-level
-simulation theorem and its validity relation are unchanged.
+that premise. [CompiledGateCompleteness.lean](CompiledGateCompleteness.lean)
+derives all compiled gates from the operation equations, positive selector
+degree, and an explicit finite activation-coverage condition. Source identities
+retain gate names as well as selector indices; the actual coverage scan is still
+required. [ActionQueryRows.lean](ActionQueryRows.lean) interprets the generated
+assignment on every row before the final cyclic row, including the signed
+previous-row read at zero. [ActionQueryValuation.lean](ActionQueryValuation.lean)
+and [InactiveGateCompleteness.lean](InactiveGateCompleteness.lean) handle the
+unused suffix without requiring agreement of wrapped private reads.
+
+[CopySourceCompleteness.lean](CopySourceCompleteness.lean) proves every equation
+of the ordered raw compiler copy stream. Deferred constants retain their
+positional allocation and the exact value in the actual fixed environment. The
+lookup-tuple bridge and identification of these copy values with the prover's
+packed cells remain open, as does the application-witness-to-`ActionZkRelation`
+corollary. The existing circuit-level simulation theorem and validity relation
+are unchanged.
 
 **Byte-cache execution costs**
 

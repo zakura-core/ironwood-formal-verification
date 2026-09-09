@@ -1,0 +1,66 @@
+import Zcash.Meta.SourceListCertificate
+import Zcash.Meta.KernelRfl
+import Zcash.Meta.AxiomCheck
+
+/-! Exact source reflection across an opaque, parameterized metadata producer. -/
+
+namespace Zcash.Meta.Tests.SourceListCertificate
+
+open Zcash.Snark.ZeroKnowledge
+
+def originalMetadata (row : ℕ) : List (ℕ × String) :=
+  [(row, "range"), (row, "coordinates"), (row + 1, "tail")]
+
+opaque packedMetadata : { producer : ℕ → List (ℕ × String) // producer = originalMetadata } :=
+  ⟨originalMetadata, rfl⟩
+
+noncomputable def reflectedMetadata (row : ℕ) :
+    SourceListCertificate (packedMetadata.val row) := by
+  certify_source_list
+
+theorem reflectedMetadata_entries (row : ℕ) :
+    (reflectedMetadata row).entries =
+      [(row, "range"), (row, "coordinates"), (row + 1, "tail")] := by
+  kernel_rfl
+
+theorem rejectsChangedLabel (row : ℕ) :
+    (reflectedMetadata row).entries ≠
+      [(row, "coordinates"), (row, "coordinates"), (row + 1, "tail")] := by
+  rw [reflectedMetadata_entries]
+  simp
+
+theorem transport_retainsEntries (row : ℕ) :
+    (SourceListCertificate.transport
+      (congrFun packedMetadata.property row) (reflectedMetadata row)).entries =
+      (reflectedMetadata row).entries := rfl
+
+opaque packedStep (row : ℕ) :
+    { step : ℕ × List (ℕ × String) × ℕ //
+      step = (row, [(row, "range"), (row, "coordinates")], row + 1) } :=
+  ⟨_, rfl⟩
+
+/-- The next source call depends on an earlier opaque result and both lists are mapped. -/
+noncomputable def reflectedThreadedMetadata (row : ℕ) :
+    SourceListCertificate
+      (((packedStep row).val.2.1 ++
+        (packedStep (packedStep row).val.2.2).val.2.1).map
+          fun entry => (entry.1, entry.2, (packedStep row).val.1)) := by
+  certify_source_list
+
+theorem reflectedThreadedMetadata_entries (row : ℕ) :
+    (reflectedThreadedMetadata row).entries =
+      [(row, "range", row), (row, "coordinates", row),
+        (row + 1, "range", row), (row + 1, "coordinates", row)] := by
+  kernel_rfl
+
+assert_computable Zcash.Meta.Tests.SourceListCertificate.originalMetadata
+assert_axioms Zcash.Meta.Tests.SourceListCertificate.packedMetadata
+assert_axioms Zcash.Meta.Tests.SourceListCertificate.reflectedMetadata
+assert_axioms Zcash.Meta.Tests.SourceListCertificate.reflectedMetadata_entries
+assert_axioms Zcash.Meta.Tests.SourceListCertificate.rejectsChangedLabel
+assert_axioms Zcash.Meta.Tests.SourceListCertificate.transport_retainsEntries
+assert_axioms Zcash.Meta.Tests.SourceListCertificate.packedStep
+assert_axioms Zcash.Meta.Tests.SourceListCertificate.reflectedThreadedMetadata
+assert_axioms Zcash.Meta.Tests.SourceListCertificate.reflectedThreadedMetadata_entries
+
+end Zcash.Meta.Tests.SourceListCertificate

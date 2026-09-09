@@ -1,3 +1,6 @@
+import Zcash.Snark.ZeroKnowledge.ActionQueryValuation
+import Zcash.Snark.ZeroKnowledge.DirectGateLabels
+import Zcash.Snark.ZeroKnowledge.CopySourceCompleteness
 import Zcash.Snark.ZeroKnowledge.ActionWitnessObservation
 import Zcash.Snark.ZeroKnowledge.ActionWitnessLoadCertificate
 import Zcash.Snark.ZeroKnowledge.ActionValueWitnessCertificate
@@ -6,6 +9,14 @@ import Zcash.Snark.ZeroKnowledge.ScalarWitnessExtraction
 import Zcash.Snark.ZeroKnowledge.MerkleHintExtraction
 import Zcash.Snark.ZeroKnowledge.ActionWitnessReadings
 import Zcash.Snark.ZeroKnowledge.ActionWitnessCompleteness
+import Zcash.Snark.ZeroKnowledge.SourceGateCompleteness
+import Zcash.Snark.ZeroKnowledge.InactiveSelectorReplacement
+import Zcash.Snark.ZeroKnowledge.SourceListCertificate
+import Zcash.Snark.ZeroKnowledge.GateActivationCoverage
+import Zcash.Snark.ZeroKnowledge.CompiledGateCompleteness
+import Zcash.Snark.ZeroKnowledge.InactiveGateCompleteness
+import Zcash.Snark.ZeroKnowledge.AdvicePlacementBounds
+import Zcash.Snark.ZeroKnowledge.ActionQueryRows
 import Zcash.Snark.ZeroKnowledge.ActionMerkleHintExtraction
 import Zcash.Snark.ZeroKnowledge.ActionScalarHintExtraction
 import Zcash.Snark.ZeroKnowledge.AdviceSourceCertificate
@@ -2741,6 +2752,21 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_constraints_of_r
 assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_constraints_of_extendsWitnesses
   +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
 
+-- The converse gate-scaling and inactive-selector compiler laws.
+assert_computable Zcash.Snark.ZeroKnowledge.sourceSelectorDegree
+assert_computable Zcash.Snark.ZeroKnowledge.sourceSelectorGated
+assert_axioms Zcash.Snark.ZeroKnowledge.sourceSelectorDegree_eval
+assert_axioms Zcash.Snark.ZeroKnowledge.sourceSelectorGated_eval_zero
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_sourceGateHomogeneous
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_sourceGate_complete
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevel_selReplacement_zero_of_inactive
+assert_axioms Zcash.Snark.ZeroKnowledge.SourceListCertificate
+assert_computable Zcash.Snark.ZeroKnowledge.SourceListCertificate.nil
+assert_computable Zcash.Snark.ZeroKnowledge.SourceListCertificate.cons
+assert_computable Zcash.Snark.ZeroKnowledge.SourceListCertificate.transport
+
 -- Native callbacks also retain the immutable public and fixed environment.
 assert_axioms Zcash.Snark.ZeroKnowledge.WitnessFunctionAgreement
 assert_axioms Zcash.Snark.ZeroKnowledge.witnessFunctionAgreementCoe
@@ -2762,3 +2788,76 @@ assert_axioms Zcash.Snark.ZeroKnowledge.wideReduceBitsLECosted_cost
 assert_axioms Zcash.Snark.ZeroKnowledge.wideReduceBitsLECosted_cost_le
 assert_axioms Zcash.Snark.ZeroKnowledge.wideReduceBitsLECosted_raw_word
 assert_axioms Zcash.Snark.ZeroKnowledge.wideReduceBitsLECosted_raw_word_cost_le
+
+-- Complete coverage of gates sharing selector indices.
+assert_computable Zcash.Snark.ZeroKnowledge.sourceGateLabel
+assert_computable Zcash.Snark.ZeroKnowledge.sourceGateActivationLabels
+assert_computable Zcash.Snark.ZeroKnowledge.gateActivationCoverageCheck
+assert_axioms Zcash.Snark.ZeroKnowledge.gateActivationCoverageCheck_sound
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevel_gate_enabled_of_coverage
+
+-- Source completeness and the generated advice footprint.
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevel_environment_fixed_nat
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevel_substitutedGate_zero_of_constraints
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevel_verifierGates_zero_of_constraints
+assert_axioms Zcash.Snark.ZeroKnowledge.mem_regionAdvicePrograms_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.mem_circuitAdvicePrograms_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.circuitAdvicePrograms_row_lt_placementEnd
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevelAdviceAssignment_advice_zero_of_outside
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_advice_zero_of_outside
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- Actual Action query feeds, including signed row-zero reads.
+assert_axioms Zcash.Snark.ZeroKnowledge.actionGateQuery_fixed
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionGateQuery_advice
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionGateQuery_instance
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessRowFeeds_interpret_of_wrap
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessRowFeeds_interpret
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAdviceRotation_read_eq
+
+-- Inactive compiler rows do not constrain private query values.
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevel_substitutedGate_zero_of_inactive
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevel_verifierGates_zero_of_inactive
+
+-- Arbitrary Action feeds and inactive suffix rows.
+assert_axioms Zcash.Snark.ZeroKnowledge.actionGateQuery_fixed_resolves
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionGateQuery_advice_resolves
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionGateQuery_instance_resolves
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionResolvedQueryValuation
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionResolvedQueryValuation_interprets
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionResolvedQueryValuation_packed
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_selector_inactive_after_placement
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- Direct reflection preserves every original gate label.
+assert_computable Zcash.Snark.ZeroKnowledge.regionSourceGateLabels
+assert_computable Zcash.Snark.ZeroKnowledge.operationSourceGateLabels
+assert_axioms Zcash.Snark.ZeroKnowledge.regionSourceGateLabels_eq
+assert_axioms Zcash.Snark.ZeroKnowledge.operationSourceGateLabels_eq
+
+-- The original equations imply the compiler's full ordered copy stream.
+assert_axioms Zcash.Snark.ZeroKnowledge.regionCopiesSplit_fst_eq_declared
+assert_axioms Zcash.Snark.ZeroKnowledge.v1Copies_fst_eq_declared
+assert_computable Zcash.Snark.ZeroKnowledge.sourceCopyValue
+assert_axioms Zcash.Snark.ZeroKnowledge.sourceCopyValue_resolveCell
+assert_axioms Zcash.Snark.ZeroKnowledge.sourceCopyValue_instance
+assert_axioms Zcash.Snark.ZeroKnowledge.sourceCopyValue_eq_of_resolveDeclared
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevel_nonconstantCopyValues_of_constraints
+assert_axioms Zcash.Snark.ZeroKnowledge.constSite_mem_declaredCopies
+assert_axioms Zcash.Snark.ZeroKnowledge.operationConstSite_mem_declaredCopies
+assert_axioms Zcash.Snark.ZeroKnowledge.sourceCopyValue_column
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevel_constantCopyColumn_registered
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevel_constantCopyValue
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevel_constantCopyValues_of_constraints
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevel_copyValues_of_constraints

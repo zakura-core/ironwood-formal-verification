@@ -72,8 +72,14 @@ application's preconditions, and [ActionWitnessCompleteness.lean](ActionWitnessC
 applies the original completeness theorem with the preserved public inputs.
 This connection still requires the full source certificate to establish the
 witness equations. It does not require equality of unused decomposition exports.
-Proving that the generated rows satisfy every gate, lookup, and copy equation is
-still open; the current constructor does not establish `ActionZkRelation`.
+The [gate compiler bridge](CompiledGateCompleteness.lean) now derives verifier
+polynomials from the original equations under explicit activation coverage.
+[Actual query-row interpretation](ActionQueryRows.lean) and
+[inactive-row handling](InactiveGateCompleteness.lean) retain the cyclic boundary
+behavior. The [copy compiler bridge](CopySourceCompleteness.lean) preserves every
+ordinary and deferred constant equation. The complete source scans, actual gate
+coverage, lookup tuples, and packed copy-value routing still need to be composed
+before the constructor establishes `ActionZkRelation`.
 The [raw-source refinement](ActionRandomnessSource.lean) proves exact agreement
 between uniform 512-bit private tapes and the existing wide-reduced reference law.
 Replacing that entire source by a distribution within `eta` adds `eta` to the

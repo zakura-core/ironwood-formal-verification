@@ -167,8 +167,20 @@ model. Compare strength only after fixing those models and assumptions.
   completeness theorem in [ActionWitnessCompleteness.lean](ActionWitnessCompleteness.lean).
   It proves the original operation constraints once the complete source certificate
   supplies the witness equations; it adds no construction precondition.
-- [ ] Discharge those witness equations and prove that the resulting operation
-  constraints imply every compiled gate, lookup tuple, and copy equation.
+- [x] Prove the [converse gate compiler laws](CompiledGateCompleteness.lean),
+  using checked positive selector degree and an explicit finite activation-coverage
+  condition. [Direct source labels](DirectGateLabels.lean) preserve gate names as
+  well as selector indices, including gates sharing a selector.
+- [x] Interpret the [actual Action query feeds](ActionQueryRows.lean) in the generated
+  environment, including the signed row-zero read. The [advice footprint](AdvicePlacementBounds.lean)
+  and [arbitrary-feed valuation](ActionQueryValuation.lean) also cover the unused
+  final domain row through [inactive gate equations](InactiveGateCompleteness.lean).
+- [x] Prove that the original operation constraints imply the
+  [complete ordered compiler copy stream](CopySourceCompleteness.lean), including
+  positional constant allocations and their actual fixed-column values.
+- [ ] Discharge the witness equations and the actual gate activation-coverage
+  check, complete the lookup-tuple bridge, and identify compiler copy values with
+  the prover's packed permutation cells.
 - [ ] Package that evidence as `ActionZkRelation` and derive application-level
   interactive and one-attempt oracle simulation corollaries.
 
