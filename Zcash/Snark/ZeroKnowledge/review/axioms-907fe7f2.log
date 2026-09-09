@@ -1,0 +1,56 @@
+'Zcash.Snark.ZeroKnowledge.observeColumnRowsCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.observeColumnRowsCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.observeColumnRowsCosted_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.observeColumnRowsCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.observeColumnRowsCosted_readBound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.polynomialQuery_eval_finFn' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkObservedAdviceQueryCosted_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkRowFixedQueryCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkRowInstanceQueryCosted_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkRowQueryCostBudget' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.plonkRowQueryCostBudget_mono_point' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkObservedAdviceQueryCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkRowFixedQueryCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkRowPublicQueryCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkLookupCompressedRowsCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkLookupCompressedRowsCosted_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkLookupCompressionCostBudget' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.plonkLookupCompressedRowsCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkLookupSortedRowsCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkLookupSortedRowsCosted_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkLookupSortedRowsCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.privateColumnPolynomialEvalCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.privateColumnPolynomialEvalCosted_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.privateColumnPolynomialEvalCostBudget' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.privateColumnPolynomialEvalCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.privateColumnPolynomialEvalCostBudget_mono_point' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.privateColumnRowValueCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.privateColumnRowValueCosted_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.privateColumnRowValueCostBudget' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.privateColumnRowValueCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkLookupBaseRowsCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkLookupBaseRowsCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkLookupProductCostBudget' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.plonkLookupBaseRowsCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]

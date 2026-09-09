@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `b571d36abac33015842ab0c6f50c0c28fb60e9a2` on `establish-zk` in
+Proof baseline: `907fe7f2654f6ee2e5c575421860333201d49ba4` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -844,3 +844,9 @@ All [57 declarations across six modules](review/axioms-b571d36a.log) have exactl
 one direct pin and use only standard Lean logical axioms. The bounds include
 sorting failures and zero-denominator product paths. Whole real-prover reduction
 admissibility and independent review remain open.
+
+The [complete real lookup-construction milestone](review/validation-907fe7f2.log)
+passed its 3,050-job focused build and 3,843-job trust-boundary build. Its
+[34 declarations across ten modules](review/axioms-907fe7f2.log) have exact direct
+pins and only standard Lean logical dependencies. The result covers complete
+lookup sorting and product rows, with all original query and expression costs.
