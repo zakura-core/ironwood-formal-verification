@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `fcb1d6a6b3d062b0e68b7673df0e64cff969a126` on `establish-zk` in
+Proof baseline: `fee234046787129e6d423d702d27aff7c9d4b63c` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -776,3 +776,12 @@ only standard Lean logical axioms plus the existing named Pallas/Vesta dependenc
 All repository guards and local Markdown links passed. This milestone closes the
 complete simulator composition and structural runtime items; it does not close
 the application witness, concrete PRNG reduction, or independent review items.
+
+The [alias normalization checkpoint](review/validation-fee23404.log) keeps scalar-IR
+simplification on entry metadata, before the original map policy. All regressions
+passed, including success and rejection after 512 earlier assignments. Its
+[five-declaration inventory](review/axioms-fee23404.log) uses only standard Lean
+logical axioms. The original blocked source entries also pass; the full read and
+alias scans have separate module boundaries so their certificates can be cached
+independently. Complete Action source checks remain prerequisites to the
+application witness corollaries.
