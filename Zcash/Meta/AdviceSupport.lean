@@ -163,6 +163,19 @@ elab "annotate_advice " instruction:term : term => do
 
 /-- Produce the read list and its proof for the exact supplied instruction. -/
 def annotateAdviceInstruction (instruction : Expr) : MetaM (Expr × Expr) := do
+  -- Structured IR is certified compositionally, including named wrappers.
+  -- Native closures still need a rule about their actual source function.
+  let program ← mkAppM ``PlacedAdviceProgram.program #[instruction]
+  let reduced ← withTransparency .all (whnf program)
+  if reduced.isAppOf ``WitgenIROver.ir then
+    let values := reduced.getAppArgs
+    let steps := values[values.size - 2]!
+    let output := values.back!
+    let column ← mkAppM ``PlacedAdviceProgram.column #[instruction]
+    let row ← mkAppM ``PlacedAdviceProgram.row #[instruction]
+    let annotated ← mkAppM ``supportedStructuredAdvice #[column, row, steps, output]
+    return (← mkAppM ``SupportedAdviceProgram.reads #[annotated],
+      ← mkAppM ``SupportedAdviceProgram.support #[annotated])
   let constructor ← mkAppM ``supportedAdviceProgram #[instruction]
   let (arguments, _, _) ← forallMetaTelescopeReducing (← inferType constructor)
   unless arguments.size == 2 do throwError "expected reads and support"

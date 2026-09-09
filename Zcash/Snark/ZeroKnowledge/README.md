@@ -56,8 +56,12 @@ beside the read annotations. Its finite-data constructor requires proved equalit
 to the original addresses, reads, and tags; it keeps those data directly evaluable.
 The original [witness-loading stage](ActionWitnessLoadCertificate.lean) has a
 complete eleven-instruction certificate and successful kernel-checked read and
-alias scans. This static proof artifact is separate from the executable witness
-constructor.
+alias scans. The original [value-commitment stage](ActionValueWitnessCertificate.lean)
+also has a complete source certificate covering 1,083 instructions for arbitrary
+stage inputs, including both multiplications and the final addition. Named
+structured witness wrappers use the general IR support theorem; unrecognized
+native callbacks remain rejected. These static proof artifacts are separate from
+the executable witness constructor.
 Applying it to the Action still requires the complete annotation list and the
 global alias and read-plan checks.
 The [extraction observation theorem](ActionWitnessObservation.lean) retains all

@@ -49,6 +49,25 @@ theorem futureRead_rejected :
     adviceSupportMapPlan id ∅ futureRead.readCertificate.annotations = false := by
   kernel_rfl
 
+/-- Named structured wrappers inherit the full IR support certificate. -/
+def shiftedFutureRead : AdviceSourceCertificate (F := Fp)
+    [(⟨⟨0⟩, 0, DecomposeRunningSum.zWitness 3 1
+      (.of 0 1 (⟨0⟩ : Column .advice))⟩, none)] := by
+  certify_source_advice
+
+/-- Reducing to structured IR retains the wrapper's unavailable source read. -/
+theorem shiftedFutureRead_rejected :
+    adviceSupportMapPlan id ∅ shiftedFutureRead.readCertificate.annotations = false := by
+  kernel_rfl
+
+/-- An unrecognized native closure cannot use the structured-IR fallback. -/
+theorem rejectsUnknownNative : True := by
+  fail_if_success
+    have _invalid : AdviceSourceCertificate (F := Fp)
+        [(⟨⟨0⟩, 0, .native (fun env => #v[(env.env.advice ⟨0⟩ 1) ^ 2])⟩, none)] := by
+      certify_source_advice
+  trivial
+
 /-- Changing a target row does not preserve a certificate's source equation. -/
 theorem rejectsChangedSource : True := by
   fail_if_success
@@ -68,6 +87,9 @@ assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.nestedInitialSlope_reads
 assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.rejectsOmittedRead
 assert_computable Zcash.Meta.Tests.AdviceSourceCertificate.futureRead +choice
 assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.futureRead_rejected
+assert_computable Zcash.Meta.Tests.AdviceSourceCertificate.shiftedFutureRead +choice
+assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.shiftedFutureRead_rejected
+assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.rejectsUnknownNative
 assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.rejectsChangedSource
 assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.transport_retainsData
 

@@ -96,7 +96,8 @@ private def nilFpCertificate : AdviceSourceCertificate ([] : List (PlacedAdviceP
   AdviceSourceCertificate.nil
 
 private def sourceCertificateProgress (message : String) : MetaM Unit := do
-  trace[Zcash.adviceSourceCertificate] "{message}"
+  if ← isTracingEnabledFor `Zcash.adviceSourceCertificate then
+    IO.eprintln s!"[advice certificate] {message}"
 
 private def transportCertificateSource (goal : MVarId) (source equality : Expr) : MetaM MVarId := do
   let target ← mkAppM ``AdviceSourceCertificate #[source]
@@ -153,7 +154,7 @@ elab "certify_source_advice" : tactic =>
     let mut currentSource := originalTarget.getAppArgs.back!
     let mut count := 0
     for step in [:200000] do
-      if step % 100 == 0 then sourceCertificateProgress s!"step {step}: {count} annotated instructions"
+      if step % 1000 == 0 then sourceCertificateProgress s!"step {step}: {count} annotated instructions"
       let reduced ← withTransparency .all (whnf currentSource)
       if reduced.isAppOf ``List.nil then
         goal.assign (mkConst ``nilFpCertificate)

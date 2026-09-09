@@ -137,6 +137,11 @@ model. Compare strength only after fixing those models and assumptions.
 - [x] Certify the original [eight-region witness-loading stage](ActionWitnessLoadCertificate.lean),
   including all eleven source instructions and both finite scans at the proved
   Action placement. The certificate is a kernel-evaluated proof artifact.
+- [x] Certify all 1,083 original instructions of the
+  [value-commitment stage](ActionValueWitnessCertificate.lean), for arbitrary stage
+  inputs. The certificate includes the short multiplication, full-width blinding
+  multiplication, and complete addition. Structured wrappers retain all IR read
+  dependencies; the complete Action scan must still establish their availability.
 - [ ] Build the certified annotations for the complete Action and discharge its
   global alias and read-plan checks. Derive `ExtendsWitnesses` for the final
   assignment.

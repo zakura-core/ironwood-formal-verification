@@ -1,5 +1,6 @@
 import Zcash.Snark.ZeroKnowledge.ActionWitnessObservation
 import Zcash.Snark.ZeroKnowledge.ActionWitnessLoadCertificate
+import Zcash.Snark.ZeroKnowledge.ActionValueWitnessCertificate
 import Zcash.Snark.ZeroKnowledge.AdviceSourceCertificate
 import Zcash.Snark.ZeroKnowledge.WideBitReductionCost
 import Zcash.Snark.ZeroKnowledge.AdviceAliasAddressPlan
@@ -2685,6 +2686,10 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessLoadSourceCertificate
 assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessLoad_readPlan
 assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessLoad_aliasPlan
 assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessLoad_annotationCount
+assert_axioms Zcash.Snark.ZeroKnowledge.actionValueSourceCertificate
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionValueSource_annotationCount
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
 
 -- Exact counted implementations of the simulator's input packing and wide reduction.
 assert_computable Zcash.Snark.ZeroKnowledge.packBitsLECosted
