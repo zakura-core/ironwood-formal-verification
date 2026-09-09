@@ -139,6 +139,12 @@ model. Compare strength only after fixing those models and assumptions.
   [source-indexed certificate](AdviceSourceCertificate.lean). Proven source
   equalities change proof metadata while retaining directly evaluable scan data;
   generation supplies semantic read proofs and preserves every original instruction.
+- [x] Bound certificate-generation pieces with
+  [synchronous kernel checks](../../Meta/CertificateChunks.lean). Each checked
+  continuation retains its exact source and remaining certificate type; composition
+  preserves all source equations. Source-list and advice regressions force piece
+  boundaries, including parameterized opaque producers and rejected annotations.
+  This controls proof-generation resources; the complete Action scans remain below.
 - [x] Certify the original [eight-region witness-loading stage](ActionWitnessLoadCertificate.lean),
   including all eleven source instructions and both finite scans at the proved
   Action placement. The certificate is a kernel-evaluated proof artifact.
@@ -465,6 +471,15 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   [lookup constraints](LookupExpressionsCost.lean), and both
   [permutation-chunk folds](PermutationChunkCost.lean), preserving their original
   results and all supplied query-reader costs.
+- [x] Count the [complete permutation constraints](PermutationExpressionsCost.lean),
+  including first, last, and inter-set boundaries. Compose gates, permutations,
+  and lookups into the exact [per-sub-proof list](ConstraintAssemblyCost.lean)
+  and [complete multi-Action list](ConstraintCollectionCost.lean). The bounds retain
+  the materialized input sizes, preparation costs, and concatenation work.
+- [x] Count the [Lagrange basis values](LagrangeBasisCost.lean), signed field powers,
+  [quotient evaluation fold](QuotientEvaluationCost.lean), and
+  [scalar query routing](QueryRoutingCost.lean), including out-of-range zero defaults.
+  The concrete query providers and complete quotient calculation still need composition.
 - [x] Count loading canonical polynomial coefficients, their
   [Horner evaluation](PolynomialArithmeticCost.lean), and the full generator sweep
   and ordered claim folds in [CommitmentArithmeticCost.lean](CommitmentArithmeticCost.lean).

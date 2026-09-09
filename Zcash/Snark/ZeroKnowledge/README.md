@@ -203,15 +203,24 @@ later encoder failure; shared work may be conservatively charged more than once.
 Further counted components cover the actual [expression AST](ExpressionCost.lean),
 [lookup compression](ExpressionCompressionCost.lean), all five
 [lookup constraints](LookupExpressionsCost.lean), and both
-[permutation-chunk product folds](PermutationChunkCost.lean).
+[permutation-chunk product folds](PermutationChunkCost.lean). The complete
+[permutation calculation](PermutationExpressionsCost.lean) includes its initial,
+final, and inter-set constraints. [Constraint assembly](ConstraintAssemblyCost.lean)
+and [collection across Actions](ConstraintCollectionCost.lean) preserve the entire
+ordered constraint list and retain input-provider costs and output construction.
+The [Lagrange basis calculation](LagrangeBasisCost.lean), including signed powers,
+and the [quotient evaluation fold](QuotientEvaluationCost.lean) have matching
+counted implementations. [Scalar query routing](QueryRoutingCost.lean) preserves
+the original zero defaults and charges the selected reader.
 [Polynomial evaluation](PolynomialArithmeticCost.lean) loads the actual canonical
 coefficient array and proves its counted Horner result equals the existing
 evaluator. [Coefficient commitments and claim folds](CommitmentArithmeticCost.lean)
 retain every generator, coefficient, and challenge access. The model prices field
 and group primitives explicitly and counts structural operations; it is not a
 machine-code correspondence theorem. Public polynomial construction, the complete
-PLONK opening and quotient calculation, encoding, and the final Action composition
-remain to be counted. PRNG-class membership additionally needs the cost of the
+PLONK opening, the concrete query-provider and quotient composition, encoding,
+and the final Action composition remain to be counted. PRNG-class membership
+additionally needs the cost of the
 real prover and the supplied verifier-view test.
 
 The [finite retry theorem](ActionFiatShamirRetry.lean) now compares complete
