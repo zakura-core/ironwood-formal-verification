@@ -188,8 +188,18 @@ The counted [bit packer](RawBitPackingCost.lean) and
 [wide reducer](WideBitReductionCost.lean) now reproduce exactly the existing
 raw-word and field-tape conversions. Each 512-bit word costs at most
 `512R + 264193` structural units for a reader with access bound `R`, including
-successor-index adapters and bounded-width arithmetic. This component does not
-yet account for the complete simulator's tape-access pattern or compose its runtime.
+successor-index adapters and bounded-width arithmetic. The
+[stored-tape implementation](StoredBitTapeCost.lean) additionally charges every
+bit-list traversal and word-index calculation, and materializes the complete raw
+or reduced tape with a polynomial bound in its length. Its erasure is the same
+fixed-tape conversion; routing the challenge/private portions and composing the
+whole simulator remain separate work.
+
+Concrete [row readers](StoredRowsCost.lean), [Action input serialization](ActionPublicInputCost.lean),
+[stored setup vectors](StoredPlonkSetupCost.lean), and [stored key readers](StoredPlonkKeyCost.lean)
+now derive access bounds from the actual materialized inputs. Their representation
+theorems preserve the original public rows, generator vector, and key trees/layout.
+These are supplied-input bounds; they do not price setup generation.
 
 The [counted IPA simulator](IpaSimulatorCost.lean) now constructs and materializes
 every round point, the mask commitment, and both scalar responses. Its erasure

@@ -1,3 +1,4 @@
+import Zcash.Snark.ZeroKnowledge.ActionPublicInputCost
 import Zcash.Snark.ZeroKnowledge.ActionCacheCost
 import Zcash.Snark.ZeroKnowledge.ActionNativeRouting
 import Zcash.Snark.ZeroKnowledge.ActionSelectorReplacement
@@ -1229,3 +1230,20 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionAdviceAliasPrograms_sources +nativ
 assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleInitial_length +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.actionQueryAddress_bytes_le +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleView_programming_cost_le +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+
+-- ActionPublicInputCost
+assert_computable Zcash.Snark.ZeroKnowledge.actionPublicInputElementsCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.actionPublicInputElementsCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.actionPublicInputElementsCosted_length
+assert_axioms Zcash.Snark.ZeroKnowledge.actionPublicInputElementsCosted_cost
+assert_computable Zcash.Snark.ZeroKnowledge.actionPublicInputRowsCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.actionPublicInputRowsCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.actionPublicInputRowsCosted_length
+assert_axioms Zcash.Snark.ZeroKnowledge.actionPublicInputRowsCosted_rowLength
+assert_axioms Zcash.Snark.ZeroKnowledge.actionPublicInputRowsCosted_cost_le
+assert_axioms Zcash.Snark.ZeroKnowledge.actionPublicInputRowsCosted_instanceRows +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.actionStoredInstanceRowCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.actionStoredInstanceRowCosted_result +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionStoredInstanceRowCosted_cost_le

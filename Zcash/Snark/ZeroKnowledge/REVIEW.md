@@ -408,8 +408,20 @@ materialization, and the final quotient fold and division. Erasure is exactly
 `plonkVerifierHx` for the original public row polynomials and disclosed columns.
 The [total quotient bound](PlonkVerifierHxCostBound.lean) counts this same
 computation, including exceptional challenge values. Supplied row, key-tree,
-observation, and challenge readers retain their complete costs; concrete stored
-input/setup representations and whole-simulator composition remain separate.
+observation, and challenge readers retain their complete costs. The concrete
+stored input representations are described below; whole-simulator composition
+remains separate.
+
+[StoredRowsCost.lean](StoredRowsCost.lean) charges both levels of matrix lookup
+and recovers the original materialized finite vectors. [ActionPublicInputCost.lean](ActionPublicInputCost.lean)
+serializes the ten actual public fields and prices all preparation and row access,
+including zero padding. [StoredPlonkSetupCost.lean](StoredPlonkSetupCost.lean)
+stores all 2048 generators, 29 fixed columns, and 15 sigma columns; its read bounds
+follow from those dimensions. [StoredPlonkKeyCost.lean](StoredPlonkKeyCost.lean)
+stores the original gate trees, permutation layout, and three lookup input/table
+lists. Returning a stored reference pays for the read; subsequent tree and column
+traversals remain in the evaluator's cost. These representations are supplied
+inputs, so no setup or key-generation algorithm is treated as a free callback.
 
 The model uses materialized arrays and lists, bounded-width structural indexing,
 and explicit prices for field and group primitives. Callback readers carry their
@@ -417,13 +429,20 @@ complete costs. Shared intermediate work may be conservatively counted more than
 once. The [public row coefficient construction](RowCoefficientCost.lean) uses the
 proved inverse-DFT formula. [Row evaluations and commitments](RowPolynomialCost.lean)
 include every coefficient calculation and retain full row-provider costs.
-These component proofs do not supply concrete public-row providers, the
-concrete query-provider and quotient composition, codecs, transcript observation,
-or their composition into `actionOracleSimulatorFromBits`. A PRNG reduction
+These component proofs still need codecs, transcript observation, and their
+composition into `actionOracleSimulatorFromBits`. A PRNG reduction
 executes the real prover and the supplied view test, so its admissibility needs
 those runtime bounds in addition to simulator efficiency.
 
 **Input conversion costs**
+
+[StoredBitTapeCost.lean](StoredBitTapeCost.lean) reads materialized Boolean lists
+with complete traversal costs and charges construction of each word/bit index.
+Its raw and reduced materializers are proved equal to every entry of the existing
+fixed-tape conversion. For `N` words, `L` stored bits, and primitive read price `R`,
+raw conversion costs at most `N * (512 * (2L + R + 4) + 264195) + N^2 + 1`;
+direct field conversion replaces `264195` by `264194`. The bound covers the entire
+converted output. Later challenge/private-tape routing remains to be composed.
 
 [RawBitPackingCost.lean](RawBitPackingCost.lean) counts little-endian packing from a
 reader that supplies its complete bit-access costs. [WideBitReductionCost.lean](WideBitReductionCost.lean)

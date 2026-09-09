@@ -546,7 +546,19 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   inverse DFT and prove agreement with the canonical interpolant on the specified
   power-of-two domain. [Row evaluation and commitment](RowPolynomialCost.lean)
   include this coefficient preparation, every input read, and every generator
-  access. Concrete public-row providers still need their full cost instantiation.
+  access. Concrete stored public-row readers are recorded below.
+- [x] Represent supplied [setup vectors](StoredPlonkSetupCost.lean),
+  [key trees and layouts](StoredPlonkKeyCost.lean), and
+  [Action public inputs](ActionPublicInputCost.lean) as materialized data.
+  [Row and finite-vector readers](StoredRowsCost.lean) count both matrix traversals,
+  preserve zero defaults, and recover the original finite families. Setup generation
+  is outside these supplied-input read bounds. Expression evaluation retains the
+  cost of traversing stored trees after their references have been read.
+- [x] Read the [complete stored bit tape](StoredBitTapeCost.lean) with every list
+  traversal and word-index calculation counted. Materializing all raw words or all
+  reduced fields is exactly the existing fixed-tape conversion, with a polynomial
+  bound in the word count and stored bit length. The complete simulator still needs
+  to compose this conversion with its challenge/private-tape routing.
 - [ ] Specify the runtime model and input representations, including access to
   public inputs and setup, bit packing, field reduction, group arithmetic,
   polynomial operations, transcript encoding, and cache lookup/programming.
