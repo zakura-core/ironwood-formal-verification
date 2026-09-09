@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `915317a16740cbe176ae694bf9f3c2e85fa1a418` on `establish-zk` in
+Proof baseline: `6281a298ede2c6723f9739f202030ee05c2205b1` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -240,6 +240,15 @@ stage. Both finite scans are kernel checked at the proved Action placement. This
 is a static proof artifact with code generation disabled for expanded kernel-only
 source auxiliaries; the original witness constructor remains executable.
 
+[ActionValueWitnessCertificate.lean](ActionValueWitnessCertificate.lean) covers
+all 1,083 original instructions of the value-commitment stage for arbitrary stage
+inputs. The short and full-width multiplications and complete addition retain
+their exact source programs. Named structured wrappers use the general IR
+support theorem, with regression checks retaining unavailable reads and rejecting
+unknown native callbacks. This stage inherits the existing named Pallas
+generator-order certificate. Its read availability still belongs to the global
+Action scan.
+
 [ActionWitnessObservation.lean](ActionWitnessObservation.lean) identifies the
 extraction agreement needed for completeness. It retains every witness field and
 exactly the 32 auxiliary Merkle readings used by the two 16-layer computations.
@@ -298,10 +307,13 @@ do not discharge the PRNG test-class resource premise.
 The [validation record](review/validation-915317a1.log) contains the successful
 full default-target build (`lake build --wfail`, 4,454 jobs), repository guards,
 and the [32-declaration dependency inventory](review/axioms-915317a1.log) for the
-latest proof milestone. Every new mathematical declaration has one direct pin;
-the seven metaprogram regression declarations are pinned in their test module.
-The new milestone uses only `propext`, `Classical.choice`, and `Quot.sound`, with
-no admission or native-evaluation certificate. All 917 modules are covered by
+source-certificate and input-cost milestone. The subsequent value-commitment
+milestone passed [the full 4,455-job build and guards](review/validation-6281a298.log).
+Both new mathematical declarations have direct pins and an
+[exact axiom inventory](review/axioms-6281a298.log); their only native dependency is
+the existing Pallas generator-order certificate below. The ten metaprogram
+regression declarations are pinned in their test module. No admission or new
+native-evaluation certificate was introduced. All 918 modules are covered by
 default targets and all 326 endpoint declarations are pinned. The full
 [parent](TrustBoundary.lean) and [Action](Action/TrustBoundary.lean) boundaries also
 check the earlier milestones.
