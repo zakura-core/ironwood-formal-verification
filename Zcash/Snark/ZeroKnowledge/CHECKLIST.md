@@ -745,6 +745,15 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   arithmetic, recursive adapters, and output materialization, including zero
   challenges. PLONK input construction and the complete prover/retry/test
   composition remain part of the resource item below.
+- [x] Compose the [complete real joint view](HonestJointRowsSource.lean) from
+  original rows and quotient pieces, including all pre-IPA commitments, disclosed
+  evaluations, both linear-mask values, the complete multi-opening data, and the
+  original 34-field IPA suffix. The [full joint bound](HonestJointRowsBound.lean)
+  pays for every coefficient, commitment, claimed-value, blind, and IPA producer.
+  [Opening preparation](PreparedHonestIpaSource.lean) matches the reference
+  commitment and reconstructed value even at exceptional challenges. Generated
+  output dimensions are proved. Whole private-tape, observer, retry, and test
+  composition remains part of the resource item below.
 - [ ] Discharge the PRNG reduction's resource conditions wherever that
   computational instantiation is claimed. This requires bounds for the actual
   real-prover-and-test reduction, including retained auxiliary data and any retry

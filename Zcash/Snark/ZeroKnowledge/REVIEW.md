@@ -949,3 +949,12 @@ The complete opening-material checkpoint passes the [focused 3,940-job trust-bou
 The [counted real IPA](HonestIpaTapeCost.lean) now preserves the complete original tape-driven transcript and has a [full materialization bound](HonestIpaBound.lean). Its input prices cover every coefficient, public input, and tape read. The statement includes zero challenges and retains the supplied claimed value. PLONK preparation and the complete prover/retry/test resource composition still require composition with this component.
 
 The complete real-IPA checkpoint passes the [focused 3,955-job trust-boundary build](review/validation-eeb9dc07.log), with [74 separately inventoried declarations](review/axioms-eeb9dc07.log) across 15 modules. Their transitive dependencies use only the standard logical axioms. The complete prover/retry/test resource bound and independent review remain open.
+
+The [complete real joint computation](HonestJointRowsSource.lean) now has exact
+source erasure and a [full cost bound](HonestJointRowsBound.lean), from original
+row readers and stored quotient pieces through all PLONK commitments and
+observations, the complete multi-opening data, and every real IPA output.
+The [prepared IPA connection](PreparedHonestIpaSource.lean) preserves both the
+original commitment and verifier-reconstructed claimed value without a challenge
+exclusion. Generated dimensions are checked. Complete private-tape, observer,
+retry, and test composition remains part of the open PRNG resource item.
