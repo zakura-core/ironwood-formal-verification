@@ -754,6 +754,18 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   commitment and reconstructed value even at exceptional challenges. Generated
   output dimensions are proved. Whole private-tape, observer, retry, and test
   composition remains part of the resource item below.
+- [x] Compose the [complete stored private tape](HonestStoredMaterialSource.lean),
+  numerator, quotient pieces, opening material, and real joint proof, with a
+  [full materialization bound](HonestStoredMaterialBound.lean). The
+  [stored Action witness reader](StoredActionWitnessCost.lean) charges every
+  supplied advice-cell access. The [complete real bit-tape adapter](StoredActionHonestTapeJoint.lean)
+  preserves the original 148m + 46 private samples and all 22 raw replies;
+  [its bound](StoredActionHonestTapeBound.lean) is independent of sampled values.
+  The [original transcript](StoredActionHonestTraceCost.lean) and
+  [canonical oracle view](StoredActionHonestOracleViewCost.lean) retain all bytes,
+  raw replies, and stopping checks, with a [complete bound](StoredActionHonestOracleViewBound.lean).
+  This is the independent-reply view. Online cache reuse, retries, and the final
+  distinguishing test remain part of the resource item below.
 - [ ] Discharge the PRNG reduction's resource conditions wherever that
   computational instantiation is claimed. This requires bounds for the actual
   real-prover-and-test reduction, including retained auxiliary data and any retry

@@ -1,3 +1,10 @@
+import Zcash.Snark.ZeroKnowledge.StoredActionHonestJointCost
+import Zcash.Snark.ZeroKnowledge.StoredActionHonestTapeJoint
+import Zcash.Snark.ZeroKnowledge.StoredActionHonestTraceCost
+import Zcash.Snark.ZeroKnowledge.StoredActionHonestOracleViewCost
+import Zcash.Snark.ZeroKnowledge.StoredActionHonestOracleViewBound
+import Zcash.Snark.ZeroKnowledge.ActionNumeratorCoefficientsCost
+import Zcash.Snark.ZeroKnowledge.ActionQuotientRowsCost
 import Zcash.Snark.ZeroKnowledge.ActionWitnessSimulation
 import Zcash.Snark.ZeroKnowledge.ActionGateActivationCoverage
 import Zcash.Snark.ZeroKnowledge.ActionLookupActivationCoverage
@@ -1352,3 +1359,17 @@ assert_axioms Zcash.Snark.ZeroKnowledge.wideActionWitness_simulation_error_bound
 assert_axioms Zcash.Snark.ZeroKnowledge.wideCapturedActionWitness_simulation_error_bound +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleBitWitness_simulation_error_bound +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.storedActionOracleBitWitness_simulation_error_bound +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+
+/- Complete real private-tape construction, stored inputs, and canonical observed view. -/
+assert_computable Zcash.Snark.ZeroKnowledge.storedActionHonestJointCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionHonestJointCosted_result +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.storedActionHonestTapeJointCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionHonestTapeJointCosted_result +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.storedActionHonestTraceCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionHonestTraceCosted_result +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.storedActionHonestOracleViewCosted +choice +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionHonestOracleViewCosted_result +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.storedActionHonestOracleViewCostBudget +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionHonestOracleViewCosted_cost_le_fixed +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionNumeratorCoefficientsCosted_result +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionQuotientPiecesFromRowsCosted_result +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)

@@ -960,3 +960,16 @@ exclusion. Generated dimensions are checked. Complete private-tape, observer,
 retry, and test composition remains part of the open PRNG resource item.
 
 The real joint-prover checkpoint passes the [focused 3,979-job trust-boundary build](review/validation-f4708f71.log), with [76 separately inventoried declarations](review/axioms-f4708f71.log) across 24 modules. All use only the standard logical axioms. The exact committed tree passes the 331-endpoint and 1,244-module coverage checks and the remaining repository guards. Complete real-prover/retry/test resource composition and independent review remain open.
+
+The [complete real private-tape computation](HonestStoredMaterialSource.lean) now
+includes material generation, the actual numerator and quotient pieces, all
+opening data, commitments, evaluations, and the original IPA suffix. Its
+[combined bound](HonestStoredMaterialBound.lean) discharges generated row widths
+and every stored reader. The [Action bit-tape adapter](StoredActionHonestTapeJoint.lean)
+preserves the original private sample order and correlated raw/field views,
+with [a fixed cost independent of sampled values](StoredActionHonestTapeBound.lean).
+The [complete canonical view](StoredActionHonestOracleViewCost.lean) has both
+source equality and a [full structural bound](StoredActionHonestOracleViewBound.lean),
+including actual codecs, raw replies, and failure checks. This view uses
+independent raw replies; the online cache, retry, and distinguishing-test
+composition remains part of the PRNG resource obligation.
