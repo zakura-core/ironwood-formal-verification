@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `57e86f0d219457b81253875fd63fcee8da3aa58d` on `establish-zk` in
+Proof baseline: `abe0c7e087402b993f6c18a6cceb8a8c9ccd7945` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -901,3 +901,11 @@ guards. Its [54 declarations across thirteen modules](review/axioms-57e86f0d.log
 have exact direct pins and only standard Lean logical dependencies. This closes
 tape decoding and complete private-state construction within the real-prover
 resource proof; polynomial, IPA, and reduction composition remain separate work.
+
+The [Action numerator milestone](review/validation-abe0c7e0.log) passed the
+warning-as-error trust-boundary build and a separate axiom inventory of
+[115 declarations across twenty-one modules](review/axioms-abe0c7e0.log).
+Source guards ran against an archive of that exact proof commit. The Action
+specialization retains its explicitly pinned inherited Pallas generator-order
+certificate. This records focused validation; whole real-prover/reduction resource
+closure and independent review remain open.
