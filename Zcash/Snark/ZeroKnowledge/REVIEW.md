@@ -234,6 +234,13 @@ source equations and support lemmas; its completed certificate is checked by the
 kernel. [Adversarial checks](../../Meta/Tests/AdviceSourceCertificate.lean) reject
 omitted reads, unavailable reads, and changed source addresses.
 
+Native support agreement also retains the immutable public and fixed environment.
+This supplies a certificate for the original absolute-row `instanceGet` callback;
+its row is not represented as a region-relative advice read. The execution theorem
+already supplies non-advice equality, so this introduces no new execution premise.
+The regression suite accepts a public read at nonzero placement and rejects
+agreement across different public inputs.
+
 [ActionWitnessLoadCertificate.lean](ActionWitnessLoadCertificate.lean) instantiates
 that interface for all eleven original instructions in the eight-region loading
 stage. Both finite scans are kernel checked at the proved Action placement. This
@@ -249,20 +256,27 @@ unknown native callbacks. This stage inherits the existing named Pallas
 generator-order certificate. Its read availability still belongs to the global
 Action scan.
 
-[ActionWitnessObservation.lean](ActionWitnessObservation.lean) identifies the
-extraction agreement needed for completeness. It retains every witness field and
-exactly the 32 auxiliary Merkle readings used by the two 16-layer computations.
-Truncating the unused tail preserves the application specification and the
-existing honest-prover preconditions. Agreement with the normalized application
-observations transfers the constructor's proved preconditions to the extracted
-data; that agreement remains to be established for the actual assignment.
+[ActionWitnessReadings.lean](ActionWitnessReadings.lean) isolates exactly the
+private readings used by the original completeness preconditions: eight fields,
+six points, five scalar/window pairs, and the first 32 auxiliary Merkle readings.
+It proves invariance of those preconditions without requiring equality of unused
+decomposition exports or auxiliary tail values. The stronger complete-observation
+interface remains in [ActionWitnessObservation.lean](ActionWitnessObservation.lean).
 
-The actual Action still needs the complete certified annotation list and both
-global checks. Its final witness equations and extracted private data therefore
-still need their correctness proofs. The semantic precondition theorem concerns
-the normalized application data; it does not assume that the constructor's extractor
-already has those observations. Generated gate, lookup, and copy validity, and hence an
-application-witness-to-`ActionZkRelation` corollary, remain open.
+[ActionWitnessExtraction.lean](ActionWitnessExtraction.lean) proves the required
+agreement for the actual generated assignment, assuming its original witness
+equations. It combines the original loaders, five full-width scalar routes, and
+two 16-layer Merkle calls with the checked hint decoding and canonical windows.
+[ActionWitnessCompleteness.lean](ActionWitnessCompleteness.lean) then transfers
+the application's conditions and preserved public inputs to the original
+top-level completeness theorem. Its conclusion is the original operation
+constraints, under the same witness-equation premise.
+
+The complete certified annotation list and global scans must still discharge
+that premise. The converse compiler bridges from operation constraints to all
+PLONK gates, lookup tuples, and copy equations also remain open, as does the
+application-witness-to-`ActionZkRelation` corollary. The existing circuit-level
+simulation theorem and its validity relation are unchanged.
 
 **Byte-cache execution costs**
 

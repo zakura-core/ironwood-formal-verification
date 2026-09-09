@@ -82,6 +82,33 @@ theorem transport_retainsData
     (certificate.transport equality).annotations = certificate.annotations := by
   kernel_rfl
 
+/-- Absolute public reads are available independently of the advice placement. -/
+def absolutePublicRead : AdviceSourceCertificate (F := Fp)
+    [(⟨⟨5⟩, 100, instanceGet ⟨0⟩ 9⟩, none)] := by
+  certify_source_advice
+
+/-- Public input is immutable even when the first region starts above row zero. -/
+theorem absolutePublicRead_available :
+    adviceSupportMapPlan (fun region => 23 + region) ∅
+      absolutePublicRead.readCertificate.annotations = true := by
+  kernel_rfl
+
+/-- A pair of environments differing only in their public instance values. -/
+def publicReadTestEnvironment (value : Fp) : Placed ProverEnvironment Fp where
+  place := fun region => 23 + region
+  env := { get := fun column _ => if column.kind = .instance then value else 0
+           usableRows := 2042
+           hint := ProverHint.empty Fp }
+
+/-- A changed public input cannot satisfy the native-callback agreement premise. -/
+theorem changedPublicInput_rejected :
+    ¬ WitnessFunctionAgreement ([] : List (AssignedCell Fp))
+      (publicReadTestEnvironment 0) (publicReadTestEnvironment 1) := by
+  intro agreement
+  have same := agreement.nonAdvice ((⟨0⟩ : Column .instance).toAny) 9 (by decide)
+  change (0 : Fp) = 1 at same
+  exact zero_ne_one same
+
 assert_computable Zcash.Meta.Tests.AdviceSourceCertificate.nestedInitialSlope +choice
 assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.nestedInitialSlope_reads
 assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.rejectsOmittedRead
@@ -92,5 +119,10 @@ assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.shiftedFutureRead_rejecte
 assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.rejectsUnknownNative
 assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.rejectsChangedSource
 assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.transport_retainsData
+
+assert_computable Zcash.Meta.Tests.AdviceSourceCertificate.absolutePublicRead +choice
+assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.absolutePublicRead_available
+assert_computable Zcash.Meta.Tests.AdviceSourceCertificate.publicReadTestEnvironment +choice
+assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.changedPublicInput_rejected
 
 end Zcash.Meta.Tests.AdviceSourceCertificate

@@ -53,6 +53,7 @@ private theorem fieldExpressionSupport (expression : FExpr Fp) :
 private def supportRules : Array Name := #[
   ``scalarSupport, ``structuredSupport, ``fieldExpressionSupport,
   ``witnessFunctionSupport_readCell,
+  ``instanceGet_support,
   ``witnessFunctionSupport_valueBuilder, ``witnessFunctionSupport_natBuilder,
   ``witnessFunctionSupport_boolBuilder,
   ``mulIncomplete_stepWit_baseX_support,

@@ -64,11 +64,14 @@ native callbacks remain rejected. These static proof artifacts are separate from
 the executable witness constructor.
 Applying it to the Action still requires the complete annotation list and the
 global alias and read-plan checks.
-The [extraction observation theorem](ActionWitnessObservation.lean) retains all
-witness fields and the 32 auxiliary Merkle readings the Action uses. It preserves
-the original specification and honest-prover preconditions exactly; unused tail
-values need no equality. Agreement of the actual extractor with the normalized
-application observations still needs to be proved.
+The [extraction theorem](ActionWitnessExtraction.lean) now recovers all private
+readings needed by completeness from the original witness equations: eight
+fields, six points, five scalar/window pairs, and 32 Merkle readings. The
+[reading agreement](ActionWitnessReadings.lean) transfers the normalized
+application's preconditions, and [ActionWitnessCompleteness.lean](ActionWitnessCompleteness.lean)
+applies the original completeness theorem with the preserved public inputs.
+This connection still requires the full source certificate to establish the
+witness equations. It does not require equality of unused decomposition exports.
 Proving that the generated rows satisfy every gate, lookup, and copy equation is
 still open; the current constructor does not establish `ActionZkRelation`.
 The [raw-source refinement](ActionRandomnessSource.lean) proves exact agreement

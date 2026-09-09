@@ -119,6 +119,11 @@ model. Compare strength only after fixing those models and assumptions.
   [scalar wrappers](NativeScalarWitnessSupport.lean). Nested callbacks retain
   explicit support premises. These are semantic certificates for the original
   functions, not yet a certificate enumerating every Action occurrence.
+- [x] Retain equality of the immutable public and fixed environment in native
+  support certificates. This certifies the original absolute-row `instanceGet`
+  reads without treating their rows as region-relative advice cells. The execution
+  bridge already supplies this equality. Regression checks accept a public read
+  at nonzero placement and reject agreement between changed public inputs.
 - [x] Prove that the [fixed Action hint programs](ActionHintReadSupport.lean),
   every scalar window, and the original Merkle sibling and swap callbacks read
   no cells. Their values depend on the immutable hint store.
@@ -145,15 +150,25 @@ model. Compare strength only after fixing those models and assumptions.
 - [ ] Build the certified annotations for the complete Action and discharge its
   global alias and read-plan checks. Derive `ExtendsWitnesses` for the final
   assignment.
-- [x] Specify the extraction agreement needed by the actual Action in
-  [ActionWitnessObservation.lean](ActionWitnessObservation.lean). It retains every
-  witness field and the 32 used auxiliary Merkle readings. The checked theorem
-  preserves the original application specification and honest-prover
-  preconditions, and transfers the constructor's preconditions when that
-  agreement is proved. Unused readings beyond the circuit depth need no equality.
-- [ ] Prove that the extracted witness has those normalized application observations, then use
-  circuit completeness to prove every original gate, lookup tuple, and compiler
-  copy equation. Record any additional construction preconditions.
+- [x] Identify the exact private readings of the original completeness preconditions
+  in [ActionWitnessReadings.lean](ActionWitnessReadings.lean): eight fields, six
+  points, five scalar/window pairs, and 32 Merkle readings. Agreement preserves
+  those preconditions; unused decomposition exports and auxiliary tail readings
+  need no equality. The stronger observation interface remains available in
+  [ActionWitnessObservation.lean](ActionWitnessObservation.lean).
+- [x] Recover those readings from the original witness equations in
+  [ActionWitnessExtraction.lean](ActionWitnessExtraction.lean), using the original
+  [field and point loaders](ActionDirectHintExtraction.lean),
+  [scalar routing](ActionScalarHintExtraction.lean), and
+  [Merkle calls](ActionMerkleHintExtraction.lean). The proof uses the actual
+  generated assignment and fixed hint program, with the already stated scalar
+  representability bounds.
+- [x] Transfer the recovered readings and preserved public inputs to the original
+  completeness theorem in [ActionWitnessCompleteness.lean](ActionWitnessCompleteness.lean).
+  It proves the original operation constraints once the complete source certificate
+  supplies the witness equations; it adds no construction precondition.
+- [ ] Discharge those witness equations and prove that the resulting operation
+  constraints imply every compiled gate, lookup tuple, and copy equation.
 - [ ] Package that evidence as `ActionZkRelation` and derive application-level
   interactive and one-attempt oracle simulation corollaries.
 

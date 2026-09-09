@@ -14,12 +14,47 @@ namespace Zcash.Snark.ZeroKnowledge
 
 open Halo2 Witgen
 
+/-- Declared cell values and the immutable public/fixed environment agree. -/
+structure WitnessFunctionAgreement {F : Type} [FiniteField F]
+    (reads : List (AssignedCell F)) (left right : Placed ProverEnvironment F) : Prop extends
+    WitnessContextAgreement reads
+      ({ env := left } : CtxOver F (Placed ProverEnvironment F)) { env := right } where
+  nonAdvice : ∀ column row, column.kind ≠ .advice →
+    left.env.get column row = right.env.get column row
+
+/-- Structured IR uses the context part of native-function agreement. -/
+instance witnessFunctionAgreementCoe {F : Type} [FiniteField F]
+    {reads : List (AssignedCell F)} {left right : Placed ProverEnvironment F} :
+    Coe (WitnessFunctionAgreement reads left right)
+      (WitnessContextAgreement reads
+        ({ env := left } : CtxOver F (Placed ProverEnvironment F)) { env := right }) :=
+  ⟨WitnessFunctionAgreement.toWitnessContextAgreement⟩
+
+/-- Restrict declared reads while retaining all immutable values. -/
+theorem WitnessFunctionAgreement.mono {F : Type} [FiniteField F]
+    {reads smaller : List (AssignedCell F)} {left right : Placed ProverEnvironment F}
+    (agreement : WitnessFunctionAgreement reads left right) (hsubset : smaller ⊆ reads) :
+    WitnessFunctionAgreement smaller left right :=
+  ⟨agreement.toWitnessContextAgreement.mono hsubset, agreement.nonAdvice⟩
+
+/-- Restrict a concatenated support to its first component. -/
+theorem WitnessFunctionAgreement.left {F : Type} [FiniteField F]
+    {first second : List (AssignedCell F)} {left right : Placed ProverEnvironment F}
+    (agreement : WitnessFunctionAgreement (first ++ second) left right) :
+    WitnessFunctionAgreement first left right :=
+  agreement.mono (List.subset_append_left _ _)
+
+/-- Restrict a concatenated support to its second component. -/
+theorem WitnessFunctionAgreement.right {F : Type} [FiniteField F]
+    {first second : List (AssignedCell F)} {left right : Placed ProverEnvironment F}
+    (agreement : WitnessFunctionAgreement (first ++ second) left right) :
+    WitnessFunctionAgreement second left right :=
+  agreement.mono (List.subset_append_right _ _)
+
 /-- The declared cell reads and immutable context determine the actual callback result. -/
 def WitnessFunctionSupport {F Value : Type} [FiniteField F]
     (reads : List (AssignedCell F)) (compute : Placed ProverEnvironment F → Value) : Prop :=
-  ∀ left right, WitnessContextAgreement reads
-    ({ env := left } : CtxOver F (Placed ProverEnvironment F)) { env := right } →
-      compute left = compute right
+  ∀ left right, WitnessFunctionAgreement reads left right → compute left = compute right
 
 /-- Enlarging the declared read set preserves a semantic support certificate. -/
 theorem WitnessFunctionSupport.mono {F Value : Type} [FiniteField F]
@@ -54,6 +89,16 @@ theorem witnessFunctionSupport_readCell {F : Type} [FiniteField F] (cell : Assig
     WitnessFunctionSupport [cell] (fun env => readCell env cell) :=
   fun _ _ agreement => agreement.cellValues cell (List.mem_singleton_self _)
 
+/-- Absolute instance reads depend only on immutable public input, with no advice dependency. -/
+theorem instanceGet_support {F : Type} [FiniteField F]
+    (column : Column .instance) (row : ℕ) :
+    WitnessFunctionSupport (F := F) [] (fun env => ((instanceGet column row).eval env)[0]) := by
+  intro left right agreement
+  dsimp only
+  rw [eval_instanceGet, eval_instanceGet]
+  exact agreement.nonAdvice column.toAny (row : ℤ)
+    (by change ColumnKind.instance ≠ ColumnKind.advice; decide)
+
 /-- Structured field or record builders supply a support for native callers. -/
 theorem witnessFunctionSupport_valueBuilder {F : Type} [FiniteField F]
     {value : TypeMap} [ProvableType value]
@@ -82,6 +127,7 @@ theorem witnessFunctionSupport_readsFrom {F : Type} [FiniteField F]
       placedWitnessCell place cell ∈ available) :
     AdviceProgramReadsFrom place available program :=
   fun left right agreement => support ⟨place, left⟩ ⟨place, right⟩
-    (adviceReadAgreement_context place available reads left right agreement hreads)
+    ⟨adviceReadAgreement_context place available reads left right agreement hreads,
+      agreement.nonAdvice⟩
 
 end Zcash.Snark.ZeroKnowledge

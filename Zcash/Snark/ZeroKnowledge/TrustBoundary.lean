@@ -1,6 +1,13 @@
 import Zcash.Snark.ZeroKnowledge.ActionWitnessObservation
 import Zcash.Snark.ZeroKnowledge.ActionWitnessLoadCertificate
 import Zcash.Snark.ZeroKnowledge.ActionValueWitnessCertificate
+import Zcash.Snark.ZeroKnowledge.ActionDirectHintExtraction
+import Zcash.Snark.ZeroKnowledge.ScalarWitnessExtraction
+import Zcash.Snark.ZeroKnowledge.MerkleHintExtraction
+import Zcash.Snark.ZeroKnowledge.ActionWitnessReadings
+import Zcash.Snark.ZeroKnowledge.ActionWitnessCompleteness
+import Zcash.Snark.ZeroKnowledge.ActionMerkleHintExtraction
+import Zcash.Snark.ZeroKnowledge.ActionScalarHintExtraction
 import Zcash.Snark.ZeroKnowledge.AdviceSourceCertificate
 import Zcash.Snark.ZeroKnowledge.WideBitReductionCost
 import Zcash.Snark.ZeroKnowledge.AdviceAliasAddressPlan
@@ -2690,6 +2697,57 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionValueSourceCertificate
   +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.actionValueSource_annotationCount
   +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- Exact extraction from original witness equations.
+assert_axioms Zcash.Snark.ZeroKnowledge.loadPrivate_cell_of_extendsWitnesses
+assert_axioms Zcash.Snark.ZeroKnowledge.witnessPoint_cells_of_extendsWitnesses
+assert_axioms Zcash.Snark.ZeroKnowledge.witnessNonIdPoint_cells_of_extendsWitnesses
+assert_axioms Zcash.Snark.ZeroKnowledge.actionInitialHintCells_of_extendsWitnesses
+assert_axioms Zcash.Snark.ZeroKnowledge.actionDirectHintCells_of_extendsWitnesses
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.fullWidth_windowCells_of_witnessScalarLoop
+assert_axioms Zcash.Snark.ZeroKnowledge.fullWidth_extract_windows_of_extendsWitnesses
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.fullWidth_extract_scalar_of_extendsWitnesses
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.condSwap_hintCells_of_extendsWitnesses
+assert_axioms Zcash.Snark.ZeroKnowledge.merkleLayer_hintCells_of_extendsWitnesses
+assert_axioms Zcash.Snark.ZeroKnowledge.merkleHintFold_region
+assert_axioms Zcash.Snark.ZeroKnowledge.merkleFold_hintCells_of_extendsWitnesses
+assert_axioms Zcash.Snark.ZeroKnowledge.ActionWitnessReadAgreement
+assert_axioms Zcash.Snark.ZeroKnowledge.ActionWitnessReadAgreement.proverAssumptions_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessConditions_proverAssumptions_of_readAgreement
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.valueCommit_fullWidth_witnesses
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.spendAuthority_fullWidth_witnesses
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.sinsemillaCommit_fullWidth_witnesses
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.commitIvk_fullWidth_witnesses
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.noteCommit_fullWidth_witnesses
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionScalarWindowReadings_of_extendsWitnesses
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionMerkleHintCells_of_extendsWitnesses
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_base_extendsWitnesses
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_readAgreement_of_extendsWitnesses
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_constraints_of_readAgreement
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_constraints_of_extendsWitnesses
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- Native callbacks also retain the immutable public and fixed environment.
+assert_axioms Zcash.Snark.ZeroKnowledge.WitnessFunctionAgreement
+assert_axioms Zcash.Snark.ZeroKnowledge.witnessFunctionAgreementCoe
+assert_axioms Zcash.Snark.ZeroKnowledge.WitnessFunctionAgreement.mono
+assert_axioms Zcash.Snark.ZeroKnowledge.WitnessFunctionAgreement.left
+assert_axioms Zcash.Snark.ZeroKnowledge.WitnessFunctionAgreement.right
+assert_axioms Zcash.Snark.ZeroKnowledge.instanceGet_support
 
 -- Exact counted implementations of the simulator's input packing and wide reduction.
 assert_computable Zcash.Snark.ZeroKnowledge.packBitsLECosted
