@@ -53,7 +53,7 @@ private partial def exposeTransitionData (expression : Expr) : MetaM Expr := do
 
 -- Normalize source metadata before constructing the policy's dependent
 -- decidability proofs. The source-to-data equality itself is kernel checked.
-private def normalizeReadData (original : Expr) : MetaM (Expr × Expr) := do
+private def normalizeAddressData (original : Expr) : MetaM (Expr × Expr) := do
   let mut current := original
   let mut equality ← mkEqRefl original
   for _ in [:10000] do
@@ -70,7 +70,7 @@ private def normalizeReadData (original : Expr) : MetaM (Expr × Expr) := do
       let checked ← withOptions (Elab.async.set · false) do
         withTransparency .all <| mkAuxTheorem (← mkEq original current) equality
       return (current, checked)
-  throwError "read-address source normalization limit reached"
+  throwError "address source normalization limit reached"
 
 private def reduceReadSourceTransition (transition : Expr) : MetaM (Expr × Expr) := do
   let arguments := transition.getAppArgs
@@ -78,11 +78,33 @@ private def reduceReadSourceTransition (transition : Expr) : MetaM (Expr × Expr
   let roots := arguments[arguments.size - 2]!
   let entry := arguments.back!
   let original ← mkAppM ``adviceReadAddressData #[place, entry]
-  let (normalized, hdata) ← normalizeReadData original
+  let (normalized, hdata) ← normalizeAddressData original
   let reader := mkApp (mkConst ``adviceReadAddressMapStep) roots
   let result ← withTransparency .all (whnf (mkApp reader normalized))
   let hfactor ← mkAppM ``adviceReadMapStep_eq_addressStep #[place, roots, entry]
   let equality ← withTransparency .all <| mkEqTrans hfactor (← mkCongrArg reader hdata)
+  return (result, equality)
+
+/-- Normalize only an alias entry before applying the original map policy.
+In particular, simplification never traverses the accumulated root map. -/
+private def reduceAliasSourceTransition (transition : Expr) : MetaM (Expr × Expr) := do
+  let arguments := transition.getAppArgs
+  let roots := arguments[arguments.size - 2]!
+  let entry := arguments.back!
+  let current ← exposeTransitionData entry
+  let rules ← ({} : SimpTheorems).addDeclToUnfold ``Zcash.Circuits.Ecc.MulComplete.zWit
+  let rules ← rules.addDeclToUnfold ``Zcash.Circuits.Ecc.MulComplete.yPWit
+  let rules ← rules.addDeclToUnfold ``Witgen.MOver.toIRScalar
+  let context ← Simp.mkContext { failIfUnchanged := false, maxSteps := 100000 }
+    (simpTheorems := #[rules])
+  let (simplified, _) ← simp current context
+  let hentry ← match simplified.proof? with
+    | some proof => pure proof
+    | none => mkEqRefl entry
+  let (normalized, hdata) ← normalizeAddressData simplified.expr
+  let reader := mkApp (mkConst ``adviceAliasMapStep) roots
+  let result ← withTransparency .all (whnf (mkApp reader normalized))
+  let equality ← withTransparency .all <| mkCongrArg reader (← mkEqTrans hentry hdata)
   return (result, equality)
 
 /-- Expose a blocked source transition through its original defining equations.
@@ -96,16 +118,8 @@ private def reduceSourceTransition (transition : Expr) : MetaM (Expr × Expr) :=
     return (current, equality)
   if transition.isAppOf ``adviceReadMapStep then
     return ← reduceReadSourceTransition transition
-  current ← exposeTransitionData current
   if transition.isAppOf ``adviceAliasMapStep then
-    let rules ← ({} : SimpTheorems).addDeclToUnfold ``Zcash.Circuits.Ecc.MulComplete.zWit
-    let rules ← rules.addDeclToUnfold ``Zcash.Circuits.Ecc.MulComplete.yPWit
-    let rules ← rules.addDeclToUnfold ``Witgen.MOver.toIRScalar
-    let context ← Simp.mkContext { failIfUnchanged := false, maxSteps := 100000 }
-      (simpTheorems := #[rules])
-    let (simplified, _) ← simp current context
-    if let some proof := simplified.proof? then equality ← mkEqTrans equality proof
-    current := simplified.expr
+    return ← reduceAliasSourceTransition transition
   for _ in [:10000] do
     current ← exposeTransitionData current
     if current.isAppOf ``Option.some || current.isAppOf ``Option.none then

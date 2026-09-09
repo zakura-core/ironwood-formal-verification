@@ -95,6 +95,47 @@ theorem opaqueScalarBuilder_rejectsCollision : True := by
       check_advice_map_scan
   trivial
 
+/-- A pre-existing map exercises normalization after many unrelated assignments. -/
+def populatedRoots : AdviceAliasMap :=
+  (List.range 512).foldl (fun roots row =>
+    let address : AdviceAddress := ((⟨7⟩ : Column .advice).toAny, row)
+    adviceAliasMapInsert roots address address) ∅
+
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 10000 in
+theorem opaqueScalarBuilder_afterPopulatedMap :
+    adviceAliasMapPlan populatedRoots [(firstAddress, scalarBuilderCopyTag)] = true := by
+  rw [adviceAliasMapPlan_eq_scan]
+  check_advice_map_scan
+
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 10000 in
+theorem opaqueScalarBuilder_rejectsPopulatedCollision : True := by
+  fail_if_success
+    have _invalid : adviceAliasMapPlan populatedRoots
+        [(firstAddress, none), (firstAddress, scalarBuilderCopyTag)] = true := by
+      rw [adviceAliasMapPlan_eq_scan]
+      check_advice_map_scan
+  trivial
+
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 10000 in
+theorem equalRootCopy_afterPopulatedMap :
+    adviceAliasMapPlan populatedRoots [(firstAddress, none), (secondAddress, some firstAddress),
+      (firstAddress, some secondAddress)] = true := by
+  rw [adviceAliasMapPlan_eq_scan]
+  check_advice_map_scan
+
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 10000 in
+theorem rejectsPopulatedConflictingRoot : True := by
+  fail_if_success
+    have _invalid : adviceAliasMapPlan populatedRoots [(firstAddress, none), (secondAddress, none),
+        (firstAddress, some secondAddress)] = true := by
+      rw [adviceAliasMapPlan_eq_scan]
+      check_advice_map_scan
+  trivial
+
 
 opaque placedReadCellSource (row : ℕ) :
     { cell : AssignedCell Fp // cell = .of 0 row (⟨0⟩ : Column .advice) } := ⟨_, rfl⟩
@@ -136,6 +177,11 @@ assert_axioms Zcash.Meta.Tests.AdviceMapScan.immutableSource_available
 assert_computable Zcash.Meta.Tests.AdviceMapScan.scalarBuilderCopyTag +choice
 assert_axioms Zcash.Meta.Tests.AdviceMapScan.opaqueScalarBuilder_freshWrite
 assert_axioms Zcash.Meta.Tests.AdviceMapScan.opaqueScalarBuilder_rejectsCollision
+assert_computable Zcash.Meta.Tests.AdviceMapScan.populatedRoots +choice
+assert_axioms Zcash.Meta.Tests.AdviceMapScan.opaqueScalarBuilder_afterPopulatedMap
+assert_axioms Zcash.Meta.Tests.AdviceMapScan.opaqueScalarBuilder_rejectsPopulatedCollision
+assert_axioms Zcash.Meta.Tests.AdviceMapScan.equalRootCopy_afterPopulatedMap
+assert_axioms Zcash.Meta.Tests.AdviceMapScan.rejectsPopulatedConflictingRoot
 
 assert_axioms Zcash.Meta.Tests.AdviceMapScan.placedReadCellSource
 assert_axioms Zcash.Meta.Tests.AdviceMapScan.opaqueReadAnnotation
