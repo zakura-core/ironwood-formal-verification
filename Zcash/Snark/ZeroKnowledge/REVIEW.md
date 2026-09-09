@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `e3bc4f813caea4f735187651f1a1a56c92c86857` on `establish-zk` in
+Proof baseline: `bff126f700c19408f7af665b22c4ff3163223982` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -527,9 +527,10 @@ The complete public-opening checkpoint passed the
 pins and separate inventories containing only standard axioms. The counted
 construction includes all polynomial, commitment, node, and group preparation,
 interpolation, and the final commitment/scalar fold. Its result equals the
-reference public opening and satisfies an explicit total cost bound. Concrete
-query providers, quotient calculation, codecs, and full simulator composition
-remain open, together with the unfinished Action source scans.
+reference public opening and satisfies an explicit total cost bound. That checkpoint left
+query-provider and quotient composition to the subsequent layer above. Concrete
+input/setup representations, codecs, and full simulator composition remain open,
+together with the unfinished Action source scans.
 
 The native dependencies remain exactly the inherited named curve-order certificates:
 
@@ -562,3 +563,14 @@ map-policy refinements, bounded kernel checker, and adversarial checks. The
 [axiom inventory](review/axioms-e3bc4f81.log) contains only the standard Lean
 logical axioms. The trust-boundary build passed with 3768 jobs and the regression
 build passed with 2566 jobs. Full Action source scans remain in progress.
+
+**Complete inferred-quotient checkpoint**
+
+The [validation record](review/validation-bff126f7.log) covers 64 declarations
+across eleven modules, each directly pinned. The
+[transitive axiom inventory](review/axioms-bff126f7.log) contains only standard
+Lean logical axioms. The complete quotient build passed with 3046 jobs and the
+trust-boundary build passed with 3779 jobs. The bound includes actual query and
+argument preparation, the full constraint list, domain values, materialization,
+and the quotient fold. Public-input/setup representations, encoding, whole
+simulator composition, and the Action source scans remain separate work.
