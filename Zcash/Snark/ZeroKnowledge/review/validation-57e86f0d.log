@@ -1,0 +1,10 @@
+Complete actual-tape private-material resource milestone
+Proof baseline: 57e86f0d219457b81253875fd63fcee8da3aa58d.
+The warning-as-error build passed for PlonkStoredMaterialCostBound (3107 jobs), covering all thirteen new modules. The ZeroKnowledge trust boundary passed separately (3884 jobs).
+All 54 declarations passed a separate warning-as-error transitive axiom inventory, with exactly one direct pin each. Dependencies are limited to propext, Classical.choice, and Quot.sound. No admitted lemma or new native certificate was introduced.
+The direct materialized decoder is proved equal to the original canonical and batched tape equivalences. It preserves the exact original batch order, every row-mask slot, both linear-mask coefficients, and every commitment blind. Its counted implementation includes all metadata and schedule construction, indexed reads, traversals, and output copies, including truncated inputs.
+The layout theorem proves that decoding can use public dummy callbacks while retaining the exact coins selected for every actual witness-dependent constructor. The complete stored private-material theorem composes this decoder with all 22 masked columns per Action and their full retained history. Its polynomial bound includes every constituent cost without assumptions on successful sorting or sampled field values.
+All repository guards passed: 331 endpoints pinned, 1149 modules covered by six agreeing default/CI targets, no umbrella imports, one csimp declaration covered, two group-work modules with twenty pinned callbacks, and six fixture artifacts with matching digests/provenance. Working and staged whitespace checks, direct-pin uniqueness, and documentation links passed.
+This is focused validation, not a new full workspace build. The last full workspace build remains the successful 4629-job run at 2872c72f.
+The proof commit was pushed only to TalDerei/ironwood-private refs/heads/establish-zk and its exact remote SHA was verified.
+The real polynomial, IPA, retry/test resource composition, and independent review remain open. No machine-code correspondence or complete PRNG resource membership is claimed at this checkpoint.

@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `a3d5091685b73e01158535339fde888b74d83bdd` on `establish-zk` in
+Proof baseline: `57e86f0d219457b81253875fd63fcee8da3aa58d` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -878,3 +878,10 @@ The [complete stored-column milestone](review/validation-a3d50916.log) passed it
 [51 declarations across seventeen modules](review/axioms-a3d50916.log) have exact
 direct pins and only standard Lean logical dependencies. The result and bound
 cover the full original column schedule on the identical selected row-mask tape.
+
+The [actual-tape private-material milestone](review/validation-57e86f0d.log) passed
+its 3,107-job focused build, 3,884-job trust-boundary build, and all repository
+guards. Its [54 declarations across thirteen modules](review/axioms-57e86f0d.log)
+have exact direct pins and only standard Lean logical dependencies. This closes
+tape decoding and complete private-state construction within the real-prover
+resource proof; polynomial, IPA, and reduction composition remain separate work.

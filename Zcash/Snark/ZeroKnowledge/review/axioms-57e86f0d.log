@@ -1,0 +1,74 @@
+'Zcash.Snark.ZeroKnowledge.batchedColumnTapeListsCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.batchedColumnTapeListsCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.batchedColumnTapeListsCosted_source' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.batchedColumnTapeListsCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.ofFn_castTape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.batchedToColumnTape_cons_list' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.batchedColumnTapeLists' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.columnRowSampleCount_append' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.batchedColumnTapeLists_rows_length_le' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.batchedColumnTapeLists_blinds_length_le' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.batchedColumnTapeLists_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.columnTapeLists' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.columnTapeLists_append' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.columnTapeLists_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkColumnBatchesCosted' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.plonkColumnBatchesCosted_result' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkColumnBatchesCosted_length' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkColumnBatchesCosted_block_length' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkColumnBatchesCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkBatchedColumnCoinsCosted' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.plonkBatchedColumnCoinsCosted_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkBatchedColumnCoinsCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.TapeAgrees.ofFn' depends on axioms: [Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkPreIpaCoinsCosted_layout_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkPreIpaCoinsCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkPreIpaCoinsCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkPreIpaCoinsCostBudget' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.plonkPreIpaCoinsCosted_rows_length_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkPreIpaCoinsCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkStoredMaterialFromTapeCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkStoredMaterialFromTapeCosted_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkStoredColumnsCostBudget_mono_tape' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkStoredMaterialCostBudget' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkStoredMaterialFromTapeCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.ofFn_finCongrTape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.preIpaCoinEquiv_lists' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.batchedPreIpaCoinEquiv_lists' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkPreIpaCoinsEquiv_lists' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.privateColumnBatchesCosted' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.privateColumnBatchesCosted_result' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.privateColumnBatches_length' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.privateColumnBatchesCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.ofFn_splitTape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.ofFn_joinTape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.ofFn_splitTape_left' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.ofFn_splitTape_right' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.columnCoinEquiv_cons_lists' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.splitListCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.splitListCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.splitListCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.splitListCosted_lengths_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.columnRowSampleCountCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.columnRowSampleCountCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.columnRowSampleCountCosted_cost' depends on axioms: [propext, Quot.sound]
