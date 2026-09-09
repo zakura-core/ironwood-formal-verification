@@ -495,6 +495,11 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   and ordered claim folds in [CommitmentArithmeticCost.lean](CommitmentArithmeticCost.lean).
   The erasure proofs identify the existing polynomial and commitment operations;
   constructing the input polynomials remains separate work.
+- [x] Construct [public row coefficients](RowCoefficientCost.lean) by a counted
+  inverse DFT and prove agreement with the canonical interpolant on the specified
+  power-of-two domain. [Row evaluation and commitment](RowPolynomialCost.lean)
+  include this coefficient preparation, every input read, and every generator
+  access. Concrete public-row providers still need their full cost instantiation.
 - [ ] Specify the runtime model and input representations, including access to
   public inputs and setup, bit packing, field reduction, group arithmetic,
   polynomial operations, transcript encoding, and cache lookup/programming.

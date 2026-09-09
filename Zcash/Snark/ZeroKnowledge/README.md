@@ -222,10 +222,14 @@ preserves every emitted slot while retaining the complete selected-reader cost.
 [Polynomial evaluation](PolynomialArithmeticCost.lean) loads the actual canonical
 coefficient array and proves its counted Horner result equals the existing
 evaluator. [Coefficient commitments and claim folds](CommitmentArithmeticCost.lean)
-retain every generator, coefficient, and challenge access. The model prices field
-and group primitives explicitly and counts structural operations; it is not a
-machine-code correspondence theorem. Public polynomial construction, the complete
-PLONK opening, the concrete query-provider and quotient composition, encoding,
+retain every generator, coefficient, and challenge access.
+[Public row coefficients](RowCoefficientCost.lean) are also constructed by a
+counted inverse DFT and proved equal to the canonical interpolant's coefficients.
+The [row evaluation and commitment algorithms](RowPolynomialCost.lean) include
+that preparation and retain the complete supplied row-provider costs.
+The model prices field and group primitives explicitly and counts structural
+operations; it is not a machine-code correspondence theorem. The complete
+PLONK opening, concrete public-row and query providers, quotient composition, encoding,
 and the final Action composition remain to be counted. PRNG-class membership
 additionally needs the cost of the
 real prover and the supplied verifier-view test.

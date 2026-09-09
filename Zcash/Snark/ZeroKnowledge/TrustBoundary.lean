@@ -1,3 +1,5 @@
+import Zcash.Snark.ZeroKnowledge.RowCoefficientCost
+import Zcash.Snark.ZeroKnowledge.RowPolynomialCost
 import Zcash.Snark.ZeroKnowledge.InterpolationWeightCost
 import Zcash.Snark.ZeroKnowledge.LagrangeEvaluationCost
 import Zcash.Snark.ZeroKnowledge.MultiopenEvaluationCost
@@ -69,6 +71,7 @@ import Zcash.Snark.ZeroKnowledge.AdviceSupportMapPlan
 import Zcash.Snark.ZeroKnowledge.WitnessFunctionSupport
 import Zcash.Snark.ZeroKnowledge.PoseidonWitnessSupport
 import Zcash.Snark.ZeroKnowledge.MulIncompleteWitnessSupport
+import Zcash.Snark.ZeroKnowledge.MulCompleteWitnessSupport
 import Zcash.Snark.ZeroKnowledge.FixedBaseWitnessSupport
 import Zcash.Snark.ZeroKnowledge.FixedCanonicityWitnessSupport
 import Zcash.Snark.ZeroKnowledge.NoteWitnessSupport
@@ -2586,6 +2589,10 @@ assert_axioms Zcash.Snark.ZeroKnowledge.mulIncomplete_stepWit_baseX_support
 assert_axioms Zcash.Snark.ZeroKnowledge.mulIncomplete_stepWit_baseY_support
 assert_axioms Zcash.Snark.ZeroKnowledge.mulIncomplete_initLambdaWit_support
 
+-- MulCompleteWitnessSupport
+assert_axioms Zcash.Snark.ZeroKnowledge.mulComplete_zWit_support
+assert_axioms Zcash.Snark.ZeroKnowledge.mulComplete_yPWit_support
+
 -- FixedBaseWitnessSupport
 assert_axioms Zcash.Snark.ZeroKnowledge.mulFixed_windowVal_support
 assert_axioms Zcash.Snark.ZeroKnowledge.mulFixed_xPWit_support
@@ -3279,3 +3286,25 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonkPieceEntryCosted_cost_le
 assert_computable Zcash.Snark.ZeroKnowledge.plonkQuotientPrimeEntryCosted
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkQuotientPrimeEntryCosted_result
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkQuotientPrimeEntryCosted_cost_le
+
+
+-- RowCoefficientCost
+assert_computable Zcash.Snark.ZeroKnowledge.rowCoefficientSummandCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.rowCoefficientSummandCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.rowCoefficientSummandCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.rowCoefficientCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.rowCoefficientCosted_result
+assert_computable Zcash.Snark.ZeroKnowledge.rowCoefficientCostBudget
+assert_axioms Zcash.Snark.ZeroKnowledge.rowCoefficientCosted_cost_le
+assert_axioms Zcash.Snark.ZeroKnowledge.rowCoefficientCosted_rowPolynomial
+
+-- RowPolynomialCost
+assert_computable Zcash.Snark.ZeroKnowledge.rowCoefficientsCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.rowCoefficientsCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.rowCoefficientsCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.rowPolynomialEvalCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.rowPolynomialEvalCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.rowPolynomialEvalCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.rowPolynomialCommitmentCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.rowPolynomialCommitmentCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.rowPolynomialCommitmentCosted_cost_le

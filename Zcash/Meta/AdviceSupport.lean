@@ -1,6 +1,7 @@
 import Zcash.Snark.ZeroKnowledge.NativeScalarWitnessSupport
 import Zcash.Snark.ZeroKnowledge.PoseidonWitnessSupport
 import Zcash.Snark.ZeroKnowledge.MulIncompleteWitnessSupport
+import Zcash.Snark.ZeroKnowledge.MulCompleteWitnessSupport
 import Zcash.Snark.ZeroKnowledge.FixedBaseWitnessSupport
 import Zcash.Snark.ZeroKnowledge.FixedCanonicityWitnessSupport
 import Zcash.Snark.ZeroKnowledge.NoteWitnessSupport
@@ -69,6 +70,8 @@ private def supportRules : Array Name := #[
   ``mulIncomplete_readWit_support,
   ``mulIncomplete_stepWit_support,
   ``mulIncomplete_initLambdaWit_support,
+  ``mulComplete_zWit_support,
+  ``mulComplete_yPWit_support,
   ``mulFixed_windowVal_support,
   ``mulFixed_xPWit_support,
   ``mulFixed_yPWit_support,

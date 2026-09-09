@@ -63,6 +63,28 @@ theorem shiftedFutureRead_rejected :
     adviceSupportMapPlan id ∅ shiftedFutureRead.readCertificate.annotations = false := by
   kernel_rfl
 
+/-- Like the complete Action certificate, expanded source metadata is kernel-only.
+An unreduced bit-family builder still retains its complete running-sum reads. -/
+noncomputable def completeRunningSumWrapper (z : AssignedCell Fp)
+    (ebits : MOver Fp (AssignedCell Fp) (ℕ → BExpr Fp)) (iter : ℕ) :
+    AdviceSourceCertificate (F := Fp) [(⟨⟨0⟩, 0, Ecc.MulComplete.zWit z ebits iter⟩, none)] := by
+  certify_source_advice
+
+/-- The signed-y wrapper likewise retains the original, potentially unreduced builder. -/
+noncomputable def completeSignedYWrapper (y : AssignedCell Fp)
+    (ebits : MOver Fp (AssignedCell Fp) (ℕ → BExpr Fp)) (iter : ℕ) :
+    AdviceSourceCertificate (F := Fp) [(⟨⟨0⟩, 0, Ecc.MulComplete.yPWit y ebits iter⟩, none)] := by
+  certify_source_advice
+
+/-- The complete running-sum wrapper cannot omit its entering advice-cell read. -/
+theorem rejectsCompleteRunningSumOmittedRead (_z : AssignedCell Fp) : True := by
+  let program : WitgenIR Fp 1 := Ecc.MulComplete.zWit _z (pure (fun _ => .false)) 1
+  fail_if_success
+    have _invalid : WitnessFunctionSupport []
+        (fun env => (program.eval env)[0]) := by
+      witness_read_support
+  trivial
+
 /-- An unrecognized native closure cannot use the structured-IR fallback. -/
 theorem rejectsUnknownNative : True := by
   fail_if_success
@@ -119,6 +141,9 @@ assert_computable Zcash.Meta.Tests.AdviceSourceCertificate.futureRead +choice
 assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.futureRead_rejected
 assert_computable Zcash.Meta.Tests.AdviceSourceCertificate.shiftedFutureRead +choice
 assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.shiftedFutureRead_rejected
+assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.completeRunningSumWrapper
+assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.completeSignedYWrapper
+assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.rejectsCompleteRunningSumOmittedRead
 assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.rejectsUnknownNative
 assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.rejectsChangedSource
 assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.transport_retainsData
