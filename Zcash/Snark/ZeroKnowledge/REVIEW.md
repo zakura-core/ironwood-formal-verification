@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `de8910f038852ad6fdb8c3748479df1ffe288946` on `establish-zk` in
+Proof baseline: `ba0159eca567c915093f7ca35f3ea4f1464235b5` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -625,3 +625,11 @@ the other declarations use standard Lean axioms. Materialized public inputs,
 setup vectors, key data, and complete bit tapes have checked reader/conversion
 costs and exact representation theorems. Whole-simulator composition, transcript
 encoding/observation, and the real-prover-and-test PRNG runtime remain open.
+
+The complete algebraic-simulator checkpoint passed the [3,073-job exact-result
+build, 3,081-job bound build, 3,321-job stored Action build, and 3,839-job trust
+boundaries](review/validation-ba0159ec.log). All [23 declarations across eight
+modules](review/axioms-ba0159ec.log) have direct pins and a separate transitive
+inventory. The stored Action result theorem alone inherits the existing Pallas
+certificate; all other new declarations use standard Lean axioms. Fixed-bit
+routing, proof-field routing, codecs, and oracle observation remain to be composed.
