@@ -945,3 +945,5 @@ coverage checks, along with the remaining repository guards. This is focused
 validation; the last complete workspace build remains the earlier recorded baseline.
 
 The complete opening-material checkpoint passes the [focused 3,940-job trust-boundary build](review/validation-531dc5f7.log), with [85 separately inventoried declarations](review/axioms-531dc5f7.log) across 21 modules. All use only the standard logical axioms. This is component validation; complete real-prover resource admissibility and independent review remain open.
+
+The [counted real IPA](HonestIpaTapeCost.lean) now preserves the complete original tape-driven transcript and has a [full materialization bound](HonestIpaBound.lean). Its input prices cover every coefficient, public input, and tape read. The statement includes zero challenges and retains the supplied claimed value. PLONK preparation and the complete prover/retry/test resource composition still require composition with this component.

@@ -737,6 +737,14 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   [complete bound](DenseMultiopenFinalBound.lean) retain every group quotient and
   both subsequent polynomial folds. These are components of real IPA preparation;
   the complete real IPA and prover/retry/test reduction remain below.
+- [x] Bound and materialize the [complete real IPA transcript](HonestIpaTapeCost.lean)
+  on its original ordered tape. Source erasure preserves the power-of-two sparse
+  mask, both recursive cross terms, inverse witness folds, all independent round
+  blinds, the incoming polynomial blind, and both final responses. The
+  [complete budget](HonestIpaBound.lean) includes all vector and input reads,
+  arithmetic, recursive adapters, and output materialization, including zero
+  challenges. PLONK input construction and the complete prover/retry/test
+  composition remain part of the resource item below.
 - [ ] Discharge the PRNG reduction's resource conditions wherever that
   computational instantiation is claimed. This requires bounds for the actual
   real-prover-and-test reduction, including retained auxiliary data and any retry
