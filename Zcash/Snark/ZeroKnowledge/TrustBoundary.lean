@@ -1,3 +1,11 @@
+import Zcash.Snark.ZeroKnowledge.InterpolationWeightCost
+import Zcash.Snark.ZeroKnowledge.LagrangeEvaluationCost
+import Zcash.Snark.ZeroKnowledge.MultiopenEvaluationCost
+import Zcash.Snark.ZeroKnowledge.MultiopenCombinationCost
+import Zcash.Snark.ZeroKnowledge.ListIndexCost
+import Zcash.Snark.ZeroKnowledge.PrivateColumnOrderCost
+import Zcash.Snark.ZeroKnowledge.PrivateColumnRoutingCost
+import Zcash.Snark.ZeroKnowledge.CommitmentEntryCost
 import Zcash.Snark.ZeroKnowledge.FieldExponentCost
 import Zcash.Snark.ZeroKnowledge.LagrangeBasisCost
 import Zcash.Snark.ZeroKnowledge.ListRoutingCost
@@ -3193,3 +3201,81 @@ assert_axioms Zcash.Snark.ZeroKnowledge.finFnCosted_cost_le
 assert_computable Zcash.Snark.ZeroKnowledge.columnResolveCosted
 assert_axioms Zcash.Snark.ZeroKnowledge.columnResolveCosted_result
 assert_axioms Zcash.Snark.ZeroKnowledge.columnResolveCosted_cost_le
+
+-- Direct declaration inventory: InterpolationWeightCost.
+assert_computable Zcash.Snark.ZeroKnowledge.rangeListCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.rangeListCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.rangeListCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.interpolationWeightStepCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.interpolationWeightStepCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.interpolationWeightStepCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.interpolationWeightCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.interpolationWeightCosted_result
+assert_computable Zcash.Snark.ZeroKnowledge.interpolationWeightCostBudget
+assert_axioms Zcash.Snark.ZeroKnowledge.interpolationWeightCosted_cost_le
+
+-- Direct declaration inventory: LagrangeEvaluationCost.
+assert_computable Zcash.Snark.ZeroKnowledge.lagrangeSummandStepCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.lagrangeSummandStepCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.lagrangeSummandStepCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.lagrangeEvalCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.lagrangeEvalCosted_result
+assert_computable Zcash.Snark.ZeroKnowledge.lagrangeEvalCostBudget
+assert_axioms Zcash.Snark.ZeroKnowledge.lagrangeEvalCosted_cost_le
+
+-- Direct declaration inventory: MultiopenEvaluationCost.
+assert_computable Zcash.Snark.ZeroKnowledge.multiopenDenominatorStepCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.multiopenDenominatorStepCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.multiopenDenominatorStepCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.multiopenSetEvalCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.multiopenSetEvalCosted_result
+assert_computable Zcash.Snark.ZeroKnowledge.multiopenSetEvalCostBudget
+assert_axioms Zcash.Snark.ZeroKnowledge.multiopenSetEvalCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.multiopenEvalStepCosted +choice
+assert_computable Zcash.Snark.ZeroKnowledge.multiopenEvalCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.multiopenEvalCosted_result
+assert_computable Zcash.Snark.ZeroKnowledge.multiopenEvalCostBudget
+assert_axioms Zcash.Snark.ZeroKnowledge.multiopenEvalCosted_cost_le
+
+-- Direct declaration inventory: MultiopenCombinationCost.
+assert_computable Zcash.Snark.ZeroKnowledge.multiopenPointStepCosted
+assert_computable Zcash.Snark.ZeroKnowledge.multiopenPointFoldCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.multiopenPointFoldCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.multiopenPointFoldCosted_msm
+assert_axioms Zcash.Snark.ZeroKnowledge.multiopenPointFoldCosted_cost_le
+
+-- Direct declaration inventory: ListIndexCost.
+assert_computable Zcash.Snark.ZeroKnowledge.idxOfListCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.idxOfListCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.idxOfListCosted_cost_le
+
+-- Direct declaration inventory: PrivateColumnOrderCost.
+assert_axioms Zcash.Snark.ZeroKnowledge.flattenFinCosted_length_eq
+assert_computable Zcash.Snark.ZeroKnowledge.privateColumnOrderCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.privateColumnOrderCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.privateColumnOrderCosted_length
+assert_axioms Zcash.Snark.ZeroKnowledge.privateColumnOrderCosted_cost_le
+
+-- Direct declaration inventory: PrivateColumnRoutingCost.
+assert_axioms Zcash.Snark.ZeroKnowledge.getDListCosted_property
+assert_computable Zcash.Snark.ZeroKnowledge.privateColumnIndexCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.privateColumnIndexCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.privateColumnIndexCosted_lt
+assert_axioms Zcash.Snark.ZeroKnowledge.privateColumnIndexCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.privateColumnViewCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.privateColumnViewCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.privateColumnViewCosted_cost_le
+
+-- Direct declaration inventory: CommitmentEntryCost.
+assert_computable Zcash.Snark.ZeroKnowledge.plonkColumnEntryCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkColumnEntryCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkColumnEntryCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.plonkLinearEntryCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkLinearEntryCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkLinearEntryCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPieceEntryCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPieceEntryCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPieceEntryCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.plonkQuotientPrimeEntryCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkQuotientPrimeEntryCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkQuotientPrimeEntryCosted_cost_le

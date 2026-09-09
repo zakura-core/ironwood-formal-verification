@@ -480,6 +480,16 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   [quotient evaluation fold](QuotientEvaluationCost.lean), and
   [scalar query routing](QueryRoutingCost.lean), including out-of-range zero defaults.
   The concrete query providers and complete quotient calculation still need composition.
+- [x] Count both [Lagrange interpolation loops](LagrangeEvaluationCost.lean) and
+  the complete [multi-opening scalar evaluation](MultiopenEvaluationCost.lean),
+  preserving coincident-point division and missing-evaluation defaults. The
+  [counted commitment/scalar combination](MultiopenCombinationCost.lean) is
+  proved equal to evaluating the original symbolic MSM construction.
+- [x] Count construction of the actual [private-column schedule](PrivateColumnOrderCost.lean),
+  its equality search, and [disclosed-value routing](PrivateColumnRoutingCost.lean).
+  The [commitment-entry readers](CommitmentEntryCost.lean) preserve every column,
+  linear-mask, quotient-piece, and quotient-prime slot. Bounds include complete
+  supplied entry costs; missing columns retain their original zero fallback.
 - [x] Count loading canonical polynomial coefficients, their
   [Horner evaluation](PolynomialArithmeticCost.lean), and the full generator sweep
   and ordered claim folds in [CommitmentArithmeticCost.lean](CommitmentArithmeticCost.lean).

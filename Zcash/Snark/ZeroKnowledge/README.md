@@ -212,6 +212,13 @@ The [Lagrange basis calculation](LagrangeBasisCost.lean), including signed power
 and the [quotient evaluation fold](QuotientEvaluationCost.lean) have matching
 counted implementations. [Scalar query routing](QueryRoutingCost.lean) preserves
 the original zero defaults and charges the selected reader.
+The [full Lagrange interpolant](LagrangeEvaluationCost.lean) and
+[multi-opening scalar calculation](MultiopenEvaluationCost.lean) also have exact
+costed implementations. A [direct commitment/scalar fold](MultiopenCombinationCost.lean)
+is proved equal to evaluating the verifier's symbolic MSM combination.
+[Private-column routing](PrivateColumnRoutingCost.lean) counts construction and
+search of the actual schedule, and [entry routing](CommitmentEntryCost.lean)
+preserves every emitted slot while retaining the complete selected-reader cost.
 [Polynomial evaluation](PolynomialArithmeticCost.lean) loads the actual canonical
 coefficient array and proves its counted Horner result equals the existing
 evaluator. [Coefficient commitments and claim folds](CommitmentArithmeticCost.lean)
