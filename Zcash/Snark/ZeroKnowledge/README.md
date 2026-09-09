@@ -19,7 +19,9 @@ The [Action instantiation](ActionInstantiation.lean) now packages original gate,
 lookup, and copy validity into one relation and specializes the full encoded
 comparison to a named captured URS. The simulator uses only public inputs and
 setup parameters. The captured-setup corollary supplies the eleven-round and
-nonidentity proofs internally; it does not assert an application witness constructor.
+nonidentity proofs internally. The [application theorem](ActionWitnessSimulation.lean)
+now constructs the required row-validity evidence and instantiates the interactive,
+captured-setup, and one-attempt oracle bounds, including the counted fixed-bit simulator.
 The [application witness constructor](ActionWitnessRows.lean) now supplies a
 separate, computable conversion to original advice rows using the actual fixed
 programs and region placement. Its [input contract](ActionWitnessConditions.lean)
@@ -63,15 +65,18 @@ structured witness wrappers use the general IR support theorem; unrecognized
 native callbacks remain rejected. These static proof artifacts are separate from
 the executable witness constructor.
 The [complete original annotation list](ActionAdviceSourceData.lean) is certified.
-Applying it to the Action still requires the global alias and read-plan checks.
+The global [alias](ActionAdviceSourceAliasCheck.lean) and
+[read-plan](ActionAdviceReadPlan.lean) checks now cover all 18,403 original
+instructions. Their [source certificate](ActionAdviceSourceCertificate.lean)
+proves every original witness equation for the generated assignment.
 The [extraction theorem](ActionWitnessExtraction.lean) now recovers all private
 readings needed by completeness from the original witness equations: eight
 fields, six points, five scalar/window pairs, and 32 Merkle readings. The
 [reading agreement](ActionWitnessReadings.lean) transfers the normalized
 application's preconditions, and [ActionWitnessCompleteness.lean](ActionWitnessCompleteness.lean)
 applies the original completeness theorem with the preserved public inputs.
-This connection still requires the full source certificate to establish the
-witness equations. It does not require equality of unused decomposition exports.
+The complete source certificate supplies its witness-equation premise. Equality
+of unused decomposition exports is unnecessary.
 The [gate compiler bridge](CompiledGateCompleteness.lean) now derives verifier
 polynomials from the original equations under explicit activation coverage.
 [Actual query-row interpretation](ActionQueryRows.lean) and
@@ -88,8 +93,11 @@ equations through the reference-key shape. The complete
 [lookup](ActionLookupActivationCoverage.lean) activation checks now pass for all
 55 configured gates and three lookup masters. A [proved reindexing](GateIndexedCoverage.lean)
 replaces source-name comparisons with finite numeric indices while retaining
-every original success and rejection. The complete witness-equation scans remain
-necessary before the constructor establishes `ActionZkRelation`.
+every original success and rejection. Together with the complete witness equations,
+these checks establish `ActionZkRelation` for the generated rows in
+[ActionWitnessSimulation.lean](ActionWitnessSimulation.lean). Its input contract
+remains `ActionWitnessConstructionConditions`, including defined hashes, canonical
+Merkle encodings, and scalar-hint bounds in addition to `ActionSpec`.
 The [raw-source refinement](ActionRandomnessSource.lean) proves exact agreement
 between uniform 512-bit private tapes and the existing wide-reduced reference law.
 Replacing that entire source by a distribution within `eta` adds `eta` to the

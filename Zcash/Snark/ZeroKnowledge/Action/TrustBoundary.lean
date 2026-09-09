@@ -1,3 +1,4 @@
+import Zcash.Snark.ZeroKnowledge.ActionWitnessSimulation
 import Zcash.Snark.ZeroKnowledge.ActionGateActivationCoverage
 import Zcash.Snark.ZeroKnowledge.ActionLookupActivationCoverage
 import Zcash.Snark.ZeroKnowledge.StoredActionInstanceCost
@@ -1340,3 +1341,14 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_gateActivationCoverage_cer
 assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_gateActivationCoverage +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_lookupActivationCoverage_certificate +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_lookupActivationCoverage +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- Complete source execution and application witness simulation.
+assert_axioms Zcash.Snark.ZeroKnowledge.actionAdviceSource_readPlan +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionAdviceSource_aliasPlan +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_extendsWitnesses +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_constraints +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessRows_relation +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.wideActionWitness_simulation_error_bound +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.wideCapturedActionWitness_simulation_error_bound +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleBitWitness_simulation_error_bound +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionOracleBitWitness_simulation_error_bound +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)

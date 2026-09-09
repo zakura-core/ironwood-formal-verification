@@ -21,6 +21,7 @@ the Boolean output of an admitted test under an explicit security assumption.
 | Claim | Theorem and source | Compared laws |
 | --- | --- | --- |
 | One complete interactive Action attempt, error `epsilon(m)` | `wideActionZkRelation_simulation_error_bound` in [ActionInstantiation.lean](ActionInstantiation.lean), using [the actual compiler theorem](ActionCompilerSimulation.lean) | `actionZkProver` and `actionZkSimulator` |
+| Application witness construction and simulation | `actionWitnessRows_relation`, `wideActionWitness_simulation_error_bound`, and `storedActionOracleBitWitness_simulation_error_bound` in [ActionWitnessSimulation.lean](ActionWitnessSimulation.lean) | The same real prover on constructed rows, compared with the public-input interactive or counted fixed-bit simulator |
 | Unlimited independent interactive retries, error `epsilon(m)/(1-F(m))` | `wideUnlimitedActionZk_simulation_error_bound` in [ActionRetryLimit.lean](ActionRetryLimit.lean) | `actionZkRetryProver` and `actionZkRetrySimulator` |
 | One-attempt programmable-oracle simulation, error `epsilon(m)+q_pre/p` | `actionFiatShamir_simulation_error_bound` in [ActionFiatShamir.lean](ActionFiatShamir.lean) | `actionOracleRealExperiment` and `actionOracleSimulatedExperiment` |
 | One-attempt fixed-bit simulator, error `epsilon_bits(m,q_pre)` | `actionFiatShamirBits_simulation_error_bound` in [ActionFiatShamirBits.lean](ActionFiatShamirBits.lean) | `actionOracleRealExperiment` and `actionOracleBitSimulatedExperiment` |
@@ -40,8 +41,10 @@ its own additional sampling term and [exact bit-tape law](ActionOracleBits.lean)
 - `ActionZkRelation` requires the original Action gate and lookup equations and
   the concrete compiler's copy equations. The Action circuit, key, masking
   profile, selector boundaries, commitment routing, and canonical codecs are
-  already connected. Constructing those satisfying rows from an application-level
-  `ActionSpec` witness remains separate correctness work.
+  already connected. The [application bridge](ActionWitnessSimulation.lean)
+  constructs those rows under `ActionWitnessConstructionConditions`: `ActionSpec`,
+  hash definedness, canonical Merkle encodings, and five scalar-hint bounds.
+  It no longer requires callers to supply already-satisfying rows or scan results.
 - Setup premises are `urs.k = 11` and `urs.w != 0`. The
   [captured-setup corollary](ActionInstantiation.lean) supplies them for its named
   URS; it does not prove a parameter-generation procedure. Theorems use the stated
@@ -240,7 +243,8 @@ intermediate maps, then checks and composes the exact continuations. No compiled
 evaluator supplies a trusted Boolean answer. Regression checks force boundaries
 between every entry, accepting available reads and equal-root copies while
 rejecting future reads, fresh-write collisions, and conflicting roots. The full
-Action scans remain an outstanding instantiation of this checked mechanism.
+[read](ActionAdviceReadPlan.lean) and [alias](ActionAdviceSourceAliasCheck.lean)
+scans now instantiate this mechanism for all 18,403 original instructions.
 
 [AdviceSourceCertificate.lean](AdviceSourceCertificate.lean) retains the original
 instructions and copy tags with their semantic read annotations. Its finite-data
@@ -289,7 +293,9 @@ the application's conditions and preserved public inputs to the original
 top-level completeness theorem. Its conclusion is the original operation
 constraints, under the same witness-equation premise.
 
-The global advice scans must still discharge that premise.
+The complete [source certificate](ActionAdviceSourceCertificate.lean) now
+discharges that premise for the actual generated assignment, using the successful
+global advice scans and the original semantic copy and read certificates.
 [CompiledGateCompleteness.lean](CompiledGateCompleteness.lean)
 derives all compiled gates from the operation equations, positive selector
 degree, and an explicit finite activation-coverage condition. Source identities
@@ -319,9 +325,18 @@ and [ActionLookupActivationCoverage.lean](ActionLookupActivationCoverage.lean) n
 discharge both coverage premises on the complete original source. All 55 configured
 gates and three lookup masters retain their exact required rows. The
 [gate-index equivalence](GateIndexedCoverage.lean) holds for every input list,
-including unknown names, shared selectors, and wrong rows. The complete advice
-scans and final application-level `ActionZkRelation` corollary remain open. The
-existing circuit-level simulation theorem and validity relation are unchanged.
+including unknown names, shared selectors, and wrong rows.
+[ActionWitnessSimulation.lean](ActionWitnessSimulation.lean) combines those checks
+with the complete source witness equations and original completeness theorem.
+`actionWitnessRows_relation` constructs `ActionZkRelation` directly from
+`ActionWitnessConstructionConditions`; it assumes neither valid circuit rows nor
+successful scan results. Those construction conditions still require `ActionSpec`,
+defined hashes, canonical Merkle encodings, and the five scalar-hint bounds.
+The application corollaries instantiate the interactive and captured-setup bounds
+and the complete one-attempt oracle comparison. The stored-simulator corollary
+uses the exact counted implementation with the complete runtime and law theorems.
+The interactive bound is `plonkSimulationErrorBound m`; the fixed-bit oracle bound
+is `plonkBitSimulationErrorBound m q`. Neither is a perfect-ZK claim.
 
 **Byte-cache execution costs**
 
@@ -615,7 +630,7 @@ discharged. The full [checklist](CHECKLIST.md) tracks the remaining extensions.
 | Review activity | Status at the proof baseline |
 | --- | --- |
 | Map claims to experiments, premises, failure observations, and resource scope | Locally checked in this packet |
-| Check transitive declarations and named native dependencies | Passed the recorded focused build and direct-pin inventory; preceding full build recorded separately |
+| Check transitive declarations and named native dependencies | Passed the complete 4,629-job build, repository guards, and separate direct-pin inventories |
 | Independent reviewer, reviewed commit, findings, and resolutions | Pending; no independent assessment recorded |
 
 An independent review should focus on whether each advertised claim matches its

@@ -9,9 +9,10 @@ target. They remain extensions of that target rather than prerequisites for it.
 The one-attempt programmable-random-oracle distribution theorem is also complete,
 including its fixed-bit simulator. Finite shared-oracle retries, the complete
 fixed-request shared-oracle stream, and the finite and unlimited reductions for
-a continuing private generator are also checked. The remaining work concerns
-witness construction, concrete PRNG and runtime instantiations, and independent
-review. The actual Action circuit connection is already proved.
+a continuing private generator are also checked. The application witness constructor
+now supplies valid Action rows under its stated input conditions, and the complete
+fixed-bit simulator has a checked structural runtime bound. Concrete PRNG reduction
+resource admissibility and independent review remain open.
 
 Checked items have the cited proof or validation evidence. Unchecked items are
 future work; adding this checklist does not prove them.
@@ -71,7 +72,7 @@ model. Compare strength only after fixing those models and assumptions.
   fixed cells, the declared public inputs, and the concrete application hint
   store. The checked interpreter preserves the exact public statement and
   reconstructs the same compiler environment. The hint and window proofs recover
-  all five semantic scalars exactly; this does not yet prove row validity.
+  all five semantic scalars exactly; the application theorem below supplies row validity.
 - [x] Prove the advice interpreter's dependency theorem and connect its equations
   to the source circuit's complete `ExtendsWitnesses` predicate in
   [AdviceWitnessCausality.lean](AdviceWitnessCausality.lean) and
@@ -155,7 +156,7 @@ model. Compare strength only after fixing those models and assumptions.
   original policy before dependent decision proofs are built. Kernel checks of
   the original previously blocked entries and regressions cover opaque scalar
   builders, available reads, unavailable reads, and collisions. The complete
-  Action scan still has to run successfully.
+  Action scans are discharged below.
 - [x] Certify the original [eight-region witness-loading stage](ActionWitnessLoadCertificate.lean),
   including all eleven source instructions and both finite scans at the proved
   Action placement. The certificate is a kernel-evaluated proof artifact.
@@ -163,15 +164,18 @@ model. Compare strength only after fixing those models and assumptions.
   [value-commitment stage](ActionValueWitnessCertificate.lean), for arbitrary stage
   inputs. The certificate includes the short multiplication, full-width blinding
   multiplication, and complete addition. Structured wrappers retain all IR read
-  dependencies; the complete Action scan must still establish their availability.
+  dependencies; the complete Action read scan below establishes their availability.
 - [x] Build the [complete original Action advice certificate](ActionAdviceSourceData.lean):
   all 18,403 instructions retain their original programs, copy tags, and semantic
   read proofs. Separate [gate](ActionGateSourceCertificate.lean) and
   [lookup](ActionLookupSourceCertificate.lean) certificates retain all 4,058 and
   2,424 original activation entries at the certified placement. The actual
   configured gate labels and lookup masters satisfy their required uniqueness checks.
-- [ ] Discharge the complete Action's global alias and read-plan checks and derive
-  `ExtendsWitnesses` for the final assignment.
+- [x] Discharge the complete Action's global [alias](ActionAdviceSourceAliasCheck.lean)
+  and [read-plan](ActionAdviceReadPlan.lean) checks. Each scan checks all 18,403
+  original instructions in source order. The [source certificate](ActionAdviceSourceCertificate.lean)
+  derives `ExtendsWitnesses` for the final generated assignment, without a supplied
+  successful-scan or witness-equation premise.
 - [x] Identify the exact private readings of the original completeness preconditions
   in [ActionWitnessReadings.lean](ActionWitnessReadings.lean): eight fields, six
   points, five scalar/window pairs, and 32 Merkle readings. Agreement preserves
@@ -217,7 +221,7 @@ model. Compare strength only after fixing those models and assumptions.
   `ActionZkRelation` in [ActionConstraintsRelation.lean](ActionConstraintsRelation.lean).
   This intermediate theorem takes original operation constraints and the two
   explicit activation-coverage checks. The coverage premises are now discharged
-  below; complete advice scans must still supply the original witness equations.
+  below, and the complete advice scans supply the original witness equations.
 - [x] Discharge the actual [gate](ActionGateActivationCoverage.lean) and
   [lookup](ActionLookupActivationCoverage.lean) activation-coverage checks. All 55
   configured gates and three lookup masters retain every required source row.
@@ -227,13 +231,22 @@ model. Compare strength only after fixing those models and assumptions.
   verification of all 4,058 gate entries and 2,424 lookup entries. Regression
   certificates cover shared selectors, unknown names, and matching names under
   different selectors. No source entry or original condition is removed.
-- [ ] Discharge the complete witness equations.
-- [ ] Package that evidence as `ActionZkRelation` and derive application-level
-  interactive and one-attempt oracle simulation corollaries.
+- [x] Discharge the complete witness equations and original operation constraints
+  in [ActionWitnessSimulation.lean](ActionWitnessSimulation.lean), using the
+  certified source execution and the existing completeness theorem.
+- [x] Package that evidence as `ActionZkRelation` and derive application-level
+  interactive and one-attempt oracle simulation corollaries in
+  [ActionWitnessSimulation.lean](ActionWitnessSimulation.lean). The captured-setup
+  corollary supplies its blinding-generator premise internally. A further corollary
+  uses the same counted fixed-bit simulator whose complete runtime and exact law
+  are proved in [StoredActionOracleRuntime.lean](StoredActionOracleRuntime.lean).
 
-Closure: the application theorem takes a valid Action witness and constructs the
-row-validity evidence. Validity remains a hypothesis; the existing circuit-level
-ZK theorem already handles all witnesses in its relation.
+Closure: the application theorem constructs the row-validity evidence from
+`ActionWitnessConstructionConditions`: `ActionSpec`, defined hashes, canonical
+Merkle encodings, and the five scalar-hint representability bounds. Those input
+conditions remain hypotheses; no already-valid rows or successful source checks
+are assumed. The existing circuit-level ZK theorem handles all witnesses in its
+relation, including any outside this constructor's input contract.
 
 **2. Setup: specialize the public parameters**
 
@@ -706,18 +719,23 @@ prover/reduction cost required by the PRNG instantiation remains a separate item
   [focused 3,739-job build](review/validation-c55b3ea1.log), with
   [80 declarations across ten runtime modules](review/axioms-c55b3ea1.log) directly
   pinned and separately inventoried. Both original stage certificates and all
-  certificate regressions pass with the bounded checking pieces. The full Action
-  source scans remain in progress.
+  certificate regressions pass with the bounded checking pieces. The later
+  application closure completes both full Action source scans and directly pins
+  all nine new source and application theorems. The endpoint census now passes
+  with 331 declarations.
 - [x] Run the full `lake build --wfail` before declaring an extension complete.
   The byte-cache cost milestone passes locally with 4,428
   jobs; all 891 modules were covered by the default targets. The application
   extraction and completeness checkpoint passes 4,465 jobs with all 928 modules
   covered, 32 new declarations directly pinned, and 14 source-certificate
   regressions checked. Its [validation record](review/validation-b3b22e26.log)
-  identifies the exact proof baseline. Future theorem commits require their own
-  validation; these local results do not assert hosted
-  CI success.
+  identifies the exact proof baseline. The complete application and simulator
+  runtime closure passes the full build with 4,629 jobs, including both trust
+  boundaries and the regression certificates; all 1,092 workspace modules are
+  covered by the default targets. Future theorem commits require their own
+  validation; these local results do not assert hosted CI success.
 
-Next implementation work: witness construction and runtime refinements. Update the review packet
-when its proof baseline changes. Completed theorems remain usable with their current
-assumptions throughout.
+The application witness bridge and complete simulator runtime are now proved.
+Remaining extensions are resource admissibility for a concrete PRNG reduction and
+independent review. Update the review packet when its proof baseline changes;
+completed theorems remain usable with their stated assumptions throughout.
