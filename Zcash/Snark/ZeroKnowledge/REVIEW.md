@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `1508aa53494dac38e4db8d89ceeca5ba85f98437` on `establish-zk` in
+Proof baseline: `abaedaec8189313f21d53ed66f6cdce1338f8ef0` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -216,6 +216,15 @@ Merkle sibling and swap callbacks read no cells. The
 availability scan and derives the original witness equations when exact source
 erasure, alias checking, and semantic copy provenance also hold.
 
+[AdviceAliasAddressPlan.lean](AdviceAliasAddressPlan.lean) proves that alias
+decisions depend only on targets and copy addresses. The
+[finite-map representation](AdviceAliasMap.lean) retains every column kind, index,
+and signed row. The [alias-map checker](AdviceAliasMapPlan.lean) and
+[read-map checker](AdviceSupportMapPlan.lean) preserve all results of the original
+scans, including rejection, and supply the same compiler witness-equation
+interface. These are checker refinements; they do not assume a successful Action
+certificate or change its source program.
+
 The actual Action still needs the complete certified annotation list and both
 global checks. Its final witness equations and extracted private data therefore
 still need their correctness proofs. The semantic precondition theorem concerns
@@ -246,11 +255,11 @@ encoding, observation, and full simulator/reduction composition remain outside i
 
 **Validation and review status**
 
-The [validation record](review/validation-1508aa53.log) contains the successful
-full default-target build (`lake build --wfail`, 4,441 jobs), repository guards,
-and the [86-declaration dependency inventory](review/axioms-1508aa53.log) for the
+The [validation record](review/validation-abaedaec.log) contains the successful
+full default-target build (`lake build --wfail`, 4,445 jobs), repository guards,
+and the [31-declaration dependency inventory](review/axioms-abaedaec.log) for the
 latest proof milestone; those declarations introduce no native or unexpected
-axioms. All 904 modules are covered by default targets and all
+axioms. All 908 modules are covered by default targets and all
 326 endpoint declarations are pinned. The full [parent](TrustBoundary.lean) and
 [Action](Action/TrustBoundary.lean) boundaries also check the earlier milestones.
 The native dependencies remain exactly the inherited named curve-order certificates:
