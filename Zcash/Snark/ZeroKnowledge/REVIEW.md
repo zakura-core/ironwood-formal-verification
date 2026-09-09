@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `b304a744a8e55f1478759d31344791f522ae4060` on `establish-zk` in
+Proof baseline: `064c3f1bc76af8692cbbc290337173a36644df5b` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -998,3 +998,5 @@ including all 48 remaining pins with the existing Pallas native dependency.
 This changes their location, not their permitted axioms. The earlier bit-tape
 validation note incorrectly said that moving its two pins had removed every
 generic native exemption; this checkpoint checks the complete census.
+
+The complete cached-prover checkpoint passes the [focused 4,090-job build of both trust boundaries](review/validation-064c3f1b.log), with [53 separately inventoried declarations](review/axioms-064c3f1b.log) across 15 modules. The exact committed tree passes all repository guards, covering 331 endpoints and 1,281 modules. The validation record also corrects the earlier generic-native census statement. Complete retained-retry/test resource admissibility and independent review remain open.

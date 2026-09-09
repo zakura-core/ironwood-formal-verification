@@ -1,0 +1,33 @@
+Proof head: 064c3f1bc76af8692cbbc290337173a36644df5b
+Proof tree: bf2ef8c03d7d4ca558d1076445f03de7d5fc1096
+Validated staged tree equals the committed tree; private establish-zk head verified equal.
+
+Focused capstone: actual cached Action prover from stored raw private and oracle tapes.
+lake build --wfail Zcash.Snark.ZeroKnowledge.StoredActionCachedRawBound
+Build completed successfully (3776 jobs).
+
+Both dependent trust boundaries:
+lake build --wfail Zcash.Snark.ZeroKnowledge.TrustBoundary Zcash.Snark.ZeroKnowledge.Action.TrustBoundary
+Build completed successfully (4090 jobs).
+
+Declaration inventory: 53 declarations, 15 modules, exactly one direct pin and import each.
+Transitive axioms: propext, Classical.choice, Quot.sound, and the existing named Pasta curve-order owners.
+Pallas owner: CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt
+Vesta owner: CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt
+No new native certificate or admitted lemma.
+Raw inventory: axioms-064c3f1b.log, produced by a separate warning-as-error Lean invocation.
+
+Trust-boundary correction: 74 older witness/compiler pins from 20 modules were moved to the Action boundary, including all 48 remaining generic native exemptions. Eighteen direct imports moved, two previously transitive modules gained direct Action imports, and HintCellExtraction gained a direct generic import. Exact pin uniqueness and zero generic native exemptions were checked across the complete files, including continuation lines. The statement in validation-b304a744.log claiming zero generic native exemptions at that earlier commit was incorrect; its two moved pins did not include these older multiline pins. All allowed axiom sets are unchanged.
+
+Guards on the final staged source archive (except tracked-file import guard on staged checkout):
+endpoint census: 331 declarations, all pinned.
+build surface: 6 matching default and CI targets; 1281 modules, all covered.
+no umbrella imports: passed.
+csimp census: 1 declaration, all covered.
+costed group-work census: 2 production modules, 20 host callbacks pinned.
+fixture manifest: 6 artifacts, digests and provenance entries match.
+
+All local CHECKLIST.md and REVIEW.md links resolve. Staged diff whitespace check passed.
+Source and trust-boundary files were unchanged between final focused validation and the committed tree.
+This is focused local validation, not a new full-workspace or hosted CI result.
+Retained retry/test resource composition, PRNG admissibility, and independent review remain open.
