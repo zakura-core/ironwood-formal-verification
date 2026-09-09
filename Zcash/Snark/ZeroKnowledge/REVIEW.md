@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `abe0c7e087402b993f6c18a6cceb8a8c9ccd7945` on `establish-zk` in
+Proof baseline: `d8c0b95d02281a10e2fdd3eebedad44f1ea6d80c` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -922,3 +922,11 @@ Source guards ran against an archive of that exact proof commit. The Action
 specialization retains its explicitly pinned inherited Pallas generator-order
 certificate. This records focused validation; whole real-prover/reduction resource
 closure and independent review remain open.
+
+The [quotient and opening-polynomial checkpoint](review/validation-d8c0b95d.log)
+passed the focused 3,919-job trust-boundary build and a separate inventory of
+[75 declarations across fourteen modules](review/axioms-d8c0b95d.log). All have one
+direct pin; the Action specialization retains the existing Pallas generator-order
+native owner. The exact committed tree passes the 331-endpoint and 1,184-module
+coverage checks, along with the remaining repository guards. This is focused
+validation; the last complete workspace build remains the earlier recorded baseline.

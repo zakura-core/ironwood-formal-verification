@@ -1,0 +1,32 @@
+Proof baseline: d8c0b95d02281a10e2fdd3eebedad44f1ea6d80c
+Exact staged tree: 93a368d7f59f7c895414848943e7adf8ee4509be (identical to committed tree)
+Branch: establish-zk
+Push destination: https://github.com/TalDerei/ironwood-private.git
+
+Focused validation; this checkpoint does not claim a full workspace build.
+
+lake build --wfail Zcash.Snark.ZeroKnowledge.TrustBoundary
+Build completed successfully (3919 jobs).
+
+Focused Action quotient and generic opening polynomial builds passed.
+Separate warning-as-error axiom inventory: 75 declarations across 14 modules.
+Every declaration has exactly one direct pin in ZeroKnowledge.TrustBoundary.
+Standard logical axioms: propext, Classical.choice, Quot.sound.
+The Action quotient specialization retains the existing native owner:
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt
+No new native certificate or admitted lemma.
+
+Repository guards were run against this exact staged tree, exported with git archive.
+The no-umbrella check uses the staged tracked-file inventory in the source checkout.
+Endpoint census: 331 declarations, all pinned.
+Build coverage: 1184 modules, all covered by 6 matching default/CI targets.
+No umbrella imports: passed.
+Csimp census: 1 declaration, covered.
+Costed group-work census: 2 production modules, 20 host callbacks pinned.
+Fixture manifest: 6 artifacts, digests and provenance match.
+Staged whitespace and documentation-link checks: passed.
+
+Scope: actual Action numerator-to-quotient-piece construction, stored private
+polynomials, exact coefficient routing, weighted sums, and opening-group folds.
+Complete multi-opening, real IPA, and prover/retry/test resource composition remain open.
+Independent review remains pending.
