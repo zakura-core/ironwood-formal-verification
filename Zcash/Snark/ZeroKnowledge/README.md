@@ -62,8 +62,8 @@ stage inputs, including both multiplications and the final addition. Named
 structured witness wrappers use the general IR support theorem; unrecognized
 native callbacks remain rejected. These static proof artifacts are separate from
 the executable witness constructor.
-Applying it to the Action still requires the complete annotation list and the
-global alias and read-plan checks.
+The [complete original annotation list](ActionAdviceSourceData.lean) is certified.
+Applying it to the Action still requires the global alias and read-plan checks.
 The [extraction theorem](ActionWitnessExtraction.lean) now recovers all private
 readings needed by completeness from the original witness equations: eight
 fields, six points, five scalar/window pairs, and 32 Merkle readings. The
@@ -83,9 +83,13 @@ identifies those values with the prover's actual packed permutation cells.
 through the exact query compiler, including the actual fallback table values on
 inactive rows. [ActionGateValues.lean](ActionGateValues.lean) and
 [ActionRowRelations.lean](ActionRowRelations.lean) retain the gate and lookup
-equations through the reference-key shape. The complete witness-equation scans
-and actual gate and lookup activation coverage remain necessary before the
-constructor establishes `ActionZkRelation`.
+equations through the reference-key shape. The complete
+[gate](ActionGateActivationCoverage.lean) and
+[lookup](ActionLookupActivationCoverage.lean) activation checks now pass for all
+55 configured gates and three lookup masters. A [proved reindexing](GateIndexedCoverage.lean)
+replaces source-name comparisons with finite numeric indices while retaining
+every original success and rejection. The complete witness-equation scans remain
+necessary before the constructor establishes `ActionZkRelation`.
 The [raw-source refinement](ActionRandomnessSource.lean) proves exact agreement
 between uniform 512-bit private tapes and the existing wide-reduced reference law.
 Replacing that entire source by a distribution within `eta` adds `eta` to the

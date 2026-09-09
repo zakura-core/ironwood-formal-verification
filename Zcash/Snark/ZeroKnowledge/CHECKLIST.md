@@ -216,10 +216,18 @@ model. Compare strength only after fixing those models and assumptions.
 - [x] Compose the gate, lookup, and actual packed-copy bridges into
   `ActionZkRelation` in [ActionConstraintsRelation.lean](ActionConstraintsRelation.lean).
   This intermediate theorem takes original operation constraints and the two
-  explicit activation-coverage checks; the complete source certificates must
-  still supply those premises for the application constructor.
-- [ ] Discharge the complete witness equations and the actual gate and lookup
-  activation-coverage checks.
+  explicit activation-coverage checks. The coverage premises are now discharged
+  below; complete advice scans must still supply the original witness equations.
+- [x] Discharge the actual [gate](ActionGateActivationCoverage.lean) and
+  [lookup](ActionLookupActivationCoverage.lean) activation-coverage checks. All 55
+  configured gates and three lookup masters retain every required source row.
+  The [numeric gate indices](GateIndexedCoverage.lean) are proved to preserve the
+  entire original check, including rejection of missing names and wrong rows.
+  [Stored data and bounded tree pieces](ActivationCoverageData.lean) permit kernel
+  verification of all 4,058 gate entries and 2,424 lookup entries. Regression
+  certificates cover shared selectors, unknown names, and matching names under
+  different selectors. No source entry or original condition is removed.
+- [ ] Discharge the complete witness equations.
 - [ ] Package that evidence as `ActionZkRelation` and derive application-level
   interactive and one-attempt oracle simulation corollaries.
 

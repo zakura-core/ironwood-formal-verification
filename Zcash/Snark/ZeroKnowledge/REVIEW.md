@@ -289,12 +289,12 @@ the application's conditions and preserved public inputs to the original
 top-level completeness theorem. Its conclusion is the original operation
 constraints, under the same witness-equation premise.
 
-The complete certified annotation list and global scans must still discharge
-that premise. [CompiledGateCompleteness.lean](CompiledGateCompleteness.lean)
+The global advice scans must still discharge that premise.
+[CompiledGateCompleteness.lean](CompiledGateCompleteness.lean)
 derives all compiled gates from the operation equations, positive selector
 degree, and an explicit finite activation-coverage condition. Source identities
-retain gate names as well as selector indices; the actual coverage scan is still
-required. [ActionQueryRows.lean](ActionQueryRows.lean) interprets the generated
+retain gate names as well as selector indices; the actual coverage scans are now
+checked below. [ActionQueryRows.lean](ActionQueryRows.lean) interprets the generated
 assignment on every row before the final cyclic row, including the signed
 previous-row read at zero. [ActionQueryValuation.lean](ActionQueryValuation.lean)
 and [InactiveGateCompleteness.lean](InactiveGateCompleteness.lean) handle the
@@ -314,10 +314,14 @@ row, and [ActionRowRelations.lean](ActionRowRelations.lean) preserves both kinds
 of row relation through the reference-key shape.
 [ActionConstraintsRelation.lean](ActionConstraintsRelation.lean) combines these
 three bridges into `ActionZkRelation` under the original constraints and explicit
-activation-coverage checks. The complete advice scans,
-actual gate and lookup activation coverage, and final application-level
-`ActionZkRelation` corollary remain open. The existing circuit-level simulation
-theorem and validity relation are unchanged.
+activation-coverage checks. [ActionGateActivationCoverage.lean](ActionGateActivationCoverage.lean)
+and [ActionLookupActivationCoverage.lean](ActionLookupActivationCoverage.lean) now
+discharge both coverage premises on the complete original source. All 55 configured
+gates and three lookup masters retain their exact required rows. The
+[gate-index equivalence](GateIndexedCoverage.lean) holds for every input list,
+including unknown names, shared selectors, and wrong rows. The complete advice
+scans and final application-level `ActionZkRelation` corollary remain open. The
+existing circuit-level simulation theorem and validity relation are unchanged.
 
 **Byte-cache execution costs**
 

@@ -1,3 +1,6 @@
+import Zcash.Snark.ZeroKnowledge.ActivationCoverageScan
+import Zcash.Snark.ZeroKnowledge.ActivationCoverageData
+import Zcash.Snark.ZeroKnowledge.GateIndexedCoverage
 import Zcash.Snark.ZeroKnowledge.CanonicalOracleViewCost
 import Zcash.Snark.ZeroKnowledge.StoredJointTraceSize
 import Zcash.Snark.ZeroKnowledge.ProtocolObserverCost
@@ -3907,3 +3910,32 @@ assert_computable Zcash.Snark.ZeroKnowledge.canonicalProtocolOracleViewBudget
 assert_axioms Zcash.Snark.ZeroKnowledge.canonicalProtocolOracleViewCosted_cost_le
 assert_axioms Zcash.Snark.ZeroKnowledge.storedJointTraceCosted_length_le
 assert_axioms Zcash.Snark.ZeroKnowledge.storedJointTraceCosted_challengeCount
+
+-- Exact original coverage scans, stored data, and collision-free configured-name indices.
+assert_computable Zcash.Snark.ZeroKnowledge.gateActivationCoverageScan +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.gateActivationCoverageScan_eq
+assert_computable Zcash.Snark.ZeroKnowledge.lookupActivationCoverageScan +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupActivationCoverageScan_eq
+assert_computable Zcash.Snark.ZeroKnowledge.coverageListAll
+assert_axioms Zcash.Snark.ZeroKnowledge.coverageListAll_cons
+assert_computable Zcash.Snark.ZeroKnowledge.coverageTreeFold +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.coverageTreeFold_chunk
+assert_computable Zcash.Snark.ZeroKnowledge.gateCoverageEmpty +choice
+assert_computable Zcash.Snark.ZeroKnowledge.gateCoverageTree +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.gateCoverageTree_contains
+assert_computable Zcash.Snark.ZeroKnowledge.gateCoveragePredicate +choice
+assert_computable Zcash.Snark.ZeroKnowledge.gateCoverageAgainst +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.gateActivationCoverageScan_stored
+assert_computable Zcash.Snark.ZeroKnowledge.lookupCoverageEmpty +choice
+assert_computable Zcash.Snark.ZeroKnowledge.lookupCoverageTree +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupCoverageTree_contains
+assert_computable Zcash.Snark.ZeroKnowledge.lookupCoveragePredicate +choice
+assert_computable Zcash.Snark.ZeroKnowledge.lookupCoverageAgainst +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.lookupActivationCoverageScan_stored
+assert_computable Zcash.Snark.ZeroKnowledge.gateCoverageIndexLabel
+assert_axioms Zcash.Snark.ZeroKnowledge.gateCoverageIndexLabel_eq_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.gateCoverageIndexLabel_mem_iff
+assert_computable Zcash.Snark.ZeroKnowledge.gateIndexedCoveragePredicate +choice
+assert_computable Zcash.Snark.ZeroKnowledge.gateIndexedCoverageScan +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.gateIndexedCoverageScan_original
+assert_axioms Zcash.Snark.ZeroKnowledge.gateIndexedCoverageScan_stored
