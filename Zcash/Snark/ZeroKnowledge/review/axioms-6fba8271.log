@@ -1,0 +1,126 @@
+'Zcash.Snark.ZeroKnowledge.SourceListCertificate' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.SourceListCertificate.nil' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.SourceListCertificate.cons' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.SourceListCertificate.transport' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.sourceSelectorDegree' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.sourceSelectorGated' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.sourceSelectorDegree_eval' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.sourceSelectorGated_eval_zero' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.actionCircuit_sourceGateHomogeneous' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionCircuit_sourceGate_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.topLevel_selReplacement_zero_of_inactive' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.sourceGateLabel' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.sourceGateActivationLabels' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.gateActivationCoverageCheck' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.gateActivationCoverageCheck_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.topLevel_gate_enabled_of_coverage' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.topLevel_environment_fixed_nat' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.topLevel_substitutedGate_zero_of_constraints' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.topLevel_verifierGates_zero_of_constraints' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.mem_regionAdvicePrograms_iff' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.mem_circuitAdvicePrograms_iff' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.circuitAdvicePrograms_row_lt_placementEnd' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.topLevelAdviceAssignment_advice_zero_of_outside' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_advice_zero_of_outside' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.topLevel_substitutedGate_zero_of_inactive' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.topLevel_verifierGates_zero_of_inactive' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.actionGateQuery_fixed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionGateQuery_advice' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionGateQuery_instance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.plonkAdviceRotation_read_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.actionWitnessRowFeeds_interpret_of_wrap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionWitnessRowFeeds_interpret' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionGateQuery_fixed_resolves' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionGateQuery_advice_resolves' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionGateQuery_instance_resolves' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionResolvedQueryValuation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionResolvedQueryValuation_interprets' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionResolvedQueryValuation_packed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionCircuit_selector_inactive_after_placement' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.regionSourceGateLabels' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.operationSourceGateLabels' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.regionSourceGateLabels_eq' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.operationSourceGateLabels_eq' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.regionCopiesSplit_fst_eq_declared' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.v1Copies_fst_eq_declared' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.sourceCopyValue' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.sourceCopyValue_resolveCell' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.sourceCopyValue_instance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.sourceCopyValue_eq_of_resolveDeclared' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.topLevel_nonconstantCopyValues_of_constraints' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.constSite_mem_declaredCopies' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.operationConstSite_mem_declaredCopies' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.sourceCopyValue_column' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.topLevel_constantCopyColumn_registered' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.topLevel_constantCopyValue' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.topLevel_constantCopyValues_of_constraints' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.topLevel_copyValues_of_constraints' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,16 @@
+Source constraints, compiled gates and copies, and actual Action query rows
+Proof baseline: 6fba827186f492a29ae98333f05ee7edcf0d09d8.
+Focused build: lake build --wfail Zcash.Snark.ZeroKnowledge.TrustBoundary Zcash.Meta.Tests.SourceListCertificate Zcash.Meta.Tests.AdviceSourceCertificate; passed (3691 jobs).
+This focused build checks all 57 new mathematical declarations and the source-reflection regressions. It also rebuilt the original witness-loading and 1083-instruction value-commitment certificates after the shared reflection change.
+Full workspace build: not claimed for this checkpoint. The complete Action advice and gate source certificates are separate unfinished workspace files; the latest successful full build remains b3b22e26 (4465 jobs).
+Endpoint census: 326 endpoint declarations, all pinned.
+Build coverage guard: passed for all 944 current workspace modules, including the two unfinished source-certificate files. Six default targets agree between lakefile.toml and CI.
+Umbrella-import guard: passed.
+csimp census: 1 declaration, covered.
+Costed group-work census: 2 production modules, 20 host callbacks pinned.
+Declaration inventory: 57 new mathematical declarations across 11 modules, each with exactly one direct pin. All 9 source-list regressions and 14 advice-source regressions have direct local pins.
+Transitive axiom inventory: propext, Classical.choice, Quot.sound, and the inherited native owner CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt. No admission or new native-evaluation certificate.
+Local Markdown links: 533 checked across README, CHECKLIST, and REVIEW before this review-record update.
+Whitespace: git diff --check and git diff --cached --check passed.
+Scope: the original constraints imply every gate under explicit source activation coverage and every equation in the complete ordered raw copy stream. Action query feeds interpret the generated rows; arbitrary feeds and exact fixed values also cover inactive cyclic boundary rows. Direct gate metadata retain names as well as selector indices, preserving distinct gates sharing a selector.
+Not claimed: complete Action source annotations or global scans, actual gate activation coverage, unconditional final witness extension, lookup tuple completeness, packed copy-value routing, application ActionZkRelation, whole-simulator runtime, PRNG resource-class membership, or independent review.

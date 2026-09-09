@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `b3b22e266917de75ae5a4107578f09a8f3b1aeb7` on `establish-zk` in
+Proof baseline: `6fba827186f492a29ae98333f05ee7edcf0d09d8` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -351,6 +351,16 @@ are pinned. The new declarations inherit only the existing Pallas native owner;
 no admission or new native certificate was introduced. The full
 [parent](TrustBoundary.lean) and [Action](Action/TrustBoundary.lean) boundaries also
 check the earlier milestones.
+The next compiler and query checkpoint passed the
+[focused 3,691-job build and guards](review/validation-6fba8271.log), with
+[57 new mathematical declarations](review/axioms-6fba8271.log) across eleven
+modules, each directly pinned. All nine source-list and fourteen advice-source
+regressions passed, and both original stage certificates were rebuilt after the
+shared reflection change. This checkpoint has no new axiom or native owner.
+The complete Action source certificates are still under construction, so this
+record claims a focused build; the latest full workspace build remains the
+preceding extraction checkpoint.
+
 The native dependencies remain exactly the inherited named curve-order certificates:
 
 ```text
@@ -365,7 +375,7 @@ discharged. The full [checklist](CHECKLIST.md) tracks the remaining extensions.
 | Review activity | Status at the proof baseline |
 | --- | --- |
 | Map claims to experiments, premises, failure observations, and resource scope | Locally checked in this packet |
-| Check transitive declarations and named native dependencies | Passed the full build and direct-pin inventory |
+| Check transitive declarations and named native dependencies | Passed the recorded focused build and direct-pin inventory; preceding full build recorded separately |
 | Independent reviewer, reviewed commit, findings, and resolutions | Pending; no independent assessment recorded |
 
 An independent review should focus on whether each advertised claim matches its

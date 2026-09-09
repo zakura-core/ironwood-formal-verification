@@ -483,6 +483,10 @@ tape alone do not prove that running-time statement.
   The byte-cache cost milestone inventories 31 declarations across seven modules,
   each with one direct pin. Its Action corollaries retain the existing Pallas and
   Vesta curve-order owners; the milestone introduces no native certificate.
+  The compiler/query checkpoint passes the [focused 3,691-job build](review/validation-6fba8271.log),
+  with 57 declarations across eleven modules directly pinned, nine source-list
+  regressions and fourteen advice-source regressions checked, and both original
+  stage certificates rebuilt. The full Action source scans remain in progress.
 - [x] Run the full `lake build --wfail` before declaring an extension complete.
   The byte-cache cost milestone passes locally with 4,428
   jobs; all 891 modules were covered by the default targets. The application
