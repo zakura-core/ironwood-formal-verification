@@ -1706,3 +1706,14 @@ The [read-address factorization](AdviceReadAddressScan.lean) lets the checker
 normalize source-owned placement data before evaluating the unchanged read
 policy. The original problematic Action entries and adversarial opaque-source
 regressions pass; the full Action read/alias scans remain separate checks.
+
+The [complete proof-field routes](RoutedProofCost.lean) now retain all producer
+prices, including query-table searches and permutation/lookup record preparation.
+The [counted transcript](TranscriptScheduleCost.lean) erases to the original full
+message schedule. At eleven IPA rounds its
+[cost bound](TranscriptScheduleBound.lean) is
+`8m^2 + (72m + 85)R + 1300m + 2200`, where `R` bounds every field's complete
+producer. This includes optional claims and all final responses, even when later
+observation stops early. Whole-simulator and oracle-observer composition remain
+separate runtime steps; these structural costs do not change the statistical
+simulation error.

@@ -591,14 +591,25 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   [fixed cost envelope](StoredActionTapeJointBound.lean) applies to every bit tape
   without reader-price premises: [exact positional prices](StoredChallengePrices.lean)
   remove sampled values from the budget. The common Action input-read envelope
-  is `553m + 4R_read + 4457`. Proof-field routing, encoding, and oracle observation
-  remain to be composed.
+  is `553m + 4R_read + 4457`. Its composition with the proof and oracle observer
+  remains below.
 - [x] Count the actual [scalar proof codec](ScalarEncodingCost.lean),
   [compressed-point and affine-point codecs](PointEncodingCost.lean), and
   [complete transcript-byte construction](TranscriptEncodingCost.lean).
   Exact erasure preserves canonical representatives, sign bits, transcript tags,
   and the proof codec's identity rejection. Each byte and each copied output
-  cell is counted. Message scheduling and oracle observation remain to compose.
+  cell is counted. Complete observer and oracle composition remain below.
+- [x] Route all twenty [original proof fields](RoutedProofCost.lean), preserving
+  actual private-column and fixed/advice query order. The
+  [reader envelope](RoutedProofBound.lean) retains complete input producers and
+  all permutation/lookup record preparation, including optional claims.
+- [x] Construct the [complete original transcript](TranscriptScheduleCost.lean),
+  with both finite collections, every point and scalar, all challenge markers,
+  every optional permutation value, and the two final IPA responses. The
+  [cost theorem](TranscriptScheduleBound.lean) gives
+  `8m^2 + (72m + 85)R + 1300m + 2200` for eleven IPA rounds, where `R` bounds
+  every field's complete producer. The original schedule and its linear item
+  envelope are preserved without a successful-emission premise.
 - [ ] Specify the runtime model and input representations, including access to
   public inputs and setup, bit packing, field reduction, group arithmetic,
   polynomial operations, transcript encoding, and cache lookup/programming.

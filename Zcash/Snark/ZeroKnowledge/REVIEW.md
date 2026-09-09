@@ -704,3 +704,14 @@ regressions, and 3,802-job trust-boundary build](review/validation-159eb4be.log)
 The [ten-declaration inventory](review/axioms-159eb4be.log) uses only standard
 Lean logical axioms. The original two blocked source entries now check without
 changing either policy; the full source-order scans remain the application gate.
+
+The complete proof-routing and transcript-construction checkpoint covers
+68 declarations across nine modules. [Routing](RoutedProofCost.lean) preserves
+all original proof fields, and [record preparation](ProofRecordProducerCost.lean)
+is retained in every used scalar reader. The
+[complete schedule](TranscriptScheduleCost.lean) agrees with the original verifier
+order. Its [eleven-round bound](TranscriptScheduleBound.lean) is
+`8m^2 + (72m + 85)R + 1300m + 2200`, under the explicit complete-producer bound
+`R`. It includes every optional claim and both final responses. The separate
+transitive inventory uses only standard Lean logical axioms. Stored-joint,
+canonical observer, and oracle replay composition remain separate checkpoints.
