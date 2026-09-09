@@ -133,7 +133,13 @@ model. Compare strength only after fixing those models and assumptions.
 - [ ] Build the certified annotations for the complete Action and discharge its
   global alias and read-plan checks. Derive `ExtendsWitnesses` for the final
   assignment.
-- [ ] Connect the extracted witness to the normalized application data, then use
+- [x] Specify the extraction agreement needed by the actual Action in
+  [ActionWitnessObservation.lean](ActionWitnessObservation.lean). It retains every
+  witness field and the 32 used auxiliary Merkle readings. The checked theorem
+  preserves the original application specification and honest-prover
+  preconditions, and transfers the constructor's preconditions when that
+  agreement is proved. Unused readings beyond the circuit depth need no equality.
+- [ ] Prove that the extracted witness has those normalized application observations, then use
   circuit completeness to prove every original gate, lookup tuple, and compiler
   copy equation. Record any additional construction preconditions.
 - [ ] Package that evidence as `ActionZkRelation` and derive application-level

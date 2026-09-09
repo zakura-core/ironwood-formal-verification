@@ -1,3 +1,4 @@
+import Zcash.Snark.ZeroKnowledge.ActionWitnessObservation
 import Zcash.Snark.ZeroKnowledge.AdviceAliasAddressPlan
 import Zcash.Snark.ZeroKnowledge.AdviceAliasMap
 import Zcash.Snark.ZeroKnowledge.AdviceAliasMapPlan
@@ -2647,3 +2648,15 @@ assert_computable Zcash.Snark.ZeroKnowledge.adviceSupportMapPlan +choice
 assert_axioms Zcash.Snark.ZeroKnowledge.adviceSupportMapPlan_eq
 assert_axioms Zcash.Snark.ZeroKnowledge.adviceSupportMapPlan_causal
 assert_axioms Zcash.Snark.ZeroKnowledge.topLevelAdviceAssignment_extendsWitnesses_of_mapPlans
+
+-- ActionWitnessObservation
+assert_computable Zcash.Snark.ZeroKnowledge.actionWitnessObservation +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessObservation_merklePath
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessObservation_firstHalf
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessObservation_secondHalf
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessObservation_spec_iff
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessObservation_proverAssumptions_iff
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessObservation_normalize
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessConditions_proverAssumptions_of_observation
+  +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)

@@ -53,6 +53,11 @@ and [finite-map read check](AdviceSupportMapPlan.lean) preserve every result of
 the original checks and feed the same compiler witness-equation theorem.
 Applying it to the Action still requires the complete annotation list and the
 global alias and read-plan checks.
+The [extraction observation theorem](ActionWitnessObservation.lean) retains all
+witness fields and the 32 auxiliary Merkle readings the Action uses. It preserves
+the original specification and honest-prover preconditions exactly; unused tail
+values need no equality. Agreement of the actual extractor with the normalized
+application observations still needs to be proved.
 Proving that the generated rows satisfy every gate, lookup, and copy equation is
 still open; the current constructor does not establish `ActionZkRelation`.
 The [raw-source refinement](ActionRandomnessSource.lean) proves exact agreement
