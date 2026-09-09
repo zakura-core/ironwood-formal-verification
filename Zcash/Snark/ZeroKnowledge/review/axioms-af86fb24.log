@@ -1,0 +1,76 @@
+'Zcash.Snark.ZeroKnowledge.appendProducedCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.appendProducedCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.appendProducedCosted_cost' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.absorbPointsCosted' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.absorbPointsCosted_result' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.absorbPointsCosted_length' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.absorbPointsCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.absorbScalarsCosted' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.absorbScalarsCosted_result' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.absorbScalarsCosted_length' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.absorbScalarsCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.absorbPoints2Costed' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.absorbPoints2Costed_result' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.absorbPoints2Costed_length' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.absorbPoints2Costed_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.absorbScalars2Costed' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.absorbScalars2Costed_result' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.absorbScalars2Costed_length' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.absorbScalars2Costed_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.absorbLookupPairCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.absorbLookupPermutedCosted' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.absorbLookupPermutedCosted_result' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.absorbLookupPermutedCosted_length' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.absorbLookupPermutedCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.absorbPermSetCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.absorbPermSetCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.absorbPermSetCosted_length_le' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.absorbPermSetCosted_cost_le' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.absorbLookupCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.absorbLookupCosted_result' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.absorbLookupCosted_length' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.absorbLookupCosted_cost_le' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.eraseProofCosts' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.ProofFieldReadBound' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.concatTranscriptBlocksCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.concatTranscriptBlocksCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.concatTranscriptBlocksCosted_cost_le' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.proofEvaluationBlocksCosted' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.preIpaTranscriptCosted' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.preIpaTranscriptCosted_result' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.ipaRoundBlocksCosted' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.ipaRoundBlocksCosted_result' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkAttemptTraceCosted' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.plonkAttemptTraceCosted_result' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.concatTranscriptBlocksCosted_cost' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.proofEvaluationBlocksCosted_length_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.preIpaTranscriptCosted_length_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkAttemptTraceCosted_length_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.absorbPermSets2Costed_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.absorbLookups2Costed_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.proofEvaluationBlocksCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.preIpaTranscriptCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.ipaRoundBlocksCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkAttemptTraceCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkAttemptTraceCosted_eleven_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.payPermSetProducer' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.payPermSetProducer_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.payPermSetProducer_readBound' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.payLookupProducer' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.payLookupProducer_result' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.payLookupProducer_readBound' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.fixedClaimReaderCosted' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.fixedClaimReaderCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.fixedClaimReaderCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkRoutedProofCosts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkRoutedProofCosts_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.routedProofReadBudget' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.plonkRoutedProofCosts_readBound' depends on axioms: [propext, Classical.choice, Quot.sound]

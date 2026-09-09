@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `159eb4bede190bbf630800fd7e24fcecd9caaedd` on `establish-zk` in
+Proof baseline: `af86fb244c7b582e46f67330a771633ff88aa505` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -715,3 +715,9 @@ order. Its [eleven-round bound](TranscriptScheduleBound.lean) is
 `R`. It includes every optional claim and both final responses. The separate
 transitive inventory uses only standard Lean logical axioms. Stored-joint,
 canonical observer, and oracle replay composition remain separate checkpoints.
+
+The complete proof-routing/schedule checkpoint passed its [nine focused builds
+and 3,809-job trust-boundary build](review/validation-af86fb24.log). The
+[68-declaration inventory](review/axioms-af86fb24.log) has exact direct pins and
+only standard Lean logical axioms. Whole-simulator composition and observation
+remain separate runtime obligations.
