@@ -176,6 +176,10 @@ their complete row-reader costs. This includes original query routing, missing-c
 defaults, full row-polynomial preparation and evaluation, expression trees, and
 all exceptional inputs. The complete real-prover-and-test runtime needed for PRNG
 test-class membership remains open; no machine-code correspondence is asserted.
+The [real permutation-row constructor](PlonkPermutationProductCostBound.lean) now
+also has a complete bound covering the original packed column/sigma queries,
+all identity-name powers, indexed products, and inherited three-chunk scans.
+Its exact-result theorem retains every row and zero-factor case.
 
 **Application witness construction**
 

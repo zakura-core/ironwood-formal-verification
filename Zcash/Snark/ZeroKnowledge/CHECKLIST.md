@@ -682,6 +682,11 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   query tables, missing-column and out-of-range defaults, polynomial interpolation
   and evaluation, expression-tree compression, challenge reads, and all failures.
   Their erasure theorems identify the original constructors for every input.
+- [x] Bound [the complete three-chunk permutation-row constructor](PlonkPermutationProductCostBound.lean).
+  The algorithm materializes the original key-selected polynomial/sigma pairs,
+  charges all column-name powers and indexed factor reads, and carries every
+  preceding chunk's terminal state into the next scan. Exact erasure and the
+  combined bound hold for every row and field value, including zero factors.
 - [ ] Discharge the PRNG reduction's resource conditions wherever that
   computational instantiation is claimed. This requires bounds for the actual
   real-prover-and-test reduction, including retained auxiliary data and any retry
