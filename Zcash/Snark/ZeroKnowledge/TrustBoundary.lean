@@ -85,6 +85,7 @@ import Zcash.Snark.ZeroKnowledge.AdviceAliasAddressPlan
 import Zcash.Snark.ZeroKnowledge.AdviceAliasMap
 import Zcash.Snark.ZeroKnowledge.AdviceAliasMapPlan
 import Zcash.Snark.ZeroKnowledge.AdviceSupportMapPlan
+import Zcash.Snark.ZeroKnowledge.AdviceMapScan
 import Zcash.Snark.ZeroKnowledge.WitnessFunctionSupport
 import Zcash.Snark.ZeroKnowledge.PoseidonWitnessSupport
 import Zcash.Snark.ZeroKnowledge.MulIncompleteWitnessSupport
@@ -2734,6 +2735,12 @@ assert_axioms Zcash.Snark.ZeroKnowledge.adviceCellReadMapAvailable_eq
 assert_computable Zcash.Snark.ZeroKnowledge.adviceSupportMapPlan +choice
 assert_axioms Zcash.Snark.ZeroKnowledge.adviceSupportMapPlan_eq
 assert_axioms Zcash.Snark.ZeroKnowledge.adviceSupportMapPlan_causal
+assert_computable Zcash.Snark.ZeroKnowledge.adviceMapScan +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceMapScan_cons
+assert_computable Zcash.Snark.ZeroKnowledge.adviceReadMapStep +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceSupportMapPlan_eq_scan
+assert_computable Zcash.Snark.ZeroKnowledge.adviceAliasMapStep +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceAliasMapPlan_eq_scan
 assert_axioms Zcash.Snark.ZeroKnowledge.topLevelAdviceAssignment_extendsWitnesses_of_mapPlans
 
 -- ActionWitnessObservation

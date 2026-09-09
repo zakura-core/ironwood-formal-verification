@@ -145,6 +145,13 @@ model. Compare strength only after fixing those models and assumptions.
   preserves all source equations. Source-list and advice regressions force piece
   boundaries, including parameterized opaque producers and rejected annotations.
   This controls proof-generation resources; the complete Action scans remain below.
+- [x] Split the global read and alias scans into
+  [checked map transitions](AdviceMapScan.lean), preserving every result of the
+  original policies. The [bounded elaborator](../../Meta/AdviceMapScan.lean)
+  stores kernel-checked intermediate maps and composes checked continuations.
+  Regression checks force a boundary at every entry and reject unavailable
+  reads, fresh-write collisions, and conflicting alias roots across boundaries.
+  The complete Action scan still has to run successfully.
 - [x] Certify the original [eight-region witness-loading stage](ActionWitnessLoadCertificate.lean),
   including all eleven source instructions and both finite scans at the proved
   Action placement. The certificate is a kernel-evaluated proof artifact.

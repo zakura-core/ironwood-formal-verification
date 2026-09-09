@@ -227,6 +227,15 @@ scans, including rejection, and supply the same compiler witness-equation
 interface. These are checker refinements; they do not assume a successful Action
 certificate or change its source program.
 
+[AdviceMapScan.lean](AdviceMapScan.lean) exposes exact option-valued transitions
+for both policies and proves equality with the original scans. Its
+[bounded checker](../../Meta/AdviceMapScan.lean) normalizes and kernel-checks
+intermediate maps, then checks and composes the exact continuations. No compiled
+evaluator supplies a trusted Boolean answer. Regression checks force boundaries
+between every entry, accepting available reads and equal-root copies while
+rejecting future reads, fresh-write collisions, and conflicting roots. The full
+Action scans remain an outstanding instantiation of this checked mechanism.
+
 [AdviceSourceCertificate.lean](AdviceSourceCertificate.lean) retains the original
 instructions and copy tags with their semantic read annotations. Its finite-data
 constructor requires equality to the original addresses, reads, and tags. Source
