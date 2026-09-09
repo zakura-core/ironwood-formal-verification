@@ -725,6 +725,18 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   arithmetic, and storage costs. The [collapsed quotient](DenseCollapsedQuotientCost.lean)
   retains every piece weight and the linear mask's original placement. The
   subsequent multi-opening, real IPA, and whole-reduction composition remain below.
+- [x] Construct [all five opening polynomials from original rows](PlonkOpeningRowsCost.lean),
+  with [their complete preparation bound](PlonkOpeningRowsBound.lean), and assemble
+  the [full stored opening material](PlonkOpeningMaterialCost.lean), including
+  actual point sets and inherited commitment blinds. Its
+  [combined bound](PlonkOpeningMaterialBound.lean) discharges every coefficient,
+  point, and blind producer. [Indexed interpolation semantics](LagrangePolynomialTotal.lean)
+  and the [complete opening-quotient constructor](DenseOpeningQuotientCost.lean)
+  preserve repeated nodes separately from divisor deduplication. The
+  [stored final multi-opening polynomial](DenseMultiopenFinalCost.lean) and its
+  [complete bound](DenseMultiopenFinalBound.lean) retain every group quotient and
+  both subsequent polynomial folds. These are components of real IPA preparation;
+  the complete real IPA and prover/retry/test reduction remain below.
 - [ ] Discharge the PRNG reduction's resource conditions wherever that
   computational instantiation is claimed. This requires bounds for the actual
   real-prover-and-test reduction, including retained auxiliary data and any retry

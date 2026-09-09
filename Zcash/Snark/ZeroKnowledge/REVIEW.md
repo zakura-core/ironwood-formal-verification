@@ -222,6 +222,19 @@ polynomials; the checked row constructor supplies the private-column identity.
 The multi-opening interpolants, real IPA, and complete reduction composition
 remain part of the open resource item.
 
+The [full opening material](PlonkOpeningMaterialCost.lean) now constructs all five
+polynomials directly from the original public/private rows and stored quotient
+pieces, with the original point sets and inherited blinds. Its
+[complete bound](PlonkOpeningMaterialBound.lean) includes every coefficient
+producer and all group assembly. [Totalized interpolation](LagrangePolynomialTotal.lean)
+retains coincident query positions in the interpolant; divisor construction uses
+the source's separate deduplication rule. The
+[complete stored multi-opening polynomial](DenseMultiopenFinalCost.lean) has exact
+source erasure and a [full cost bound](DenseMultiopenFinalBound.lean), including
+the constructed group quotients and final fold. Complete real IPA execution and
+prover/retry/test resource composition remain open. These new generic results use
+only the standard logical axioms and introduce no native certificate.
+
 **Application witness construction**
 
 [ActionWitnessConditions.lean](ActionWitnessConditions.lean) starts from
