@@ -1,0 +1,9 @@
+Real prover lookup sorting and running-product resource milestone
+Proof baseline: b571d36abac33015842ab0c6f50c0c28fb60e9a2.
+Focused warning-as-error build passed for LookupSortRowsCost and RunningProductCost (2766 jobs). Both ZeroKnowledge and Action trust boundaries passed with warnings as errors (3907 jobs).
+The six new modules contain 57 declarations. A separate warning-as-error transitive axiom inventory passed for every declaration, all using only propext, Classical.choice, and Quot.sound. Every declaration has exactly one direct pin; no admission or native certificate was introduced.
+The counted lookup sorter includes input materialization, canonical key extraction, comparisons, run planning, reservations and erasure, reverse filling, and every failure path. Injectivity of the canonical field key proves its insertion-sort implementation equals the original canonical merge sort. The polynomial size bound includes all callbacks and input traversals.
+The counted lookup and chained permutation running products preserve the original total-inverse recurrence on every input, including zero denominators. Bounds retain numerator, denominator, challenge, and earlier-chunk costs.
+Endpoint census passed: 331 declarations. Build coverage passed: 1098 workspace modules under six matching default targets. Umbrella-import, csimp (1 declaration), costed group-work (2 modules, 20 callbacks), and fixture-manifest (6 artifacts, LC_ALL=C) guards passed. Working and staged whitespace checks passed.
+The proof commit was pushed only to TalDerei/ironwood-private refs/heads/establish-zk, and its exact remote SHA was verified.
+These are components of the real-prover resource proof. Whole real-prover/retry/postprocessing admissibility and independent review remain open. The last complete workspace build remains the successful 4629-job run at 2872c72f; this milestone records focused verification, not a new full build.

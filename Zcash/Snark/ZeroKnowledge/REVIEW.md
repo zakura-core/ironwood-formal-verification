@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `2872c72f01a774e0cb37acb8fef97e61a3d6b26d` on `establish-zk` in
+Proof baseline: `b571d36abac33015842ab0c6f50c0c28fb60e9a2` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -833,3 +833,10 @@ The application contract remains `ActionWitnessConstructionConditions`. The
 complete counted simulator and its statistical law are also covered by this full
 build. Concrete PRNG reduction resource admissibility and independent review are
 the remaining unchecked extensions.
+
+The [real-prover lookup and product milestone](review/validation-b571d36a.log)
+passed its focused 2,766-job build and both trust boundaries with 3,907 jobs.
+All [57 declarations across six modules](review/axioms-b571d36a.log) have exactly
+one direct pin and use only standard Lean logical axioms. The bounds include
+sorting failures and zero-denominator product paths. Whole real-prover reduction
+admissibility and independent review remain open.

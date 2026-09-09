@@ -1,0 +1,65 @@
+'Zcash.Snark.ZeroKnowledge.lengthListCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.lengthListCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.lengthListCosted_cost' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.reverseAuxListCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.reverseAuxListCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.reverseAuxListCosted_cost' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.reverseListCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.reverseListCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.reverseListCosted_cost' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.lookupRunPlanCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.lookupRunPlanCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.lookupRunPlanCosted_cost' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.lookupReservedCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.lookupReservedCosted_result' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.lookupReservedCosted_cost_le' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.lookupContainsCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.lookupContainsCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.lookupContainsCosted_cost_le' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.lookupEraseCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.lookupEraseCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.lookupEraseCosted_cost_le' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.reserveLookupValuesCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.reserveLookupValuesCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.reserveLookupValuesCosted_cost_le_bound' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.reserveLookupValuesCosted_cost_le' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.fillLookupPlanCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.fillLookupPlanCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.fillLookupPlanCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.lookupInsertCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.lookupInsertCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.lookupInsertCosted_cost_le' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.canonicalLookupSortCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.canonicalLookupSortCosted_insertionSort' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.canonicalLookupSortCosted_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.canonicalLookupSortCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.canonicalLookupSortCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.lookupSortColumnsCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.lookupSortColumnsCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.reserveLookupValuesCosted_remaining_length' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.lookupSortColumnsCostBudget' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.lookupSortColumnsCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.lookupSortedPrefixesCosted' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.lookupSortedPrefixesCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.lookupSortedPrefixesCostBudget' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.lookupSortedPrefixesCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.runningProductRowsCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.runningProductRowsCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.runningProductRowsCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.chainedProductInitialCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.chainedProductInitialCosted_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.chainedProductInitialCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.chainedProductRowsCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.chainedProductRowsCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.chainedProductRowsCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.lookupProductRowsCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.lookupProductRowsCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.lookupProductRowsCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
