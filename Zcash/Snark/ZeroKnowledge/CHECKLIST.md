@@ -692,8 +692,15 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   Each of the 22 columns per Action is materialized before entering the retained
   history. The result equals the reference constructor on the identical selected
   row-mask subsequence, including totalized lookup failures. Preparation, stored
-  reads, masking, and every history dependency are counted. Decoding that
-  subsequence from the full batched tape remains part of the surrounding prover.
+  reads, masking, and every history dependency are counted. This component
+  consumes the already selected row-mask subsequence.
+- [x] Decode the [actual pre-IPA tape](PlonkPreIpaCoinsCost.lean) and compose it
+  with the [complete private-material construction](PlonkStoredMaterialCost.lean).
+  The original batch equivalences supply exactly the same row masks, linear-mask
+  coefficients, and commitment blinds. The [combined bound](PlonkStoredMaterialCostBound.lean)
+  includes schedule preparation, every selected word, all column construction,
+  retained history, and failures. The decoder uses only public mask boundaries;
+  its source-equivalence theorem permits every actual witness-dependent constructor.
 - [ ] Discharge the PRNG reduction's resource conditions wherever that
   computational instantiation is claimed. This requires bounds for the actual
   real-prover-and-test reduction, including retained auxiliary data and any retry

@@ -185,8 +185,13 @@ original 22-column schedule per Action, retaining earlier masked columns and the
 exact offsets of the selected row-mask tape. Its
 [combined bound](PlonkStoredColumnsCostBound.lean) includes all constructor work,
 materialization, masking, and stored-history reads, including totalized failures.
-The full batched-tape decoder and remaining real-prover composition are separate
-parts of the open PRNG resource item.
+The [complete stored private material](PlonkStoredMaterialCost.lean) now composes
+that column runner with the actual batched pre-IPA decoder. Exact erasure retains
+every row mask, both linear-mask coefficients, and all commitment blinds; tape
+selection uses only the proved public layout. Its
+[combined cost bound](PlonkStoredMaterialCostBound.lean) includes all schedule,
+decoding, construction, masking, and stored-history work. The remaining real
+polynomial, IPA, and reduction composition still belongs to the open resource item.
 
 **Application witness construction**
 
