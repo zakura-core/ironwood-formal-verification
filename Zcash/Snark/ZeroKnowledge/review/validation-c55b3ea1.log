@@ -1,0 +1,22 @@
+Complete constraint evaluation and bounded certificate checks
+Proof baseline: c55b3ea1c600b08f64a2e4ef57c87d63eb51577e.
+Certificate generator: 616b47fe2998c4997da88d495460cd6a05800bbf.
+Focused build: lake build --wfail Zcash.Snark.ZeroKnowledge.TrustBoundary; passed (3739 jobs).
+The focused build checks all 80 new mathematical declarations and their direct axiom or computability pins, and rebuilds the original witness-loading and 1083-instruction value-commitment certificates with the revised generator.
+Certificate regressions: lake build --wfail Zcash.Meta.Tests.SourceListCertificate Zcash.Meta.Tests.AdviceSourceCertificate; passed (2567 jobs). Nine source-list and fourteen advice-source declarations retain their existing pins. The tests force source-check boundaries every two and one reduction steps, respectively, covering parameterized opaque source equations, computable metadata, unavailable or omitted reads, changed targets, and unsupported native callbacks.
+Constraint collection: lake build --wfail Zcash.Snark.ZeroKnowledge.ConstraintCollectionCost; passed (2762 jobs).
+Full workspace build: not claimed for this checkpoint. The complete Action advice, gate, and lookup source certificates are unfinished workspace files; the latest successful full build remains b3b22e26 (4465 jobs).
+Endpoint census: 326 endpoint declarations, all pinned.
+Build coverage guard: all 979 workspace modules covered at the check, including the three unfinished Action source certificates. Six default targets agree between lakefile.toml and CI.
+Umbrella-import guard: passed.
+csimp census: 1 declaration, covered.
+Costed group-work census: 2 production modules, 20 host callbacks pinned.
+Fixture manifest: all 6 artifacts match their digests and provenance entries.
+Declaration inventory: 80 mathematical declarations across 10 runtime modules, each with exactly one direct pin.
+Separate transitive axiom inventory: all 80 declarations checked; only propext, Classical.choice, and Quot.sound occur. The integer-power, two Lagrange-basis implementations, and quotient-evaluation implementation explicitly retain Classical.choice in their computability pins. No new native-evaluation certificate or admission.
+Local Markdown links: 599 checked across README, CHECKLIST, and REVIEW before this review-record update.
+Whitespace: git diff --check and git diff --cached --check passed.
+Scope: complete permutation boundaries and chunks, ordered gate/permutation/lookup constraint assembly, complete cross-Action constraint collection, signed powers and domain Lagrange values, quotient Horner evaluation, finite-to-total scalar queries, and list construction/routing. Every erasure result matches the existing protocol operation, including exceptional field values and out-of-range defaults.
+Costs retain complete supplied scalar readers and input preparation, and use actual materialized list and expression sizes with explicit field-operation prices. This is a structural cost model, not compiler or machine-code correspondence.
+Certificate checks now seal each bounded source-reduction segment into a synchronously kernel-checked continuation, discard obsolete elaboration caches, and compose those checked pieces with a checked final value. Source equations and semantic read proofs remain in the resulting proof. Original all-at-once Action checks exhausted paging resources and were stopped; the replacement complete-source checks remain in progress at this checkpoint.
+Remaining composition: public polynomial construction, complete PLONK opening, concrete query providers and quotient composition, codecs and transcript observation, whole fixed-bit simulator cost, and real-prover-and-test PRNG reductions. Full Action source scans and application-level witness corollaries remain open.

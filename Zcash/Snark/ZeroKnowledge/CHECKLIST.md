@@ -542,7 +542,12 @@ tape alone do not prove that running-time statement.
   and separately inventoried. The arithmetic milestone passes the
   [focused 3,728-job build](review/validation-1e80ffcc.log), with
   [118 declarations across fourteen modules](review/axioms-1e80ffcc.log) directly
-  pinned and separately inventoried. The full Action source scans remain in progress.
+  pinned and separately inventoried. The constraint checkpoint passes the
+  [focused 3,739-job build](review/validation-c55b3ea1.log), with
+  [80 declarations across ten runtime modules](review/axioms-c55b3ea1.log) directly
+  pinned and separately inventoried. Both original stage certificates and all
+  certificate regressions pass with the bounded checking pieces. The full Action
+  source scans remain in progress.
 - [x] Run the full `lake build --wfail` before declaring an extension complete.
   The byte-cache cost milestone passes locally with 4,428
   jobs; all 891 modules were covered by the default targets. The application

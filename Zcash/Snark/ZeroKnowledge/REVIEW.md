@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `1e80ffcc3a2281f4edf17b7fd190ee8d0e11f774` on `establish-zk` in
+Proof baseline: `c55b3ea1c600b08f64a2e4ef57c87d63eb51577e` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -345,13 +345,18 @@ formulas and inactive-row behavior. [PolynomialArithmeticCost.lean](PolynomialAr
 loads the actual canonical coefficient array and proves its counted Horner
 algorithm equal to the existing evaluator. [CommitmentArithmeticCost.lean](CommitmentArithmeticCost.lean)
 counts the full coefficient/generator sweep and the public commitment and scalar
-claim folds.
+claim folds. The [complete permutation calculation](PermutationExpressionsCost.lean)
+includes first, last, and inter-set constraints. [Constraint assembly](ConstraintAssemblyCost.lean)
+and [cross-Action collection](ConstraintCollectionCost.lean) preserve the entire
+ordered list and retain all provider costs. The [Lagrange basis](LagrangeBasisCost.lean),
+[quotient fold](QuotientEvaluationCost.lean), and [query routers](QueryRoutingCost.lean)
+also have exact counted implementations, including exceptional values and defaults.
 
 The model uses materialized arrays and lists, bounded-width structural indexing,
 and explicit prices for field and group primitives. Callback readers carry their
 complete costs. Shared intermediate work may be conservatively counted more than
 once. These component proofs do not supply public polynomial construction, the
-complete PLONK opening and quotient assembly, codecs, transcript observation,
+complete PLONK opening, concrete query-provider and quotient composition, codecs, transcript observation,
 or their composition into `actionOracleSimulatorFromBits`. A PRNG reduction
 executes the real prover and the supplied view test, so its admissibility needs
 those runtime bounds in addition to simulator efficiency.
@@ -419,6 +424,14 @@ exactly one direct pin and a separate transitive inventory. The thirteen runtime
 modules use only Lean's standard axioms; the Action relation composition retains
 the existing Pallas certificate. The full Action source checks and complete
 simulator/reduction runtime composition remain open.
+
+The constraint and certificate-generation checkpoint passed the
+[focused 3,739-job build and guards](review/validation-c55b3ea1.log). All
+[80 new declarations across ten runtime modules](review/axioms-c55b3ea1.log) have
+one direct pin and a separate inventory containing only standard axioms. Both
+original stage certificates and all source-certificate regressions passed after
+switching to synchronously checked proof pieces. The full Action source
+certificates remain in progress, so this checkpoint does not claim a full build.
 
 The native dependencies remain exactly the inherited named curve-order certificates:
 
