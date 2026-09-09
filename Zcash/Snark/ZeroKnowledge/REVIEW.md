@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `6281a298ede2c6723f9739f202030ee05c2205b1` on `establish-zk` in
+Proof baseline: `b3b22e266917de75ae5a4107578f09a8f3b1aeb7` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -327,8 +327,15 @@ Both new mathematical declarations have direct pins and an
 [exact axiom inventory](review/axioms-6281a298.log); their only native dependency is
 the existing Pallas generator-order certificate below. The ten metaprogram
 regression declarations are pinned in their test module. No admission or new
-native-evaluation certificate was introduced. All 918 modules are covered by
-default targets and all 326 endpoint declarations are pinned. The full
+native-evaluation certificate was introduced at that milestone.
+
+The application extraction and completeness checkpoint passed
+[the full 4,465-job build and guards](review/validation-b3b22e26.log), with
+[32 new mathematical declarations](review/axioms-b3b22e26.log) each directly pinned.
+Its 14 source-certificate regression declarations also pass their direct checks.
+All 928 modules are covered by default targets and all 326 endpoint declarations
+are pinned. The new declarations inherit only the existing Pallas native owner;
+no admission or new native certificate was introduced. The full
 [parent](TrustBoundary.lean) and [Action](Action/TrustBoundary.lean) boundaries also
 check the earlier milestones.
 The native dependencies remain exactly the inherited named curve-order certificates:

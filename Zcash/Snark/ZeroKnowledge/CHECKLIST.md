@@ -473,8 +473,12 @@ tape alone do not prove that running-time statement.
   Vesta curve-order owners; the milestone introduces no native certificate.
 - [x] Run the full `lake build --wfail` before declaring an extension complete.
   The byte-cache cost milestone passes locally with 4,428
-  jobs; all 891 modules are covered by the default targets. Future theorem
-  commits require their own validation; these local results do not assert hosted
+  jobs; all 891 modules were covered by the default targets. The application
+  extraction and completeness checkpoint passes 4,465 jobs with all 928 modules
+  covered, 32 new declarations directly pinned, and 14 source-certificate
+  regressions checked. Its [validation record](review/validation-b3b22e26.log)
+  identifies the exact proof baseline. Future theorem commits require their own
+  validation; these local results do not assert hosted
   CI success.
 
 Next implementation work: witness construction and runtime refinements. Update the review packet

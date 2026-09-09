@@ -1,0 +1,95 @@
+'Zcash.Snark.ZeroKnowledge.actionDirectHintCells_of_extendsWitnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionMerkleHintCells_of_extendsWitnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionScalarWindowReadings_of_extendsWitnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_constraints_of_readAgreement' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_constraints_of_extendsWitnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionCircuit_base_extendsWitnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_readAgreement_of_extendsWitnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.ActionWitnessReadAgreement' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.ActionWitnessReadAgreement.proverAssumptions_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.actionWitnessConditions_proverAssumptions_of_readAgreement' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.loadPrivate_cell_of_extendsWitnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.witnessPoint_cells_of_extendsWitnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.witnessNonIdPoint_cells_of_extendsWitnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.actionInitialHintCells_of_extendsWitnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.condSwap_hintCells_of_extendsWitnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.merkleLayer_hintCells_of_extendsWitnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.merkleHintFold_region' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.merkleFold_hintCells_of_extendsWitnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.fullWidth_windowCells_of_witnessScalarLoop' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.fullWidth_extract_windows_of_extendsWitnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.fullWidth_extract_scalar_of_extendsWitnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.valueCommit_fullWidth_witnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.spendAuthority_fullWidth_witnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.sinsemillaCommit_fullWidth_witnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.commitIvk_fullWidth_witnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.noteCommit_fullWidth_witnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.WitnessFunctionAgreement' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.witnessFunctionAgreementCoe' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.WitnessFunctionAgreement.mono' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.WitnessFunctionAgreement.left' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.WitnessFunctionAgreement.right' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.instanceGet_support' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,17 @@
+Application witness readings and original Action completeness
+Proof baseline: b3b22e266917de75ae5a4107578f09a8f3b1aeb7.
+Full build: lake build --wfail; passed (4465 jobs).
+Focused extraction, completeness, trust boundary, and source-regression build: passed (3674 jobs).
+Endpoint census: 326 endpoint declarations, all pinned.
+Build coverage: 928 modules, all covered by default targets.
+Build surface: 6 targets; lakefile.toml and CI agree.
+Umbrella-import guard: passed.
+csimp census: 1 declaration, covered.
+Costed group-work census: 2 production modules, 20 host callbacks pinned.
+Declaration inventory: 32 new mathematical declarations across 11 modules, each with exactly one direct pin; all 14 source-certificate regression declarations directly pinned in their test module.
+Transitive axiom inventory: propext, Classical.choice, Quot.sound, and the inherited native owner CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt. No admission or new native-evaluation certificate.
+Local Markdown links: 514 checked across README, CHECKLIST, and REVIEW before this review-record update.
+Whitespace: git diff --check passed.
+Scope: assuming the original source witness equations, the actual generated assignment recovers eight fields, six points, five scalar/window pairs, and the 32 Merkle readings used by the original completeness preconditions. The existing application conditions and preserved public input then imply the original operation constraints.
+Absolute public reads: native support retains the immutable public/fixed environment already preserved by execution; regressions accept an absolute public read at nonzero placement and reject changed public inputs.
+Not claimed: complete Action source annotations or global scans, unconditional final witness extension, converse compiler gate/lookup/copy bridges, application ActionZkRelation, whole-simulator runtime, PRNG resource-class membership, or independent review.
