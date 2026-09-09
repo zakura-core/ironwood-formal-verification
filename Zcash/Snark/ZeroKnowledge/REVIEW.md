@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `ba0159eca567c915093f7ca35f3ea4f1464235b5` on `establish-zk` in
+Proof baseline: `454c38c8fb52dfe7e91104baa0416b46cf02e3d8` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -642,3 +642,11 @@ modules](review/axioms-ba0159ec.log) have direct pins and a separate transitive
 inventory. The stored Action result theorem alone inherits the existing Pallas
 certificate; all other new declarations use standard Lean axioms. Fixed-bit
 routing, proof-field routing, codecs, and oracle observation remain to be composed.
+
+The complete tape-production checkpoint passed [both trust boundaries with 3,844
+jobs](review/validation-454c38c8.log). Its [24 declarations across five
+modules](review/axioms-454c38c8.log) have exact direct pins and a separate transitive
+inventory, using only standard Lean axioms. The raw-response prefix and every
+private-coin slot are connected to the existing bit-tape split, and all production
+and indexed-read costs are included. The joint-simulator, proof-field, codec,
+and oracle-observer composition remains the next runtime layer.

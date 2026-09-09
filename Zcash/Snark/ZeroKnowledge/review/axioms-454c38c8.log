@@ -1,0 +1,44 @@
+'Zcash.Snark.ZeroKnowledge.PlonkSimulatorCoinsCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.PlonkSimulatorCoinsCosted.erase' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.storedPlonkFieldReadCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedPlonkFieldReadCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedPlonkFieldReadCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedPlonkCoinsCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedPlonkCoinsCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.PlonkSimulatorCoinsCosted.ReadBound' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.storedPlonkCoinsCosted_readBound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedPlonkCoinsCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedPlonkChallengesCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedPlonkChallengesCosted_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedPlonkChallengesCosted_readBound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedPlonkChallengesCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.PlonkPreparedSimulatorTapes' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted_raw_length' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted_raw_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted_challenges_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted_coins_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkStoredTapeReadBudget' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted_readBound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkStoredTapeCostBudget' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
