@@ -1,3 +1,7 @@
+import Zcash.Snark.ZeroKnowledge.AdviceAliasAddressPlan
+import Zcash.Snark.ZeroKnowledge.AdviceAliasMap
+import Zcash.Snark.ZeroKnowledge.AdviceAliasMapPlan
+import Zcash.Snark.ZeroKnowledge.AdviceSupportMapPlan
 import Zcash.Snark.ZeroKnowledge.WitnessFunctionSupport
 import Zcash.Snark.ZeroKnowledge.PoseidonWitnessSupport
 import Zcash.Snark.ZeroKnowledge.MulIncompleteWitnessSupport
@@ -2602,3 +2606,44 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionScalarHintPrograms_reads_nil
 assert_axioms Zcash.Snark.ZeroKnowledge.actionScalarWindow_reads_nil
 assert_axioms Zcash.Snark.ZeroKnowledge.actionMerkleSiblingHint_support
 assert_axioms Zcash.Snark.ZeroKnowledge.actionMerkleSwapHint_support
+
+-- Exact finite-map refinements of the advice alias and certified read checks.
+
+-- AdviceAliasAddressPlan
+assert_computable Zcash.Snark.ZeroKnowledge.adviceAliasAddressData
+assert_computable Zcash.Snark.ZeroKnowledge.adviceAddressAliasPlan
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceAliasPlan_eq_addressPlan
+assert_computable Zcash.Snark.ZeroKnowledge.regionAdviceAliasAddresses
+assert_computable Zcash.Snark.ZeroKnowledge.circuitAdviceAliasAddresses
+assert_axioms Zcash.Snark.ZeroKnowledge.regionAdviceAliasAddresses_eq
+assert_axioms Zcash.Snark.ZeroKnowledge.circuitAdviceAliasAddresses_eq
+
+-- AdviceAliasMap
+assert_computable Zcash.Snark.ZeroKnowledge.adviceAddressKey
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceAddressKey_injective
+assert_computable Zcash.Snark.ZeroKnowledge.AdviceAliasMap +choice
+assert_computable Zcash.Snark.ZeroKnowledge.adviceAliasMapLookup +choice
+assert_computable Zcash.Snark.ZeroKnowledge.adviceAliasMapInsert +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceAliasMapLookup_empty
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceAliasMapLookup_insert
+assert_axioms Zcash.Snark.ZeroKnowledge.AdviceAliasMapRepresents
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceAliasMapRepresents_empty
+assert_axioms Zcash.Snark.ZeroKnowledge.AdviceAliasMapRepresents.root
+assert_axioms Zcash.Snark.ZeroKnowledge.AdviceAliasMapRepresents.known
+assert_axioms Zcash.Snark.ZeroKnowledge.AdviceAliasMapRepresents.insert
+assert_axioms Zcash.Snark.ZeroKnowledge.AdviceAliasMapRepresents.insert_self
+assert_axioms Zcash.Snark.ZeroKnowledge.AdviceAliasMapRepresents.cons_known
+
+-- AdviceAliasMapPlan
+assert_computable Zcash.Snark.ZeroKnowledge.adviceAliasMapPlan +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceAliasMapPlan_eq
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceAliasMapPlan_original
+assert_axioms Zcash.Snark.ZeroKnowledge.circuitAdviceAliasMapPlan_original
+
+-- AdviceSupportMapPlan
+assert_computable Zcash.Snark.ZeroKnowledge.adviceCellReadMapAvailable +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceCellReadMapAvailable_eq
+assert_computable Zcash.Snark.ZeroKnowledge.adviceSupportMapPlan +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceSupportMapPlan_eq
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceSupportMapPlan_causal
+assert_axioms Zcash.Snark.ZeroKnowledge.topLevelAdviceAssignment_extendsWitnesses_of_mapPlans

@@ -47,6 +47,10 @@ layers. Nested callback requirements remain explicit. The
 and Merkle swap callbacks, read no advice cells. The
 [certified annotation checker](AdviceSupportPlan.lean) combines these semantic
 certificates with a finite read-availability check and exact source erasure.
+The [address projection](AdviceAliasAddressPlan.lean) discards witness function
+bodies from the alias calculation. The [finite-map alias check](AdviceAliasMapPlan.lean)
+and [finite-map read check](AdviceSupportMapPlan.lean) preserve every result of
+the original checks and feed the same compiler witness-equation theorem.
 Applying it to the Action still requires the complete annotation list and the
 global alias and read-plan checks.
 Proving that the generated rows satisfy every gate, lookup, and copy equation is

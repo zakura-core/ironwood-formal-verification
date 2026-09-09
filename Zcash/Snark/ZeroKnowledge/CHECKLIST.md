@@ -126,6 +126,10 @@ model. Compare strength only after fixing those models and assumptions.
   in [AdviceSupportPlan.lean](AdviceSupportPlan.lean). A successful availability
   check proves causality; exact source erasure, semantic copy provenance, and
   a successful alias check then imply the original `ExtendsWitnesses` predicate.
+  The [alias-map refinement](AdviceAliasMapPlan.lean) and
+  [read-map refinement](AdviceSupportMapPlan.lean) now preserve all original
+  checker results, including rejection. Their map representation retains column
+  kind, index, and signed row, and supplies the same witness-equation theorem.
 - [ ] Build the certified annotations for the complete Action and discharge its
   global alias and read-plan checks. Derive `ExtendsWitnesses` for the final
   assignment.
