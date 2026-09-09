@@ -1,0 +1,12 @@
+'Zcash.Snark.ZeroKnowledge.adviceReadAddressData' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.adviceReadAddressMapStep' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.adviceReadMapStep_eq_addressStep' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Meta.Tests.AdviceMapScan.scalarBuilderCopyTag' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Meta.Tests.AdviceMapScan.opaqueScalarBuilder_freshWrite' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Meta.Tests.AdviceMapScan.opaqueScalarBuilder_rejectsCollision' does not depend on any axioms
+'Zcash.Meta.Tests.AdviceMapScan.placedReadCellSource' does not depend on any axioms
+'Zcash.Meta.Tests.AdviceMapScan.opaqueReadAnnotation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Meta.Tests.AdviceMapScan.opaquePlacedRead_available' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Meta.Tests.AdviceMapScan.opaquePlacedRead_rejectsUnavailable' does not depend on any axioms

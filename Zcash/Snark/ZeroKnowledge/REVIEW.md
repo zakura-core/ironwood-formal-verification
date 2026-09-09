@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `6c80818e5cb64c6f4f6c4677bbb5708b6ea872a9` on `establish-zk` in
+Proof baseline: `159eb4bede190bbf630800fd7e24fcecd9caaedd` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -698,3 +698,9 @@ identity is in [AdviceReadAddressScan.lean](AdviceReadAddressScan.lean), and the
 [regressions](../../Meta/Tests/AdviceMapScan.lean) retain opaque source data while
 checking both success and rejection. The original Action entries that previously
 blocked normalization now pass. The complete global scans are still running.
+
+The original-source normalization checkpoint passed its [focused checks,
+regressions, and 3,802-job trust-boundary build](review/validation-159eb4be.log).
+The [ten-declaration inventory](review/axioms-159eb4be.log) uses only standard
+Lean logical axioms. The original two blocked source entries now check without
+changing either policy; the full source-order scans remain the application gate.
