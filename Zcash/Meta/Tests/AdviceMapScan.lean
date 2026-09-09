@@ -73,6 +73,54 @@ theorem immutableSource_available :
   rw [adviceAliasMapPlan_eq_scan]
   check_advice_map_scan
 
+
+/-- The scalar builder hides its IR constructor behind an opaque source equation. -/
+def scalarBuilderCopyTag : Option AdviceAddress :=
+  let program := Zcash.Circuits.Ecc.MulComplete.zWit
+    (.of 0 0 (⟨0⟩ : Column .advice)) (pure (fun _ => Witgen.BExprOver.false)) 0
+  match program with
+  | .native _ => none
+  | .ir _ _ => witnessCopyAddress id program
+
+theorem opaqueScalarBuilder_freshWrite :
+    adviceAliasMapPlan ∅ [(firstAddress, scalarBuilderCopyTag)] = true := by
+  rw [adviceAliasMapPlan_eq_scan]
+  check_advice_map_scan
+
+theorem opaqueScalarBuilder_rejectsCollision : True := by
+  fail_if_success
+    have _invalid : adviceAliasMapPlan ∅
+        [(firstAddress, none), (firstAddress, scalarBuilderCopyTag)] = true := by
+      rw [adviceAliasMapPlan_eq_scan]
+      check_advice_map_scan
+  trivial
+
+
+opaque placedReadCellSource (row : ℕ) :
+    { cell : AssignedCell Fp // cell = .of 0 row (⟨0⟩ : Column .advice) } := ⟨_, rfl⟩
+
+/-- An over-approximate read certificate keeps the opaque cell in its original data. -/
+noncomputable def opaqueReadAnnotation (row : ℕ) : SupportedAdviceProgram Fp where
+  instruction := ⟨⟨1⟩, 0, .ofFExpr (.const 0)⟩
+  reads := [(placedReadCellSource row).val]
+  support := by
+    intro left right _
+    simp [WitgenIROver.ofFExpr, WitgenIROver.eval, VExprOver.eval, FExprOver.eval]
+
+theorem opaquePlacedRead_available :
+    adviceSupportMapPlan id (adviceAliasMapInsert ∅ firstAddress firstAddress)
+      [opaqueReadAnnotation 0] = true := by
+  rw [adviceSupportMapPlan_eq_scan]
+  check_advice_map_scan
+
+theorem opaquePlacedRead_rejectsUnavailable : True := by
+  fail_if_success
+    have _invalid : adviceSupportMapPlan id (adviceAliasMapInsert ∅ firstAddress firstAddress)
+        [opaqueReadAnnotation 1] = true := by
+      rw [adviceSupportMapPlan_eq_scan]
+      check_advice_map_scan
+  trivial
+
 assert_computable Zcash.Meta.Tests.AdviceMapScan.readChain +choice
 assert_axioms Zcash.Meta.Tests.AdviceMapScan.earlierRead_available
 assert_computable Zcash.Meta.Tests.AdviceMapScan.futureRead +choice
@@ -84,5 +132,14 @@ assert_axioms Zcash.Meta.Tests.AdviceMapScan.rejectsFreshWriteCollision
 assert_axioms Zcash.Meta.Tests.AdviceMapScan.rejectsConflictingRoot
 assert_axioms Zcash.Meta.Tests.AdviceMapScan.rejectsUnavailableSource
 assert_axioms Zcash.Meta.Tests.AdviceMapScan.immutableSource_available
+
+assert_computable Zcash.Meta.Tests.AdviceMapScan.scalarBuilderCopyTag +choice
+assert_axioms Zcash.Meta.Tests.AdviceMapScan.opaqueScalarBuilder_freshWrite
+assert_axioms Zcash.Meta.Tests.AdviceMapScan.opaqueScalarBuilder_rejectsCollision
+
+assert_axioms Zcash.Meta.Tests.AdviceMapScan.placedReadCellSource
+assert_axioms Zcash.Meta.Tests.AdviceMapScan.opaqueReadAnnotation
+assert_axioms Zcash.Meta.Tests.AdviceMapScan.opaquePlacedRead_available
+assert_axioms Zcash.Meta.Tests.AdviceMapScan.opaquePlacedRead_rejectsUnavailable
 
 end Zcash.Meta.Tests.AdviceMapScan

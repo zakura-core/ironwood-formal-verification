@@ -691,3 +691,10 @@ boundaries with 3,855 jobs](review/validation-6c80818e.log). Its
 logical axioms and the existing named Pallas dependency. These certificates
 preserve the original data; read/alias safety and activation coverage are checked
 separately before the application-level simulation corollaries can use them.
+
+The read-checker normalization now factors source equations through pure placed
+addresses before constructing dependent decision proofs. The exact transition
+identity is in [AdviceReadAddressScan.lean](AdviceReadAddressScan.lean), and the
+[regressions](../../Meta/Tests/AdviceMapScan.lean) retain opaque source data while
+checking both success and rejection. The original Action entries that previously
+blocked normalization now pass. The complete global scans are still running.

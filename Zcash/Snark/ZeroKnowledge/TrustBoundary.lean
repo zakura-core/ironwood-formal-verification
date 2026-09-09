@@ -117,6 +117,7 @@ import Zcash.Snark.ZeroKnowledge.AdviceAliasMap
 import Zcash.Snark.ZeroKnowledge.AdviceAliasMapPlan
 import Zcash.Snark.ZeroKnowledge.AdviceSupportMapPlan
 import Zcash.Snark.ZeroKnowledge.AdviceMapScan
+import Zcash.Snark.ZeroKnowledge.AdviceReadAddressScan
 import Zcash.Snark.ZeroKnowledge.WitnessFunctionSupport
 import Zcash.Snark.ZeroKnowledge.PoseidonWitnessSupport
 import Zcash.Snark.ZeroKnowledge.MulIncompleteWitnessSupport
@@ -2773,6 +2774,11 @@ assert_axioms Zcash.Snark.ZeroKnowledge.adviceSupportMapPlan_eq_scan
 assert_computable Zcash.Snark.ZeroKnowledge.adviceAliasMapStep +choice
 assert_axioms Zcash.Snark.ZeroKnowledge.adviceAliasMapPlan_eq_scan
 assert_axioms Zcash.Snark.ZeroKnowledge.topLevelAdviceAssignment_extendsWitnesses_of_mapPlans
+
+-- Source equations act on pure address data before the original read policy.
+assert_computable Zcash.Snark.ZeroKnowledge.adviceReadAddressData +choice
+assert_computable Zcash.Snark.ZeroKnowledge.adviceReadAddressMapStep +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.adviceReadMapStep_eq_addressStep
 
 -- ActionWitnessObservation
 assert_computable Zcash.Snark.ZeroKnowledge.actionWitnessObservation +choice

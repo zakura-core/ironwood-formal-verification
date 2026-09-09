@@ -151,7 +151,11 @@ model. Compare strength only after fixing those models and assumptions.
   stores kernel-checked intermediate maps and composes checked continuations.
   Regression checks force a boundary at every entry and reject unavailable
   reads, fresh-write collisions, and conflicting alias roots across boundaries.
-  The complete Action scan still has to run successfully.
+  The [placed-address factorization](AdviceReadAddressScan.lean) preserves the
+  original policy before dependent decision proofs are built. Kernel checks of
+  the original previously blocked entries and regressions cover opaque scalar
+  builders, available reads, unavailable reads, and collisions. The complete
+  Action scan still has to run successfully.
 - [x] Certify the original [eight-region witness-loading stage](ActionWitnessLoadCertificate.lean),
   including all eleven source instructions and both finite scans at the proved
   Action placement. The certificate is a kernel-evaluated proof artifact.

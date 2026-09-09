@@ -1701,3 +1701,8 @@ The [complete Action advice source](ActionAdviceSourceData.lean),
 certificates. They preserve 18,403 witness instructions, 4,058 gate entries, and
 2,424 lookup entries. This supplies the original data for the remaining global
 witness-execution and activation-coverage checks.
+
+The [read-address factorization](AdviceReadAddressScan.lean) lets the checker
+normalize source-owned placement data before evaluating the unchanged read
+policy. The original problematic Action entries and adversarial opaque-source
+regressions pass; the full Action read/alias scans remain separate checks.
