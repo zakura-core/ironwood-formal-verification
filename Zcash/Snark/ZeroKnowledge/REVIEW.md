@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `907fe7f2654f6ee2e5c575421860333201d49ba4` on `establish-zk` in
+Proof baseline: `2bcc329a1666b105e8608a10483f87aa905bcc28` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -854,3 +854,9 @@ passed its 3,050-job focused build and 3,843-job trust-boundary build. Its
 [34 declarations across ten modules](review/axioms-907fe7f2.log) have exact direct
 pins and only standard Lean logical dependencies. The result covers complete
 lookup sorting and product rows, with all original query and expression costs.
+
+The [complete real permutation-construction milestone](review/validation-2bcc329a.log)
+passed its 3,054-job focused build and 3,854-job trust-boundary build. All
+[33 declarations across eleven modules](review/axioms-2bcc329a.log) have exact direct
+pins and only standard Lean logical dependencies. Its combined bound includes
+original packed-pair queries, identity-name powers, and every inherited chunk.
