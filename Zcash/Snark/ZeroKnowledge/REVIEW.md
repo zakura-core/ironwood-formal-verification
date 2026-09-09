@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `4ccde259bd9d55dbbdb13d5b3bde329c9e41667e` on `establish-zk` in
+Proof baseline: `2872c72f01a774e0cb37acb8fef97e61a3d6b26d` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -813,3 +813,18 @@ to standard Lean logical axioms. Both trust boundaries and all repository guards
 passed. The indexed scan is proved equal to the original for all inputs and retains
 all rejection cases. The complete advice scans and application witness corollaries
 remain the circuit-construction work.
+
+The [complete application witness milestone](review/validation-2872c72f.log) passed
+the full `lake build --wfail` with 4,629 jobs, including both trust boundaries and
+the original certificate regressions. The global read and alias scans each
+checked all 18,403 original entries; the application corollaries use their actual
+source certificate, with no supplied successful-check or row-validity premise.
+All [nine new declarations](review/axioms-2872c72f.log) have direct pins and a
+separate transitive inventory. The five source/row theorems retain the existing
+Pallas owner; the four simulation corollaries additionally retain the existing
+Vesta owner. No axiom, admission, or native-evaluation certificate was added.
+Repository guards pass with 331 endpoints and all 1,092 workspace modules covered.
+The application contract remains `ActionWitnessConstructionConditions`. The
+complete counted simulator and its statistical law are also covered by this full
+build. Concrete PRNG reduction resource admissibility and independent review are
+the remaining unchecked extensions.

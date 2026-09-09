@@ -1,0 +1,45 @@
+Complete original Action source execution and application witness simulation
+Proof baseline: 2872c72f01a774e0cb37acb8fef97e61a3d6b26d.
+Nine declarations across four modules, each with exactly one direct pin in Action/TrustBoundary.lean.
+The five source and row theorems use standard logical axioms and the existing Pallas curve-order certificate. The four simulation theorems additionally use the existing Vesta curve-order certificate. No new axiom, admission, or native-evaluation certificate was introduced.
+
+'Zcash.Snark.ZeroKnowledge.actionAdviceSource_readPlan' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionAdviceSource_aliasPlan' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_extendsWitnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_constraints' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionWitnessRows_relation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.wideActionWitness_simulation_error_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1,
+ CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.wideCapturedActionWitness_simulation_error_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1,
+ CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionOracleBitWitness_simulation_error_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1,
+ CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.storedActionOracleBitWitness_simulation_error_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1,
+ CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt._native.native_decide.ax_1_1]
