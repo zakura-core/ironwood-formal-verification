@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `084e9f2a341852ed4c149b508ff064e0fa584dbd` on `establish-zk` in
+Proof baseline: `bb756ffca3055f7d7912e8ffb02dec111506cb5f` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -361,6 +361,17 @@ to evaluating the existing symbolic MSM combination. The
 [commitment-entry routing](CommitmentEntryCost.lean) charge schedule construction,
 equality search, and the complete selected readers.
 
+[PlonkMaskSimulatorCost.lean](PlonkMaskSimulatorCost.lean) computes every
+commitment and private-column observation in the original pre-IPA simulator.
+Its result is the fully materialized finite view, and the counter retains all
+coin reads and point multiplications. [Opening layouts](OpeningGroupLayoutCost.lean)
+and [query-order tables](QueryOrderCost.lean) preserve the exact original order.
+[Private-group evaluations](PrivateOpeningEvaluationCost.lean) include all column
+routing and scalar folds. [Public opening claims](PublicOpeningClaimsCost.lean)
+include the complete row-polynomial preparation and fixed-query routing.
+The [collapsed quotient point](CollapsedQuotientPointCost.lean) counts every
+original piece weight and point read.
+
 The model uses materialized arrays and lists, bounded-width structural indexing,
 and explicit prices for field and group primitives. Callback readers carry their
 complete costs. Shared intermediate work may be conservatively counted more than
@@ -461,6 +472,15 @@ coefficients are now constructed from their rows with explicit cost bounds;
 evaluation and commitment include that preparation. Complete-multiplication
 wrapper support and all source regressions passed, and both original stage
 certificates were rebuilt. Full Action source scans remain in progress.
+
+The mask and opening-claims checkpoint passed the
+[focused 3,756-job build and guards](review/validation-bb756ffc.log). All
+[38 declarations across six modules](review/axioms-bb756ffc.log) have direct
+pins and a separate inventory containing only standard axioms. The complete
+PLONK mask view is materialized with a checked cost bound. Opening layouts,
+exact query tables, complete private-group evaluations, public first-group claims,
+and the collapsed quotient point retain their actual preparation and routing costs.
+Commitment and node reconstruction and the final simulator composition remain open.
 
 The native dependencies remain exactly the inherited named curve-order certificates:
 
