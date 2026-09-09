@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `a5ad741f2c6389f40d38bf3e9471820f71fb90e4` on `establish-zk` in
+Proof baseline: `45f586ac37a71a2a929436543fcc0c492dd4b88e` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -671,3 +671,9 @@ have counted implementations with exact representation theorems. The 25 new
 declarations use only standard Lean logical axioms. The original proof codec's
 identity rejection and every transcript tag and byte are retained. Connecting
 these producers to the complete message schedule and oracle observation remains.
+
+The canonical-encoding checkpoint passed its [three focused builds and the
+3,799-job trust-boundary build](review/validation-45f586ac.log). The
+[25-declaration inventory](review/axioms-45f586ac.log) has exact direct pins and
+only standard Lean logical axioms. These codec results preserve the actual
+proof and transcript formats, including the point codec's identity rejection.
