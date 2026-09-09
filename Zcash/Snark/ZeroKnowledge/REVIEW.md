@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `af86fb244c7b582e46f67330a771633ff88aa505` on `establish-zk` in
+Proof baseline: `059f0df781352449c9606a2d4cec0e1c619e48de` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -734,3 +734,10 @@ the declared public prefix; their field reductions agree with the same prepared
 challenge record. The separate axiom inventory finds only standard Lean logical
 axioms and the existing named Pallas curve-order dependency in three Action
 theorems. Full public initialization, oracle replay, and cache composition remain.
+
+The stored-bit transcript and canonical-observer checkpoint passed its [sixteen
+focused builds and both trust boundaries with 3,881 jobs](review/validation-059f0df7.log).
+The [58-declaration inventory](review/axioms-059f0df7.log) records exact direct pins
+and only the existing named Pallas native dependency in three Action theorems.
+Whole-oracle composition, application source checks, concrete PRNG resource
+membership, and independent review remain separate work.

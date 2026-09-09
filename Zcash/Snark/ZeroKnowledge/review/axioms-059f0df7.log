@@ -1,0 +1,95 @@
+'Zcash.Snark.ZeroKnowledge.observeProtocolTraceCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.observeProtocolTraceCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.observeProtocolTraceCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedIpaReadersCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.storedIpaReadersCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedIpaReadersCosted_readBound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedJointProofCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedJointProofCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedJointProofInputBudget' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.storedJointProofCosted_readBound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedJointProofCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedJointTraceCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedJointTraceCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedJointTraceCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkChallengeSequenceCosted' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.plonkChallengeSequenceCosted_result' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkChallengeSequenceCosted_length' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkChallengeSequenceCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.afterStoredChallengeCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.afterStoredChallengeCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.afterStoredChallengeCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.replayOracleScheduleCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.replayOracleScheduleCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.replayOracleScheduleCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.protocolPrefixCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.protocolPrefixCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.protocolPrefixCosted_length_le' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.protocolPrefixCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.protocolQueryPrefixCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.protocolQueryPrefixCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.protocolQueryPrefixCosted_length_le' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.protocolQueryPrefixCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.protocolQueryAddressCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.protocolQueryAddressCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.protocolQueryAddressCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.canonicalProtocolObserverCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.canonicalProtocolObserverCosted_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.canonicalProtocolObserverCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.materializePlonkJointView_shape' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.StoredPlonkTraceOutput' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.storedActionTapeTraceCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedActionTapeTraceCosted_challenge_repricing' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedActionTapeTraceCosted_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.storedActionTapeJointCosted_shape' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.storedActionTapeTraceCostBudget' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedActionTapeTraceCosted_cost_le_fixed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.protocolChallengeCountCosted' does not depend on any axioms
+'Zcash.Snark.ZeroKnowledge.protocolChallengeCountCosted_result' depends on axioms: [propext]
+'Zcash.Snark.ZeroKnowledge.protocolChallengeCountCosted_cost_le' depends on axioms: [propext, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.canonicalProtocolOracleReportCosted' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.canonicalProtocolOracleReportCosted_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.canonicalProtocolOracleReportCosted_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedDigestPrefixCosted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedDigestPrefixCosted_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedDigestPrefixCosted_cost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted_digest_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted_digest_agreement' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted_digest_cost_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
