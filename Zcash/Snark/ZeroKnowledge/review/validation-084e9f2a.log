@@ -1,0 +1,18 @@
+Public row polynomial preparation and complete-multiplication read support
+Proof baseline: 084e9f2a341852ed4c149b508ff064e0fa584dbd.
+Focused build: lake build --wfail Zcash.Snark.ZeroKnowledge.TrustBoundary; passed (3750 jobs).
+Row coefficient build: passed (2916 jobs). Row evaluation and commitment build: passed (2943 jobs).
+Source regressions: lake build --wfail Zcash.Meta.Tests.AdviceSourceCertificate Zcash.Meta.Tests.SourceListCertificate; passed (2568 jobs). Seventeen advice-source declarations and nine source-list declarations retain direct pins. The added cases cover unreduced complete-multiplication bit-family builders and reject omitting the entering running-sum cell. Existing unsupported-native, changed-target, unavailable-read, immutable-public-input, and piece-boundary checks remain.
+The added parametric source certificates are kernel-only static metadata, as is the complete Action source certificate; their checked source and semantic support remain explicit. Existing computable regression definitions retain their computability checks. The original witness constructor is unchanged.
+Both original stage certificates rebuilt successfully after the support-rule additions: witness loading (45 seconds) and 1083-instruction value commitment (168 seconds).
+Declaration inventory: 17 public-polynomial declarations and two complete-multiplication support theorems, each with exactly one direct pin. Separate transitive axiom inventories passed; only propext, Classical.choice, and Quot.sound occur. Five concrete-field runtime definitions explicitly retain Classical.choice in their computability pins. No new axiom, native certificate, or admission.
+Endpoint census: 326 endpoint declarations, all pinned.
+Build coverage: all 992 workspace modules covered, including unfinished Action source certificates and the subsequent opening-layout work. Six default targets agree between lakefile.toml and CI.
+Umbrella-import guard: passed. csimp census: 1 declaration, covered. Costed group-work census: 2 production modules, 20 host callbacks pinned.
+Fixture manifest: all 6 artifacts match their digests and provenance entries.
+Local Markdown links: 632 checked across README, CHECKLIST, and REVIEW before this review-record update.
+Whitespace: git diff --check and git diff --cached --check passed.
+Scope: directly construct each canonical row-polynomial coefficient by the inverse-DFT formula, materialize the coefficient vector, and evaluate or commit with that preparation included. The domain identity uses the existing root-of-unity theorem for k <= 32, including the specified k = 11. Bounds retain normalization, inverse powers, every row read, complete generator reads, and blinding terms. Evaluation erasure holds for every point, including exceptional challenges.
+The cost model prices field/group primitives and bounded-width structural operations explicitly; compiler and machine-code correspondence are not claimed.
+Full workspace build: not claimed for this checkpoint. Complete Action advice and gate checks are rerunning with the added support rules; the earlier full lookup check remains in progress. The latest successful full workspace build remains b3b22e26 (4465 jobs).
+Remaining: full source scans and application-level witness corollaries; concrete public-row and query providers; complete PLONK opening and quotient composition; codecs and transcript observation; whole fixed-bit simulator and real-prover-and-test PRNG-reduction costs.

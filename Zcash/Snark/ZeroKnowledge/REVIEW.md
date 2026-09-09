@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `7756fd3eb17daea360d3afbc7f82b7fb9ca50edb` on `establish-zk` in
+Proof baseline: `084e9f2a341852ed4c149b508ff064e0fa584dbd` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -364,7 +364,10 @@ equality search, and the complete selected readers.
 The model uses materialized arrays and lists, bounded-width structural indexing,
 and explicit prices for field and group primitives. Callback readers carry their
 complete costs. Shared intermediate work may be conservatively counted more than
-once. These component proofs do not supply public polynomial construction, the
+once. The [public row coefficient construction](RowCoefficientCost.lean) uses the
+proved inverse-DFT formula. [Row evaluations and commitments](RowPolynomialCost.lean)
+include every coefficient calculation and retain full row-provider costs.
+These component proofs do not supply concrete public-row providers, the
 complete PLONK opening, concrete query-provider and quotient composition, codecs, transcript observation,
 or their composition into `actionOracleSimulatorFromBits`. A PRNG reduction
 executes the real prover and the supplied view test, so its admissibility needs
@@ -449,6 +452,15 @@ one direct pin and a separate inventory containing only standard axioms. This
 adds both Lagrange interpolation loops, complete multi-opening scalar evaluation,
 the direct commitment/scalar combination, and actual private-column and entry
 routing. Complete opening assembly and whole-program costs remain open.
+
+The public-polynomial checkpoint passed the
+[focused 3,750-job build and guards](review/validation-084e9f2a.log). All
+[19 declarations across three modules](review/axioms-084e9f2a.log) have direct
+pins and separate inventories containing only standard axioms. Public polynomial
+coefficients are now constructed from their rows with explicit cost bounds;
+evaluation and commitment include that preparation. Complete-multiplication
+wrapper support and all source regressions passed, and both original stage
+certificates were rebuilt. Full Action source scans remain in progress.
 
 The native dependencies remain exactly the inherited named curve-order certificates:
 
