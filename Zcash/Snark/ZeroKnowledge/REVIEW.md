@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `bff126f700c19408f7af665b22c4ff3163223982` on `establish-zk` in
+Proof baseline: `de8910f038852ad6fdb8c3748479df1ffe288946` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -593,3 +593,12 @@ trust-boundary build passed with 3779 jobs. The bound includes actual query and
 argument preparation, the full constraint list, domain values, materialization,
 and the quotient fold. Public-input/setup representations, encoding, whole
 simulator composition, and the Action source scans remain separate work.
+
+The stored-input checkpoint passed its [focused 3,282-job build and both trust boundaries
+(3,831 jobs)](review/validation-de8910f0.log). All [68 declarations across five
+modules](review/axioms-de8910f0.log) have exactly one direct pin. Only the two
+Action-instance-row connection lemmas inherit the existing Pallas certificate;
+the other declarations use standard Lean axioms. Materialized public inputs,
+setup vectors, key data, and complete bit tapes have checked reader/conversion
+costs and exact representation theorems. Whole-simulator composition, transcript
+encoding/observation, and the real-prover-and-test PRNG runtime remain open.
