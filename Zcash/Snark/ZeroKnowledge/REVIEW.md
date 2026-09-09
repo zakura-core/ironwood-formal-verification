@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `45f586ac37a71a2a929436543fcc0c492dd4b88e` on `establish-zk` in
+Proof baseline: `6c80818e5cb64c6f4f6c4677bbb5708b6ea872a9` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -684,3 +684,10 @@ Their 14 declarations are directly pinned and have a separate transitive axiom
 inventory. They inherit the existing Pallas curve-order certificate, with no new
 axiom or native-evaluation certificate. Full read/write scans and activation
 coverage remain separate checks on this certified original data.
+
+The original-source checkpoint passed its [three focused builds and both trust
+boundaries with 3,855 jobs](review/validation-6c80818e.log). Its
+[14-declaration inventory](review/axioms-6c80818e.log) records only standard Lean
+logical axioms and the existing named Pallas dependency. These certificates
+preserve the original data; read/alias safety and activation coverage are checked
+separately before the application-level simulation corollaries can use them.
