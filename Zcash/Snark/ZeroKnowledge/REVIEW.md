@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `531dc5f78c5b09b65deb6f82bb59b83b0b7ce5ef` on `establish-zk` in
+Proof baseline: `eeb9dc0729463883810f050af095d19d1cc71754` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -947,3 +947,5 @@ validation; the last complete workspace build remains the earlier recorded basel
 The complete opening-material checkpoint passes the [focused 3,940-job trust-boundary build](review/validation-531dc5f7.log), with [85 separately inventoried declarations](review/axioms-531dc5f7.log) across 21 modules. All use only the standard logical axioms. This is component validation; complete real-prover resource admissibility and independent review remain open.
 
 The [counted real IPA](HonestIpaTapeCost.lean) now preserves the complete original tape-driven transcript and has a [full materialization bound](HonestIpaBound.lean). Its input prices cover every coefficient, public input, and tape read. The statement includes zero challenges and retains the supplied claimed value. PLONK preparation and the complete prover/retry/test resource composition still require composition with this component.
+
+The complete real-IPA checkpoint passes the [focused 3,955-job trust-boundary build](review/validation-eeb9dc07.log), with [74 separately inventoried declarations](review/axioms-eeb9dc07.log) across 15 modules. Their transitive dependencies use only the standard logical axioms. The complete prover/retry/test resource bound and independent review remain open.

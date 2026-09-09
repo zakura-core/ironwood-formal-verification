@@ -1,0 +1,39 @@
+Proof baseline: eeb9dc0729463883810f050af095d19d1cc71754
+Exact staged tree: ff9fd926a1ff5553dc183b325bf7799ec88c9036 (identical to committed tree)
+Branch: establish-zk
+Push destination: https://github.com/TalDerei/ironwood-private.git
+
+Focused validation; this checkpoint does not claim a full workspace build.
+
+lake build --wfail Zcash.Snark.ZeroKnowledge.TrustBoundary
+Build completed successfully (3955 jobs).
+
+lake build --wfail Zcash.Snark.ZeroKnowledge.HonestIpaTapeCost
+Build completed successfully (2801 jobs).
+
+Separate warning-as-error axiom inventory: 74 declarations across 15 modules.
+Every declaration has exactly one direct pin in ZeroKnowledge.TrustBoundary.
+Transitive axioms for these declarations: propext, Classical.choice, Quot.sound.
+No native certificate or admitted lemma in these new declarations.
+
+Repository guards were run against this exact staged tree, exported with git archive.
+The no-umbrella check uses the staged tracked-file inventory in the source checkout.
+check_endpoint_census.sh
+endpoint census: 331 endpoint declaration(s), all pinned.
+check_build_coverage.sh
+build surface: 6 target(s), lakefile.toml and .github/workflows/lean.yml agree.
+build coverage: 1220 module(s), all covered by the default targets.
+check_csimp_census.sh
+csimp census: 1 csimp declaration(s), all covered.
+check_costed_group_work_census.sh
+costed group-work census: 2 production modules, 20 host-callback definitions pinned.
+check_fixture_manifest.sh
+fixture manifest: 6 artifact(s), digests and provenance entries all match.
+check_no_umbrella_imports.sh
+Whitespace, documentation links, 15 imports and 74 unique direct pins: PASS
+
+Scope: complete actual IPA cross terms and recursive folds, sparse coefficients,
+independent blinds and both final responses, full materialization, and the
+original ordered IPA tape. All source erasures include exceptional challenges.
+Complete PLONK preparation and prover/retry/test resource composition remain open.
+Independent review remains pending.
