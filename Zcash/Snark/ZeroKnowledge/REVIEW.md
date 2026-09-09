@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `fee234046787129e6d423d702d27aff7c9d4b63c` on `establish-zk` in
+Proof baseline: `4ccde259bd9d55dbbdb13d5b3bde329c9e41667e` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -789,3 +789,12 @@ logical axioms. The original blocked source entries also pass; the full read and
 alias scans have separate module boundaries so their certificates can be cached
 independently. Complete Action source checks remain prerequisites to the
 application witness corollaries.
+
+The [complete activation-coverage milestone](review/validation-4ccde259.log) passed
+for all 55 configured Action gates and three lookup masters, using every original
+source entry. Its [51-declaration inventory](review/axioms-4ccde259.log) records exact
+direct pins; only the four Action theorems add the existing named Pallas dependency
+to standard Lean logical axioms. Both trust boundaries and all repository guards
+passed. The indexed scan is proved equal to the original for all inputs and retains
+all rejection cases. The complete advice scans and application witness corollaries
+remain the circuit-construction work.
