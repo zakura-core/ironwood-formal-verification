@@ -524,7 +524,10 @@ tape alone do not prove that running-time statement.
   stage certificates rebuilt. The Action row checkpoint passes the
   [focused 3,700-job build](review/validation-fb1c737e.log), with
   [35 declarations across nine modules](review/axioms-fb1c737e.log) directly pinned
-  and separately inventoried. The full Action source scans remain in progress.
+  and separately inventoried. The arithmetic milestone passes the
+  [focused 3,728-job build](review/validation-1e80ffcc.log), with
+  [118 declarations across fourteen modules](review/axioms-1e80ffcc.log) directly
+  pinned and separately inventoried. The full Action source scans remain in progress.
 - [x] Run the full `lake build --wfail` before declaring an extension complete.
   The byte-cache cost milestone passes locally with 4,428
   jobs; all 891 modules were covered by the default targets. The application

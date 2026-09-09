@@ -1,0 +1,18 @@
+Complete IPA simulation and PLONK arithmetic costs
+Proof baseline: 1e80ffcc3a2281f4edf17b7fd190ee8d0e11f774.
+Focused build: lake build --wfail Zcash.Snark.ZeroKnowledge.TrustBoundary; passed (3728 jobs).
+The build checks all 118 new declarations and their direct axiom or computability pins. Every component was compiled with warnings treated as errors.
+Full workspace build: not claimed for this checkpoint. The complete Action advice, gate, and lookup source certificates are unfinished workspace files; the latest successful full build remains b3b22e26 (4465 jobs).
+Endpoint census: 326 endpoint declarations, all pinned.
+Build coverage guard: all 968 workspace modules covered at the check, including the three unfinished Action source certificates. Six default targets agree between lakefile.toml and CI.
+Umbrella-import guard: passed.
+csimp census: 1 declaration, covered.
+Costed group-work census: 2 production modules, 20 host callbacks pinned.
+Fixture manifest: all 6 artifacts match their digests and provenance entries.
+Declaration inventory: 118 mathematical declarations across 14 modules, each with exactly one direct pin.
+Separate transitive axiom inventory: all 118 declarations checked. The 13 runtime modules use only propext, Classical.choice, and Quot.sound. The Action relation composition additionally retains the existing native owner CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt. No admission or new native-evaluation certificate.
+Local Markdown links: 574 checked across README, CHECKLIST, and REVIEW before this review-record update.
+Whitespace: git diff --check and git diff --cached --check passed.
+Scope: counted public IPA folds, scalar case selection, complete IPA arithmetic and transcript materialization, finite/list iteration, expression evaluation and compression, all five lookup constraints, permutation-chunk arithmetic, canonical polynomial coefficient loading and Horner evaluation, full coefficient commitments, and commitment/scalar Horner folds. The Action source-constraint bridges also compose into ActionZkRelation under their explicit activation-coverage premises.
+Cost model: structural operations with complete supplied reader costs and explicit field/group primitive prices. All result theorems identify the existing protocol functions; exceptional field values are retained. This is not compiler or machine-code correspondence.
+Remaining composition: public polynomial construction, complete PLONK opening and quotient assembly, codecs and transcript observation, whole fixed-bit simulator cost, and the real-prover-and-test PRNG reductions. Full Action source scans and application-level witness validity remain open.

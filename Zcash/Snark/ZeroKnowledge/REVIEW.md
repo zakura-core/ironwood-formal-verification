@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `fb1c737e5b61fb896ea81b1074dd56522d0f48a8` on `establish-zk` in
+Proof baseline: `1e80ffcc3a2281f4edf17b7fd190ee8d0e11f774` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -154,8 +154,10 @@ The `148m + 70` coefficient belongs to the comparison, not the real tape count.
 The finite PRNG loss `eta` covers the whole candidate prefix and admitted test,
 even when a particular execution uses fewer blocks. [The explicit encoding](ActionPrivateRetryBits.lean)
 identifies that raw prefix with a fixed bit string. These are input and query
-budgets. A costed simulator implementation, machine running-time bound, and the
-resulting PRNG test-class membership proof remain open.
+budgets. The arithmetic and cache components below have checked structural
+costs. Whole-simulator composition and the real-prover-and-test runtime needed
+for PRNG test-class membership remain open; no machine-code correspondence is
+asserted.
 
 **Application witness construction**
 
@@ -294,7 +296,10 @@ source-coverage premise; inactive rows use the actual zero-index table entry,
 including the Sinsemilla generator coordinates.
 [ActionGateValues.lean](ActionGateValues.lean) establishes every compiled gate
 row, and [ActionRowRelations.lean](ActionRowRelations.lean) preserves both kinds
-of row relation through the reference-key shape. The complete advice scans,
+of row relation through the reference-key shape.
+[ActionConstraintsRelation.lean](ActionConstraintsRelation.lean) combines these
+three bridges into `ActionZkRelation` under the original constraints and explicit
+activation-coverage checks. The complete advice scans,
 actual gate and lookup activation coverage, and final application-level
 `ActionZkRelation` corollary remain open. The existing circuit-level simulation
 theorem and validity relation are unchanged.
@@ -319,6 +324,37 @@ The parameters are `m` Actions and `q` initially cached entries. No successful
 emission or nonzero-challenge premise is needed. This is a cache-component cost
 proof; public-input preparation, bit packing, field/group/polynomial arithmetic,
 encoding, observation, and full simulator/reduction composition remain outside it.
+
+**IPA and PLONK arithmetic costs**
+
+[IpaSimulatorCost.lean](IpaSimulatorCost.lean) constructs the complete IPA
+transcript and materializes every output, including fields originally represented
+as functions. `materializedIpaSimulatorCosted_result` identifies exactly the
+existing simulator's finite observation; `materializedIpaSimulatorCosted_cost_le`
+bounds the same counted algorithm. The budget retains both public folds, the
+scalar case test, every round point, the mask commitment, both responses, and
+all supplied public-input and coin-reader costs. It holds at exceptional challenge
+values and includes materialization work before any later encoder failure.
+
+[ExpressionCost.lean](ExpressionCost.lean) counts every original AST node and query
+access. [ExpressionCompressionCost.lean](ExpressionCompressionCost.lean) composes
+those evaluations into the actual ordered lookup fold. The complete five-value
+[lookup calculation](LookupExpressionsCost.lean) and both
+[permutation-chunk products](PermutationChunkCost.lean) retain their existing
+formulas and inactive-row behavior. [PolynomialArithmeticCost.lean](PolynomialArithmeticCost.lean)
+loads the actual canonical coefficient array and proves its counted Horner
+algorithm equal to the existing evaluator. [CommitmentArithmeticCost.lean](CommitmentArithmeticCost.lean)
+counts the full coefficient/generator sweep and the public commitment and scalar
+claim folds.
+
+The model uses materialized arrays and lists, bounded-width structural indexing,
+and explicit prices for field and group primitives. Callback readers carry their
+complete costs. Shared intermediate work may be conservatively counted more than
+once. These component proofs do not supply public polynomial construction, the
+complete PLONK opening and quotient assembly, codecs, transcript observation,
+or their composition into `actionOracleSimulatorFromBits`. A PRNG reduction
+executes the real prover and the supplied view test, so its admissibility needs
+those runtime bounds in addition to simulator efficiency.
 
 **Input conversion costs**
 
@@ -375,6 +411,14 @@ The Action row checkpoint passed the
 pins and a separate dependency inventory. This closes the actual lookup-tuple
 and packed-copy bridges under the stated source premises. Its only native
 owner is the existing Pallas certificate; the full source scans remain pending.
+
+The arithmetic milestone passed the
+[focused 3,728-job build and guards](review/validation-1e80ffcc.log). All
+[118 new declarations across fourteen modules](review/axioms-1e80ffcc.log) have
+exactly one direct pin and a separate transitive inventory. The thirteen runtime
+modules use only Lean's standard axioms; the Action relation composition retains
+the existing Pallas certificate. The full Action source checks and complete
+simulator/reduction runtime composition remain open.
 
 The native dependencies remain exactly the inherited named curve-order certificates:
 
