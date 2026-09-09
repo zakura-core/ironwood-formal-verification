@@ -165,8 +165,13 @@ proof, canonical codecs and observation, query replay, and cache programming are
 included, with all failure branches retained. Inputs are materialized public
 inputs, setup vectors, key trees/layout, bits, and the initial cache; setup/key
 generation is outside the supplied-input model. The budget records explicit
-primitive operation prices. The real-prover-and-test runtime needed for PRNG
-test-class membership remains open; no machine-code correspondence is asserted.
+primitive operation prices. The real prover's [lookup-prefix construction](LookupSortRowsCost.lean)
+now has a complete input-size bound covering sorting, reservations, reverse filling,
+and failures. The [lookup and permutation ratio scans](RunningProductCost.lean)
+retain every row-provider cost and inherited chunk, including zero denominators.
+Their results equal the original computations for every input. Composing those
+components into the real-prover-and-test runtime needed for PRNG test-class
+membership remains open; no machine-code correspondence is asserted.
 
 **Application witness construction**
 

@@ -669,6 +669,13 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   [Exact law equality and statistical transfer](StoredActionOracleRuntime.lean)
   connect this same counted implementation to the existing fixed-bit simulator and
   its two-sided `plonkBitSimulationErrorBound m q` theorem.
+- [x] Bound the real prover's [complete lookup-prefix sorter](LookupSortRowsCost.lean)
+  and [lookup and chained permutation ratio scans](RunningProductCost.lean).
+  The sort includes both input lists, canonical-key extraction, comparisons,
+  reservations, reverse filling, and all failures. Its counted comparison sort
+  is proved equal to the original canonical merge sort. The ratio bounds retain
+  every numerator, denominator, challenge read, and inherited chunk computation,
+  including zero denominators. These are components of the real-prover bound.
 - [ ] Discharge the PRNG reduction's resource conditions wherever that
   computational instantiation is claimed. This requires bounds for the actual
   real-prover-and-test reduction, including retained auxiliary data and any retry
