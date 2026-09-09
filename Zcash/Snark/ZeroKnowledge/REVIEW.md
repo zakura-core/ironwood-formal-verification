@@ -154,11 +154,16 @@ The `148m + 70` coefficient belongs to the comparison, not the real tape count.
 The finite PRNG loss `eta` covers the whole candidate prefix and admitted test,
 even when a particular execution uses fewer blocks. [The explicit encoding](ActionPrivateRetryBits.lean)
 identifies that raw prefix with a fixed bit string. These are input and query
-budgets. The arithmetic and cache components below have checked structural
-costs. The algebraic joint simulator is now composed below. Fixed-bit/encoding
-composition and the real-prover-and-test runtime needed
-for PRNG test-class membership remain open; no machine-code correspondence is
-asserted.
+budgets. The complete [stored-input simulator](StoredActionOracleSimulatorCost.lean)
+has a [fixed structural execution-cost bound](StoredActionOracleSimulatorBound.lean)
+and [exact law equality](StoredActionOracleRuntime.lean) with the original fixed-bit
+simulator. Public initialization, bit packing/reduction, the entire PLONK/IPA
+proof, canonical codecs and observation, query replay, and cache programming are
+included, with all failure branches retained. Inputs are materialized public
+inputs, setup vectors, key trees/layout, bits, and the initial cache; setup/key
+generation is outside the supplied-input model. The budget records explicit
+primitive operation prices. The real-prover-and-test runtime needed for PRNG
+test-class membership remains open; no machine-code correspondence is asserted.
 
 **Application witness construction**
 
@@ -741,3 +746,25 @@ The [58-declaration inventory](review/axioms-059f0df7.log) records exact direct 
 and only the existing named Pallas native dependency in three Action theorems.
 Whole-oracle composition, application source checks, concrete PRNG resource
 membership, and independent review remain separate work.
+
+
+The complete runtime checkpoint composes public initialization, the stored bit
+producer, the full Action PLONK/IPA proof, canonical observation, exact query and
+raw-reply replay, and cache programming. The exact-result theorem
+`storedActionOracleSimulatorCosted_result` in
+[StoredActionOracleSimulatorCost.lean](StoredActionOracleSimulatorCost.lean)
+recovers `actionOracleSimulatorFromBits` with the actual Action key and codecs.
+[StoredActionOracleSimulatorBound.lean](StoredActionOracleSimulatorBound.lean)
+proves a fixed total budget for every full input tape, including abort and
+programming-conflict paths. It is a sum of initialization, complete view,
+programming, and composition costs; generated reader bounds are derived inside
+the proof. The prior cache contributes at most
+`22 * ((q + 22) * (9490m + 14207) + 4) + 2` for programming.
+
+[StoredActionOracleRuntime.lean](StoredActionOracleRuntime.lean) erases the counter
+under the original uniform bit law, proves equality with `actionOracleBitSimulator`,
+and transfers its two-sided `plonkBitSimulationErrorBound m q` theorem. The bound
+uses explicit primitive prices and materialized inputs; setup/key generation and
+compiler or machine-code correspondence are outside this cost model. Runtime of
+the real-prover-and-test reduction remains necessary to instantiate its PRNG
+admissibility premise. Independent review is still pending.

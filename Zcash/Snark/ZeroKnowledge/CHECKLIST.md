@@ -623,25 +623,39 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   and encoded byte. The [stored raw reader](StoredDigestPrefixCost.lean) recovers
   the exact zero-extended public reply tape and its agreement with the field
   challenges, without exposing words from the private suffix.
-- [ ] Specify the runtime model and input representations, including access to
+- [x] Specify the runtime model and input representations, including access to
   public inputs and setup, bit packing, field reduction, group arithmetic,
   polynomial operations, transcript encoding, and cache lookup/programming.
-- [ ] Build costed implementations of those operations and prove that erasing
+- [x] Build costed implementations of those operations and prove that erasing
   their costs gives the operations used by the existing simulator. Account for
   supplied callbacks instead of assigning arbitrary host computations zero cost.
-- [ ] Compose the costed operations into the actual fixed-bit simulator and prove
+- [x] Compose the costed operations into the actual fixed-bit simulator and prove
   equality with `actionOracleSimulatorFromBits`, retaining all failure branches.
-- [ ] Prove the resulting running-time bound in the Action count, prior cache
+  [Public initialization](StoredActionInitialCost.lean) includes the actual instance
+  commitments; the [complete oracle view](StoredActionOracleViewCost.lean) includes
+  canonical observation, every raw reply, and the original query schedule. The
+  [whole program](StoredActionOracleSimulatorCost.lean) then performs the existing
+  conflict-checked cache programming. Its exact-result theorem uses the actual
+  Action compiler key, fixed columns, sigma columns, and canonical codecs.
+- [x] Prove the resulting running-time bound in the Action count, prior cache
   size, and explicit input sizes. State primitive-cost assumptions and distinguish
   a cost-model theorem from compiler or machine-code correspondence.
+  The [fixed complete budget](StoredActionOracleSimulatorBound.lean) bounds every
+  bit tape, including every failure path, by the sum of initialization, complete
+  view construction, cache programming, and composition costs. Its parameters are
+  `m`, the stored bit length, prior cache length, stored key structure, and explicit
+  primitive prices. Setup/key generation is outside the supplied-input model.
+  [Exact law equality and statistical transfer](StoredActionOracleRuntime.lean)
+  connect this same counted implementation to the existing fixed-bit simulator and
+  its two-sided `plonkBitSimulationErrorBound m q` theorem.
 - [ ] Discharge the PRNG reduction's resource conditions wherever that
   computational instantiation is claimed. This requires bounds for the actual
   real-prover-and-test reduction, including retained auxiliary data and any retry
   or postprocessing work; the simulator's runtime bound alone does not supply them.
 
-Closure: a bound on the same simulator's execution cost follows from a specified
-cost model and explicit primitive assumptions. Computability and a fixed random
-tape alone do not prove that running-time statement.
+Closure: the same fixed-bit simulator now has a checked complete execution-cost
+bound in the stated structural model with explicit primitive prices. The real
+prover/reduction cost required by the PRNG instantiation remains a separate item.
 
 **7. Review: prepare the evidence and obtain independent assessment**
 

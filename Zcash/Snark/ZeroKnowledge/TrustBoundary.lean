@@ -1,3 +1,5 @@
+import Zcash.Snark.ZeroKnowledge.CanonicalOracleViewCost
+import Zcash.Snark.ZeroKnowledge.StoredJointTraceSize
 import Zcash.Snark.ZeroKnowledge.ProtocolObserverCost
 import Zcash.Snark.ZeroKnowledge.StoredIpaReadCost
 import Zcash.Snark.ZeroKnowledge.StoredJointProofCost
@@ -3897,3 +3899,11 @@ assert_axioms Zcash.Snark.ZeroKnowledge.storedDigestPrefixCosted_cost_le
 assert_axioms Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted_digest_result
 assert_axioms Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted_digest_agreement
 assert_axioms Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted_digest_cost_le
+
+-- Complete stored-input oracle simulator, its total bound, and exact statistical law.
+assert_computable Zcash.Snark.ZeroKnowledge.canonicalProtocolOracleViewCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.canonicalProtocolOracleViewCosted_result
+assert_computable Zcash.Snark.ZeroKnowledge.canonicalProtocolOracleViewBudget
+assert_axioms Zcash.Snark.ZeroKnowledge.canonicalProtocolOracleViewCosted_cost_le
+assert_axioms Zcash.Snark.ZeroKnowledge.storedJointTraceCosted_length_le
+assert_axioms Zcash.Snark.ZeroKnowledge.storedJointTraceCosted_challengeCount

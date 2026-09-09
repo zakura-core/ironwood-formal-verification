@@ -182,8 +182,8 @@ keeps the cost of the preceding work. For materialized query logs, the
 schedule and its [linear transcript-size bound](PlonkTranscriptSize.lean).
 Here `q` is the initial cache length and `m` is the Action count. The units count
 byte comparisons, structural case tests, and cache-cell construction. The
-surrounding proof construction, codecs, and observer require their own costs and
-a composition proof.
+surrounding proof construction, codecs, and observer are included in the complete
+composition below.
 The counted [bit packer](RawBitPackingCost.lean) and
 [wide reducer](WideBitReductionCost.lean) now reproduce exactly the existing
 raw-word and field-tape conversions. Each 512-bit word costs at most
@@ -221,8 +221,21 @@ complete cost theorems. They preserve canonical bytes and identity rejection.
 The [complete stored-bit transcript](StoredActionTapeTraceCost.lean) now composes
 proof routing and message scheduling, with a [fixed cost envelope](StoredActionTapeTraceBound.lean).
 The [canonical observer](CanonicalObserverCost.lean) retains the original bytes,
-received challenges, and abort checks. Public initialization, complete oracle
-replay, and cache programming remain to compose into the full simulator.
+received challenges, and abort checks. The [complete stored-input simulator](StoredActionOracleSimulatorCost.lean)
+now composes public instance commitments, the bit-driven proof, every query and
+raw reply, canonical observation, and conflict-checked cache programming. Erasing
+its counter gives exactly `actionOracleSimulatorFromBits` for the actual Action
+compiler key and original codecs, including all failure branches.
+
+The [complete runtime bound](StoredActionOracleSimulatorBound.lean) applies to
+every complete bit tape. It depends on the Action count, prior cache length,
+stored bit length and key structure, and explicit field/group, equality, read,
+and structural operation prices. Setup/key generation is outside this model of
+supplied inputs. The [distribution theorem](StoredActionOracleRuntime.lean) proves
+that this counted implementation has the existing fixed-bit simulator's law and
+two-sided statistical error bound. These are structural execution costs;
+compiler and machine-code correspondence and the real-prover-and-test PRNG
+resource bound remain separate.
 
 The [counted IPA simulator](IpaSimulatorCost.lean) now constructs and materializes
 every round point, the mask commitment, and both scalar responses. Its erasure

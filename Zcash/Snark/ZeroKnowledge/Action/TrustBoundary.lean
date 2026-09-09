@@ -1,3 +1,10 @@
+import Zcash.Snark.ZeroKnowledge.StoredActionInstanceCost
+import Zcash.Snark.ZeroKnowledge.StoredActionInitialCost
+import Zcash.Snark.ZeroKnowledge.StoredActionOracleViewCost
+import Zcash.Snark.ZeroKnowledge.StoredActionOracleViewBound
+import Zcash.Snark.ZeroKnowledge.StoredActionOracleSimulatorCost
+import Zcash.Snark.ZeroKnowledge.StoredActionOracleSimulatorBound
+import Zcash.Snark.ZeroKnowledge.StoredActionOracleRuntime
 import Zcash.Snark.ZeroKnowledge.StoredActionTapeTraceCost
 import Zcash.Snark.ZeroKnowledge.StoredActionJointSize
 import Zcash.Snark.ZeroKnowledge.StoredActionTapeTraceBound
@@ -1304,3 +1311,24 @@ assert_axioms Zcash.Snark.ZeroKnowledge.storedActionTapeTraceCosted_result +nati
 assert_axioms Zcash.Snark.ZeroKnowledge.storedActionTapeJointCosted_shape +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
 assert_computable Zcash.Snark.ZeroKnowledge.storedActionTapeTraceCostBudget +choice
 assert_axioms Zcash.Snark.ZeroKnowledge.storedActionTapeTraceCosted_cost_le_fixed +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+
+-- Complete stored-input oracle simulator, its total bound, and exact statistical law.
+assert_computable Zcash.Snark.ZeroKnowledge.storedActionInstanceCommitmentCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionInstanceCommitmentCosted_result +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.storedActionInstanceCommitmentBudget
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionInstanceCommitmentCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.storedActionInitialCosted +choice +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionInitialCosted_result +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionInitialCosted_length +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionInitialCosted_cost_le +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.storedActionOracleViewCosted +choice +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionOracleViewCosted_result +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.storedActionOracleViewCostBudget +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionOracleViewCosted_cost_le_fixed +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.storedActionOracleSimulatorCosted +choice +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionOracleSimulatorCosted_result +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.storedActionOracleSimulatorCostBudget +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionOracleSimulatorCosted_cost_le_fixed +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionOracleBitSimulator +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionOracleBitSimulator_law +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionOracleBit_simulation_error_bound +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
