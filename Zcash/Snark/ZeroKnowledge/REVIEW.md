@@ -209,6 +209,19 @@ retry/test composition remain part of the open resource item. The Action
 specialization inherits the existing Pallas generator-order native certificate,
 which is explicitly named in its direct trust-boundary pin.
 
+The [complete quotient-piece constructor](PlonkQuotientRowsCost.lean) now carries
+the original rows through numerator reconstruction, domain division, and all eight
+stored pieces. Its [cost bound](PlonkQuotientRowsBound.lean) includes that entire
+composition; the [Action compiler corollary](ActionQuotientRowsCost.lean) supplies
+the concrete premises. The [private coefficient constructor](PrivatePolynomialCoefficientsCost.lean),
+[exact group routing](DenseOpeningGroupCost.lean), and
+[stored opening-polynomial folds](DenseOpeningPolynomialCost.lean) retain every
+coefficient provider, source-order choice, and arithmetic cost. Generic group
+erasure requires that supplied coefficients denote the stated public/private
+polynomials; the checked row constructor supplies the private-column identity.
+The multi-opening interpolants, real IPA, and complete reduction composition
+remain part of the open resource item.
+
 **Application witness construction**
 
 [ActionWitnessConditions.lean](ActionWitnessConditions.lean) starts from

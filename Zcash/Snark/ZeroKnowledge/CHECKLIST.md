@@ -715,6 +715,16 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   Quotient erasure holds without a divisibility assumption. Opening-divisor
   construction [retains the source's point deduplication](DenseVanishingDivision.lean),
   including coincident points. These remain components of the full real-prover bound.
+- [x] Compose the actual numerator with [all eight quotient pieces](PlonkQuotientRowsCost.lean),
+  with a [complete bound from the original rows](PlonkQuotientRowsBound.lean)
+  and [Action compiler specialization](ActionQuotientRowsCost.lean). Materialize
+  [private polynomial coefficients](PrivatePolynomialCoefficientsCost.lean),
+  preserve their exact [column routing](PrivateCoefficientRoutingCost.lean), and
+  construct the [original opening groups](DenseOpeningGroupCost.lean) and
+  [polynomial folds](DenseOpeningPolynomialCost.lean) with full provider,
+  arithmetic, and storage costs. The [collapsed quotient](DenseCollapsedQuotientCost.lean)
+  retains every piece weight and the linear mask's original placement. The
+  subsequent multi-opening, real IPA, and whole-reduction composition remain below.
 - [ ] Discharge the PRNG reduction's resource conditions wherever that
   computational instantiation is claimed. This requires bounds for the actual
   real-prover-and-test reduction, including retained auxiliary data and any retry
