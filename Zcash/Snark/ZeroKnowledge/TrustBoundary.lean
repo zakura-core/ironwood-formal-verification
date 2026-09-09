@@ -1,3 +1,6 @@
+import Zcash.Snark.ZeroKnowledge.ScalarEncodingCost
+import Zcash.Snark.ZeroKnowledge.PointEncodingCost
+import Zcash.Snark.ZeroKnowledge.TranscriptEncodingCost
 import Zcash.Snark.ZeroKnowledge.StoredChallengePrices
 import Zcash.Snark.ZeroKnowledge.PlonkJointPriceBudget
 import Zcash.Snark.ZeroKnowledge.PlonkCoinReadCost
@@ -3715,3 +3718,31 @@ assert_computable Zcash.Snark.ZeroKnowledge.Challenges.readPrices
 assert_computable Zcash.Snark.ZeroKnowledge.storedPlonkChallengePriceModel +choice
 assert_axioms Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted_challenge_prices
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkJointSimulatorCostBudget_congr_prices
+
+/-! ## Complete proof and transcript codecs -/
+
+assert_computable Zcash.Snark.ZeroKnowledge.i2leosp256ByteCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.i2leosp256ByteCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.i2leosp256ByteCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.i2leosp256Costed
+assert_axioms Zcash.Snark.ZeroKnowledge.i2leosp256Costed_result
+assert_axioms Zcash.Snark.ZeroKnowledge.i2leosp256Costed_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.plonkScalarCodecCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkScalarCodecCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkScalarCodecCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.vestaCoordinateCodecCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.vestaCoordinateCodecCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.vestaCoordinateCodecCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.vestaAffineCodecCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.vestaAffineCodecCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.vestaAffineCodecCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.plonkPointCodecCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPointCodecCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkPointCodecCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.transcriptElementBytesCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.transcriptElementBytesCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.transcriptElementBytesCosted_length_le
+assert_axioms Zcash.Snark.ZeroKnowledge.transcriptElementBytesCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.transcriptBytesCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.transcriptBytesCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.transcriptBytesCosted_cost_le

@@ -215,8 +215,11 @@ accesses using their concrete representations. The [bit-driven composition](Stor
 now connects the complete bit producer to this joint computation. Its
 [fixed bound](StoredActionTapeJointBound.lean) depends only on input sizes, stored
 key structure, and primitive operation prices, for every possible bit tape.
-Proof-field routing, codecs, and oracle observation remain necessary for the
-complete oracle-simulator runtime theorem.
+The actual [scalar codec](ScalarEncodingCost.lean), [point codecs](PointEncodingCost.lean),
+and [transcript encoder](TranscriptEncodingCost.lean) now have exact-result and
+complete cost theorems. They preserve canonical bytes and identity rejection.
+Proof-field routing, message scheduling, and oracle observation remain to
+compose for the complete oracle-simulator runtime theorem.
 
 The [counted IPA simulator](IpaSimulatorCost.lean) now constructs and materializes
 every round point, the mask commitment, and both scalar responses. Its erasure

@@ -584,6 +584,12 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   remove sampled values from the budget. The common Action input-read envelope
   is `553m + 4R_read + 4457`. Proof-field routing, encoding, and oracle observation
   remain to be composed.
+- [x] Count the actual [scalar proof codec](ScalarEncodingCost.lean),
+  [compressed-point and affine-point codecs](PointEncodingCost.lean), and
+  [complete transcript-byte construction](TranscriptEncodingCost.lean).
+  Exact erasure preserves canonical representatives, sign bits, transcript tags,
+  and the proof codec's identity rejection. Each byte and each copied output
+  cell is counted. Message scheduling and oracle observation remain to compose.
 - [ ] Specify the runtime model and input representations, including access to
   public inputs and setup, bit packing, field reduction, group arithmetic,
   polynomial operations, transcript encoding, and cache lookup/programming.

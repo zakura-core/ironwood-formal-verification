@@ -665,3 +665,9 @@ inventory. Only the complete Action erasure theorem inherits the existing Pallas
 certificate. The cost envelope covers every input tape without sampled-value or
 reader-price premises. Proof-field routing, codecs, and oracle observation are
 still separate composition work.
+
+The actual scalar, compressed-point, affine-point, and transcript encoders now
+have counted implementations with exact representation theorems. The 25 new
+declarations use only standard Lean logical axioms. The original proof codec's
+identity rejection and every transcript tag and byte are retained. Connecting
+these producers to the complete message schedule and oracle observation remains.
