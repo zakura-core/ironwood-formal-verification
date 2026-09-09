@@ -557,8 +557,14 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
 - [x] Read the [complete stored bit tape](StoredBitTapeCost.lean) with every list
   traversal and word-index calculation counted. Materializing all raw words or all
   reduced fields is exactly the existing fixed-tape conversion, with a polynomial
-  bound in the word count and stored bit length. The complete simulator still needs
-  to compose this conversion with its challenge/private-tape routing.
+  bound in the word count and stored bit length.
+- [x] Produce the [complete simulator tapes](PlonkStoredTapeCost.lean) from those
+  stored bits. The raw replies and reduced fields retain their original joint
+  distribution because both come from the same bits. Exact
+  [challenge routing](PlonkChallengeReadCost.lean) and
+  [private-coin routing](PlonkCoinReadCost.lean) recover the existing split and
+  final IPA scalar positions. The [complete preparation and read bounds](PlonkStoredTapeBound.lean)
+  account for both packing passes, eager scalar loads, and every later indexed read.
 - [x] Compose the [complete algebraic joint simulator](PlonkJointSimulatorCost.lean):
   materialized PLONK masks, stored observation and point readers, the complete
   inferred quotient, public opening, and every IPA output. Erasure is the existing

@@ -1,3 +1,8 @@
+import Zcash.Snark.ZeroKnowledge.PlonkCoinReadCost
+import Zcash.Snark.ZeroKnowledge.PlonkCoinReadBound
+import Zcash.Snark.ZeroKnowledge.PlonkChallengeReadCost
+import Zcash.Snark.ZeroKnowledge.PlonkStoredTapeCost
+import Zcash.Snark.ZeroKnowledge.PlonkStoredTapeBound
 import Zcash.Snark.ZeroKnowledge.PlonkJointSimulatorCostBound
 import Zcash.Snark.ZeroKnowledge.PlonkJointStoredBounds
 import Zcash.Snark.ZeroKnowledge.PlonkJointSimulatorBudget
@@ -3672,3 +3677,30 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaskStoredPoints_cost_le
 
 -- PlonkJointSimulatorCostBound
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkJointSimulatorCosted_cost_le
+
+/-! ## Complete stored-bit tape production and exact coin routing -/
+
+assert_axioms Zcash.Snark.ZeroKnowledge.PlonkSimulatorCoinsCosted
+assert_computable Zcash.Snark.ZeroKnowledge.PlonkSimulatorCoinsCosted.erase
+assert_computable Zcash.Snark.ZeroKnowledge.storedPlonkFieldReadCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.storedPlonkFieldReadCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.storedPlonkFieldReadCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.storedPlonkCoinsCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.storedPlonkCoinsCosted_result
+assert_computable Zcash.Snark.ZeroKnowledge.PlonkSimulatorCoinsCosted.ReadBound
+assert_axioms Zcash.Snark.ZeroKnowledge.storedPlonkCoinsCosted_readBound
+assert_axioms Zcash.Snark.ZeroKnowledge.storedPlonkCoinsCosted_cost_le
+assert_computable Zcash.Snark.ZeroKnowledge.storedPlonkChallengesCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.storedPlonkChallengesCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.storedPlonkChallengesCosted_readBound
+assert_axioms Zcash.Snark.ZeroKnowledge.storedPlonkChallengesCosted_cost_le
+assert_axioms Zcash.Snark.ZeroKnowledge.PlonkPreparedSimulatorTapes
+assert_computable Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted_raw_length
+assert_axioms Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted_raw_result
+assert_axioms Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted_challenges_result
+assert_axioms Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted_coins_result
+assert_computable Zcash.Snark.ZeroKnowledge.plonkStoredTapeReadBudget
+assert_axioms Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted_readBound
+assert_computable Zcash.Snark.ZeroKnowledge.plonkStoredTapeCostBudget
+assert_axioms Zcash.Snark.ZeroKnowledge.storedPlonkSimulatorTapesCosted_cost_le

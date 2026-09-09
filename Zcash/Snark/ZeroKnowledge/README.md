@@ -192,8 +192,12 @@ successor-index adapters and bounded-width arithmetic. The
 [stored-tape implementation](StoredBitTapeCost.lean) additionally charges every
 bit-list traversal and word-index calculation, and materializes the complete raw
 or reduced tape with a polynomial bound in its length. Its erasure is the same
-fixed-tape conversion; routing the challenge/private portions and composing the
-whole simulator remain separate work.
+fixed-tape conversion. The [complete tape producer](PlonkStoredTapeCost.lean)
+also recovers the original challenge/private split and every private-coin position.
+Raw replies and reduced fields come from the same bits, preserving their correlation.
+Its [bound](PlonkStoredTapeBound.lean) includes both packing passes, eager scalar
+loads, and full subsequent indexed reads. Composing these producers with the whole
+simulator remains separate work.
 
 Concrete [row readers](StoredRowsCost.lean), [Action input serialization](ActionPublicInputCost.lean),
 [stored setup vectors](StoredPlonkSetupCost.lean), and [stored key readers](StoredPlonkKeyCost.lean)

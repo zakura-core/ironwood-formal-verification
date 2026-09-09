@@ -465,7 +465,16 @@ Its raw and reduced materializers are proved equal to every entry of the existin
 fixed-tape conversion. For `N` words, `L` stored bits, and primitive read price `R`,
 raw conversion costs at most `N * (512 * (2L + R + 4) + 264195) + N^2 + 1`;
 direct field conversion replaces `264195` by `264194`. The bound covers the entire
-converted output. Later challenge/private-tape routing remains to be composed.
+converted output.
+
+[PlonkStoredTapeCost.lean](PlonkStoredTapeCost.lean) composes both conversions
+and the exact challenge/private-coin split. The raw reply prefix and reduced
+challenge values are functions of the same original bits; no independence is
+introduced between them. [PlonkStoredTapeBound.lean](PlonkStoredTapeBound.lean)
+adds all eager scalar reads and derives every later indexed reader's bound from
+the generated field-list length. Its common bound is `4N + 2R + 25`, including
+both field reads in each IPA-round coin pair. Connecting that producer to the
+complete proof and oracle observer remains separate composition work.
 
 [RawBitPackingCost.lean](RawBitPackingCost.lean) counts little-endian packing from a
 reader that supplies its complete bit-access costs. [WideBitReductionCost.lean](WideBitReductionCost.lean)
