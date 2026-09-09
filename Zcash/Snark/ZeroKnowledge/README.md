@@ -201,6 +201,17 @@ now derive access bounds from the actual materialized inputs. Their representati
 theorems preserve the original public rows, generator vector, and key trees/layout.
 These are supplied-input bounds; they do not price setup generation.
 
+The [complete counted joint simulator](PlonkJointSimulatorCost.lean) now composes
+the materialized PLONK mask, stored readers, complete quotient and public opening,
+and every IPA output. Its exact-erasure theorem preserves the original joint
+simulator at all challenge values. The [total bound](PlonkJointSimulatorCostBound.lean)
+retains every preparation stage and derives the generated readers' sizes and
+access costs from the mask constructor. The [stored Action adapter](StoredActionJointCost.lean)
+and its [bound](StoredActionJointCostBound.lean) instantiate public rows and setup
+accesses using their concrete representations. Composing challenge/private-coin
+routing, proof fields, codecs, and transcript observation with the fixed-bit
+input remains necessary for the complete oracle-simulator runtime theorem.
+
 The [counted IPA simulator](IpaSimulatorCost.lean) now constructs and materializes
 every round point, the mask commitment, and both scalar responses. Its erasure
 theorem gives exactly the existing simulator's complete finite observation;

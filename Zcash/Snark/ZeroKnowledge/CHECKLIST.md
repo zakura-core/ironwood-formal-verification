@@ -559,6 +559,18 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   reduced fields is exactly the existing fixed-tape conversion, with a polynomial
   bound in the word count and stored bit length. The complete simulator still needs
   to compose this conversion with its challenge/private-tape routing.
+- [x] Compose the [complete algebraic joint simulator](PlonkJointSimulatorCost.lean):
+  materialized PLONK masks, stored observation and point readers, the complete
+  inferred quotient, public opening, and every IPA output. Erasure is the existing
+  joint simulator's complete finite view. The [total cost theorem](PlonkJointSimulatorCostBound.lean)
+  derives all generated-reader bounds from the mask constructor and holds at every
+  challenge value. It has no unpriced expected-quotient callback.
+- [x] Instantiate those public readers using the
+  [stored Action adapter](StoredActionJointCost.lean) and its
+  [concrete bound](StoredActionJointCostBound.lean). Public-row, generator, and
+  setup-read premises follow from the original Action input layout and stored
+  dimensions. Challenge/private-coin producers, proof-field routing, encoding,
+  and transcript observation remain to be composed with the fixed-bit stage.
 - [ ] Specify the runtime model and input representations, including access to
   public inputs and setup, bit packing, field reduction, group arithmetic,
   polynomial operations, transcript encoding, and cache lookup/programming.

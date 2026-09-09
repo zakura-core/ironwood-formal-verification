@@ -1,3 +1,5 @@
+import Zcash.Snark.ZeroKnowledge.StoredActionJointCostBound
+import Zcash.Snark.ZeroKnowledge.StoredActionJointCost
 import Zcash.Snark.ZeroKnowledge.ActionPublicInputCost
 import Zcash.Snark.ZeroKnowledge.ActionCacheCost
 import Zcash.Snark.ZeroKnowledge.ActionNativeRouting
@@ -1247,3 +1249,12 @@ assert_computable Zcash.Snark.ZeroKnowledge.actionStoredInstanceRowCosted +choic
 assert_axioms Zcash.Snark.ZeroKnowledge.actionStoredInstanceRowCosted_result +native(
   CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.actionStoredInstanceRowCosted_cost_le
+
+-- StoredActionJointCost
+assert_computable Zcash.Snark.ZeroKnowledge.storedActionJointSimulatorCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionJointSimulatorCosted_result +native(
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.storedActionJointInputBudget
+
+-- StoredActionJointCostBound
+assert_axioms Zcash.Snark.ZeroKnowledge.storedActionJointSimulatorCosted_cost_le

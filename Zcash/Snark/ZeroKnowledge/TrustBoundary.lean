@@ -1,3 +1,9 @@
+import Zcash.Snark.ZeroKnowledge.PlonkJointSimulatorCostBound
+import Zcash.Snark.ZeroKnowledge.PlonkJointStoredBounds
+import Zcash.Snark.ZeroKnowledge.PlonkJointSimulatorBudget
+import Zcash.Snark.ZeroKnowledge.PlonkJointSimulatorCost
+import Zcash.Snark.ZeroKnowledge.ChallengeReadCost
+import Zcash.Snark.ZeroKnowledge.IpaPreparedInputCost
 import Zcash.Snark.ZeroKnowledge.StoredPlonkKeyCost
 import Zcash.Snark.ZeroKnowledge.StoredPlonkSetupCost
 import Zcash.Snark.ZeroKnowledge.StoredBitTapeCost
@@ -3635,3 +3641,34 @@ assert_axioms Zcash.Snark.ZeroKnowledge.StoredPlonkKey.lookupInputCosted_cost_le
 assert_axioms Zcash.Snark.ZeroKnowledge.StoredPlonkKey.lookupTableCosted_cost_le
 assert_axioms Zcash.Snark.ZeroKnowledge.StoredPlonkKey.lookupInputCosted_encode_cost_le
 assert_axioms Zcash.Snark.ZeroKnowledge.StoredPlonkKey.lookupTableCosted_encode_cost_le
+
+-- IpaPreparedInputCost
+assert_computable Zcash.Snark.ZeroKnowledge.prepareIpaPublicCosted
+assert_axioms Zcash.Snark.ZeroKnowledge.prepareIpaPublicCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.prepareIpaPublicCosted_cost
+assert_axioms Zcash.Snark.ZeroKnowledge.prepareIpaPublicCosted_readBound
+assert_computable Zcash.Snark.ZeroKnowledge.preparedIpaSimulatorCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.preparedIpaSimulatorCosted_result
+assert_axioms Zcash.Snark.ZeroKnowledge.preparedIpaSimulatorCosted_cost_le
+
+-- ChallengeReadCost
+assert_computable Zcash.Snark.ZeroKnowledge.Challenges.eraseCosts
+assert_computable Zcash.Snark.ZeroKnowledge.Challenges.ReadBound
+
+-- PlonkJointSimulatorCost
+assert_computable Zcash.Snark.ZeroKnowledge.materializePlonkJointView
+assert_computable Zcash.Snark.ZeroKnowledge.plonkJointSimulatorCosted +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkJointSimulatorCosted_result
+
+-- PlonkJointSimulatorBudget
+assert_computable Zcash.Snark.ZeroKnowledge.plonkJointAccessBudget
+assert_computable Zcash.Snark.ZeroKnowledge.plonkJointSimulatorCostBudget
+
+-- PlonkJointStoredBounds
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaskStoredViews_length
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaskStoredViews_cost_le
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaskStoredViews_readBound
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkMaskStoredPoints_cost_le
+
+-- PlonkJointSimulatorCostBound
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkJointSimulatorCosted_cost_le

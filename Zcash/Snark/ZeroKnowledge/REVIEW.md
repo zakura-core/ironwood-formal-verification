@@ -155,7 +155,8 @@ The finite PRNG loss `eta` covers the whole candidate prefix and admitted test,
 even when a particular execution uses fewer blocks. [The explicit encoding](ActionPrivateRetryBits.lean)
 identifies that raw prefix with a fixed bit string. These are input and query
 budgets. The arithmetic and cache components below have checked structural
-costs. Whole-simulator composition and the real-prover-and-test runtime needed
+costs. The algebraic joint simulator is now composed below. Fixed-bit/encoding
+composition and the real-prover-and-test runtime needed
 for PRNG test-class membership remain open; no machine-code correspondence is
 asserted.
 
@@ -412,6 +413,27 @@ observation, and challenge readers retain their complete costs. The concrete
 stored input representations are described below; whole-simulator composition
 remains separate.
 
+[PlonkJointSimulatorCost.lean](PlonkJointSimulatorCost.lean) computes the complete
+materialized mask, builds its stored readers, computes the actual inferred
+quotient and public opening, and constructs every IPA output.
+`plonkJointSimulatorCosted_result` identifies the exact finite observation of
+`plonkJointSimulatorFromCoins`, using `plonkVerifierHx` internally. The
+[complete cost theorem](PlonkJointSimulatorCostBound.lean) composes those same
+algorithms. Generated mask-reader dimensions and access bounds follow from the
+constructor; no expected-quotient or preparation callback is left unpriced.
+The [composite budget](PlonkJointSimulatorBudget.lean) retains the actual key
+trees/layout, all supplied reads, both field/group primitive price records, and
+every preparation stage. It applies to exceptional challenges and zero defaults.
+
+[StoredActionJointCost.lean](StoredActionJointCost.lean) supplies the actual Action
+instance rows and materialized setup readers. Its [cost theorem](StoredActionJointCostBound.lean)
+discharges every public-row, fixed/sigma, and generator access premise using the
+concrete input and setup sizes. The common input envelope is
+`25m + R_coin + 2R_read + 4200`; it includes the original ten public fields and
+the 2048/29/15 setup dimensions. Remaining coin-reader premises concern the
+challenge and private-tape producers. Proof-field routing, encoding, and the
+oracle observer remain to be composed with those producers and the counted cache.
+
 [StoredRowsCost.lean](StoredRowsCost.lean) charges both levels of matrix lookup
 and recovers the original materialized finite vectors. [ActionPublicInputCost.lean](ActionPublicInputCost.lean)
 serializes the ten actual public fields and prices all preparation and row access,
@@ -429,8 +451,9 @@ complete costs. Shared intermediate work may be conservatively counted more than
 once. The [public row coefficient construction](RowCoefficientCost.lean) uses the
 proved inverse-DFT formula. [Row evaluations and commitments](RowPolynomialCost.lean)
 include every coefficient calculation and retain full row-provider costs.
-These component proofs still need codecs, transcript observation, and their
-composition into `actionOracleSimulatorFromBits`. A PRNG reduction
+The complete algebraic simulation still needs challenge/private-tape routing,
+proof-field routing, codecs, and transcript observation composed into
+`actionOracleSimulatorFromBits`. A PRNG reduction
 executes the real prover and the supplied view test, so its admissibility needs
 those runtime bounds in addition to simulator efficiency.
 
