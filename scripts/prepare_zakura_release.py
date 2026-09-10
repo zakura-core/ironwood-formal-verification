@@ -48,6 +48,10 @@ TEST_GROUPS = [
         "random_and_full_length_zero_patterns_match_the_reference",
         "zero_numerators_match_the_reference_prefix_chain", "leaves_blinding_rows_untouched",
     ], False),
+    ("zakura-halo2-proofs", "crates/halo2_proofs/src/plonk/permutation/prover.rs",
+     "plonk::permutation::prover::tests", [
+        "identity_product_remains_valid_when_a_shared_factor_is_zero",
+    ], True),
     ("zakura-halo2-proofs", "crates/halo2_proofs/src/poly/multiopen/prover.rs",
      "poly::multiopen::prover::tests", [
         "parallel_q_prime_matches_ordered_operator_fold_fp",

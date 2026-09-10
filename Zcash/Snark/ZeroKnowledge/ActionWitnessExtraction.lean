@@ -11,8 +11,7 @@ The original full Action witness equations imply agreement with the normalized
 application witness on every value inspected by the existing honest-prover
 preconditions. This assembles the original field and point loaders, all five
 scalar/window pairs, and the 32 used Merkle readings. It uses the actual fixed
-hint program and actual generated assignment, with the existing scalar-hint
-representability bounds.
+hint program and actual generated assignment, including full-range scalar decoding.
 
 The source certificate must independently establish the witness equations. No
 gate validity, successful proof attempt, or verifier acceptance is assumed.
@@ -41,7 +40,6 @@ theorem actionCircuit_base_extendsWitnesses (env : Placed ProverEnvironment Fp)
 /-- Original witness consistency recovers every private reading needed by completeness. -/
 theorem actionWitnessAssignment_readAgreement_of_extendsWitnesses
     (inputs : PublicInputs Fp) (witness : PrivateWitness)
-    (bounds : ActionScalarHintBounds witness)
     (hw : ExtendsWitnesses actionCircuit.placement
       (actionCircuit.proverEnvironment (actionWitnessAssignment inputs witness) (actionWitnessHints witness))
       actionCircuit.operations 0) :
@@ -58,12 +56,12 @@ theorem actionWitnessAssignment_readAgreement_of_extendsWitnesses
   obtain ⟨hrcv, halpha, hrivk, hrcmOld, hrcmNew⟩ :=
     actionScalarWindowReadings_of_extendsWitnesses _ _ _ _ _ env hbase
   have hmerkle := actionMerkleHintCells_of_extendsWitnesses _ _ _ _ _ env hbase
-  have hdecode := actionWitnessAssignment_hintData inputs witness bounds
+  have hdecode := actionWitnessAssignment_hintData inputs witness
   simp only [Circuit.hintWitnesses, actionWitnessHintData, circuit_norm] at hdecode
   obtain ⟨dpsi, drho, dnk, dvo, dvn, dpsiNew, dmag, dsign,
     dcm, dgd, dak, dpkd, dgdNew, dpkdNew, _, _, _, _, _, dsib, dswap⟩ := hdecode
   obtain ⟨drcv, dalpha, drivk, drcmOld, drcmNew⟩ :=
-    actionWitnessAssignment_hintWindows inputs witness bounds
+    actionWitnessAssignment_hintWindows inputs witness
   have scalarPair (windows : Vector Fp 85) (scalar : Fq)
       (h : windows = canonicalActionScalarWindows scalar) :
       (windows, Ecc.MulFixed.FullWidth.windowsScalar windows) =

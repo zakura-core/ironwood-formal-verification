@@ -14,7 +14,7 @@ open Zcash.Arithmetic (Fp URS)
 open Zcash.Common
 
 /-- The generated application assignment satisfies the complete original Action constraints. -/
-theorem actionWitnessAssignment_constraints (inputs : PublicInputs Fp) (witness : PrivateWitness)
+theorem actionWitnessAssignment_constraints_capstone (inputs : PublicInputs Fp) (witness : PrivateWitness)
     (conditions : ActionWitnessConstructionConditions inputs witness) :
     Constraints actionCircuit.placement
       (actionCircuit.environment (actionWitnessAssignment inputs witness)) actionCircuit.operations 0 :=
@@ -22,13 +22,13 @@ theorem actionWitnessAssignment_constraints (inputs : PublicInputs Fp) (witness 
     (actionWitnessAssignment_extendsWitnesses inputs witness)
 
 /-- Application witness conditions supply every original row and compiler copy premise. -/
-theorem actionWitnessRows_relation {actions : ℕ} (urs : URS VestaG) (hk : urs.k = 11)
+theorem actionWitnessRows_relation_capstone {actions : ℕ} (urs : URS VestaG) (hk : urs.k = 11)
     (inputs : Fin actions → PublicInputs Fp) (witnesses : Fin actions → PrivateWitness)
     (conditions : ∀ action, ActionWitnessConstructionConditions (inputs action) (witnesses action)) :
     ActionZkRelation urs hk inputs (actionWitnessRowBundle inputs witnesses) :=
   actionWitnessRows_relation_of_constraints urs hk inputs witnesses
     actionCircuit_gateActivationCoverage actionCircuit_lookupActivationCoverage
-    (fun action => actionWitnessAssignment_constraints (inputs action) (witnesses action) (conditions action))
+    (fun action => actionWitnessAssignment_constraints_capstone (inputs action) (witnesses action) (conditions action))
 
 /-- Statistical simulation for the rows constructed from the application Action witnesses. -/
 theorem wideActionWitness_simulation_error_bound [Fintype VestaG] {actions : ℕ}
@@ -42,7 +42,7 @@ theorem wideActionWitness_simulation_error_bound [Fintype VestaG] {actions : ℕ
         (actionZkProver urs hk inputs (actionWitnessRowBundle inputs witnesses))
         (plonkSimulationErrorBound actions) :=
   wideActionZkRelation_simulation_error_bound urs hk inputs (actionWitnessRowBundle inputs witnesses)
-    (actionWitnessRows_relation urs hk inputs witnesses conditions) hW
+    (actionWitnessRows_relation_capstone urs hk inputs witnesses conditions) hW
 
 /-- The captured setup supplies its checked blinding-generator condition for application witnesses. -/
 theorem wideCapturedActionWitness_simulation_error_bound [Fintype VestaG] {actions : ℕ}
@@ -73,7 +73,7 @@ theorem actionOracleBitWitness_simulation_error_bound [Fintype VestaG] {actions 
         (actionOracleProver urs hk inputs (actionWitnessRowBundle inputs witnesses) vkTranscriptRepr cache)
         (plonkBitSimulationErrorBound actions cache.length) :=
   actionOracleBit_simulation_error_bound urs hk inputs (actionWitnessRowBundle inputs witnesses)
-    (actionWitnessRows_relation urs hk inputs witnesses conditions) hpositive hW vkTranscriptRepr cache
+    (actionWitnessRows_relation_capstone urs hk inputs witnesses conditions) hpositive hW vkTranscriptRepr cache
 
 /-- Application witnesses instantiate the same complete counted simulator and its statistical law. -/
 theorem storedActionOracleBitWitness_simulation_error_bound [Fintype VestaG]
@@ -96,6 +96,6 @@ theorem storedActionOracleBitWitness_simulation_error_bound [Fintype VestaG]
   let publicInputs := fun action : Fin inputs.length => inputs[action.val]
   exact storedActionOracleBit_simulation_error_bound fieldCosts ipaCosts node equal read omegaAccess
     inputs generators W U (actionWitnessRowBundle publicInputs witnesses)
-    (actionWitnessRows_relation urs rfl publicInputs witnesses conditions) hpositive hW vkTranscriptRepr cache
+    (actionWitnessRows_relation_capstone urs rfl publicInputs witnesses conditions) hpositive hW vkTranscriptRepr cache
 
 end Zcash.Snark.ZeroKnowledge

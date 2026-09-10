@@ -35,6 +35,20 @@ theorem rejectsChangedLabel (row : ℕ) :
   rw [reflectedMetadata_entries]
   simp
 
+/-- Reflection cannot reuse a certificate after its source label changes. -/
+theorem rejectsChangedSource (_row : ℕ) : True := by
+  fail_if_success
+    have _invalid : SourceListCertificate
+        [(_row, "coordinates"), (_row, "coordinates"), (_row + 1, "tail")] :=
+      reflectedMetadata _row
+  trivial
+
+/-- Reflection rejects an abstract source without an equation exposing its entries. -/
+theorem rejectsUnexposedSource (_source : List (ℕ × String)) : True := by
+  fail_if_success
+    have _invalid : SourceListCertificate _source := by certify_source_list
+  trivial
+
 /-- Transporting a source equality preserves its recorded entries, keeping subsequent scans
 independent of equality casts. -/
 theorem transport_retainsEntries (row : ℕ) :
@@ -68,6 +82,8 @@ assert_axioms Zcash.Meta.Tests.SourceListCertificate.packedMetadata
 assert_axioms Zcash.Meta.Tests.SourceListCertificate.reflectedMetadata
 assert_axioms Zcash.Meta.Tests.SourceListCertificate.reflectedMetadata_entries
 assert_axioms Zcash.Meta.Tests.SourceListCertificate.rejectsChangedLabel
+assert_axioms Zcash.Meta.Tests.SourceListCertificate.rejectsChangedSource
+assert_axioms Zcash.Meta.Tests.SourceListCertificate.rejectsUnexposedSource
 assert_axioms Zcash.Meta.Tests.SourceListCertificate.transport_retainsEntries
 assert_axioms Zcash.Meta.Tests.SourceListCertificate.packedStep
 assert_axioms Zcash.Meta.Tests.SourceListCertificate.reflectedThreadedMetadata

@@ -48,9 +48,9 @@ All Rust references below use the Common revision pinned above.
 | --- | --- | --- |
 | Identity public instance commitment | `Error::Transcript`, before the first prover oracle query | [instance initialization](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/plonk/prover.rs#L1152), [identity rejection](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/transcript.rs#L207) |
 | Identity proof point before multi-opening | `Error::Transcript`; the Orchard caller receives no partial proof buffer | [transcript writer](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/transcript.rs#L207) |
-| Duplicate opening queries at `x = 0` | Returned error after receiving `x1,x2`, mapped to `Error::Opening` | [query check](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/poly/multiopen/prover.rs#L607), [error mapping](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/plonk/prover.rs#L1941) |
+| Duplicate opening queries at `x = 0` | Returned error after receiving `x1,x2`, mapped to `Error::Opening` | [query check](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/poly/multiopen/prover.rs#L610), [error mapping](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/plonk/prover.rs#L1941) |
 | Identity proof point in multi-opening or IPA | `Error::Opening`, through that same mapping | [error mapping](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/plonk/prover.rs#L1941) |
-| Zero IPA round challenge | Panic at inverse `unwrap`, after writing both round points | [IPA round](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/poly/commitment/prover.rs#L397) |
+| Zero IPA round challenge | Panic at inverse `unwrap`, after writing both round points | [IPA round](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/poly/commitment/prover.rs#L401) |
 | All stages finish | Return the completed proof buffer; completion alone is not verifier acceptance | [Orchard proof call](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/orchard/src/circuit.rs#L1600) |
 
 With multiple workers, Rust prepares advice and draws its blinding randomness
@@ -64,8 +64,8 @@ assert that Rust leaves the RNG untouched.
 
 Other exceptional values need not stop the call. In particular, the release
 uses an algebraic fallback to evaluate the quotient when `x3` is an opening
-node, and a zero-aware grand-product computation. These are existing
-computation branches within one call. [MultiopenIpa.lean](../MultiopenIpa.lean)
+node. This is an existing computation branch within one call.
+[MultiopenIpa.lean](../MultiopenIpa.lean)
 supplies the actual final polynomial evaluation to the IPA at every point.
 Its equality with the verifier's division-based value requires distinct
 opening nodes and a later point away from them. The
@@ -81,6 +81,41 @@ and satisfying witness rows. Arbitrary malformed requests, allocation failure,
 timing, memory/cache accesses, and process-level panic handling are outside
 the observation. The panic outcome marks termination of this proof call;
 the model supplies no catch-and-retry handler.
+
+## Reference-model exceptions
+
+The generic Rust product scan preserves zero denominators as in
+[RunningProductRows.lean](../RunningProductRows.lean), but the release also has
+an [identity-set shortcut](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/plonk/permutation/prover.rs#L988).
+Orchard's third permutation set contains only `fixed_10` and takes this shortcut:
+Rust retains the incoming `last_z` throughout the unblinded prefix, whereas the
+reference scan becomes zero after a shared numerator/denominator factor vanishes.
+Equality of these intermediate polynomials is therefore claimed only outside
+that exceptional event. This is an accepted model divergence, not a zero-aware
+implementation of that set.
+
+Let `p = |Fp|` and let `δ` be the wide-reduction bias defined in the
+[error bounds](../README.md#error-bounds). For fixed column values and `beta`,
+each of the 2,042 active rows excludes at most
+one `gamma`. The event has probability at most `2042/p` per Action for uniform
+`gamma`, or `2042/p + δ` for wide reduction. Across `m` Actions, a conservative
+bound is `2042m/p + δ`, since the proof shares one `gamma`. This event is contained
+in the zero-denominator event already bounded in
+[PlonkProductBounds.lean](../PlonkProductBounds.lean). The Lean `ε(m)` and `η(m)`
+theorems concern the reference model; a separate comparison with Rust must account
+for this divergence. Even adding `2042m/p + δ` to either displayed reference bound
+remains below `m · 2^-238` for `m ≥ 1`. This arithmetic is not a Rust-to-Lean proof.
+The released [zero-factor regression](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/plonk/permutation/prover.rs#L1906)
+checks the isolated identity chunk's constraints; it does not assert equality
+with the generic scan or correctness of an arbitrary chunk chain.
+
+The total reference constructor also replaces a failed lookup sort with zero
+columns. Rust instead returns
+[`Error::ConstraintSystemFailure`](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/plonk/lookup/prover.rs#L1919)
+before writing the sorted-column commitments. Under `ActionZkRelation`,
+[`plonkColumnAttempt_complete_of_original`](../PlonkLookupCompletion.lean)
+rules out sorting failure on every tape. Statements about invalid witnesses would
+need to model that error explicitly.
 
 ## Lean connection
 
@@ -187,5 +222,6 @@ separate. Their existing Lean reconstruction checks still apply.
 
 The same preparation script accepts `--suite regressions` to add serial/default,
 worker-count, cache, and arithmetic comparisons from the release's existing
-tests. These are optional implementation evidence beyond the fixture refresh.
+tests, including the identity-set zero-factor regression under `multicore`.
+These are optional implementation evidence beyond the fixture refresh.
 No new RNG/trace instrumentation is included in the release-alignment work.

@@ -4,7 +4,8 @@ import Zcash.Snark.ZeroKnowledge.PreIpaMask
 # Batched sampling of column tails and blinds
 
 A batch samples every column's tail, then every column's commitment blind. This matches
-the advice and lookup batching in the available Bento randomness sampler. The singleton
+the advice and lookup batching in pinned Common's `plonk/prover.rs` and
+`plonk/lookup/prover.rs` (see `Zakura/PROVENANCE.md`). The singleton
 case covers permutation and lookup products. Each block is converted by a checked
 equivalence to the canonical column tape; blocks and their fields retain their order.
 -/

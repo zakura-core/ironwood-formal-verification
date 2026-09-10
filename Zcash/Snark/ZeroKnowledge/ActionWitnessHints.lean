@@ -4,9 +4,9 @@ import Zcash.Snark.ZeroKnowledge.ActionWitnessConditions
 # Encoding application witnesses for the fixed Action hint program
 
 The stored values are ordinary field arrays under the keys used by
-`Circuit.hintWitnesses`. Scalar decoding uses the existing field-to-Nat bridge;
-its representability conditions are explicit. The encoding does not consult any
-advice assignment, proof, or verifier result.
+`Circuit.hintWitnesses`. Each scalar uses two 128-bit limbs whose natural-number
+reconstruction covers the full `Fq` range. The encoding does not consult any advice
+assignment, proof, or verifier result.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge
@@ -41,7 +41,31 @@ def actionWitnessHintData (witness : PrivateWitness) : Circuit.WitnessData Fp :=
   merkleSwap := actionWitnessSide witness
 }
 
-/-- Field-array storage consumed by the existing fixed top-level Action hint program. -/
+/-- Store the scalar's low and high 128-bit limbs, with zero padding beyond two columns. -/
+def actionScalarHintValues (scalar : Fq) (width : ℕ) : Vector Fp width :=
+  Vector.ofFn fun column =>
+    if column.val = 0 then (scalar.val % 2 ^ 128 : ℕ)
+    else if column.val = 1 then (scalar.val / 2 ^ 128 : ℕ)
+    else 0
+
+/-- Natural-number reconstruction of the two field limbs recovers every `Fq` scalar.
+This supplies full-range scalar decoding for the fixed Action hint program. -/
+theorem actionScalarHintValues_decode (scalar : Fq) :
+    (actionScalarHintValues scalar 2)[0].val +
+      2 ^ 128 * (actionScalarHintValues scalar 2)[1].val = scalar.val := by
+  have hradix : 2 ^ 128 < PALLAS_BASE_CARD := by decide
+  have hlow : scalar.val % 2 ^ 128 < PALLAS_BASE_CARD :=
+    lt_trans (Nat.mod_lt _ (by decide)) hradix
+  have hscalar : scalar.val < 2 ^ 128 * 2 ^ 128 :=
+    lt_trans (ZMod.val_lt scalar) (by decide)
+  have hhigh : scalar.val / 2 ^ 128 < PALLAS_BASE_CARD :=
+    lt_trans (Nat.div_lt_of_lt_mul hscalar) hradix
+  change ((scalar.val % 2 ^ 128 : ℕ) : Fp).val +
+    2 ^ 128 * ((scalar.val / 2 ^ 128 : ℕ) : Fp).val = scalar.val
+  rw [ZMod.val_natCast_of_lt hlow, ZMod.val_natCast_of_lt hhigh]
+  exact Nat.mod_add_div _ _
+
+/-- Field-array storage consumed by the fixed top-level Action hint program. -/
 def actionWitnessHints (witness : PrivateWitness) : ProverHint Fp := fun key width =>
   match key with
   | "orchard.action.psi_old" => #[Vector.replicate width witness.psiOld]
@@ -58,11 +82,11 @@ def actionWitnessHints (witness : PrivateWitness) : ProverHint Fp := fun key wid
   | "orchard.action.pkd_old" => #[Vector.ofFn (fun col => if col.val = 0 then witness.pkdOld.x else if col.val = 1 then witness.pkdOld.y else 0)]
   | "orchard.action.gd_new" => #[Vector.ofFn (fun col => if col.val = 0 then witness.gdNew.x else if col.val = 1 then witness.gdNew.y else 0)]
   | "orchard.action.pkd_new" => #[Vector.ofFn (fun col => if col.val = 0 then witness.pkdNew.x else if col.val = 1 then witness.pkdNew.y else 0)]
-  | "orchard.action.rcv" => #[Vector.replicate width (witness.rcv.2.val : Fp)]
-  | "orchard.action.alpha" => #[Vector.replicate width (witness.alpha.2.val : Fp)]
-  | "orchard.action.rivk" => #[Vector.replicate width (witness.rivk.2.val : Fp)]
-  | "orchard.action.rcm_old" => #[Vector.replicate width (witness.rcmOld.2.val : Fp)]
-  | "orchard.action.rcm_new" => #[Vector.replicate width (witness.rcmNew.2.val : Fp)]
+  | "orchard.action.rcv" => #[actionScalarHintValues witness.rcv.2 width]
+  | "orchard.action.alpha" => #[actionScalarHintValues witness.alpha.2 width]
+  | "orchard.action.rivk" => #[actionScalarHintValues witness.rivk.2 width]
+  | "orchard.action.rcm_old" => #[actionScalarHintValues witness.rcmOld.2 width]
+  | "orchard.action.rcm_new" => #[actionScalarHintValues witness.rcmNew.2 width]
   | "orchard.action.merkle_sibling" =>
       Array.ofFn (fun layer : Fin 32 => Vector.replicate width (canonicalActionMerklePath witness layer.val).1)
   | "orchard.action.merkle_swap" =>
@@ -119,14 +143,10 @@ theorem actionMerkleSwap_eval (environment : Placed ProverEnvironment Fp)
 
 /-- The fixed top-level hint program decodes the supplied application data in every cell environment. -/
 theorem actionWitnessHints_decode (witness : PrivateWitness)
-    (bounds : ActionScalarHintBounds witness) (place : RegionIndex → ℕ) (environment : Environment Fp) :
+    (place : RegionIndex → ℕ) (environment : Environment Fp) :
     @Eval.eval _ _ _ (CircuitType.proverEval Circuit.PrivateInputs)
       (actionWitnessHintEnvironment witness place environment) Circuit.hintWitnesses = actionWitnessHintData witness := by
   simp only [Circuit.hintWitnesses, actionWitnessHintData, circuit_norm]
-  have scalarDecode (scalar : Fq) (hbound : scalar.val < PALLAS_BASE_CARD) :
-      ((scalar.val : ℕ) : Fp).val = scalar.val := by
-    rw [ZMod.val_natCast]
-    exact Nat.mod_eq_of_lt hbound
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
   · change witness.psiOld = witness.psiOld
     rfl
@@ -174,11 +194,11 @@ theorem actionWitnessHints_decode (witness : PrivateWitness)
           .hintGet "orchard.action.pkd_new" 2 (.const 0) 1⟩ : Point (FExpr Fp)) = witness.pkdNew
     rw [actionPointHint_eval]
     simp [actionWitnessHintEnvironment, actionWitnessHints]
-  · exact scalarDecode witness.rcv.2 bounds.rcv
-  · exact scalarDecode witness.alpha.2 bounds.alpha
-  · exact scalarDecode witness.rivk.2 bounds.rivk
-  · exact scalarDecode witness.rcmOld.2 bounds.rcmOld
-  · exact scalarDecode witness.rcmNew.2 bounds.rcmNew
+  · exact actionScalarHintValues_decode witness.rcv.2
+  · exact actionScalarHintValues_decode witness.alpha.2
+  · exact actionScalarHintValues_decode witness.rivk.2
+  · exact actionScalarHintValues_decode witness.rcmOld.2
+  · exact actionScalarHintValues_decode witness.rcmNew.2
   · funext layer
     rw [actionMerkleSibling_eval]
     change ((Witgen.WitgenIROver.ofFExpr

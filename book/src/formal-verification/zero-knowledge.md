@@ -6,7 +6,8 @@ The model compares that call's observation with a simulator that receives
 public inputs and setup parameters. The Action
 application theorem constructs the prover's rows from
 `ActionWitnessConstructionConditions`, which includes `ActionSpec`, defined
-hashes, canonical encodings, and scalar-hint bounds. The one-attempt interactive
+hashes and canonical encodings. The five scalar hints use two 128-bit limbs and
+decode over the full `Fq` range. The one-attempt interactive
 comparison uses independent uniform input bits and a nonidentity blinding point.
 
 Fiat–Shamir comparisons use a programmable classical random oracle. The
@@ -30,7 +31,7 @@ Auxiliary retry and continuing-generator theorems concern additional external
 caller policies and are outside the release claim. Concrete BLAKE2b security,
 security of a particular PRNG, and whole-program Rust correspondence remain
 separate claims. The
-[Action witness theorem statements](https://github.com/zakura-core/ironwood-formal-verification/blob/859e54eac7c973238ec25c0b50b42264747aadce/Zcash/Snark/ZeroKnowledge/ActionWitnessSimulation.lean)
+[Action witness theorem statements](https://github.com/zakura-core/ironwood-formal-verification/blob/establish-zk/Zcash/Snark/ZeroKnowledge/ActionWitnessSimulation.lean)
 give the precise application contract.
 
 ## Computability boundary

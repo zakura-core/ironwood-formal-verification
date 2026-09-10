@@ -5,11 +5,12 @@ import Zcash.Snark.ZeroKnowledge.IpaSampling
 /-!
 # The Action-indexed sampling batches
 
-The available Bento sampler at `e32e61eb35b6e5b5e0600cb0903adcfe0cd617d8` samples
-all ten advice tails for an Action before their ten blinds, and both lookup tails before
-their two blinds. Product columns use singleton batches. This module describes those
-batches explicitly and proves that they flatten to the pinned column order. The separate
-Sensei revision `56a7de7` remains unavailable; this is not a Rust refinement theorem.
+Common `50f712ee22ca95e2dd5230c6f331ce2e433d70ee` samples all ten advice tails
+for an Action before their ten blinds in `plonk/prover.rs`; lookup's
+`sample_permuted_blinding` samples both tails before their two blinds. Product
+columns use singleton batches. This module proves that these batches flatten
+to the pinned column order. The release and RNG correspondence boundary are
+recorded in `Zakura/PROVENANCE.md`.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

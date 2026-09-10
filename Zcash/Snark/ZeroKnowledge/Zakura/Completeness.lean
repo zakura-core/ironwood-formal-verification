@@ -136,7 +136,7 @@ theorem actionWitness_completeness_error_bound [Fintype VestaG] {actions : ℕ}
     (actionProver urs hk inputs (actionWitnessRowBundle inputs witnesses) vkTranscriptRepr []).toOuterMeasure
       (actionAcceptedCallSet urs hk inputs vkTranscriptRepr)ᶜ ≤ plonkCompletenessErrorBound actions :=
   action_completeness_error_bound urs hk inputs (actionWitnessRowBundle inputs witnesses)
-    (actionWitnessRows_relation urs hk inputs witnesses conditions) hpositive hW vkTranscriptRepr hinit
+    (actionWitnessRows_relation_capstone urs hk inputs witnesses conditions) hpositive hW vkTranscriptRepr hinit
 
 /-- The probability of returning an accepted proof is at least `1 - eta(m)`. -/
 theorem actionWitness_acceptance_probability_bound [Fintype VestaG] {actions : ℕ}

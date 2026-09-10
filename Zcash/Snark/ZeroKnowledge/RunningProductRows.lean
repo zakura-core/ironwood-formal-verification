@@ -10,12 +10,16 @@ inputs. The required row recurrence can fail only at a zero denominator, and the
 precise failure condition is retained. A permutation identity still forces the
 terminal value to be zero or one, without requiring all denominators to be nonzero.
 
+## Reference scan and release shortcut
+
 The same scan supplies lookup products and chained permutation products. The lookup
 terminal identity is derived from permutations of the input and table prefixes.
 Correctness of the concrete sorting algorithm, the permutation-column identity,
 and integration of these rows into the joint prover experiment remain separate.
-The zero-preserving fallback was inspected in the available Bento source at
-`e32e61eb35b6e5b5e0600cb0903adcfe0cd617d8`; the pinned Sensei commit is still unlocated.
+Common `50f712ee22ca95e2dd5230c6f331ce2e433d70ee` implements this scan in
+`plonk::prefix_products_of_fractions`. Its separate `prepare_identity_product`
+shortcut can retain a nonzero state after a shared factor vanishes; that branch
+differs from this reference scan, as recorded in `Zakura/PROVENANCE.md`.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

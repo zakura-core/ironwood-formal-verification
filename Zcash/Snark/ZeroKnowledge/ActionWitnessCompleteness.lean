@@ -68,6 +68,6 @@ theorem actionWitnessAssignment_constraints_of_extendsWitnesses
     Constraints actionCircuit.placement
       (actionCircuit.environment (actionWitnessAssignment inputs witness)) actionCircuit.operations 0 :=
   actionWitnessAssignment_constraints_of_readAgreement inputs witness conditions hw
-    (actionWitnessAssignment_readAgreement_of_extendsWitnesses inputs witness conditions.scalarHints hw)
+    (actionWitnessAssignment_readAgreement_of_extendsWitnesses inputs witness hw)
 
 end Zcash.Snark.ZeroKnowledge

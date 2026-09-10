@@ -6,9 +6,9 @@ import Zcash.Snark.ZeroKnowledge.CanonicalMerklePath
 
 The input starts with `ActionSpec`. Defined Sinsemilla hashes and canonical
 Merkle encodings turn its guarded statements into the honest path computation.
-The fixed top-level hint program also needs each scalar's natural representative
-to fit in one base-field hint. These are input conditions, not assumptions about
-proof emission, verifier acceptance, or already-satisfying circuit rows.
+The fixed top-level hint program encodes every `Fq` scalar in two 128-bit limbs.
+These are input conditions, not assumptions about proof emission, verifier
+acceptance, or already-satisfying circuit rows.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge
@@ -19,14 +19,6 @@ open Zcash.Circuits.Specs.Sinsemilla
 open Zcash.Circuits.Sinsemilla.Merkle
 open Zcash.Circuits.Sinsemilla.Merkle.CalculateRoot
 open CompElliptic.Fields.Pasta (PALLAS_BASE_CARD)
-
-/-- Scalar representatives encodable by the existing one-field `natHint` interface. -/
-structure ActionScalarHintBounds (witness : PrivateWitness) : Prop where
-  rcv : witness.rcv.2.val < PALLAS_BASE_CARD
-  alpha : witness.alpha.2.val < PALLAS_BASE_CARD
-  rivk : witness.rivk.2.val < PALLAS_BASE_CARD
-  rcmOld : witness.rcmOld.2.val < PALLAS_BASE_CARD
-  rcmNew : witness.rcmNew.2.val < PALLAS_BASE_CARD
 
 /-- The literal application left-child encodings, padded outside its 32 layers. -/
 def actionWitnessLeftEncoding (witness : PrivateWitness) (index : ℕ) : ℕ :=
@@ -43,7 +35,6 @@ def actionWitnessSide (witness : PrivateWitness) (index : ℕ) : Bool :=
 /-- The application-level input contract for the existing hint-driven witness generator. -/
 structure ActionWitnessConstructionConditions (inputs : PublicInputs Fp) (witness : PrivateWitness) : Prop where
   specification : ActionSpec inputs witness
-  scalarHints : ActionScalarHintBounds witness
   canonicalLeft : ∀ index, witness.leftEncoding index < PALLAS_BASE_CARD
   canonicalRight : ∀ index, witness.rightEncoding index < PALLAS_BASE_CARD
   ivkDefined : (hashToPoint orchardGenerators.S orchardBases.ivkQ

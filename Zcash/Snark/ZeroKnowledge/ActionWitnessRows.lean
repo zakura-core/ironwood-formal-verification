@@ -49,24 +49,22 @@ theorem actionWitnessAssignment_publicInput (inputs : PublicInputs Fp) (witness 
   generatedAdviceAssignment_publicInput actionCircuit inputs (actionWitnessHints witness)
 
 /-- Decoding the fixed program in the actual constructed environment gives the original application data. -/
-theorem actionWitnessAssignment_hintData (inputs : PublicInputs Fp) (witness : PrivateWitness)
-    (bounds : ActionScalarHintBounds witness) :
+theorem actionWitnessAssignment_hintData (inputs : PublicInputs Fp) (witness : PrivateWitness) :
     @Eval.eval _ _ _ (CircuitType.proverEval Circuit.PrivateInputs)
       (actionCircuit.placedProverEnvironment (actionWitnessAssignment inputs witness) (actionWitnessHints witness))
       Circuit.hintWitnesses = actionWitnessHintData witness :=
-  actionWitnessHints_decode witness bounds actionCircuit.placement
+  actionWitnessHints_decode witness actionCircuit.placement
     (actionCircuit.environment (actionWitnessAssignment inputs witness))
 
 /-- The same actual environment supplies canonical scalar windows to all five fixed-base gadgets. -/
-theorem actionWitnessAssignment_hintWindows (inputs : PublicInputs Fp) (witness : PrivateWitness)
-    (bounds : ActionScalarHintBounds witness) :
+theorem actionWitnessAssignment_hintWindows (inputs : PublicInputs Fp) (witness : PrivateWitness) :
     let penv := actionCircuit.placedProverEnvironment (actionWitnessAssignment inputs witness) (actionWitnessHints witness)
     actionScalarWindowValues Circuit.hintWitnesses.rcv penv = canonicalActionScalarWindows witness.rcv.2 ∧
     actionScalarWindowValues Circuit.hintWitnesses.alpha penv = canonicalActionScalarWindows witness.alpha.2 ∧
     actionScalarWindowValues Circuit.hintWitnesses.rivk penv = canonicalActionScalarWindows witness.rivk.2 ∧
     actionScalarWindowValues Circuit.hintWitnesses.rcmOld penv = canonicalActionScalarWindows witness.rcmOld.2 ∧
     actionScalarWindowValues Circuit.hintWitnesses.rcmNew penv = canonicalActionScalarWindows witness.rcmNew.2 :=
-  actionWitnessHintWindows_canonical witness bounds actionCircuit.placement
+  actionWitnessHintWindows_canonical witness actionCircuit.placement
     (actionCircuit.environment (actionWitnessAssignment inputs witness))
 
 end Zcash.Snark.ZeroKnowledge

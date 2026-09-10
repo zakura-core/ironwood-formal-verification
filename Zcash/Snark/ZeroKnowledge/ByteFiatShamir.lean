@@ -38,7 +38,9 @@ theorem transcriptBytes_squeeze_length (absorbed : List (TranscriptElt Fp VestaG
   simp only [transcriptBytes_append, List.length_append]
   rfl
 
-/-- Interpret one raw hash response by the specified wide reduction. -/
+/-- Reduce the digest's little-endian integer modulo `p`.
+For digest bytes `b₀, …, b₆₃`, the supplied hash value is `∑ᵢ bᵢ · 256ⁱ`, matching
+pinned Common's `Challenge255::new` and Pasta `Fp::from_uniform_bytes`. -/
 def byteFiatShamir (hash : TranscriptHashAddress → Fin challengeDigestCard) : FiatShamir Fp VestaG where
   squeeze absorbed := ((hash (transcriptHashAddress absorbed)).val : Fp)
 

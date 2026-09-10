@@ -4,7 +4,7 @@ import Zcash.Snark.ZeroKnowledge.ActionWitnessHints
 # Exact scalar windows from the fixed Action hint program
 
 These are the values produced by the existing 85-window witness programs,
-before any advice assignment is assumed. The field-to-Nat decoding theorem and
+before any advice assignment is assumed. The two-limb decoding theorem and
 the base-eight reconstruction theorem recover each application scalar exactly.
 -/
 
@@ -51,14 +51,14 @@ theorem actionScalarWindowValues_reconstruct (program : Var UnconstrainedNat Fp)
 
 /-- All five fixed Action scalar programs generate exactly the normalized application's windows. -/
 theorem actionWitnessHintWindows_canonical (witness : PrivateWitness)
-    (bounds : ActionScalarHintBounds witness) (place : RegionIndex → ℕ) (environment : Environment Fp) :
+    (place : RegionIndex → ℕ) (environment : Environment Fp) :
     let penv := actionWitnessHintEnvironment witness place environment
     actionScalarWindowValues Circuit.hintWitnesses.rcv penv = canonicalActionScalarWindows witness.rcv.2 ∧
     actionScalarWindowValues Circuit.hintWitnesses.alpha penv = canonicalActionScalarWindows witness.alpha.2 ∧
     actionScalarWindowValues Circuit.hintWitnesses.rivk penv = canonicalActionScalarWindows witness.rivk.2 ∧
     actionScalarWindowValues Circuit.hintWitnesses.rcmOld penv = canonicalActionScalarWindows witness.rcmOld.2 ∧
     actionScalarWindowValues Circuit.hintWitnesses.rcmNew penv = canonicalActionScalarWindows witness.rcmNew.2 := by
-  have hdecode := actionWitnessHints_decode witness bounds place environment
+  have hdecode := actionWitnessHints_decode witness place environment
   refine ⟨actionScalarWindowValues_canonical _ _ _ ?_,
     actionScalarWindowValues_canonical _ _ _ ?_, actionScalarWindowValues_canonical _ _ _ ?_,
     actionScalarWindowValues_canonical _ _ _ ?_, actionScalarWindowValues_canonical _ _ _ ?_⟩

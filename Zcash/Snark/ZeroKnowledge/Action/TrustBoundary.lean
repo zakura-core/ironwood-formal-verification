@@ -1173,7 +1173,6 @@ assert_axioms Zcash.Snark.ZeroKnowledge.exactCanonicalMerklePath_pathNode
 assert_axioms Zcash.Snark.ZeroKnowledge.pathNode_append
 
 -- ActionWitnessConditions
-assert_axioms Zcash.Snark.ZeroKnowledge.ActionScalarHintBounds
 assert_computable Zcash.Snark.ZeroKnowledge.actionWitnessLeftEncoding
 assert_computable Zcash.Snark.ZeroKnowledge.actionWitnessRightEncoding
 assert_computable Zcash.Snark.ZeroKnowledge.actionWitnessSide
@@ -1185,6 +1184,8 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessConditions_proverAssumption
 
 -- ActionWitnessHints
 assert_computable Zcash.Snark.ZeroKnowledge.actionWitnessHintData +choice
+assert_computable Zcash.Snark.ZeroKnowledge.actionScalarHintValues +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.actionScalarHintValues_decode
 assert_computable Zcash.Snark.ZeroKnowledge.actionWitnessHints +choice
 assert_computable Zcash.Snark.ZeroKnowledge.actionWitnessHintEnvironment +choice
 assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessHints_sibling_read
@@ -1377,8 +1378,8 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionCircuit_lookupActivationCoverage +
 assert_axioms Zcash.Snark.ZeroKnowledge.actionAdviceSource_readPlan +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.actionAdviceSource_aliasPlan +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_extendsWitnesses +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
-assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_constraints +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
-assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessRows_relation +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_constraints_capstone +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessRows_relation_capstone +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.wideActionWitness_simulation_error_bound +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.wideCapturedActionWitness_simulation_error_bound +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
 -- Prover completeness: actual emission status and full typed-verifier acceptance.

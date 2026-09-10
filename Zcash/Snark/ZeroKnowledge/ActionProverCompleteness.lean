@@ -104,7 +104,7 @@ theorem wideActionWitness_completeness_error_bound [Fintype VestaG] {actions : �
     (actionZkTypedProver urs hk inputs (actionWitnessRowBundle inputs witnesses)).toOuterMeasure
         (actionAcceptedAttemptSet urs hk inputs)ᶜ ≤ plonkCompletenessErrorBound actions :=
   wideActionZkRelation_completeness_error_bound urs hk inputs (actionWitnessRowBundle inputs witnesses)
-    (actionWitnessRows_relation urs hk inputs witnesses conditions) hpositive hW
+    (actionWitnessRows_relation_capstone urs hk inputs witnesses conditions) hpositive hW
 
 /-- The probability of completed emission and verifier acceptance is at least `1 - eta(m)`. -/
 theorem wideActionWitness_acceptance_probability_bound [Fintype VestaG] {actions : ℕ}

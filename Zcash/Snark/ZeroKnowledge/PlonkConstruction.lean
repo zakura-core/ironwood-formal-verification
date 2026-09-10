@@ -9,10 +9,18 @@ This installs the advice, lookup-sort, and product-scan computations in the exis
 failure and retains its private prefix. It reserves the same 126 replacement-row
 samples per Action as the total schedule used by the joint simulation.
 
+## Failure observation
+
 The successful-attempt theorem is an equality on the same tape, not a claim about
 the distribution conditioned on success. The sampling comparison includes the
 failure flag and prefix, but compares two samplers for the same witness-dependent
 computation; it is not itself a zero-knowledge simulation.
+
+The full reference prover uses the total constructor below, which supplies zero
+columns after sorting failure. Rust returns `Error::ConstraintSystemFailure`
+instead. `plonkColumnAttempt_complete_of_original` in `PlonkLookupCompletion.lean`
+rules out that failure for the valid rows supplied by `ActionZkRelation`; this totalization
+does not model the Rust prover on invalid witnesses.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

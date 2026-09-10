@@ -42,7 +42,7 @@ theorem actionPointHintPrograms_reads_nil (program : MOver Fp (AssignedCell Fp) 
   simp only [actionPointHintPrograms, List.mem_cons, List.not_mem_nil, or_false] at hprogram
   rcases hprogram with rfl | rfl | rfl | rfl | rfl | rfl <;> rfl
 
-/-- The original scalar hints have no cell reads, independently of scalar representability. -/
+/-- The five scalar programs read only immutable hints, so their cell-read sets are empty. -/
 theorem actionScalarHintPrograms_reads_nil (program : MOver Fp (AssignedCell Fp) (NExpr Fp))
     (hprogram : program ∈ actionScalarHintPrograms) : natBuilderReads program = [] := by
   simp only [actionScalarHintPrograms, List.mem_cons, List.not_mem_nil, or_false] at hprogram

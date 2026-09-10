@@ -1388,10 +1388,12 @@ private def pointHint (key : String) :
     y := .hintGet key 2 (.const 0) 1
   }
 
-/-- One Nat-valued Action hint, read through the field-to-Nat bridge. -/
+/-- One scalar-valued Action hint, stored as low and high 128-bit limbs in row zero.
+Recombine their natural representatives before computing scalar windows. -/
 private def natHint (key : String) :
     Witgen.MOver Fp (AssignedCell Fp) (NExpr Fp) :=
-  pure (.val (.hintGet key 1 (.const 0) 0))
+  pure (.add (.val (.hintGet key 2 (.const 0) 0))
+    (.mul (.const (2 ^ 128)) (.val (.hintGet key 2 (.const 0) 1))))
 
 /-- A Merkle sibling hint at layer `i`. -/
 private def merkleSiblingHint (i : ℕ) : WitgenIR Fp 1 :=
