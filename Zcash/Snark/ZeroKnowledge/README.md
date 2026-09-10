@@ -11,10 +11,11 @@ The description labels its source `sensei at 56a7de7`, which resolves to
 The [Sensei crate](https://github.com/tachyon-zcash/bento/tree/56a7de7474da3b86fa475f01400edadfd8af4cb6/crates/sensei)
 is present at that revision.
 
-The [ZK checklist](CHECKLIST.md) records the completed interactive theorem and
-optional assumption instantiations, Fiat–Shamir proofs, and unlimited-retry targets.
 The [review packet](REVIEW.md) maps the current claims to exact experiments,
-assumptions, bounds, and validation evidence; independent review remains pending.
+assumptions, bounds, and validation evidence. Three separate AI-agent reviews
+[completed without blocking findings](review/independent-469ad6bb.md), covering
+the interactive and application theorems, Fiat–Shamir and retry histories, and
+operational PRNG reductions. The completed checklist has been removed.
 The [Action instantiation](ActionInstantiation.lean) now packages original gate,
 lookup, and copy validity into one relation and specializes the full encoded
 comparison to a named captured URS. The simulator uses only public inputs and

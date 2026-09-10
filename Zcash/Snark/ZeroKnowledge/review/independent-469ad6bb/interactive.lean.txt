@@ -1,0 +1,120 @@
+import Zcash.Snark.ZeroKnowledge.ActionWitnessSimulation
+import Zcash.Snark.ZeroKnowledge.ActionDigest
+import Zcash.Snark.ZeroKnowledge.PlonkDisclosure
+import Zcash.Snark.ZeroKnowledge.PlonkBinaryBounds
+
+open Zcash.Snark Zcash.Snark.ZeroKnowledge Zcash.Common
+open Zcash.Arithmetic (Fp URS)
+open Zcash.Circuits.Action
+set_option maxRecDepth 8192
+set_option maxHeartbeats 1000000
+
+namespace InteractiveIndependentReview
+
+def allOne : Challenges 11 Fp where
+  theta := 1
+  beta := 1
+  gamma := 1
+  y := 1
+  x := 1
+  x1 := 1
+  x2 := 1
+  x3 := 1
+  x4 := 1
+  xi := 1
+  z := 1
+  ipaRound := fun _ => 1
+
+-- A domain hit is outside the perfect algebraic region, yet is permitted by the observer.
+theorem domainHitPermitted :
+    (allOne.x ^ 2048 = 1) ∧ ¬ PlonkChallengesGood allOne ∧
+      (∀ i < 22, plonkAfterChallenge allOne i = none) := by
+  refine ⟨by simp [allOne], ?_, ?_⟩
+  · simp [PlonkChallengesGood, allOne]
+  · exact (plonkAfterChallenge_all allOne).2 ⟨one_ne_zero, fun _ => one_ne_zero⟩
+
+-- Zero xi is charged by simulation; it is not turned into a new abort condition.
+theorem zeroXiPermitted :
+    ∀ i < 22, plonkAfterChallenge { allOne with xi := 0 } i = none :=
+  (plonkAfterChallenge_all { allOne with xi := 0 }).2 ⟨one_ne_zero, fun _ => one_ne_zero⟩
+
+-- The actual duplicate-opening check occurs after x2, not immediately when x arrives.
+theorem duplicateOpeningOrder :
+    plonkAfterChallenge { allOne with x := 0 } 4 = none ∧
+      plonkAfterChallenge { allOne with x := 0 } 6 = some .coincidentOpeningQueries := by
+  constructor <;> simp [plonkAfterChallenge]
+
+-- Zero IPA challenges trigger the retry status at their own receipt.
+theorem roundZeroStops :
+    plonkAfterChallenge { allOne with ipaRound := fun (_ : Fin 11) => 0 } 11 = some .retryRandomness := by
+  simp [plonkAfterChallenge, plonkAttemptChallenge, plonkChallengeSequence]
+
+-- The observer retains bytes before an encoding failure and omits the later suffix.
+theorem encodingFailurePrefix :
+    observeProtocolTrace (fun (_ : Unit) => none) (fun _ => [7])
+      (fun _ => 0) (fun _ => none) 0 [.scalar 0, .point (), .scalar 1] =
+      ⟨[7], [], .failed .retryRandomness⟩ := rfl
+
+-- Received challenges survive a stopping check; future bytes do not.
+theorem challengeFailurePrefix :
+    observeProtocolTrace (fun (_ : Unit) => some [8]) (fun _ => [7])
+      (fun _ => 0) (fun _ => some .retryRandomness) 0 [.scalar 0, .challenge, .scalar 1] =
+      ⟨[7], [0], .failed .retryRandomness⟩ := rfl
+
+-- The sparse mask's evaluation-direction exception is a public zero, not an unjustified uniform draw.
+theorem evaluationDirectionZero :
+    idealSparseIpaScalar (1 : Fp) (fun (_ : Fin 11) => 1) = PMF.pure 0 := by
+  simp [idealSparseIpaScalar]
+
+-- The linear-mask theorem really needs distinct evaluation points.
+theorem collidingLinearMasks (a b x : Fp) :
+    linearMaskPair x x (a, b) = (a + b * x, a + b * x) := rfl
+
+-- Witness independence follows through the same public simulator for arbitrary public postprocessing.
+theorem arbitraryViewTest {actions : ℕ} [Fintype VestaG]
+    (urs : URS VestaG) (hk : urs.k = 11) (inputs : Fin actions → PublicInputs Fp)
+    (left right : Fin actions → Fin 10 → Fin 2048 → Fp)
+    (hl : ActionZkRelation urs hk inputs left) (hr : ActionZkRelation urs hk inputs right)
+    (hW : urs.w ≠ 0) (test : Challenges urs.k Fp × ProverAttemptResult → Bool) :
+    PMFEventBiasLE ((actionZkProver urs hk inputs left).map test)
+      ((actionZkProver urs hk inputs right).map test)
+      (plonkSimulationErrorBound actions + plonkSimulationErrorBound actions) := by
+  have hleft := wideActionZkRelation_simulation_error_bound urs hk inputs left hl hW
+  have hright := wideActionZkRelation_simulation_error_bound urs hk inputs right hr hW
+  exact eventBias_map (hleft.1.trans hright.2) test
+
+end InteractiveIndependentReview
+#print axioms Zcash.Snark.ZeroKnowledge.wideActionCompilerTypedReference_simulation_error_bound
+#print axioms Zcash.Snark.ZeroKnowledge.wideActionCompilerReference_simulation_error_bound
+#print axioms Zcash.Snark.ZeroKnowledge.wideActionZkRelation_simulation_error_bound
+#print axioms Zcash.Snark.ZeroKnowledge.wideCapturedActionZk_simulation_error_bound
+#print axioms Zcash.Snark.ZeroKnowledge.actionWitnessRows_relation
+#print axioms Zcash.Snark.ZeroKnowledge.wideActionWitness_simulation_error_bound
+#print axioms Zcash.Snark.ZeroKnowledge.storedActionOracleBitWitness_simulation_error_bound
+#print axioms Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_constraints
+#print axioms Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_extendsWitnesses
+#print axioms Zcash.Snark.ZeroKnowledge.actionCircuit_gateActivationCoverage
+#print axioms Zcash.Snark.ZeroKnowledge.actionCircuit_lookupActivationCoverage
+#print axioms Zcash.Snark.ZeroKnowledge.actionReferenceKey_maskingProfile
+#print axioms Zcash.Snark.ZeroKnowledge.actionReferenceKey_degreeProfile
+#print axioms Zcash.Snark.ZeroKnowledge.actionReferenceKey_opening_eq_public
+#print axioms Zcash.Snark.ZeroKnowledge.plonkReferenceProofFromTape_law
+#print axioms Zcash.Snark.ZeroKnowledge.plonkReferenceAttemptFromTape_prefix_causal
+#print axioms Zcash.Snark.ZeroKnowledge.idealPlonkJoint_simulation_capstone
+#print axioms Zcash.Snark.ZeroKnowledge.idealIpa_simulation_capstone
+#print axioms Zcash.Snark.ZeroKnowledge.widePlonkChallenges_bad_le
+#print axioms Zcash.Snark.ZeroKnowledge.plonkReferenceRowTapeLaw_denominators_bad_le
+#print axioms Zcash.Snark.ZeroKnowledge.uniformRawFieldTape_reduce
+#print axioms Zcash.Snark.ZeroKnowledge.fieldSample_ne_ideal
+#print axioms Zcash.Snark.ZeroKnowledge.fieldSample_bias_le
+#print axioms Zcash.Snark.ZeroKnowledge.plonkSimulationErrorBound_lt_actions_mul_two_pow
+#print axioms Zcash.Snark.ZeroKnowledge.wideActionZkDigest_simulation_error_bound
+#print axioms InteractiveIndependentReview.domainHitPermitted
+#print axioms InteractiveIndependentReview.zeroXiPermitted
+#print axioms InteractiveIndependentReview.duplicateOpeningOrder
+#print axioms InteractiveIndependentReview.roundZeroStops
+#print axioms InteractiveIndependentReview.encodingFailurePrefix
+#print axioms InteractiveIndependentReview.challengeFailurePrefix
+#print axioms InteractiveIndependentReview.evaluationDirectionZero
+#print axioms InteractiveIndependentReview.collidingLinearMasks
+#print axioms InteractiveIndependentReview.arbitraryViewTest

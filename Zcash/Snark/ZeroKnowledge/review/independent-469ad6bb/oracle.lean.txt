@@ -1,0 +1,81 @@
+import Zcash.Snark.ZeroKnowledge.ActionFiatShamirRetry
+import Zcash.Snark.ZeroKnowledge.ActionGeneratorStreamTermination
+import Zcash.Snark.ZeroKnowledge.CostedActionGeneratorStream
+
+namespace OracleReview469ad6b
+open Zcash.Snark.ZeroKnowledge Zcash.Common
+
+def retryAttempt : ProverAttemptResult := ⟨[1], [], .failed .retryRandomness⟩
+def terminalAttempt : ProverAttemptResult := ⟨[2], [], .failed .coincidentOpeningQueries⟩
+def completeAttempt : ProverAttemptResult := ⟨[3], [], .complete⟩
+def countStep (state : Nat) (attempt : Option ProverAttemptResult) := (attempt, state + 1)
+
+example : runStatefulRetries countStep oracleRetrySet
+    [some retryAttempt, some terminalAttempt, some retryAttempt] 0 =
+    (⟨[some retryAttempt, some terminalAttempt], false⟩, 2) := rfl
+
+example : runStatefulRetries countStep oracleRetrySet
+    [some retryAttempt, some completeAttempt, some retryAttempt] 0 =
+    (⟨[some retryAttempt, some completeAttempt], false⟩, 2) := rfl
+
+example : runStatefulRetries countStep oracleRetrySet
+    [some retryAttempt, none, some retryAttempt] 0 =
+    (⟨[some retryAttempt, none], false⟩, 2) := rfl
+
+example : runStatefulRetries countStep oracleRetrySet [] 5 = (⟨[], true⟩, 5) := rfl
+
+example : runStatefulRetries countStep oracleRetrySet
+    [some retryAttempt, some retryAttempt] 5 =
+    (⟨[some retryAttempt, some retryAttempt], true⟩, 7) := rfl
+
+example : programOracleTrace ([(7, 11)] : OracleCache Nat Nat) [(8, 12), (7, 11)] = none := rfl
+example : programOracleTrace ([(7, 11)] : OracleCache Nat Nat) [(8, 12), (9, 13)] =
+    some [(9, 13), (8, 12), (7, 11)] := rfl
+
+example : cachedOracleRunTape 2
+    (OracleComp.query 7 (fun _ => .query 8 (fun reply : Nat => .pure reply)))
+    ([(7, 11)] : OracleCache Nat Nat)
+    (fun i : Fin 2 => if i = 0 then 20 else 21) =
+    some (21, [(8, 21), (7, 11)]) := rfl
+
+example : statefulRetryStream (fun (_ : Unit) (_ : Unit) => ((none : Option ProverAttemptResult), ()))
+    oracleRetrySet (fun _ => ()) () 0 = some (none, ()) ∧
+    statefulRetryStream (fun (_ : Unit) (_ : Unit) => ((none : Option ProverAttemptResult), ()))
+    oracleRetrySet (fun _ => ()) () 1 = none := by constructor <;> rfl
+
+example : statefulRetryStream (fun (_ : Unit) (_ : Unit) => (true, ()))
+    ({true} : Set Bool) (fun _ => ()) () ∈ retryStreamNontermination := by
+  intro index
+  induction index with
+  | zero => simp [statefulRetryStream]
+  | succ index ih => simpa only [statefulRetryStream, Set.mem_singleton_iff, if_pos rfl] using ih
+
+def generatedStep (state : Nat) (attempt : Option ProverAttemptResult) (block : Nat) :=
+  (attempt, state + block)
+def generatorNext (state : Nat) := (state, state + 1)
+
+example : runGeneratedCoinRetries generatedStep oracleRetrySet generatorNext
+    [some retryAttempt, some terminalAttempt, some retryAttempt] 0 10 =
+    ((⟨[some retryAttempt, some terminalAttempt], false⟩, 21), 12) := rfl
+
+example : runGeneratedCoinRetries generatedStep oracleRetrySet generatorNext [] 4 10 =
+    ((⟨[], true⟩, 4), 10) := rfl
+
+end OracleReview469ad6b
+
+#print axioms Zcash.Snark.ZeroKnowledge.actionFiatShamir_challengeSchedule
+#print axioms Zcash.Snark.ZeroKnowledge.plonkReferenceOracleComp_replay
+#print axioms Zcash.Snark.ZeroKnowledge.actionOracle_programming_failure_le
+#print axioms Zcash.Snark.ZeroKnowledge.actionFiatShamir_simulation_error_bound
+#print axioms Zcash.Snark.ZeroKnowledge.actionFiatShamirBits_simulation_error_bound
+#print axioms Zcash.Snark.ZeroKnowledge.actionFiatShamirRetry_simulation_error_bound
+#print axioms Zcash.Snark.ZeroKnowledge.actionOracleRetryRecorded_error_bound
+#print axioms Zcash.Snark.ZeroKnowledge.measureEventBias_of_prefixes
+#print axioms Zcash.Snark.ZeroKnowledge.wideUnlimitedActionOracle_simulation_capstone
+#print axioms Zcash.Snark.ZeroKnowledge.actionOracleBitRetryStream_nontermination_eq_zero
+#print axioms Zcash.Snark.ZeroKnowledge.actionOracleRetryStream_nontermination_le
+#print axioms Zcash.Snark.ZeroKnowledge.actionGeneratedOracleRetries_replay
+#print axioms Zcash.Snark.ZeroKnowledge.actionGeneratedOracleRetryStream_truncate
+#print axioms Zcash.Snark.ZeroKnowledge.generatedUnlimitedActionOracle_simulation_capstone
+#print axioms Zcash.Snark.ZeroKnowledge.actionGeneratedOracleRetryStream_nontermination_le
+#print axioms Zcash.Snark.ZeroKnowledge.costedGeneratedUnlimitedActionOracle_simulation_capstone

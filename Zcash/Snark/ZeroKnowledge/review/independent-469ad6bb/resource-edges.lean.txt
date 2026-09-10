@@ -1,0 +1,45 @@
+import Zcash.Snark.ZeroKnowledge.CachedPrefixCost
+import Zcash.Snark.ZeroKnowledge.StoredActionRecordedCost
+import Zcash.Snark.ZeroKnowledge.RawTapeTestProgram
+import Zcash.Snark.ZeroKnowledge.InteractiveViewEncoding
+import Zcash.Snark.ZeroKnowledge.ActionReductionProgram
+
+open Zcash.Snark.ZeroKnowledge
+set_option exponentiation.threshold 1024
+
+-- A cache hit must reuse the first cached value and still consume its reply slot.
+-- The next miss must receive slot 1 rather than accidentally reusing slot 0.
+example :
+    (cachedPrefixRunCosted
+      (fun history : List Nat => fun _ => (history, 3))
+      (fun _ => (true, 1))
+      (fun _ index => (([], if index = 0 then [1] else [2]), 2))
+      (fun index => (10 + index, 1))
+      2 [] [(([], [1]), 7), (([], [1]), 8)] 0).1 =
+      ([7, 11], [(([], [2]), 11), (([], [1]), 7), (([], [1]), 8)]) := by decide
+
+-- Byte comparisons stop at the finite query, even if stored cache payloads are longer.
+example : (oracleCacheLookupCosted [(([], [1, 2, 3, 4]), 9)] ([], [1])).1 = none := by decide
+
+-- Zero budget preserves the initial state and marks finite exhaustion without running a step.
+example :
+    (runStatefulRetriesCosted (fun (state : Nat) (_ : Unit) => ((state + 1, state + 1), 9))
+      (fun _ => (true, 1)) [] 42).1 = (⟨[], true⟩, 42) := by rfl
+
+-- A terminal result preserves the incremented state and ignores all remaining tapes.
+example :
+    (runStatefulRetriesCosted (fun (state : Nat) (_ : Unit) => ((state + 1, state + 1), 9))
+      (fun _ => (false, 1)) [(), (), ()] 42).1 = (⟨[43], false⟩, 43) := by rfl
+
+-- The high raw-input bit is observable; the circuit interface has not silently truncated to the field.
+example :
+    rawTapeTest ⟨[.input (.word 0 0 (some ⟨511, by decide⟩))], 0⟩ [] [[⟨2^511, by decide⟩]] = true ∧
+    rawTapeTest ⟨[.input (.word 0 0 (some ⟨511, by decide⟩))], 0⟩ [] [[0]] = false := by decide
+
+-- Every ordinary raw circuit has a real implementation in the class, at its derived budget.
+example (prices : ActionReductionPrices) (data : ActionReductionData) (hdata : data.WellFormed)
+    (program : RawTapeTestProgram) (budget : Nat) :
+    (ActionReductionProgram.raw program).kernel prices data budget ∈
+      actionReductionAdmissible prices data budget
+        ((ActionReductionProgram.raw program).costBudget prices data budget ((budget * 22) * 512)) :=
+  ⟨hdata, .raw program, le_rfl, rfl⟩

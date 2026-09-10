@@ -1,0 +1,98 @@
+'Zcash.Snark.ZeroKnowledge.wideActionCompilerTypedReference_simulation_error_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1,
+ CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.wideActionCompilerReference_simulation_error_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1,
+ CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.wideActionZkRelation_simulation_error_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1,
+ CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.wideCapturedActionZk_simulation_error_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1,
+ CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionWitnessRows_relation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.wideActionWitness_simulation_error_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1,
+ CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.storedActionOracleBitWitness_simulation_error_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1,
+ CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_constraints' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_extendsWitnesses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionCircuit_gateActivationCoverage' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionCircuit_lookupActivationCoverage' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionReferenceKey_maskingProfile' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionReferenceKey_degreeProfile' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.actionReferenceKey_opening_eq_public' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1]
+'Zcash.Snark.ZeroKnowledge.plonkReferenceProofFromTape_law' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkReferenceAttemptFromTape_prefix_causal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.idealPlonkJoint_simulation_capstone' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.idealIpa_simulation_capstone' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.widePlonkChallenges_bad_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkReferenceRowTapeLaw_denominators_bad_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.uniformRawFieldTape_reduce' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.fieldSample_ne_ideal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.fieldSample_bias_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Zcash.Snark.ZeroKnowledge.plonkSimulationErrorBound_lt_actions_mul_two_pow' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Zcash.Snark.ZeroKnowledge.wideActionZkDigest_simulation_error_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1,
+ CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt._native.native_decide.ax_1_1]
+'InteractiveIndependentReview.domainHitPermitted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'InteractiveIndependentReview.zeroXiPermitted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'InteractiveIndependentReview.duplicateOpeningOrder' depends on axioms: [propext, Classical.choice, Quot.sound]
+'InteractiveIndependentReview.roundZeroStops' depends on axioms: [propext, Classical.choice, Quot.sound]
+'InteractiveIndependentReview.encodingFailurePrefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'InteractiveIndependentReview.challengeFailurePrefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'InteractiveIndependentReview.evaluationDirectionZero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'InteractiveIndependentReview.collidingLinearMasks' depends on axioms: [propext, Classical.choice, Quot.sound]
+'InteractiveIndependentReview.arbitraryViewTest' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt._native.native_decide.ax_1_1,
+ CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt._native.native_decide.ax_1_1]

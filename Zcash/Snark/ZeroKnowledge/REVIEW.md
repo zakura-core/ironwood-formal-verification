@@ -3,7 +3,11 @@
 Proof baseline: `4a87136b23e7b25eb079a19e7f1289838f138dc1` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
-experiments. Independent review is pending.
+experiments. Three separate AI-agent reviews of HEAD
+`469ad6bb782329f632713f25b814f515b53f89ba` completed with no blocking findings.
+The [review record](review/independent-469ad6bb.md) retains their scopes, source
+anchors, reproducible checks, and qualifications; the completed checklist has
+been removed.
 
 The target is the [pinned prover description](https://gist.githubusercontent.com/ebfull/bf25819afa697e39b54bd5f1a1992a2c/raw/589528c0f752112fd83c42aeeea91b6958e67605/zk.md)
 and the repository's reference computation. The description's Sensei revision is
@@ -192,9 +196,10 @@ reduction templates retain their explicit admissibility premises.
 **Component evidence from preceding checkpoints**
 
 The following construction notes record what each component established when
-it was added. Statements about remaining composition work in these historical
-notes are superseded by the complete operational results above. Their individual
-validation records still refer to their named commits.
+it was added. Statements about remaining composition work or pending review in
+these historical notes are superseded by the complete operational results and
+review record above. Their individual validation records still refer to their
+named commits.
 
 The real prover's [lookup-prefix construction](LookupSortRowsCost.lean)
 now has a complete input-size bound covering sorting, reservations, reverse filling,
@@ -631,9 +636,12 @@ build and repository guards](review/validation-4a87136b.log); the
 [source/module/pin mapping](review/declarations-4a87136b.json) cover all 29 new
 modules. All 334 endpoints are pinned and all 1,321 modules are covered by the
 six default targets. The generic boundary has no native exemption. This closes
-the operational PRNG resource item; independent review remains pending.
+the operational PRNG resource item. The subsequent
+[independent AI-agent reviews](review/independent-469ad6bb.md) close the final
+review item without requiring a proof-source change.
 
-The following records preserve validation of the earlier component checkpoints.
+The following records preserve validation of the earlier component checkpoints,
+including statements about work that was pending at those earlier revisions.
 
 The [validation record](review/validation-915317a1.log) contains the successful
 full default-target build (`lake build --wfail`, 4,454 jobs), repository guards,
@@ -732,22 +740,23 @@ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt
 CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt
 ```
 
-This is local validation of the recorded proof tree. It does not establish hosted
-CI, an independent audit, historical priority, concrete PRNG security, or machine
-time. The [checklist](CHECKLIST.md) retains the independent-review item.
+The build evidence is local validation of the recorded proof tree. The separate
+AI-agent assessments are recorded below; neither constitutes a human third-party
+audit or establishes hosted CI, historical priority, concrete PRNG security, or
+machine time.
 
-| Review activity | Status at the proof baseline |
+| Review activity | Recorded status |
 | --- | --- |
 | Map claims to experiments, premises, failure observations, and resource scope | Locally checked in this packet |
 | Check transitive declarations and named native dependencies | Passed the complete 4,858-job build, repository guards, and separate direct-pin inventories |
-| Independent reviewer, reviewed commit, findings, and resolutions | Pending; no independent assessment recorded |
+| Independent reviewers, reviewed commit, findings, and resolutions | Three separate AI-agent reviews at `469ad6bb`, with unchanged proof sources from `4a87136b`; no blocking findings or required code changes. [Reports and evidence](review/independent-469ad6bb.md) |
 
-An independent review should focus on whether each advertised claim matches its
-experiment, whether auxiliary data and shared state preserve the asserted seed
-independence, whether failed prefixes and stopping branches stay visible, and
-whether the computational claims charge the actual truncation tail, whether the
-application constructor premises and extraction boundary are accurately stated,
-and whether future efficiency claims add the required execution-cost proofs.
+The reviews checked claim/experiment agreement, application-constructor premises,
+shared randomness and seed independence, retained failures and stopping branches,
+oracle and retry histories, truncation tails, and complete operational resource
+membership. All three reviewers approved closure within the documented models.
+The completed checklist has been removed; its theorem map and qualifications
+remain in this packet and [PROGRAMS.md](PROGRAMS.md).
 
 **Bounded map-scan checkpoint**
 

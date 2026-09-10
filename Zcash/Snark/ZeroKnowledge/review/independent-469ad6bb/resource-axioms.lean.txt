@@ -1,0 +1,194 @@
+import Zcash.Snark.ZeroKnowledge.ActionReductionClass
+import Zcash.Snark.ZeroKnowledge.ActionReductionData
+import Zcash.Snark.ZeroKnowledge.ActionReductionProgram
+import Zcash.Snark.ZeroKnowledge.ActionReductionSource
+import Zcash.Snark.ZeroKnowledge.BooleanTestBound
+import Zcash.Snark.ZeroKnowledge.BooleanTestCost
+import Zcash.Snark.ZeroKnowledge.BooleanTestMap
+import Zcash.Snark.ZeroKnowledge.BooleanTestMeasurable
+import Zcash.Snark.ZeroKnowledge.CostedActionGeneratorStream
+import Zcash.Snark.ZeroKnowledge.CostedActionPrng
+import Zcash.Snark.ZeroKnowledge.CostedInteractivePrng
+import Zcash.Snark.ZeroKnowledge.IndexedTestReadCost
+import Zcash.Snark.ZeroKnowledge.InteractiveBitsView
+import Zcash.Snark.ZeroKnowledge.InteractiveChallengeBits
+import Zcash.Snark.ZeroKnowledge.InteractiveReductionClass
+import Zcash.Snark.ZeroKnowledge.InteractiveReductionProgram
+import Zcash.Snark.ZeroKnowledge.InteractiveReductionSource
+import Zcash.Snark.ZeroKnowledge.InteractiveTestCost
+import Zcash.Snark.ZeroKnowledge.InteractiveViewBound
+import Zcash.Snark.ZeroKnowledge.InteractiveViewCost
+import Zcash.Snark.ZeroKnowledge.InteractiveViewEncoding
+import Zcash.Snark.ZeroKnowledge.ObservedReductionCost
+import Zcash.Snark.ZeroKnowledge.RawTapeTestProgram
+import Zcash.Snark.ZeroKnowledge.RecordedTestProgram
+import Zcash.Snark.ZeroKnowledge.RecordedTestRead
+import Zcash.Snark.ZeroKnowledge.RecordedTestReadBound
+import Zcash.Snark.ZeroKnowledge.RecordedTestRegression
+import Zcash.Snark.ZeroKnowledge.StreamTestProgram
+import Zcash.Snark.ZeroKnowledge.StreamTestRead
+
+#print axioms Zcash.Snark.ZeroKnowledge.ActionReductionProgram.constant
+#print axioms Zcash.Snark.ZeroKnowledge.ActionReductionProgram.kernel_constant
+#print axioms Zcash.Snark.ZeroKnowledge.ActionReductionProgram.constant_costBudget
+#print axioms Zcash.Snark.ZeroKnowledge.actionReductionAdmissible_constants
+#print axioms Zcash.Snark.ZeroKnowledge.ActionReductionProgram.kernel_negate
+#print axioms Zcash.Snark.ZeroKnowledge.ActionReductionPrices
+#print axioms Zcash.Snark.ZeroKnowledge.ActionReductionData
+#print axioms Zcash.Snark.ZeroKnowledge.ActionReductionData.ofReference
+#print axioms Zcash.Snark.ZeroKnowledge.ActionReductionData.WellFormed
+#print axioms Zcash.Snark.ZeroKnowledge.ActionReductionData.ofReference_wellFormed
+#print axioms Zcash.Snark.ZeroKnowledge.ActionReductionProgram
+#print axioms Zcash.Snark.ZeroKnowledge.ActionReductionProgram.evalCosted
+#print axioms Zcash.Snark.ZeroKnowledge.ActionReductionProgram.costBudget
+#print axioms Zcash.Snark.ZeroKnowledge.ActionReductionProgram.evalCosted_cost_le
+#print axioms Zcash.Snark.ZeroKnowledge.ActionReductionProgram.kernel
+#print axioms Zcash.Snark.ZeroKnowledge.actionReductionAdmissible
+#print axioms Zcash.Snark.ZeroKnowledge.actionReductionAdmissible_runtime
+#print axioms Zcash.Snark.ZeroKnowledge.actionReductionAdmissible_mono
+#print axioms Zcash.Snark.ZeroKnowledge.recordedPrngTimeBound
+#print axioms Zcash.Snark.ZeroKnowledge.recordedPrngViewAndTailTimeBound
+#print axioms Zcash.Snark.ZeroKnowledge.ActionReductionProgram.kernel_observed
+#print axioms Zcash.Snark.ZeroKnowledge.actionOracleRecordPrngReduction_mem_costed
+#print axioms Zcash.Snark.ZeroKnowledge.actionOracleRecordPrngReduction_mem_ownBudget
+#print axioms Zcash.Snark.ZeroKnowledge.BooleanTestInstruction.inputCost
+#print axioms Zcash.Snark.ZeroKnowledge.BooleanTestInstruction.evalCosted_cost_le
+#print axioms Zcash.Snark.ZeroKnowledge.runBooleanTestCosted_cost_le
+#print axioms Zcash.Snark.ZeroKnowledge.BooleanTestProgram.costBudget
+#print axioms Zcash.Snark.ZeroKnowledge.BooleanTestProgram.evalCosted_cost_le
+#print axioms Zcash.Snark.ZeroKnowledge.BooleanTestInstruction
+#print axioms Zcash.Snark.ZeroKnowledge.BooleanTestProgram
+#print axioms Zcash.Snark.ZeroKnowledge.BooleanTestInstruction.eval
+#print axioms Zcash.Snark.ZeroKnowledge.BooleanTestInstruction.evalCosted
+#print axioms Zcash.Snark.ZeroKnowledge.BooleanTestInstruction.evalCosted_result
+#print axioms Zcash.Snark.ZeroKnowledge.runBooleanTest
+#print axioms Zcash.Snark.ZeroKnowledge.runBooleanTestCosted
+#print axioms Zcash.Snark.ZeroKnowledge.runBooleanTestCosted_result
+#print axioms Zcash.Snark.ZeroKnowledge.runBooleanTestCosted_length
+#print axioms Zcash.Snark.ZeroKnowledge.BooleanTestProgram.eval
+#print axioms Zcash.Snark.ZeroKnowledge.BooleanTestProgram.evalCosted
+#print axioms Zcash.Snark.ZeroKnowledge.BooleanTestProgram.evalCosted_result
+#print axioms Zcash.Snark.ZeroKnowledge.BooleanTestInstruction.mapInput
+#print axioms Zcash.Snark.ZeroKnowledge.BooleanTestInstruction.eval_mapInput
+#print axioms Zcash.Snark.ZeroKnowledge.BooleanTestProgram.mapInput
+#print axioms Zcash.Snark.ZeroKnowledge.runBooleanTest_mapInput
+#print axioms Zcash.Snark.ZeroKnowledge.BooleanTestProgram.eval_mapInput
+#print axioms Zcash.Snark.ZeroKnowledge.BooleanTestProgram.mapInput_length
+#print axioms Zcash.Snark.ZeroKnowledge.BooleanTestInstruction.eval_measurable
+#print axioms Zcash.Snark.ZeroKnowledge.runBooleanTest_measurable
+#print axioms Zcash.Snark.ZeroKnowledge.BooleanTestProgram.eval_measurable
+#print axioms Zcash.Snark.ZeroKnowledge.costedGeneratedUnlimitedActionOracle_simulation_capstone
+#print axioms Zcash.Snark.ZeroKnowledge.costedActionOracleRecordPrng_test_error_bound
+#print axioms Zcash.Snark.ZeroKnowledge.costedActionOracleRecordPrng_exhaustion_le
+#print axioms Zcash.Snark.ZeroKnowledge.costedUniformSeedActionZk_test_error_bound
+#print axioms Zcash.Snark.ZeroKnowledge.getDListCosted_cost_le_index
+#print axioms Zcash.Snark.ZeroKnowledge.getOptionListCosted
+#print axioms Zcash.Snark.ZeroKnowledge.getOptionListCosted_result
+#print axioms Zcash.Snark.ZeroKnowledge.getOptionListCosted_cost_le
+#print axioms Zcash.Snark.ZeroKnowledge.interactiveBitsViewCosted
+#print axioms Zcash.Snark.ZeroKnowledge.interactiveBitsViewCostBudget
+#print axioms Zcash.Snark.ZeroKnowledge.interactiveBitsViewCosted_cost_le
+#print axioms Zcash.Snark.ZeroKnowledge.interactiveBitsViewCosted_result
+#print axioms Zcash.Snark.ZeroKnowledge.plonkHistoryChallenges_ofFn
+#print axioms Zcash.Snark.ZeroKnowledge.uniformRawPlonkChallenges
+#print axioms Zcash.Snark.ZeroKnowledge.uniformBitPlonkChallenges
+#print axioms Zcash.Snark.ZeroKnowledge.InteractiveReductionProgram.constant
+#print axioms Zcash.Snark.ZeroKnowledge.InteractiveReductionProgram.kernel_constant
+#print axioms Zcash.Snark.ZeroKnowledge.InteractiveReductionProgram.constant_costBudget
+#print axioms Zcash.Snark.ZeroKnowledge.interactiveReductionAdmissible_constants
+#print axioms Zcash.Snark.ZeroKnowledge.InteractiveReductionProgram.kernel_negate
+#print axioms Zcash.Snark.ZeroKnowledge.InteractiveReductionProgram
+#print axioms Zcash.Snark.ZeroKnowledge.InteractiveReductionProgram.evalCosted
+#print axioms Zcash.Snark.ZeroKnowledge.InteractiveReductionProgram.costBudget
+#print axioms Zcash.Snark.ZeroKnowledge.InteractiveReductionProgram.evalCosted_cost_le
+#print axioms Zcash.Snark.ZeroKnowledge.InteractiveReductionProgram.kernel
+#print axioms Zcash.Snark.ZeroKnowledge.interactiveReductionAdmissible
+#print axioms Zcash.Snark.ZeroKnowledge.interactiveReductionAdmissible_runtime
+#print axioms Zcash.Snark.ZeroKnowledge.interactivePrngTimeBound
+#print axioms Zcash.Snark.ZeroKnowledge.InteractiveReductionProgram.kernel_observed
+#print axioms Zcash.Snark.ZeroKnowledge.actionPrngReduction_mem_costed
+#print axioms Zcash.Snark.ZeroKnowledge.interactiveViewTest
+#print axioms Zcash.Snark.ZeroKnowledge.interactiveTestCosted
+#print axioms Zcash.Snark.ZeroKnowledge.interactiveTestCostBudget
+#print axioms Zcash.Snark.ZeroKnowledge.interactiveTestCosted_cost_le
+#print axioms Zcash.Snark.ZeroKnowledge.interactiveTestCosted_result
+#print axioms Zcash.Snark.ZeroKnowledge.interactiveHistoryViewCostBudget
+#print axioms Zcash.Snark.ZeroKnowledge.interactiveHistoryViewCosted_cost_le
+#print axioms Zcash.Snark.ZeroKnowledge.interactiveViewFrames
+#print axioms Zcash.Snark.ZeroKnowledge.interactiveRecordedView
+#print axioms Zcash.Snark.ZeroKnowledge.interactiveHistoryViewCosted
+#print axioms Zcash.Snark.ZeroKnowledge.interactiveHistoryViewCosted_result
+#print axioms Zcash.Snark.ZeroKnowledge.interactiveRecordedView_injective
+#print axioms Zcash.Snark.ZeroKnowledge.observedReductionCosted
+#print axioms Zcash.Snark.ZeroKnowledge.observedReductionCostBudget
+#print axioms Zcash.Snark.ZeroKnowledge.observedReductionCosted_cost_le
+#print axioms Zcash.Snark.ZeroKnowledge.observedReductionCosted_result
+#print axioms Zcash.Snark.ZeroKnowledge.RawTapeTestAddress
+#print axioms Zcash.Snark.ZeroKnowledge.RawTapeTestAddress.eval
+#print axioms Zcash.Snark.ZeroKnowledge.RawTapeTestAddress.evalCosted
+#print axioms Zcash.Snark.ZeroKnowledge.RawTapeTestAddress.evalCosted_result
+#print axioms Zcash.Snark.ZeroKnowledge.RawTapeTestAddress.costBudget
+#print axioms Zcash.Snark.ZeroKnowledge.RawTapeTestAddress.evalCosted_cost_le
+#print axioms Zcash.Snark.ZeroKnowledge.RawTapeTestProgram
+#print axioms Zcash.Snark.ZeroKnowledge.rawTapeTest
+#print axioms Zcash.Snark.ZeroKnowledge.rawTapeTestCosted
+#print axioms Zcash.Snark.ZeroKnowledge.rawTapeTestCosted_result
+#print axioms Zcash.Snark.ZeroKnowledge.rawTapeTestCostBudget
+#print axioms Zcash.Snark.ZeroKnowledge.rawTapeTestCosted_cost_le
+#print axioms Zcash.Snark.ZeroKnowledge.RecordedTestProgram
+#print axioms Zcash.Snark.ZeroKnowledge.recordedViewTest
+#print axioms Zcash.Snark.ZeroKnowledge.recordedViewTestCosted
+#print axioms Zcash.Snark.ZeroKnowledge.recordedViewTestCosted_result
+#print axioms Zcash.Snark.ZeroKnowledge.recordedViewTestCostBudget
+#print axioms Zcash.Snark.ZeroKnowledge.recordedViewTestCosted_cost_le
+#print axioms Zcash.Snark.ZeroKnowledge.recordedExhaustionTest
+#print axioms Zcash.Snark.ZeroKnowledge.recordedExhaustionTest_eval
+#print axioms Zcash.Snark.ZeroKnowledge.copyAuxiliaryWordsCosted
+#print axioms Zcash.Snark.ZeroKnowledge.copyAuxiliaryWordsCosted_result
+#print axioms Zcash.Snark.ZeroKnowledge.copyAuxiliaryWordsCosted_cost_le
+#print axioms Zcash.Snark.ZeroKnowledge.RecordedTestCacheSlot
+#print axioms Zcash.Snark.ZeroKnowledge.RecordedTestAddress
+#print axioms Zcash.Snark.ZeroKnowledge.testEmptyAttempt
+#print axioms Zcash.Snark.ZeroKnowledge.recordedTestOutput
+#print axioms Zcash.Snark.ZeroKnowledge.recordedTestCache
+#print axioms Zcash.Snark.ZeroKnowledge.optionalByteTest
+#print axioms Zcash.Snark.ZeroKnowledge.optionalFieldTest
+#print axioms Zcash.Snark.ZeroKnowledge.optionalRawWordTest
+#print axioms Zcash.Snark.ZeroKnowledge.RecordedTestAddress.eval
+#print axioms Zcash.Snark.ZeroKnowledge.recordedTestHistoryCosted
+#print axioms Zcash.Snark.ZeroKnowledge.recordedTestOutputCosted
+#print axioms Zcash.Snark.ZeroKnowledge.recordedTestCacheCosted
+#print axioms Zcash.Snark.ZeroKnowledge.recordedTestProofCosted
+#print axioms Zcash.Snark.ZeroKnowledge.recordedTestScalarCosted
+#print axioms Zcash.Snark.ZeroKnowledge.recordedTestCacheEntryCosted
+#print axioms Zcash.Snark.ZeroKnowledge.recordedTestCacheByteCosted
+#print axioms Zcash.Snark.ZeroKnowledge.RecordedTestAddress.evalCosted
+#print axioms Zcash.Snark.ZeroKnowledge.RecordedTestAddress.evalCosted_result
+#print axioms Zcash.Snark.ZeroKnowledge.recordedTestHistoryCosted_cost_le
+#print axioms Zcash.Snark.ZeroKnowledge.recordedTestOutputCosted_cost_le
+#print axioms Zcash.Snark.ZeroKnowledge.recordedTestCacheCosted_cost_le
+#print axioms Zcash.Snark.ZeroKnowledge.recordedTestProofCosted_cost_le
+#print axioms Zcash.Snark.ZeroKnowledge.recordedTestScalarCosted_cost_le
+#print axioms Zcash.Snark.ZeroKnowledge.recordedTestCacheEntryCosted_cost_le
+#print axioms Zcash.Snark.ZeroKnowledge.recordedTestCacheByteCosted_cost_le
+#print axioms Zcash.Snark.ZeroKnowledge.RecordedTestAddress.indexSum
+#print axioms Zcash.Snark.ZeroKnowledge.RecordedTestAddress.costBudget
+#print axioms Zcash.Snark.ZeroKnowledge.RecordedTestAddress.evalCosted_cost_le
+#print axioms Zcash.Snark.ZeroKnowledge.recordedTest_history_absence_regression
+#print axioms Zcash.Snark.ZeroKnowledge.recordedTest_cache_routing_regression
+#print axioms Zcash.Snark.ZeroKnowledge.recordedTest_query_parts_regression
+#print axioms Zcash.Snark.ZeroKnowledge.rawTapeTest_candidate_regression
+#print axioms Zcash.Snark.ZeroKnowledge.booleanTest_wire_routing_regression
+#print axioms Zcash.Snark.ZeroKnowledge.recordedTest_retry_status_regression
+#print axioms Zcash.Snark.ZeroKnowledge.StreamTestProgram
+#print axioms Zcash.Snark.ZeroKnowledge.streamViewTest
+#print axioms Zcash.Snark.ZeroKnowledge.StreamTestProgram.toRecorded
+#print axioms Zcash.Snark.ZeroKnowledge.streamViewTest_measurable
+#print axioms Zcash.Snark.ZeroKnowledge.streamViewTest_recorded
+#print axioms Zcash.Snark.ZeroKnowledge.StreamTestAddress
+#print axioms Zcash.Snark.ZeroKnowledge.StreamTestAddress.toRecorded
+#print axioms Zcash.Snark.ZeroKnowledge.StreamTestAddress.index
+#print axioms Zcash.Snark.ZeroKnowledge.StreamTestAddress.readEntry
+#print axioms Zcash.Snark.ZeroKnowledge.StreamTestAddress.eval
+#print axioms Zcash.Snark.ZeroKnowledge.StreamTestAddress.eval_measurable
+#print axioms Zcash.Snark.ZeroKnowledge.StreamTestAddress.eval_recorded
