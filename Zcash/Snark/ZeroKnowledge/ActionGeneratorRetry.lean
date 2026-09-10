@@ -6,7 +6,9 @@ import Zcash.Snark.ZeroKnowledge.GeneratedRetryCoins
 
 Each started attempt allocates its full `148m + 46` raw private words, even if
 the reference attempt aborts before using all of them. Remaining words in that
-block are discarded. Later blocks are allocated only on `retryRandomness`.
+block are discarded. Later blocks are allocated only when the additional caller
+policy selects a terminal failure. This caller is absent from the released
+Orchard proof entry point.
 The word generator is never reseeded; its private final state advances by the
 number of started attempts times the block width. It is not revealed to the
 verifier. Oracle reply slots remain independent, separately supplied inputs.

@@ -7,7 +7,7 @@ import Mathlib.Tactic.Module
 
 This is the coefficient-vector algorithm in the pinned description: the witness folds by
 `u⁻¹`, the public vectors by `u`, and each left/right message has its own additive blind.
-Challenges are supplied as inputs. This models the algebra before encoding and retries,
+Challenges are supplied as inputs. This models the algebra before encoding and terminal failures,
 not the Fiat–Shamir challenge-generation procedure.
 -/
 

@@ -63,9 +63,6 @@ import Zcash.Snark.ZeroKnowledge.StoredFirstOpeningCost
 import Zcash.Snark.ZeroKnowledge.StoredMultiopenBlindCost
 import Zcash.Snark.ZeroKnowledge.StoredMultiopenDataBound
 import Zcash.Snark.ZeroKnowledge.StoredMultiopenDataCost
-import Zcash.Snark.ZeroKnowledge.StoredMultiopenValueBound
-import Zcash.Snark.ZeroKnowledge.StoredMultiopenValueCost
-import Zcash.Snark.ZeroKnowledge.StoredOpeningValueCost
 import Zcash.Snark.ZeroKnowledge.HonestIpaBound
 import Zcash.Snark.ZeroKnowledge.HonestIpaCost
 import Zcash.Snark.ZeroKnowledge.HonestIpaRoundBound
@@ -393,6 +390,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkSigmaCertificate
 import Zcash.Snark.ZeroKnowledge.BlindingGenerator
 import Zcash.Snark.ZeroKnowledge.PlonkEncoding
 import Zcash.Snark.ZeroKnowledge.PlonkBinaryBounds
+import Zcash.Snark.ZeroKnowledge.PlonkCompleteness
 import Zcash.Snark.ZeroKnowledge.PlonkCommitmentRouting
 import Zcash.Snark.ZeroKnowledge.PlonkQueryBlocks
 import Zcash.Snark.ZeroKnowledge.GroupingSlots
@@ -590,7 +588,8 @@ theorem remain premises. The Action public-input layout and compiler public-comm
 correspondence are derived below; concrete key shape and query-layout checks remain.
 The full attempt observer reuses the existing verifier's message schedule and
 retains encoded prefixes, received challenges, the full verifier tape, and a distinct
-status for completion, retry, or coincident opening queries. Its success criterion is
+status for completion, identity failure, coincident opening queries, or the zero-IPA
+panic. Its success criterion is
 exact: every point encodes, x is nonzero, and all round challenges are nonzero. The
 x check is equivalent to distinctness of the actual interpolation node lists. No
 condition on xi or evaluation-domain membership is added. The same numerical joint
@@ -609,9 +608,10 @@ The numerical inequality `B < 1` is kernel-certified for `m <= 65535`, including
 both captured Action counts; the general endpoint takes that inequality explicitly.
 Support certificates are proofs, not witness inputs to the simulator. Independent
 selection of completed attempts converges to this conditioned law, also for view
-types without a Fintype instance. Separately, every finite independent retry budget
-retains all earlier failed observations, stopping on either completion or the
-terminal opening error and continuing only on a retry request. Its two-sided joint
+types without a Fintype instance. Separately, an auxiliary caller with a finite
+independent retry budget retains all earlier failed observations. It stops on
+completion or a coincident-opening error and elects to repeat point failures and
+handled IPA panics. This caller is absent from the Zakura release model. Its two-sided joint
 budget is `epsilon / (1 - F)`, where `F` is the honest single-attempt failure bound.
 The real and simulated exhaustion probabilities are at most `F^n` and `B^n` and
 tend to zero for `B < 1`. The probability recursion is proved equal to the observable
@@ -1040,6 +1040,7 @@ assert_axioms Zcash.Snark.ZeroKnowledge.computedMultiopenOpening_commitment
 assert_axioms Zcash.Snark.ZeroKnowledge.computedMultiopenOpening_value
 assert_axioms Zcash.Snark.ZeroKnowledge.multiopenFinalPolynomial_natDegree_lt
 assert_axioms Zcash.Snark.ZeroKnowledge.computedMultiopenIpaPublic_validOpening
+assert_axioms Zcash.Snark.ZeroKnowledge.computedMultiopenIpaPublic_eq_verifier
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkOpeningPointSets_nodup
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkOpeningPointSets_away
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkOpeningPointSets_length
@@ -1621,6 +1622,10 @@ assert_axioms Zcash.Snark.ZeroKnowledge.compilerSigmaPlonkReference_no_perfect_s
 -- Complete protocol attempts: existing schedule, partial encoding, and explicit failure outcomes.
 assert_computable Zcash.Snark.ZeroKnowledge.protocolChallengeCount
 assert_computable Zcash.Snark.ZeroKnowledge.protocolMessageCount
+assert_computable Zcash.Snark.ZeroKnowledge.callerRetryAfterFailure
+assert_axioms Zcash.Snark.ZeroKnowledge.callerRetryAfterFailure_complete
+assert_axioms Zcash.Snark.ZeroKnowledge.callerRetryAfterFailure_coincident
+assert_axioms Zcash.Snark.ZeroKnowledge.callerRetryAfterFailure_ne_complete
 assert_computable Zcash.Snark.ZeroKnowledge.observeProtocolTrace
 assert_computable Zcash.Snark.ZeroKnowledge.protocolTraceBytes
 assert_computable Zcash.Snark.ZeroKnowledge.plonkAttemptTrace
@@ -1676,6 +1681,24 @@ assert_axioms Zcash.Snark.ZeroKnowledge.freshSampledPlonkVerifier_challenges
 assert_axioms Zcash.Snark.ZeroKnowledge.freshPlonkAttempt_failure_le
 assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkAttempt_failure_le
 
+-- Complete typed-verifier acceptance and the conservative one-attempt completeness bound.
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProofFromJointView_wellFormed
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProofFromJointView_assemble
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProofFromJointView_deployedAccepts
+assert_axioms Zcash.Snark.ZeroKnowledge.idealIpaSimulator_verifies_of_mem_support
+assert_axioms Zcash.Snark.ZeroKnowledge.idealPlonkVerifierSimulator_deployedAccepts
+assert_axioms Zcash.Snark.ZeroKnowledge.freshPlonkVerifierSimulator_challenges
+assert_axioms Zcash.Snark.ZeroKnowledge.freshPlonkVerifierSimulator_rejection_le
+assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkVerifierSimulator_rejection_prob_le
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierRejectionBound
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompletenessErrorBound
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompletenessErrorBound_eq
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompletenessErrorBound_le_actions_mul_one
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompletenessErrorBound_one_lt_two_pow
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompletenessErrorBound_lt_actions_mul_two_pow
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAcceptedAttemptSet
+assert_axioms Zcash.Snark.ZeroKnowledge.widePlonk_completeness_error_bound
+
 -- Successful full observations: explicit normalizers and the compiler-derived comparison.
 assert_computable Zcash.Snark.ZeroKnowledge.plonkAttemptSuccessDecidable +choice
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkSimulationErrorBound
@@ -1693,7 +1716,7 @@ assert_axioms Zcash.Snark.ZeroKnowledge.successfulPlonk_simulation_error_bound
 assert_axioms Zcash.Snark.ZeroKnowledge.successfulPlonk_selection_tendsto
 assert_axioms Zcash.Snark.ZeroKnowledge.wideSuccessfulCompilerKeygenPlonk_simulation_capstone
 
--- Independent retries retain every prefix and distinguish retry requests from terminal errors.
+-- Auxiliary caller composition retains every prefix and selects which terminal failures to repeat.
 assert_computable Zcash.Snark.ZeroKnowledge.RetryHistory.prepend
 assert_computable Zcash.Snark.ZeroKnowledge.RetryHistory.stopped
 assert_computable Zcash.Snark.ZeroKnowledge.RetryHistory.map
@@ -2232,6 +2255,7 @@ assert_axioms Zcash.Snark.ZeroKnowledge.cachedOracleRunTape_law
 assert_computable Zcash.Snark.ZeroKnowledge.programOracleTrace
 assert_axioms Zcash.Snark.ZeroKnowledge.programOracleTrace_append
 assert_axioms Zcash.Snark.ZeroKnowledge.programOracleTrace_keeps
+assert_axioms Zcash.Snark.ZeroKnowledge.programOracleTrace_answers
 assert_axioms Zcash.Snark.ZeroKnowledge.programOracleTrace_ne_none_of_fresh
 assert_computable Zcash.Snark.ZeroKnowledge.programOracleView
 assert_axioms Zcash.Snark.ZeroKnowledge.freshOracleTraceLaw
@@ -2264,6 +2288,7 @@ assert_axioms Zcash.Snark.ZeroKnowledge.oracleAttemptContinue_cache_length_le
 -- OracleSchedule
 assert_computable Zcash.Snark.ZeroKnowledge.replayOracleSchedule
 assert_axioms Zcash.Snark.ZeroKnowledge.replayOracleSchedule_queries_prefix
+assert_axioms Zcash.Snark.ZeroKnowledge.replayOracleSchedule_queries_of_complete
 assert_axioms Zcash.Snark.ZeroKnowledge.replayOracleSchedule_result
 assert_axioms Zcash.Snark.ZeroKnowledge.replayOracleSchedule_queries_nodup
 assert_computable Zcash.Snark.ZeroKnowledge.oracleHistoryTape
@@ -2285,6 +2310,7 @@ assert_axioms Zcash.Snark.ZeroKnowledge.digestPlonkVerifierSimulator_advice
 -- PlonkOracle
 assert_computable Zcash.Snark.ZeroKnowledge.plonkRawOracleView +choice
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkRawOracleView_result
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkRawOracleView_query_mem_of_complete
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkRawOracleView_queries_nodup
 assert_computable Zcash.Snark.ZeroKnowledge.plonkReferenceOracleTrace +choice
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkReferenceOracleTrace_causal
@@ -4653,17 +4679,6 @@ assert_axioms Zcash.Snark.ZeroKnowledge.storedMultiopenDataCosted_quotient_resul
 assert_axioms Zcash.Snark.ZeroKnowledge.storedMultiopenDataCosted_polynomial_result
 assert_axioms Zcash.Snark.ZeroKnowledge.storedMultiopenDataCosted_blind_result
 assert_axioms Zcash.Snark.ZeroKnowledge.storedMultiopenDataCosted_value_result
-assert_computable Zcash.Snark.ZeroKnowledge.storedMultiopenValueCostBudget
-assert_axioms Zcash.Snark.ZeroKnowledge.storedMultiopenValueCosted_cost_le
-assert_computable Zcash.Snark.ZeroKnowledge.storedMultiopenValueCosted +choice
-assert_axioms Zcash.Snark.ZeroKnowledge.storedMultiopenValueCosted_result
-assert_axioms Zcash.Snark.ZeroKnowledge.computedMultiopenOpening_value_fold
-assert_axioms Zcash.Snark.ZeroKnowledge.storedMultiopenValueCosted_computed
-assert_computable Zcash.Snark.ZeroKnowledge.storedOpeningSetCosted +choice
-assert_axioms Zcash.Snark.ZeroKnowledge.storedOpeningSetCosted_result
-assert_axioms Zcash.Snark.ZeroKnowledge.storedOpeningSetCosted_dimensions
-assert_computable Zcash.Snark.ZeroKnowledge.storedOpeningSetCostBudget
-assert_axioms Zcash.Snark.ZeroKnowledge.storedOpeningSetCosted_cost_le
 
 /- Complete real private-tape construction, stored inputs, and canonical observed view. -/
 assert_axioms Zcash.Snark.ZeroKnowledge.honestStoredMaterialCosted_dimensions
@@ -4853,7 +4868,7 @@ assert_axioms Zcash.Snark.ZeroKnowledge.recordedTest_cache_routing_regression
 assert_axioms Zcash.Snark.ZeroKnowledge.recordedTest_query_parts_regression
 assert_axioms Zcash.Snark.ZeroKnowledge.rawTapeTest_candidate_regression
 assert_axioms Zcash.Snark.ZeroKnowledge.booleanTest_wire_routing_regression
-assert_axioms Zcash.Snark.ZeroKnowledge.recordedTest_retry_status_regression
+assert_axioms Zcash.Snark.ZeroKnowledge.recordedTest_failure_status_regression
 assert_axioms Zcash.Snark.ZeroKnowledge.StreamTestProgram
 assert_computable Zcash.Snark.ZeroKnowledge.streamViewTest
 assert_computable Zcash.Snark.ZeroKnowledge.StreamTestProgram.toRecorded

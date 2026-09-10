@@ -179,7 +179,7 @@ theorem idealPlonkJoint_simulation_capstone {actions : ℕ}
       (pieces material.1) material.2.1 (plonkCommitmentBlindsFromVector material.2.2)
       hpoints (hdegree material.1 hrows) hW hxi hu
     have hp := plonkPublicIpaInput_honest urs pub x x1 x2 x4 q xi z rounds expectedHx pieces
-      material.1 material.2.1 material.2.2 (hquotient material.1 hrows)
+      material.1 material.2.1 material.2.2 (hquotient material.1 hrows) hpoints
     dsimp only [plonkIpaData]
     rw [hi]
     simp only [plonkCommitmentBlindsFromVector] at hp ⊢

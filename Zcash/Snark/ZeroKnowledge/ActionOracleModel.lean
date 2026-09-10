@@ -58,6 +58,23 @@ theorem actionOracleDigestView_law {actions : ℕ} (urs : URS VestaG) (hk : urs.
     actionZkDigestProver, rawDigestChallengeExperiment, sampleFieldsWith_eq_independentTape,
     PMF.map_bind, PMF.map_comp, Function.comp_def]
 
+/-- Erasing the raw replies leaves exactly the wide-reduced typed prover used by the acceptance theorem. -/
+theorem actionOracleTypedTape_law [Fintype VestaG] {actions : ℕ}
+    (urs : URS VestaG) (hk : urs.k = 11) (inputs : Fin actions → PublicInputs Fp)
+    (witness : Fin actions → Fin 10 → Fin 2048 → Fp) :
+    (actionOracleTapeLaw actions urs.k).map (fun tapes =>
+      (actionOracleDigestView urs hk inputs witness tapes).2) = actionZkTypedProver urs hk inputs witness := by
+  change (actionOracleTapeLaw actions urs.k).map
+    (Prod.snd ∘ actionOracleDigestView urs hk inputs witness) = _
+  rw [← PMF.map_comp, actionOracleDigestView_law, ← actionZkTypedProver_digest_law]
+  simp only [attachPlonkDigests, liftDigestTapeView, PMF.map_bind, PMF.map_comp,
+    Function.comp_def]
+  calc
+    _ = (actionZkTypedProver urs hk inputs witness).bind PMF.pure :=
+      congrArg (PMF.bind (actionZkTypedProver urs hk inputs witness))
+        (funext fun view => PMF.map_const _ view)
+    _ = _ := PMF.bind_pure _
+
 /-- The actual Action reference computation with the statement's common-input prefix. -/
 def actionOracleComp {actions : ℕ} (urs : URS VestaG) (hk : urs.k = 11)
     (inputs : Fin actions → PublicInputs Fp) (witness : Fin actions → Fin 10 → Fin 2048 → Fp)
@@ -118,6 +135,16 @@ def actionOracleProgramView {actions : ℕ} (urs : URS VestaG) (vkTranscriptRepr
     (view : PlonkChallengeTape urs.k (Fin challengeDigestCard) × PlonkFreshView actions urs.k VestaG) :
     Option (ProverAttemptResult × OracleCache TranscriptHashAddress (Fin challengeDigestCard)) :=
   programOracleView cache (plonkRawOracleView (actionOracleInitial urs vkTranscriptRepr inputs) view.1 view.2.2)
+
+/-- Distinct transcript addresses can always be installed in a fresh oracle cache. -/
+theorem actionOracleProgramView_empty_ne_none {actions : ℕ}
+    (urs : URS VestaG) (vkTranscriptRepr : Fp) (inputs : Fin actions → PublicInputs Fp)
+    (view : PlonkChallengeTape urs.k (Fin challengeDigestCard) × PlonkFreshView actions urs.k VestaG) :
+    actionOracleProgramView urs vkTranscriptRepr inputs [] view ≠ none := by
+  have hgood := programOracleTrace_ne_none_of_fresh
+    (plonkRawOracleView (actionOracleInitial urs vkTranscriptRepr inputs) view.1 view.2.2).2 []
+    (plonkRawOracleView_queries_nodup _ _ _) (by intro query hquery; simp)
+  simpa only [actionOracleProgramView, programOracleView, ne_eq, Option.map_eq_none_iff] using hgood
 
 /-- The oracle simulator takes only public data and the preexisting oracle cache. -/
 noncomputable def actionOracleSimulator [Fintype VestaG] {actions : ℕ} (urs : URS VestaG) (hk : urs.k = 11)

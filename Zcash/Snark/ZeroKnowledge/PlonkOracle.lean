@@ -38,6 +38,40 @@ theorem plonkRawOracleView_result {actions k : ℕ} (initial : List (TranscriptE
     funext fun i => (plonkChallengesFromDigests_extend_read digests i).symm
   rw [hread]
 
+/-- Every challenge of a completed canonical proof appears in its recorded raw-oracle trace. -/
+theorem plonkRawOracleView_query_mem_of_complete {actions k : ℕ}
+    (initial : List (TranscriptElt Fp VestaG))
+    (digests : PlonkChallengeTape k (Fin challengeDigestCard))
+    (proof : ProofString (plonkProofShape actions k) Fp VestaG)
+    (hcomplete : (observePlonkAttempt plonkPointCodec plonkScalarCodec
+      (plonkChallengesFromTape (fun i => ((digests i).val : Fp)), proof)).status = .complete)
+    (i : Fin (k + 11)) :
+    (protocolQueryAddress initial (plonkAttemptTrace proof) i.val, digests i) ∈
+      (plonkRawOracleView initial digests proof).2 := by
+  have hcontinued : protocolAttemptContinues (plonkRawOracleView initial digests proof).1 = true := by
+    rw [plonkRawOracleView_result]
+    change decide ((observePlonkAttempt plonkPointCodec plonkScalarCodec
+      (plonkChallengesFromTape (fun i => ((digests i).val : Fp)), proof)).status = .complete) = true
+    exact decide_eq_true hcomplete
+  have hqueries := replayOracleSchedule_queries_of_complete
+    (protocolOracleReport plonkPointCodec (extendDigestTape digests)
+      (plonkAfterChallenge (plonkChallengesFromDigests k (extendDigestTape digests)))
+      (plonkAttemptTrace proof))
+    protocolAttemptContinues (protocolQueryAddress initial (plonkAttemptTrace proof))
+    (extendDigestTape digests) (protocolChallengeCount (plonkAttemptTrace proof)) 0 hcontinued
+  change (protocolQueryAddress initial (plonkAttemptTrace proof) i.val, digests i) ∈
+    (replayOracleSchedule _ _ _ _ _ _).2
+  rw [hqueries]
+  apply List.mem_map.mpr
+  refine ⟨i.val, ?_, ?_⟩
+  · apply List.mem_range'_1.mpr
+    constructor
+    · exact Nat.zero_le _
+    · rw [plonkAttemptTrace_challengeCount]
+      have hi := i.isLt
+      omega
+  · simp only [extendDigestTape_fin]
+
 /-- Internal query collisions are impossible even on an exceptional or incomplete attempt. -/
 theorem plonkRawOracleView_queries_nodup {actions k : ℕ} (initial : List (TranscriptElt Fp VestaG))
     (digests : PlonkChallengeTape k (Fin challengeDigestCard))

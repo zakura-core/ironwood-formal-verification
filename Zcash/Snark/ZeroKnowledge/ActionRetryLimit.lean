@@ -3,12 +3,13 @@ import Zcash.Snark.ZeroKnowledge.RetryLimit
 import Zcash.Snark.ZeroKnowledge.RetryExpectation
 
 /-!
-# Unlimited independent Action retries
+# Unlimited independent attempts under an auxiliary caller
 
 These laws retain every encoded attempt, received challenge, verifier tape, and
-status. Only a fresh-randomness request continues; completed emission and the
-coincident-opening error stop. The statement and witness stay fixed, with fresh
-independent private and verifier tapes in each attempt.
+terminal status. The external `CallerRetryPolicy` repeats point failures and
+handled IPA panics; completed emission and the coincident-opening error stop.
+The statement and witness stay fixed, with fresh independent private and verifier
+tapes in each attempt. This composition is outside the Zakura release model.
 
 The simulator takes public data and a proof that its retry probability is below
 one. That proof is erased and cannot affect its law. The theorem supplies it from

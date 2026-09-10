@@ -5,10 +5,14 @@ import Zcash.Snark.ZeroKnowledge.IpaVerifier
 /-!
 # The computed multi-opening supplies a valid IPA input
 
-The final polynomial and incoming blind are computed by the specified `x₄` folds. The
-public commitment and value are computed by the existing verifier's `multiopenCombine`
-and `multiopenEval`. Their correspondence is proved, so the IPA simulation theorem's
-valid-opening premises are derived for this construction.
+The final polynomial and incoming blind are computed by the specified `x₄` folds.
+The prover supplies the actual polynomial evaluation to the IPA, including when the
+opening point coincides with an earlier node. The verifier's `multiopenEval` agrees
+only away from those nodes; the simulation argument uses that restricted agreement.
+
+Common `50f712ee22ca95e2dd5230c6f331ce2e433d70ee`, `poly/multiopen/prover.rs`,
+uses the direct quotient evaluation on a node collision. The algebraic model evaluates
+the final polynomial in both cases, preserving that value without resampling.
 
 The group claims here are actual polynomial evaluations. Connecting the PLONK verifier's
 inferred `H_x(x)` to those values still requires the quotient/constraint identity; routing
@@ -96,11 +100,22 @@ theorem computedMultiopenOpening_value (urs : URS G) (x2 x4 q qPrimeBlind : Fp)
     List.foldl_map] at hquot ⊢
   rw [hquot]
 
-/-- Public IPA data from the computed verifier opening. -/
+/-- The prover's IPA input uses the actual polynomial value, including at an opening-node collision. -/
 def computedMultiopenIpaPublic (urs : URS G) (x2 x4 q xi z qPrimeBlind : Fp)
     (rounds : Fin urs.k → Fp) (groups : List BlindedOpeningGroup) : IpaPublic urs.k Fp G :=
   let opened := computedMultiopenOpening urs x2 x4 q qPrimeBlind groups
-  IpaPublic.ofMsm urs opened.1 q opened.2 xi z rounds
+  IpaPublic.ofMsm urs opened.1 q ((multiopenFinalPolynomial x2 x4 groups).eval q) xi z rounds
+
+/-- Away from distinct opening nodes, the prover's IPA input equals the verifier's reconstruction. -/
+theorem computedMultiopenIpaPublic_eq_verifier (urs : URS G) (x2 x4 q xi z qPrimeBlind : Fp)
+    (rounds : Fin urs.k → Fp) (groups : List BlindedOpeningGroup)
+    (hnodes : ∀ group ∈ groups, group.points.Nodup)
+    (hq : ∀ group ∈ groups, q ∉ group.points) :
+    computedMultiopenIpaPublic urs x2 x4 q xi z qPrimeBlind rounds groups =
+      let opened := computedMultiopenOpening urs x2 x4 q qPrimeBlind groups
+      IpaPublic.ofMsm urs opened.1 q opened.2 xi z rounds := by
+  simp only [computedMultiopenIpaPublic,
+    computedMultiopenOpening_value urs x2 x4 q qPrimeBlind groups hnodes hq]
 
 end PublicOpening
 
@@ -131,11 +146,10 @@ section ValidOpening
 
 variable {G : Type*} [AddCommGroup G] [Module Fp G]
 
-/-- Both IPA opening premises follow from the computed polynomial, blind, and verifier value. -/
+/-- The computed polynomial and blind satisfy the IPA opening premises even at an opening-node collision. -/
 theorem computedMultiopenIpaPublic_validOpening (urs : URS G) (x2 x4 q xi z qPrimeBlind : Fp)
     (rounds : Fin urs.k → Fp) (groups : List BlindedOpeningGroup)
     (hnodes : ∀ group ∈ groups, group.points.Nodup)
-    (hq : ∀ group ∈ groups, q ∉ group.points)
     (hpos : ∀ group ∈ groups, 0 < group.points.length)
     (hlen : ∀ group ∈ groups, group.points.length ≤ 2 ^ urs.k)
     (hdegree : ∀ group ∈ groups, group.polynomial.natDegree < 2 ^ urs.k) :
@@ -147,9 +161,8 @@ theorem computedMultiopenIpaPublic_validOpening (urs : URS G) (x2 x4 q xi z qPri
   dsimp only [computedMultiopenIpaPublic, IpaPublic.ofMsm]
   constructor
   · exact computedMultiopenOpening_commitment urs x2 x4 q qPrimeBlind groups
-  · rw [coefficientEvaluation_polynomialCoefficients _ _
-      (multiopenFinalPolynomial_natDegree_lt (by positivity) x2 x4 groups hnodes hpos hlen hdegree)]
-    exact (computedMultiopenOpening_value urs x2 x4 q qPrimeBlind groups hnodes hq).symm
+  · exact coefficientEvaluation_polynomialCoefficients _ _
+      (multiopenFinalPolynomial_natDegree_lt (by positivity) x2 x4 groups hnodes hpos hlen hdegree)
 
 end ValidOpening
 

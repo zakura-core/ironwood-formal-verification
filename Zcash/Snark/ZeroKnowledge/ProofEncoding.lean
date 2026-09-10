@@ -6,7 +6,7 @@ import Zcash.Snark.Core.Vesta
 
 Each scalar is its canonical 32-byte little-endian field representative. Each
 nonidentity Vesta point uses its affine x-coordinate with y-parity in bit 255.
-The proof writer requests fresh randomness on the identity before writing bytes.
+The proof writer fails on the identity before writing bytes.
 These encodings concern proof output; they do not implement Fiat–Shamir hashing.
 -/
 

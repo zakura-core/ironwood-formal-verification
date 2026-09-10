@@ -4,7 +4,7 @@ import Zcash.Snark.Verifier.FiatShamir
 # Observing a prover attempt in transcript order
 
 The existing transcript markers determine when a fresh verifier coin is received.
-Point encoding can request new randomness before emitting any bytes for that point.
+Point encoding can fail before emitting any bytes for that point.
 The supplied post-challenge check can stop an attempt after receiving a challenge.
 The observer retains the emitted prefix and the challenges actually received.
 
@@ -16,13 +16,14 @@ namespace Zcash.Snark.ZeroKnowledge
 
 open Zcash.Arithmetic (Fp)
 
-/-- The two failure cases specified for the prover's message schedule. -/
+/-- Terminal failures of the released message schedule; the zero IPA challenge corresponds to a panic. -/
 inductive ProverAttemptFailure where
-  | retryRandomness
+  | identityPoint
   | coincidentOpeningQueries
+  | zeroIpaChallenge
   deriving DecidableEq
 
-/-- Completion is distinct from a request for new randomness and a terminal error. -/
+/-- An attempt completes or stops at a terminal failure, without requesting another attempt. -/
 inductive ProverAttemptStatus where
   | complete
   | failed (reason : ProverAttemptFailure)
@@ -86,7 +87,7 @@ def observeProtocolTrace {G : Type*} (pointCodec : G → Option (List UInt8))
   | _, [] => ⟨[], [], .complete⟩
   | next, .point point :: rest =>
     match pointCodec point with
-    | none => ⟨[], [], .failed .retryRandomness⟩
+    | none => ⟨[], [], .failed .identityPoint⟩
     | some bytes =>
       let result := observeProtocolTrace pointCodec scalarCodec challenges afterChallenge next rest
       ⟨bytes ++ result.proof, result.received, result.status⟩

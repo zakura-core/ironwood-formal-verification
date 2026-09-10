@@ -1,18 +1,18 @@
 import Zcash.Snark.ZeroKnowledge.PlonkFiniteView
 import Zcash.Snark.ZeroKnowledge.PlonkSuccessBounds
 import Zcash.Snark.ZeroKnowledge.RetryHistorySimulation
+import Zcash.Snark.ZeroKnowledge.CallerRetryPolicy
 
 /-!
-# Full-prover retries with the observed history retained
+# Auxiliary caller composition with the observed history retained
 
-Only `retryRandomness` requests another independent attempt. A complete emission
-or a coincident-opening error stops the run. Every encoded prefix, received
+An external caller explicitly repeats point failures or handled IPA panics.
+A complete emission or a coincident-opening error stops that caller. Every encoded prefix, received
 challenge sequence, verifier tape, and status is retained, with exhaustion of a
 finite retry budget reported separately. Witness and public input stay fixed.
 
-This is the specified attempt observer under an explicit independent-retry
-policy. The reference construction's circuit/key and stage-causality obligations
-remain; the model does not claim a caller reusing state obeys this independence.
+This additional caller is absent from Zakura 1.4.0's modeled proof entry point.
+The independence and caller policy are premises of these composition results.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge
@@ -21,25 +21,25 @@ open Zcash.Arithmetic (Fp)
 open Zcash.Common
 open scoped ENNReal
 
-/-- A retry request, as opposed to completed output or the terminal opening error. -/
+/-- The terminal failures that the auxiliary caller elects to repeat. -/
 def plonkRetrySet {actions k : ℕ} {G : Type*}
     (pointCodec : G → Option (List UInt8)) (scalarCodec : Fp → List UInt8) :
     Set (PlonkFreshView actions k G) :=
-  {view | (observePlonkAttempt pointCodec scalarCodec view).status = .failed .retryRandomness}
+  {view | callerRetryAfterFailure (observePlonkAttempt pointCodec scalarCodec view).status = true}
 
 instance plonkRetryDecidable {actions k : ℕ} {G : Type*}
     (pointCodec : G → Option (List UInt8)) (scalarCodec : Fp → List UInt8) :
     DecidablePred (fun view : PlonkFreshView actions k G => view ∈ plonkRetrySet pointCodec scalarCodec) :=
   fun view => inferInstanceAs
-    (Decidable ((observePlonkAttempt pointCodec scalarCodec view).status = .failed .retryRandomness))
+    (Decidable (callerRetryAfterFailure (observePlonkAttempt pointCodec scalarCodec view).status = true))
 
 /-- The same retry decision can be made from the observed result alone. -/
 def plonkObservedRetrySet {k : ℕ} : Set (Challenges k Fp × ProverAttemptResult) :=
-  {view | view.2.status = .failed .retryRandomness}
+  {view | callerRetryAfterFailure view.2.status = true}
 
 instance plonkObservedRetryDecidable {k : ℕ} :
     DecidablePred (fun view : Challenges k Fp × ProverAttemptResult => view ∈ plonkObservedRetrySet) :=
-  fun view => inferInstanceAs (Decidable (view.2.status = .failed .retryRandomness))
+  fun view => inferInstanceAs (Decidable (callerRetryAfterFailure view.2.status = true))
 
 /-- Execute the finite policy and observe all attempts it actually uses. -/
 def runPlonkRetries {actions k : ℕ} {G : Type*}
@@ -80,16 +80,15 @@ theorem runPlonkRetries_complete {actions k : ℕ} {G : Type*}
   simp [runPlonkRetries, runRetryHistory, plonkRetrySet, h,
     RetryHistory.stopped, RetryHistory.map, plonkAttemptObservation]
 
-/-- Retry requests are a subset of all the failures bounded by the single-attempt theorem. -/
+/-- The failures selected by the auxiliary caller are covered by the single-attempt bound. -/
 theorem plonkRetry_subset_failure {actions k : ℕ} {G : Type*}
     (pointCodec : G → Option (List UInt8)) (scalarCodec : Fp → List UInt8) :
     plonkRetrySet (actions := actions) (k := k) pointCodec scalarCodec ⊆
       (plonkAttemptSuccessSet pointCodec scalarCodec)ᶜ := by
   intro view hretry hcomplete
-  change (observePlonkAttempt pointCodec scalarCodec view).status = .failed .retryRandomness at hretry
+  change callerRetryAfterFailure (observePlonkAttempt pointCodec scalarCodec view).status = true at hretry
   change (observePlonkAttempt pointCodec scalarCodec view).status = .complete at hcomplete
-  rw [hretry] at hcomplete
-  cases hcomplete
+  exact callerRetryAfterFailure_ne_complete _ hretry hcomplete
 
 /-- Repeat the same complete attempt law independently, preserving every encoded observation. -/
 noncomputable def observedPlonkRetries {actions k : ℕ} {G : Type*}
@@ -156,7 +155,7 @@ theorem observedPlonkRetries_exhausted {actions k : ℕ} {G : Type*}
   rw [observedPlonkRetries, PMF.toOuterMeasure_map_apply]
   exact retainedRetries_exhausted law (plonkRetrySet pointCodec scalarCodec) n
 
-/-- The real and simulated exhaustion masses are bounded, without interpreting terminal errors as retries. -/
+/-- The real and simulated exhaustion masses obey the auxiliary caller's geometric bound. -/
 theorem observedPlonkRetries_both_exhausted_le {actions k : ℕ} {G : Type*}
     {actual simulate : PMF (PlonkFreshView actions k G)}
     (pointCodec : G → Option (List UInt8)) (scalarCodec : Fp → List UInt8)

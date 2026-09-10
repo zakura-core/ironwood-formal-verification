@@ -14,7 +14,7 @@
 # sweep holds only if the umbrella cannot creep back in, since nothing else fails when it
 # does — builds just quietly get slow again.
 #
-# The rule: no tracked `.lean` file may contain a bare `import Mathlib` or a bare
+# The rule: no tracked or unignored new `.lean` file may contain a bare `import Mathlib` or a bare
 # `import Mathlib.Tactic` (with or without a trailing comment). Specific submodule imports
 # such as `import Mathlib.Tactic.Ring` are fine. If an umbrella import is ever legitimately
 # needed, extend this script with an explicit allowlist rather than deleting the check.
@@ -25,10 +25,29 @@ set -euo pipefail
 # One-or-more whitespace after `import` (not exactly one space), and optional
 # `public`/`meta` modifiers, so spacing variants and module-system prefixes
 # cannot slip a banned umbrella past the anchor.
-violations=$(git ls-files '*.lean' | xargs grep -nE '^(public[[:space:]]+)?(meta[[:space:]]+)?import[[:space:]]+Mathlib(\.Tactic)?([[:space:]]|$)' || true)
+python3 - <<'PY'
+import os
+from pathlib import Path
+import re
+import subprocess
 
-if [ -n "$violations" ]; then
-  echo "::error::bare 'import Mathlib' / 'import Mathlib.Tactic' umbrella imports are not allowed; import the specific Mathlib modules instead (see scripts/check_no_umbrella_imports.sh):"
-  echo "$violations"
-  exit 1
-fi
+paths = subprocess.check_output([
+    "git", "ls-files", "--cached", "--others", "--exclude-standard", "-z", "--", "*.lean",
+]).split(b"\0")
+pattern = re.compile(r"^(public\s+)?(meta\s+)?import\s+Mathlib(\.Tactic)?(\s|$)")
+violations = []
+for raw in sorted(set(paths) - {b""}):
+    path = Path(os.fsdecode(raw))
+    try:
+        lines = path.read_text().splitlines()
+    except FileNotFoundError:
+        # Unstaged deletions remain in the index but have no source to inspect.
+        continue
+    violations.extend(f"{path}:{number}:{line}" for number, line in enumerate(lines, 1)
+                      if pattern.search(line))
+if violations:
+    print("::error::bare 'import Mathlib' / 'import Mathlib.Tactic' umbrella imports are not allowed; "
+          "import the specific Mathlib modules instead (see scripts/check_no_umbrella_imports.sh):")
+    print("\n".join(violations))
+    raise SystemExit(1)
+PY

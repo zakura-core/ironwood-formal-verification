@@ -1,5 +1,6 @@
 import Zcash.Snark.ZeroKnowledge.ActionQueryRows
 import Zcash.Snark.ZeroKnowledge.ActionQueryMasking
+import Zcash.Snark.ZeroKnowledge.PlonkKeygenSelectors
 
 /-!# Exact source valuations for all Action verifier rows
 -/

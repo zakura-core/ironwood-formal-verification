@@ -24,11 +24,10 @@ theorem preparedHonestIpaCosted_computed (costs : FieldOperationCosts)
           (multiopenFinalPolynomial x2.1 x4.1 (groups.map StoredOpeningGroup.erase)))
         (multiopenFinalBlind x4.1 quotientBlind.1 (groups.map StoredOpeningGroup.erase))
         (fun i => (tape i).1)) := by
-  let urs : URS G := { k := 11, g := fun i => (generators i).1, w := W.1, u := U.1 }
   rewrite [preparedHonestIpaCosted_result,
     storedMultiopenDataCosted_polynomial_result costs equal read omegaAccess x2 x4 q quotientBlind groups hpoints,
     storedMultiopenDataCosted_blind_result,
-    storedMultiopenDataCosted_value_result costs equal read omegaAccess urs]
+    storedMultiopenDataCosted_value_result costs equal read omegaAccess x2 x4 q quotientBlind groups hpoints]
   simp only [computedMultiopenIpaPublic, IpaPublic.ofMsm, computedMultiopenOpening_commitment]
   rfl
 

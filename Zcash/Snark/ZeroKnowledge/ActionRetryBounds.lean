@@ -1,11 +1,12 @@
 import Zcash.Snark.ZeroKnowledge.ActionInstantiation
 
 /-!
-# Retry rates for the closed Action reference construction
+# Rates for the auxiliary Action caller policy
 
-The canonical encoded observer retries only a fresh-randomness request. Its rate
-is bounded by the already proved failure budget. The Action simulation theorem
-then supplies the simulator's retry bound, without reopening compiler premises.
+The external policy in `CallerRetryPolicy` repeats selected terminal failures.
+Its rate is bounded by the single-attempt failure budget. The Action simulation
+theorem then supplies the simulator's bound. This caller is absent from the
+Zakura release model.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge
@@ -25,9 +26,8 @@ theorem wideActionZk_retry_le {actions : ℕ} (urs : URS VestaG) (hk : urs.k = 1
   have hsub : plonkObservedRetrySet ⊆
       {view : Challenges urs.k Fp × ProverAttemptResult | view.2.status ≠ .complete} := by
     intro view hr hc
-    change view.2.status = .failed .retryRandomness at hr
-    rw [hr] at hc
-    cases hc
+    change callerRetryAfterFailure view.2.status = true at hr
+    exact callerRetryAfterFailure_ne_complete _ hr hc
   exact ((actionZkProver urs hk inputs witness).toOuterMeasure.mono hsub).trans
     (wideVestaPlonkReferenceAttempt_failure_le urs hk _ _ witness hW)
 

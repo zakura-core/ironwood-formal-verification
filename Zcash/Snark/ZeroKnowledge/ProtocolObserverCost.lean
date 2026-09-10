@@ -23,7 +23,7 @@ def observeProtocolTraceCosted {G : Type*}
   | next, .point point :: rest =>
     let encoded := pointCodec point
     match encoded.1 with
-    | none => (⟨[], [], .failed .retryRandomness⟩, encoded.2 + 8)
+    | none => (⟨[], [], .failed .identityPoint⟩, encoded.2 + 8)
     | some bytes =>
       let result := observeProtocolTraceCosted pointCodec scalarCodec challenges afterChallenge next rest
       let joined := appendListCosted bytes result.1.proof

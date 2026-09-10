@@ -4,3 +4,5 @@
 /.lake
 /.elan
 /scripts/generated/
+/Zcash/Snark/ZeroKnowledge/review/
+/scripts/__pycache__/

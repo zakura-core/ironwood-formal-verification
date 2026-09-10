@@ -1,13 +1,13 @@
 import Zcash.Snark.ZeroKnowledge.IpaFresh
 
 /-!
-# The visible IPA attempt, including partial output and retries
+# The visible IPA attempt, including partial output and terminal failures
 
 The point codec can fail before appending any bytes. Each round writes its left point,
-then its right point, then receives a challenge and requests fresh randomness if it is
-zero. The final two scalars are emitted only after all rounds succeed. This is the
-schedule in the pinned description; it also matches the available Bento checkout's
-`write_point` / `invert_ipa_challenge` order.
+then its right point, then receives a challenge and stops with a panic if it is
+zero. The final two scalars are emitted only after all rounds succeed. This is
+the `write_point` / inverse-unwrap order in the Common release recorded in
+`Zakura/PROVENANCE.md`. The observer never requests a retry.
 
 Codecs are supplied parameters. The distribution theorem covers their complete output,
 including errors, but does not certify a concrete Rust codec or Fiat–Shamir hash state.
@@ -20,10 +20,11 @@ open Zcash.Arithmetic (Fp scalarFieldOrder)
 open Zcash.Common
 open scoped ENNReal
 
-/-- The two possible outcomes of the fixed-shape IPA attempt. -/
+/-- The IPA either completes, fails to encode a point, or panics on a zero round challenge. -/
 inductive IpaAttemptStatus where
   | complete
-  | retryRandomness
+  | identityPoint
+  | zeroChallengePanic
   deriving DecidableEq
 
 /-- Retain emitted bytes, received challenges, and the result, even when the attempt fails. -/
@@ -38,12 +39,12 @@ def observeIpaRounds {G : Type*} (pointCodec : G → Option (List UInt8))
   | [] => ⟨scalarCodec c ++ scalarCodec f, [], .complete⟩
   | (challenge, left, right) :: rounds =>
     match pointCodec left with
-    | none => ⟨[], [], .retryRandomness⟩
+    | none => ⟨[], [], .identityPoint⟩
     | some leftBytes =>
       match pointCodec right with
-      | none => ⟨leftBytes, [], .retryRandomness⟩
+      | none => ⟨leftBytes, [], .identityPoint⟩
       | some rightBytes =>
-        if challenge = 0 then ⟨leftBytes ++ rightBytes, [challenge], .retryRandomness⟩
+        if challenge = 0 then ⟨leftBytes ++ rightBytes, [challenge], .zeroChallengePanic⟩
         else
           let rest := observeIpaRounds pointCodec scalarCodec c f rounds
           ⟨leftBytes ++ rightBytes ++ rest.proof, challenge :: rest.received, rest.status⟩
@@ -52,7 +53,7 @@ def observeIpaRounds {G : Type*} (pointCodec : G → Option (List UInt8))
 def observeIpaAttempt {k : ℕ} {G : Type*} (pointCodec : G → Option (List UInt8))
     (scalarCodec : Fp → List UInt8) (view : IpaFreshView k G) : IpaAttemptResult :=
   match pointCodec view.2.maskCommitment with
-  | none => ⟨[], [], .retryRandomness⟩
+  | none => ⟨[], [], .identityPoint⟩
   | some maskBytes =>
     let rest := observeIpaRounds pointCodec scalarCodec view.2.scalar view.2.blind
       (List.ofFn fun j => (view.1 j.succ.succ, view.2.messages j))
@@ -68,7 +69,7 @@ def ipaAttemptObservation {k : ℕ} {G : Type*} (pointCodec : G → Option (List
 theorem observeIpaAttempt_mask_failure {k : ℕ} {G : Type*}
     (pointCodec : G → Option (List UInt8)) (scalarCodec : Fp → List UInt8)
     (view : IpaFreshView k G) (h : pointCodec view.2.maskCommitment = none) :
-    observeIpaAttempt pointCodec scalarCodec view = ⟨[], [], .retryRandomness⟩ := by
+    observeIpaAttempt pointCodec scalarCodec view = ⟨[], [], .identityPoint⟩ := by
   simp [observeIpaAttempt, h]
 
 /-- A failed right-point encoding retains the left bytes and has not received the round challenge. -/
@@ -77,7 +78,7 @@ theorem observeIpaRounds_right_failure {G : Type*} (pointCodec : G → Option (L
     (rounds : List (Fp × G × G)) (leftBytes : List UInt8)
     (hleft : pointCodec left = some leftBytes) (hright : pointCodec right = none) :
     observeIpaRounds pointCodec scalarCodec c f ((challenge, left, right) :: rounds) =
-      ⟨leftBytes, [], .retryRandomness⟩ := by
+      ⟨leftBytes, [], .identityPoint⟩ := by
   simp [observeIpaRounds, hleft, hright]
 
 /-- A zero round challenge is checked after both point writes and before any later output. -/
@@ -86,7 +87,7 @@ theorem observeIpaRounds_zero_challenge {G : Type*} (pointCodec : G → Option (
     (rounds : List (Fp × G × G)) (leftBytes rightBytes : List UInt8)
     (hleft : pointCodec left = some leftBytes) (hright : pointCodec right = some rightBytes) :
     observeIpaRounds pointCodec scalarCodec c f ((0, left, right) :: rounds) =
-      ⟨leftBytes ++ rightBytes, [0], .retryRandomness⟩ := by
+      ⟨leftBytes ++ rightBytes, [0], .zeroChallengePanic⟩ := by
   simp [observeIpaRounds, hleft, hright]
 
 section Distribution

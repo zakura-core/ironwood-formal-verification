@@ -11,9 +11,9 @@ same round blocks and the two final scalars. The common public initialization is
 fixed separately and contributes no proof bytes. Challenge markers receive fresh
 coins from the full interactive tape; they do not perform Fiat–Shamir hashing.
 
-An identity-rejecting point codec requests fresh randomness at the first identity.
+An identity-rejecting point codec stops at the first identity.
 The duplicate-opening failure at `x = 0` is checked after `x1,x2`, before writing
-`Q'`. Each zero round challenge requests fresh randomness after both round points.
+`Q'`. Each zero round challenge stops with the IPA panic after both round points.
 The observer adds no test on `xi`, on `q`, or on evaluation-domain membership.
 -/
 
@@ -42,7 +42,7 @@ def plonkAttemptChallenge {k : ℕ} (ch : Challenges k Fp) (index : ℕ) : Fp :=
 def plonkAfterChallenge {k : ℕ} (ch : Challenges k Fp) (index : ℕ) :
     Option ProverAttemptFailure :=
   if index = 6 ∧ ch.x = 0 then some .coincidentOpeningQueries
-  else if 11 ≤ index ∧ plonkAttemptChallenge ch index = 0 then some .retryRandomness
+  else if 11 ≤ index ∧ plonkAttemptChallenge ch index = 0 then some .zeroIpaChallenge
   else none
 
 /-- Observe all protocol phases, retaining the prefix if an attempt stops. -/

@@ -1,11 +1,13 @@
 import Zcash.Snark.ZeroKnowledge.StatefulRetryResources
+import Zcash.Snark.ZeroKnowledge.CallerRetryPolicy
 import Zcash.Snark.ZeroKnowledge.OracleCachePreservation
 import Zcash.Snark.ZeroKnowledge.ProverAttempt
 
 /-!
 # Observed retry decisions and the retained oracle state
 
-Only an ordinary attempt with status `failed retryRandomness` continues.
+Only a terminal failure selected by the additional caller policy continues.
+This caller is not part of the released Orchard proof call.
 Completion, the coincident-opening error, and simulator programming failure all
 stop. An observation always returns the cache to be used by any continuation;
 programming failure returns the unchanged prior cache.
@@ -16,7 +18,7 @@ namespace Zcash.Snark.ZeroKnowledge
 /-- The specified retry decision, with explicit simulator programming failure terminal. -/
 def oracleRetryRequested : Option ProverAttemptResult → Bool
   | none => false
-  | some attempt => decide (attempt.status = .failed .retryRandomness)
+  | some attempt => callerRetryAfterFailure attempt.status
 
 /-- The retry set has a computational decision procedure inherited from its Boolean predicate. -/
 abbrev oracleRetrySet : Set (Option ProverAttemptResult) := {attempt | oracleRetryRequested attempt = true}
@@ -24,9 +26,9 @@ abbrev oracleRetrySet : Set (Option ProverAttemptResult) := {attempt | oracleRet
 /-- Programming failure never requests another attempt. -/
 theorem oracleRetryRequested_none : oracleRetryRequested none = false := rfl
 
-/-- An ordinary attempt requests a retry exactly at the specified fresh-randomness status. -/
+/-- The auxiliary caller makes its decision from the attempt's terminal status. -/
 theorem oracleRetryRequested_some (attempt : ProverAttemptResult) :
-    oracleRetryRequested (some attempt) = true ↔ attempt.status = .failed .retryRandomness := by
+    oracleRetryRequested (some attempt) = true ↔ callerRetryAfterFailure attempt.status = true := by
   simp [oracleRetryRequested]
 
 /-- Completed output is terminal, without asserting verifier acceptance. -/

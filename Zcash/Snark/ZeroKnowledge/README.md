@@ -1,4 +1,4 @@
-# Ironwood zero knowledge
+# Zakura 1.4.0 zero knowledge
 
 This directory contains Lean proofs of both:
 
@@ -7,8 +7,19 @@ This directory contains Lean proofs of both:
   **classical programmable random-oracle model**.
 
 The proofs compare the verifier's view with a simulator that receives no private
-witness. The reference is the [pinned prover description][protocol]
-(Sensei at [56a7de7][sensei]), with `k = 11` and 2,048 rows.
+witness. The release target is one post-NU6.3 Orchard proof call in Zakura 1.4.0,
+using Common `50f712ee22ca95e2dd5230c6f331ce2e433d70ee`, with `k = 11` and
+2,048 rows. The [release provenance](Zakura/PROVENANCE.md) pins the sources,
+published crates, feature profiles, and implementation boundary. The
+[prover description][protocol] supplies the reference masking equations.
+
+The release model returns proof bytes, returns an error, or records the zero-IPA
+panic. It has no retry-request status, resampling step, or automatic retry.
+Public identity commitments fail before the first prover oracle query. The
+IPA receives the actual polynomial evaluation on an opening-node collision,
+matching the released algebraic fallback within the same call. The
+release observation and its theorem connection require Lean elaboration;
+source and artifact checks alone do not validate the new proof terms.
 
 [Results](#main-results) · [Bounds](#error-bounds) ·
 [Assumptions](#assumptions-and-scope) · [Build](#build-and-reference)
@@ -19,14 +30,15 @@ witness. The reference is the [pinned prover description][protocol]
 | --- | --- |
 | **Interactive HVZK:** statistical comparison of the complete observed attempt, including failed prefixes. | [ActionInstantiation.lean](ActionInstantiation.lean) |
 | **Fiat–Shamir ZK:** statistical comparison of the full oracle view, including adaptive queries before and after the attempt. | [ActionFiatShamir.lean](ActionFiatShamir.lean) |
+| **Released call observation:** one proof, returned error, or panic, with the oracle cache retained. | [Zakura/Action.lean](Zakura/Action.lean) |
 | **Action connection:** construct circuit rows from application witnesses and prove their validity. | [ActionWitnessSimulation.lean](ActionWitnessSimulation.lean) |
-| **Retry histories:** finite and unlimited comparisons under the specified retry policies. | [Interactive](ActionRetryLimit.lean), [Fiat–Shamir](ActionOracleStreamSimulation.lean) |
+| **Prover completeness (awaiting final build):** bound abort or rejection from valid application witnesses, including an initialized call with a fresh random oracle. | [Interactive](ActionProverCompleteness.lean), [initialized call](Zakura/Completeness.lean) |
 | **Executable simulator:** a fixed-bit implementation with a proved distribution and structural resource bounds. | [ActionOracleBits.lean](ActionOracleBits.lean), [program model](PROGRAMS.md) |
-| **PRNG reductions:** computational simulation bounds under explicit generator-security assumptions. | [Interactive](CostedInteractivePrng.lean), [retry streams](CostedActionGeneratorStream.lean) |
+| **PRNG reduction:** a computational interactive simulation bound under an explicit generator-security assumption. | [CostedInteractivePrng.lean](CostedInteractivePrng.lean) |
 
-The [review packet](REVIEW.md) lists the exact theorem names, compared
-experiments, and bounds for every result. Both masking optimizations, the sparse
-IPA mask and linear multi-opening mask, are covered jointly with PLONK.
+Both masking optimizations, the sparse IPA mask and linear multi-opening mask,
+are covered jointly with PLONK. The linked theorem statements give the exact
+experiments and premises.
 
 ## Error bounds
 
@@ -45,10 +57,28 @@ between the real prover and simulator.
 
 The one-attempt Fiat–Shamir bound adds `q_pre/p`, where `q_pre` counts prior
 oracle queries. The fixed-bit simulator adds a further `(132m + 36)δ`.
-See the [full bounds](REVIEW.md) for retries and PRNG reductions.
+The deterministic released-call observation preserves the ideal-field
+simulator's `ε(m) + q_pre/p` bound. [PROGRAMS.md](PROGRAMS.md) describes the
+PRNG reductions and their assumptions.
 
-Each real attempt uses `148m + 46` private field samples; `148m + 70` counts
-sampling-bias costs in the comparison, not the private tape length.
+A complete private tape contains `148m + 46` field samples; a stopped call
+can consume only a prefix. The `148m + 70` coefficient counts sampling-bias
+costs in the comparison, not the private tape length.
+
+The new completeness theorem reuses the existing Action circuit completeness
+proof. Its proposed bound counts both aborted attempts and completed proofs
+rejected by the typed verifier:
+
+```text
+η(m) = (42904m + 8271)/p + (296m + 160)δ < m · 2^-238
+Pr[completed and accepted] ≥ 1 − η(m),    m ≥ 1
+```
+
+This is high-probability completeness for one interactive attempt. The new
+[acceptance proof and binary bound](ActionProverCompleteness.lean) await the
+requested final Lean build. The [call bridge](Zakura/Completeness.lean) preserves
+the same bound for the modeled Fiat–Shamir call with an empty initial oracle
+cache and successful public initialization.
 
 ## Assumptions and scope
 
@@ -62,29 +92,40 @@ sampling-bias costs in the comparison, not the private tape length.
 - **Randomness:** fresh, independent uniform raw-bit tapes, with field elements
   sampled by wide reduction. Seeded-generator results instead use the stated
   PRNG security assumption.
-- **Retries:** a fixed request and the stated freshness, cache, and retry-rate
-  conditions. Oracle retries permit no intervening adversary queries.
+- **Invocation:** one call with matching post-NU6.3 circuit/key versions and
+  instance counts. Exceptional challenges are not resampled. Failed calls do
+  not return the partial proof buffer; oracle queries remain observable.
 
 Fiat–Shamir uses a classical programmable random oracle. Concrete BLAKE2b
 security, whole-program Rust equivalence, and machine-instruction timing are
 outside these protocol and structural-cost theorems.
+The [implementation notes](Zakura/OPTIMIZATIONS.md) record source review of
+optimized Rust computation and randomness consumption. The release refresh uses
+the existing verifier fixture formats, generated by pinned Rust and checked in
+Lean, while retaining the unchanged circuit dumps. New RNG/trace instrumentation
+is outside this task. Auxiliary caller-composition theorems
+in the library are outside this release claim and are not invoked by its model.
 
 ## Build and reference
 
 From the repository root:
 
 ```sh
+python3 scripts/check_zakura_release.py
 lake build --wfail
 ```
 
 The default build includes this development and its trust census.
+The provenance document gives the authenticated source check, existing-fixture
+refresh commands, and optional backend regressions. The checked-in verifier
+captures were regenerated from the pinned Zakura release and are consumed by
+the default fixture checks.
 
-- [REVIEW.md](REVIEW.md): theorem index, exact bounds, assumptions, and review evidence.
 - [PROGRAMS.md](PROGRAMS.md): executable programs and the resource model.
+- [Zakura/PROVENANCE.md](Zakura/PROVENANCE.md): exact release target and validation limits.
 - [Computability boundary](../../../book/src/formal-verification/zero-knowledge.md):
   operational reductions and static proof artifacts.
 - [TrustBoundary.lean](TrustBoundary.lean) and [Action/TrustBoundary.lean](Action/TrustBoundary.lean):
   checked axiom dependencies.
 
 [protocol]: https://gist.githubusercontent.com/ebfull/bf25819afa697e39b54bd5f1a1992a2c/raw/589528c0f752112fd83c42aeeea91b6958e67605/zk.md
-[sensei]: https://github.com/tachyon-zcash/bento/tree/56a7de7474da3b86fa475f01400edadfd8af4cb6/crates/sensei

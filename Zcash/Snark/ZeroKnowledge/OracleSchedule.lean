@@ -40,6 +40,24 @@ theorem replayOracleSchedule_queries_prefix {Query Reply Value : Type*}
       simpa only [replayOracleSchedule, hc, if_true, List.range'_succ,
         List.map_cons, List.cons_append] using congrArg (List.cons (query index, reply index)) htail
 
+/-- A replay that finishes with a continuing report cannot have stopped before any scheduled query. -/
+theorem replayOracleSchedule_queries_of_complete {Query Reply Value : Type*}
+    (report : ℕ → Value) (continues : Value → Bool) (query : ℕ → Query) (reply : ℕ → Reply)
+    (budget index : ℕ)
+    (hcomplete : continues (replayOracleSchedule report continues query reply budget index).1 = true) :
+    (replayOracleSchedule report continues query reply budget index).2 =
+      (List.range' index budget).map (fun i => (query i, reply i)) := by
+  induction budget generalizing index with
+  | zero => rfl
+  | succ budget ih =>
+    cases hc : continues (report index) with
+    | false => simp [replayOracleSchedule, hc] at hcomplete
+    | true =>
+      have hrest := ih (index + 1) (by
+        simpa only [replayOracleSchedule, hc, if_true] using hcomplete)
+      simpa only [replayOracleSchedule, hc, if_true, List.range'_succ, List.map_cons] using
+        congrArg (List.cons (query index, reply index)) hrest
+
 /-- Stopping early changes no report when stopped reports already equal the final observation. -/
 theorem replayOracleSchedule_result {Query Reply Value : Type*}
     (report : ℕ → Value) (continues : Value → Bool) (query : ℕ → Query) (reply : ℕ → Reply)

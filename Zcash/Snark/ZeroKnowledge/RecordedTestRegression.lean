@@ -39,10 +39,10 @@ theorem booleanTest_wire_routing_regression :
     (BooleanTestProgram.eval (Input := Unit) ⟨[.constant true], 4⟩ (fun _ => true)) = false := by
   exact ⟨rfl, rfl⟩
 
-/-- Terminal coincident openings are observed distinctly from an instruction to retry. -/
-theorem recordedTest_retry_status_regression :
+/-- Recorded observations distinguish identity failures from duplicate opening errors. -/
+theorem recordedTest_failure_status_regression :
     let view : ActionRetryRecordedView := (⟨[(some ⟨[], [], .failed .coincidentOpeningQueries⟩, [])], false⟩, [])
-    recordedViewTest ⟨[.input (.status 0 (.failed .retryRandomness))], 0⟩ [] view = false ∧
+    recordedViewTest ⟨[.input (.status 0 (.failed .identityPoint))], 0⟩ [] view = false ∧
     recordedViewTest ⟨[.input (.status 0 (.failed .coincidentOpeningQueries))], 0⟩ [] view = true := by
   exact ⟨rfl, rfl⟩
 

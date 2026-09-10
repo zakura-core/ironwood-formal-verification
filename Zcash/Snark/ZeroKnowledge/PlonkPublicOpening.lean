@@ -158,7 +158,7 @@ def plonkPublicOpening {actions : ℕ} (urs : URS G) (pub : PlonkPublicPolynomia
     (multiopenEval x2 q (List.ofFn fun i => (plonkOpeningPointSets (omegaOf 11) x i, nodes i, values i)))
     (Msm.zero urs.k Fp G)
 
-/-- The opening reconstructed from the public view equals the honest polynomial construction. -/
+/-- The public view and the honest polynomial data give the same verifier reconstruction. -/
 theorem plonkPublicOpening_honest {actions : ℕ} (urs : URS G)
     (pub : PlonkPublicPolynomials actions) (x x1 x2 x4 q hEval : Fp)
     (pieces : ColumnHistory 2048 → Fin 8 → CPoly) (rows : ColumnHistory 2048)
@@ -192,14 +192,15 @@ def plonkPublicIpaInput {actions : ℕ} (urs : URS G) (pub : PlonkPublicPolynomi
   let opened := plonkPublicOpening urs pub x x1 x2 x4 q (expectedHx (privateColumnView view.2.1)) view
   IpaPublic.ofMsm urs opened.1 q opened.2 xi z rounds
 
-/-- The public algorithm reconstructs precisely the IPA input of the honest polynomial computation. -/
+/-- Away from opening-node collisions, the public algorithm reconstructs the honest prover's IPA input. -/
 theorem plonkPublicIpaInput_honest {actions : ℕ} (urs : URS G)
     (pub : PlonkPublicPolynomials actions) (x x1 x2 x4 q xi z : Fp) (rounds : Fin urs.k → Fp)
     (expectedHx : (PrivateColumnId actions → Fin 5 → Fp) → Fp)
     (pieces : ColumnHistory 2048 → Fin 8 → CPoly) (rows : ColumnHistory 2048)
     (coefficients : Fp × Fp) (blinds : Fin (22 * actions + 10) → Fp)
     (hquotient : (plonkCollapsedQuotient x (pieces rows)).eval x =
-      expectedHx (privateColumnView (observeColumnRows (omegaOf 11) (plonkObservationPoints (omegaOf 11) x q) rows))) :
+      expectedHx (privateColumnView (observeColumnRows (omegaOf 11) (plonkObservationPoints (omegaOf 11) x q) rows)))
+    (hpoints : Function.Injective (plonkObservationPoints (omegaOf 11) x q)) :
     plonkPublicIpaInput urs pub x x1 x2 x4 q xi z rounds expectedHx
         (honestPlonkMaskView urs pub x x1 x2 q pieces rows coefficients blinds) =
       computedMultiopenIpaPublic urs x2 x4 q xi z (plonkQuotientPrimeEntry blinds) rounds
@@ -208,7 +209,13 @@ theorem plonkPublicIpaInput_honest {actions : ℕ} (urs : URS G)
   unfold plonkPublicIpaInput
   simp only [honestPlonkMaskView_columns]
   rw [plonkPublicOpening_honest urs pub x x1 x2 x4 q _ pieces rows coefficients blinds hquotient]
-  rfl
+  symm
+  apply computedMultiopenIpaPublic_eq_verifier
+  all_goals
+    intro group hgroup
+    obtain ⟨i, rfl⟩ := List.mem_ofFn.mp hgroup
+  · exact plonkOpeningPointSets_nodup (omegaOf 11) x q hpoints i
+  · exact plonkOpeningPointSets_away (omegaOf 11) x q hpoints i
 
 end PublicOpening
 

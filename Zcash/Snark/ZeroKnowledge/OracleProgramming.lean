@@ -62,6 +62,26 @@ theorem programOracleTrace_keeps {Query Reply : Type*} [DecidableEq Query]
       · simpa only [programOracleTrace, hlookup] using hprogram
       · simpa only [oracleCacheLookup_cons_ne cache address query answer hne] using hstored
 
+/-- Successful programming stores each reply from the proposed trace. -/
+theorem programOracleTrace_answers {Query Reply : Type*} [DecidableEq Query]
+    (trace : List (Query × Reply)) (cache finalCache : OracleCache Query Reply)
+    (hprogram : programOracleTrace cache trace = some finalCache) :
+    ∀ entry ∈ trace, oracleCacheLookup finalCache entry.1 = some entry.2 := by
+  induction trace generalizing cache with
+  | nil => simp
+  | cons entry trace ih =>
+    rcases entry with ⟨query, reply⟩
+    cases hlookup : oracleCacheLookup cache query with
+    | some value => simp [programOracleTrace, hlookup] at hprogram
+    | none =>
+      have hrest : programOracleTrace ((query, reply) :: cache) trace = some finalCache := by
+        simpa only [programOracleTrace, hlookup] using hprogram
+      intro entry hentry
+      rcases List.mem_cons.mp hentry with rfl | hentry
+      · exact programOracleTrace_keeps trace ((query, reply) :: cache) finalCache hrest
+          query reply (oracleCacheLookup_cons_same cache query reply)
+      · exact ih ((query, reply) :: cache) hrest entry hentry
+
 /-- A trace of distinct fresh addresses can always be programmed. -/
 theorem programOracleTrace_ne_none_of_fresh {Query Reply : Type*} [DecidableEq Query]
     (trace : List (Query × Reply)) (cache : OracleCache Query Reply)

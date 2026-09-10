@@ -53,7 +53,7 @@ theorem actionOracleSimulator_retry_le [Fintype VestaG] {actions : ℕ}
   dsimp only [law] at hprogram
   rw [actionZkDigestSimulator_observed] at hprogram
   have hbound : ((actionZkSimulator urs hk inputs).map Prod.snd).toOuterMeasure
-      {attempt | attempt.status = .failed .retryRandomness} ≤ plonkCommonFailureBound actions := by
+      {attempt | callerRetryAfterFailure attempt.status = true} ≤ plonkCommonFailureBound actions := by
     simpa only [PMF.toOuterMeasure_map_apply, plonkObservedRetrySet, Set.preimage_setOf_eq] using
       wideActionZkSimulator_retry_le urs hk inputs witness hvalid hW
   have h := hprogram.trans hbound

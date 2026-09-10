@@ -1,9 +1,0 @@
-Complete real permutation-column construction resource milestone
-Proof baseline: 2bcc329a1666b105e8608a10483f87aa905bcc28.
-The focused warning-as-error build passed for PlonkPermutationProductCostBound (3054 jobs), covering all eleven new modules. The ZeroKnowledge trust boundary passed separately (3854 jobs).
-All 33 declarations passed a separate warning-as-error transitive axiom inventory, with exactly one direct pin each. Dependencies are limited to propext, Classical.choice, and Quot.sound. No admitted lemma or new native certificate was introduced.
-The counted factor construction executes the original stored chunk selection and actual public/advice/sigma polynomial query routes. Each factor retains pair reads, identity-name powers, and all arithmetic costs. Explicit finite products include list lengths, indexed reads, and complete factor preparation. The product scan retains all preceding chunk terminal values and every numerator and denominator computation.
-The complete per-row budget covers all three chunks and every row, including suffix rows, missing chunks, zero factors, and total field inversion. Erasure identifies the exact existing plonkPermutationBaseRows computation on every input.
-Working and staged whitespace checks passed. No theorem endpoint, fixture, default build target, csimp declaration, or group callback was changed; the preceding census/fixture guards remain applicable. This is focused validation. The last full workspace build remains the successful 4629-job run at 2872c72f.
-The proof commit was pushed only to TalDerei/ironwood-private refs/heads/establish-zk, with its exact remote SHA verified.
-The complete real-prover/retry/test resource composition and independent review remain open; these component theorems do not alone discharge PRNG test-class membership.

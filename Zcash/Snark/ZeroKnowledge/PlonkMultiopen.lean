@@ -256,7 +256,6 @@ theorem plonkMultiopenIpa_validOpening {actions : ℕ} (urs : URS G) (hk : urs.k
     intro group hgroup
     obtain ⟨i, rfl⟩ := List.mem_ofFn.mp hgroup
   · exact plonkOpeningPointSets_nodup (omegaOf 11) x q hpoints i
-  · exact plonkOpeningPointSets_away (omegaOf 11) x q hpoints i
   · exact (plonkOpeningPointSets_length (omegaOf 11) x i).1
   · exact (plonkOpeningPointSets_length (omegaOf 11) x i).2.trans (by rw [hk]; decide)
   · simpa only [hk] using plonkOpeningPolynomials_natDegree_lt pub rows x x1 pieces coefficients hdegree i

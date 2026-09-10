@@ -31,7 +31,8 @@ def oracleRetryRequestedCosted : Option ProverAttemptResult → Bool × ℕ
   | none => (false, 2)
   | some attempt => match attempt.status with
     | .complete => (false, 4)
-    | .failed .retryRandomness => (true, 5)
+    | .failed .identityPoint => (true, 5)
+    | .failed .zeroIpaChallenge => (true, 5)
     | .failed .coincidentOpeningQueries => (false, 5)
 
 /-- The counted retry predicate makes exactly the specified stopping decision, preserving the retry
@@ -46,7 +47,7 @@ theorem oracleRetryRequestedCosted_result (attempt : Option ProverAttemptResult)
     | complete => rfl
     | failed reason => cases reason <;> rfl
 
-/-- Testing whether an attempt requests fresh randomness costs at most five units, supplying the
+/-- Testing whether the auxiliary caller repeats an attempt costs at most five units, supplying the
 stopping-check budget. -/
 theorem oracleRetryRequestedCosted_cost_le (attempt : Option ProverAttemptResult) :
     (oracleRetryRequestedCosted attempt).2 ≤ 5 := by

@@ -45,7 +45,7 @@ def afterStoredChallengeCosted (equal read : ℕ) (x : Fp × ℕ) (sequence : Li
     (some .coincidentOpeningQueries, x.2 + equal + 5)
   else
     let value := getDListCosted read (0 : Fp) sequence index
-    let status := if 11 ≤ index ∧ value.1 = 0 then some .retryRandomness else none
+    let status := if 11 ≤ index ∧ value.1 = 0 then some .zeroIpaChallenge else none
     (status, x.2 + value.2 + 2 * equal + 10)
 
 /-- Stored checking preserves the exact original post-challenge policy at every index. -/

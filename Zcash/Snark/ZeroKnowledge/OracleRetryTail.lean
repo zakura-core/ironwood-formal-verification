@@ -3,19 +3,20 @@ import Zcash.Snark.ZeroKnowledge.OracleRetry
 /-!
 # Oracle programming preserves the stopping policy
 
-A retry can be requested only by a successfully programmed ordinary attempt.
-No programming conflict is converted into a request for more randomness.
+The auxiliary caller can repeat only a successfully programmed ordinary attempt.
+A programming conflict stops this composition. The released proof call has no
+such caller policy.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge
 
 open scoped ENNReal
 
-/-- A programmed observation retries only if the original ordinary attempt requested it. -/
+/-- Programming an observation cannot add an invocation that the auxiliary caller would reject. -/
 theorem programOracleView_retry_imp {Query Reply : Type*} [DecidableEq Query]
     (cache : OracleCache Query Reply) (view : ProverAttemptResult × List (Query × Reply))
     (h : (programOracleView cache view).map Prod.fst ∈ oracleRetrySet) :
-    view.1.status = .failed .retryRandomness := by
+    callerRetryAfterFailure view.1.status = true := by
   unfold programOracleView at h
   cases hp : programOracleTrace cache view.2 with
   | none => simp [hp, oracleRetrySet, oracleRetryRequested] at h
@@ -30,7 +31,7 @@ theorem programOracleView_retry_le {Seed Query Reply : Type*} [DecidableEq Query
     (law.map (fun seed => oracleAttemptState cache (programOracleView cache (view seed)))).toOuterMeasure
         {observation | observation.1 ∈ oracleRetrySet} ≤
       (law.map (fun seed => (view seed).1)).toOuterMeasure
-        {attempt | attempt.status = .failed .retryRandomness} := by
+        {attempt | callerRetryAfterFailure attempt.status = true} := by
   simp only [PMF.toOuterMeasure_map_apply]
   apply law.toOuterMeasure.mono
   intro seed hseed
