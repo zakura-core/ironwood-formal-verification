@@ -393,6 +393,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkSigmaCertificate
 import Zcash.Snark.ZeroKnowledge.BlindingGenerator
 import Zcash.Snark.ZeroKnowledge.PlonkEncoding
 import Zcash.Snark.ZeroKnowledge.PlonkBinaryBounds
+import Zcash.Snark.ZeroKnowledge.PlonkCompleteness
 import Zcash.Snark.ZeroKnowledge.PlonkCommitmentRouting
 import Zcash.Snark.ZeroKnowledge.PlonkQueryBlocks
 import Zcash.Snark.ZeroKnowledge.GroupingSlots
@@ -1674,6 +1675,24 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonkAttempt_failure_subset
 assert_axioms Zcash.Snark.ZeroKnowledge.freshSampledPlonkVerifier_challenges
 assert_axioms Zcash.Snark.ZeroKnowledge.freshPlonkAttempt_failure_le
 assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkAttempt_failure_le
+
+-- Complete typed-verifier acceptance and the conservative one-attempt completeness bound.
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProofFromJointView_wellFormed
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProofFromJointView_assemble
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkProofFromJointView_deployedAccepts
+assert_axioms Zcash.Snark.ZeroKnowledge.idealIpaSimulator_verifies_of_mem_support
+assert_axioms Zcash.Snark.ZeroKnowledge.idealPlonkVerifierSimulator_deployedAccepts
+assert_axioms Zcash.Snark.ZeroKnowledge.freshPlonkVerifierSimulator_challenges
+assert_axioms Zcash.Snark.ZeroKnowledge.freshPlonkVerifierSimulator_rejection_le
+assert_axioms Zcash.Snark.ZeroKnowledge.widePlonkVerifierSimulator_rejection_prob_le
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkVerifierRejectionBound
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompletenessErrorBound
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompletenessErrorBound_eq
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompletenessErrorBound_le_actions_mul_one
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompletenessErrorBound_one_lt_two_pow
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkCompletenessErrorBound_lt_actions_mul_two_pow
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAcceptedAttemptSet
+assert_axioms Zcash.Snark.ZeroKnowledge.widePlonk_completeness_error_bound
 
 -- Successful full observations: explicit normalizers and the compiler-derived comparison.
 assert_computable Zcash.Snark.ZeroKnowledge.plonkAttemptSuccessDecidable +choice

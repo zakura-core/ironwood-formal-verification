@@ -55,6 +55,7 @@ import Zcash.Snark.ZeroKnowledge.StoredActionHonestOracleViewBound
 import Zcash.Snark.ZeroKnowledge.ActionNumeratorCoefficientsCost
 import Zcash.Snark.ZeroKnowledge.ActionQuotientRowsCost
 import Zcash.Snark.ZeroKnowledge.ActionWitnessSimulation
+import Zcash.Snark.ZeroKnowledge.ActionProverCompleteness
 import Zcash.Snark.ZeroKnowledge.ActionGateActivationCoverage
 import Zcash.Snark.ZeroKnowledge.ActionLookupActivationCoverage
 import Zcash.Snark.ZeroKnowledge.StoredActionInstanceCost
@@ -1406,6 +1407,17 @@ assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessAssignment_constraints +nat
 assert_axioms Zcash.Snark.ZeroKnowledge.actionWitnessRows_relation +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.wideActionWitness_simulation_error_bound +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.wideCapturedActionWitness_simulation_error_bound +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+-- Prover completeness: actual emission status and full typed-verifier acceptance.
+assert_axioms Zcash.Snark.ZeroKnowledge.actionAcceptedAttemptSet +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionAcceptedAttemptSet_mem_iff +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionAcceptedAttemptSet_not_mem_of_zero_x +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionZkTypedProver_failure_pos +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.wideActionZkRelation_completeness_error_bound +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.wideActionWitness_completeness_error_bound +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.wideActionWitness_acceptance_probability_bound +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.wideActionWitness_completeness_binary_bound +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.wideCapturedActionWitness_completeness_error_bound +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+
 assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleBitWitness_simulation_error_bound +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.storedActionOracleBitWitness_simulation_error_bound +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
 

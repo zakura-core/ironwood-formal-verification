@@ -9,6 +9,9 @@ The [review record](review/independent-469ad6bb.md) retains their scopes, source
 anchors, reproducible checks, and qualifications; the completed checklist has
 been removed.
 
+The new prover-completeness additions below are not covered by that checked
+baseline. Their final Lean build is pending at the user's request.
+
 The target is the [pinned prover description](https://gist.githubusercontent.com/ebfull/bf25819afa697e39b54bd5f1a1992a2c/raw/589528c0f752112fd83c42aeeea91b6958e67605/zk.md)
 and the repository's reference computation. The description's Sensei revision is
 [Bento `56a7de7474da3b86fa475f01400edadfd8af4cb6`](https://github.com/tachyon-zcash/bento/tree/56a7de7474da3b86fa475f01400edadfd8af4cb6/crates/sensei).
@@ -28,6 +31,7 @@ and complete real-prover reductions whose resource conditions are discharged.
 | --- | --- | --- |
 | One complete interactive Action attempt, error `epsilon(m)` | `wideActionZkRelation_simulation_error_bound` in [ActionInstantiation.lean](ActionInstantiation.lean), using [the actual compiler theorem](ActionCompilerSimulation.lean) | `actionZkProver` and `actionZkSimulator` |
 | Application witness construction and simulation | `actionWitnessRows_relation`, `wideActionWitness_simulation_error_bound`, and `storedActionOracleBitWitness_simulation_error_bound` in [ActionWitnessSimulation.lean](ActionWitnessSimulation.lean) | The same real prover on constructed rows, compared with the public-input interactive or counted fixed-bit simulator |
+| Prover completeness, pending final build: abort or rejection at most `eta_complete(m)` | `wideActionWitness_completeness_error_bound` and `wideActionWitness_acceptance_probability_bound` in [ActionProverCompleteness.lean](ActionProverCompleteness.lean) | `actionZkTypedProver` on constructed rows; `actionAcceptedAttemptSet` requires canonical emission completion and `DeployedAccepts` for the same proof |
 | Unlimited independent interactive retries, error `epsilon(m)/(1-F(m))` | `wideUnlimitedActionZk_simulation_error_bound` in [ActionRetryLimit.lean](ActionRetryLimit.lean) | `actionZkRetryProver` and `actionZkRetrySimulator` |
 | One-attempt programmable-oracle simulation, error `epsilon(m)+q_pre/p` | `actionFiatShamir_simulation_error_bound` in [ActionFiatShamir.lean](ActionFiatShamir.lean) | `actionOracleRealExperiment` and `actionOracleSimulatedExperiment` |
 | One-attempt fixed-bit simulator, error `epsilon_bits(m,q_pre)` | `actionFiatShamirBits_simulation_error_bound` in [ActionFiatShamirBits.lean](ActionFiatShamirBits.lean) | `actionOracleRealExperiment` and `actionOracleBitSimulatedExperiment` |
@@ -139,6 +143,10 @@ epsilon(m) = (42882m + 4113)/p + (148m + 70) delta
 F(m) = (22m + 45)/p + (148m + 68) delta
 B(m) = F(m) + epsilon(m)
 
+eta_complete(m) = F(m) + epsilon(m) + 4113/p + 22 delta
+                = (42904m + 8271)/p + (296m + 160) delta
+                < m*2^-238, m >= 1
+
 epsilon_bits(m,q) = epsilon(m) + (132m + 36) delta + q/p
                   = (42882m + 4113 + q)/p + (280m + 106) delta
 
@@ -158,6 +166,26 @@ are in [PlonkBinaryBounds.lean](PlonkBinaryBounds.lean),
 [OracleBitBounds.lean](OracleBitBounds.lean), [OracleRetryBounds.lean](OracleRetryBounds.lean),
 and [OracleRetryPotential.lean](OracleRetryPotential.lean). The shared-oracle
 retry-rate certificate is in [ActionOracleRetryGeometric.lean](ActionOracleRetryGeometric.lean).
+
+The new completeness route reuses `actionWitnessRows_relation`, which invokes
+the existing Action circuit completeness proof. [PlonkAcceptance.lean](PlonkAcceptance.lean)
+connects the simulated IPA equation to every check in `assemble?`, including
+typed read shape, duplicate queries, dynamic group count, and nonzero inverse
+denominators. [PlonkSimulatorAcceptance.lean](PlonkSimulatorAcceptance.lean)
+then bounds simulator rejection by the exceptional-challenge probability.
+The real-to-simulator bound and honest emission-failure bound give
+`eta_complete(m)`. This union bound deliberately charges exceptional challenges
+again at the simulator-acceptance step; no tightness claim is made.
+
+Acceptance has probability at least `1 - eta_complete(m)` for a nonempty bundle
+under the existing application-witness, setup, and independent uniform-bit-tape
+conditions. No acceptance premise is assumed. The zero-challenge result
+`actionZkTypedProver_failure_pos` retains a positive failure probability, so
+this is not perfect completeness. These additions concern one interactive
+attempt and the existing typed, post-decode verifier boundary; they do not
+assert byte-parser refinement or a Fiat–Shamir completeness theorem. The new
+[numerical certificates](PlonkCompletenessBounds.lean) and acceptance proofs
+await the requested final Lean build.
 
 | Resource | Checked amount |
 | --- | --- |

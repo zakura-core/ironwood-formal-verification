@@ -20,6 +20,7 @@ witness. The reference is the [pinned prover description][protocol]
 | **Interactive HVZK:** statistical comparison of the complete observed attempt, including failed prefixes. | [ActionInstantiation.lean](ActionInstantiation.lean) |
 | **Fiat–Shamir ZK:** statistical comparison of the full oracle view, including adaptive queries before and after the attempt. | [ActionFiatShamir.lean](ActionFiatShamir.lean) |
 | **Action connection:** construct circuit rows from application witnesses and prove their validity. | [ActionWitnessSimulation.lean](ActionWitnessSimulation.lean) |
+| **Prover completeness (awaiting final build):** bound abort or rejection of an interactive attempt from a valid application witness. | [ActionProverCompleteness.lean](ActionProverCompleteness.lean) |
 | **Retry histories:** finite and unlimited comparisons under the specified retry policies. | [Interactive](ActionRetryLimit.lean), [Fiat–Shamir](ActionOracleStreamSimulation.lean) |
 | **Executable simulator:** a fixed-bit implementation with a proved distribution and structural resource bounds. | [ActionOracleBits.lean](ActionOracleBits.lean), [program model](PROGRAMS.md) |
 | **PRNG reductions:** computational simulation bounds under explicit generator-security assumptions. | [Interactive](CostedInteractivePrng.lean), [retry streams](CostedActionGeneratorStream.lean) |
@@ -49,6 +50,19 @@ See the [full bounds](REVIEW.md) for retries and PRNG reductions.
 
 Each real attempt uses `148m + 46` private field samples; `148m + 70` counts
 sampling-bias costs in the comparison, not the private tape length.
+
+The new completeness theorem reuses the existing Action circuit completeness
+proof. Its proposed bound counts both aborted attempts and completed proofs
+rejected by the typed verifier:
+
+```text
+η(m) = (42904m + 8271)/p + (296m + 160)δ < m · 2^-238
+Pr[completed and accepted] ≥ 1 − η(m),    m ≥ 1
+```
+
+This is high-probability completeness for one interactive attempt. The new
+[acceptance proof and binary bound](ActionProverCompleteness.lean) await the
+requested final Lean build.
 
 ## Assumptions and scope
 
