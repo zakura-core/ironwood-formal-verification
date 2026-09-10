@@ -7,8 +7,8 @@ import Zcash.Snark.ZeroKnowledge.PlonkKeygenFixed
 
 The public sigma polynomials interpolate the compiler's actual permutation table.
 The key's sigma-query indices and naming constants identify their evaluations with
-the replayed packed-cell names. Only original copy values remain as a witness-validity
-premise; sigma coherence is no longer supplied independently of key generation.
+the replayed packed-cell names. Original copy values are the witness-validity
+premise; key generation supplies sigma coherence.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

@@ -22,6 +22,8 @@ def noteYSelectorTrace (config : NoteCommit.YCanonicity.Config × LookupRangeChe
     runningSelectorTrace config.2 0 25, runningSelectorTrace config.2 0 13,
     [(config.1.qYCanon.index, 0)]]
 
+/-- Note-coordinate witnessing retains its configured region trace, supplying the source metadata
+for Action selector coverage. -/
 @[selector_trace_norm]
 theorem noteY_selectorTrace (witness : WitgenIR Fp 1)
     (config : NoteCommit.YCanonicity.Config × LookupRangeCheck.Config 10)
@@ -38,6 +40,8 @@ def notePiecesSelectorTrace (config : NoteCommit.Main.Config) : List (List (ℕ 
   let short := shortSelectorTrace config.lookupConfig
   [[], short, short, [], [], short, [], short, short, [], [], short, [], short, []]
 
+/-- Note message preparation retains its configured region traces, supplying the source metadata for
+Action selector coverage. -/
 @[selector_trace_norm]
 theorem notePieces_selectorTrace (config : NoteCommit.Main.Config)
     (input : Var NoteCommit.Main.Inputs Fp) (region : RegionIndex) :
@@ -54,6 +58,8 @@ def noteChecksSelectorTrace (config : NoteCommit.Main.Config) : List (List (ℕ 
     [runningSelectorTrace config.lookupConfig 0 13, runningSelectorTrace config.lookupConfig 0 14,
       runningSelectorTrace config.lookupConfig 0 14, runningSelectorTrace config.lookupConfig 0 13]
 
+/-- Note canonicity checks retain their configured region traces, supplying the source metadata for
+Action selector coverage. -/
 @[selector_trace_norm]
 theorem noteChecks_selectorTrace (generators : Specs.Sinsemilla.Generators) (base : Ecc.MulFixed.FixedBase)
     (point : Point Fp) (honCurve : point.OnCurve) (config : NoteCommit.Main.Config)
@@ -72,6 +78,8 @@ def noteGatesSelectorTrace (config : NoteCommit.Main.Config) : List (List (ℕ �
     [(config.gates.pkd.qNotecommitPkd.index, 0)], [(config.gates.value.qNotecommitValue.index, 0)],
     [(config.gates.rho.qNotecommitRho.index, 0)], [(config.gates.psi.qNotecommitPsi.index, 0)]]
 
+/-- The note gate stage retains its configured region traces, supplying the source metadata for
+Action selector coverage. -/
 @[selector_trace_norm]
 theorem noteGates_selectorTrace (config : NoteCommit.Main.Config)
     (input : Var NoteCommit.Main.Inputs Fp) (pieces : NoteCommit.Main.PieceCells)
@@ -87,6 +95,8 @@ theorem noteGates_selectorTrace (config : NoteCommit.Main.Config)
 def noteCommitSelectorTrace (config : NoteCommit.Main.Config) : List (List (ℕ × ℕ)) :=
   notePiecesSelectorTrace config ++ noteChecksSelectorTrace config ++ noteGatesSelectorTrace config
 
+/-- The complete note commitment retains its composed source trace, supplying the source metadata
+for Action selector coverage. -/
 @[selector_trace_norm]
 theorem noteCommit_selectorTrace (generators : Specs.Sinsemilla.Generators) (base : Ecc.MulFixed.FixedBase)
     (point : Point Fp) (honCurve : point.OnCurve) (config : NoteCommit.Main.Config)

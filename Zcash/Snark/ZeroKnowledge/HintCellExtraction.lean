@@ -13,7 +13,6 @@ validity or replace the global witness-consistency proof.
 namespace Zcash.Snark.ZeroKnowledge
 open Halo2 Zcash.Circuits
 set_option maxRecDepth 8192
-set_option maxHeartbeats 1000000
 
 /-- The original scalar-loading region retains its exact witness-program output. -/
 theorem loadPrivate_cell_of_extendsWitnesses

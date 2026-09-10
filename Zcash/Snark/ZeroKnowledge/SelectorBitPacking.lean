@@ -46,6 +46,8 @@ private def indexPackingCount (degree : ℕ → ℕ) (conflicts : ℕ → ℕ �
   let remaining := selectors.filter (fun selector => degree selector ≠ 0)
   zeroDegree.length + (combineIndices degree conflicts budget remaining.length remaining).length
 
+/-- Extending an indexed selector group agrees with extending full descriptions when degrees and
+conflicts agree, validating compact packing data. -/
 private theorem extendIndices_eq (describe : ℕ → SelectorDescription)
     (degree : ℕ → ℕ) (conflicts : ℕ → ℕ → Bool) (budget : ℕ)
     (hdegree : ∀ selector, (describe selector).maxDegree = degree selector)
@@ -78,6 +80,8 @@ private theorem extendIndices_eq (describe : ℕ → SelectorDescription)
               List.map_nil] using
               ih (max currentDegree (degree selector - 1)) (combination ++ [selector])
 
+/-- Grouping selector indices reproduces grouping full descriptions under matching degree and
+conflict data, transporting the packing algorithm. -/
 private theorem combineIndices_eq (describe : ℕ → SelectorDescription)
     (degree : ℕ → ℕ) (conflicts : ℕ → ℕ → Bool) (budget : ℕ)
     (hdegree : ∀ selector, (describe selector).maxDegree = degree selector)
@@ -98,6 +102,8 @@ private theorem combineIndices_eq (describe : ℕ → SelectorDescription)
           simp only [Prod.map]
           rw [ih]
 
+/-- Indexed packing computes the compiler's number of new fixed columns, connecting the compact
+certificate to the key shape. -/
 private theorem process_map_count (describe : ℕ → SelectorDescription)
     (degree : ℕ → ℕ) (conflicts : ℕ → ℕ → Bool) (budget : ℕ)
     (hdegree : ∀ selector, (describe selector).maxDegree = degree selector)

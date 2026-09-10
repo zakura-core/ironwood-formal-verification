@@ -25,7 +25,6 @@ attribute [local irreducible] cachedPrefixRunCosted cachedOracleRunTape prefixOr
     (getDListCosted read (0 : Fin challengeDigestCard) replies) 22 [] cache 0
   (some run.1, run.2 + 1)
 
-set_option maxHeartbeats 600000 in
 set_option maxRecDepth 10000 in
 /-- The counted implementation is exactly the original cached real oracle execution on every supplied tape. -/
 theorem storedActionCachedFieldsCosted_result (costs : FieldOperationCosts)

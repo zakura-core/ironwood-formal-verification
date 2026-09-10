@@ -14,7 +14,6 @@ def storedActionCachedFieldsCostBudget (costs : FieldOperationCosts)
     (storedActionHistoryQueryCostBudget costs node equal read omegaAccess canonicalRead compare groupAdd groupScale
       actions privateLength 22 initialLength key) (2 * replyLength + read + 1) + 1
 
-set_option maxHeartbeats 600000 in
 set_option maxRecDepth 10000 in
 /-- Concrete stored producers discharge every callback premise of the complete cached-execution envelope. -/
 theorem storedActionCachedFieldsCosted_cost_le (costs : FieldOperationCosts)

@@ -63,6 +63,8 @@ theorem actionCircuit_verifierLookupTable_maskBoundaryCheck_values
   exact actionCircuit_compiledExpressionMaskSafe_values hpacked boundary source
     (actionCircuit_sourceLookupTableMaskSafe _ _ (List.getElem_mem lookup.isLt) source hsource)
 
+/-- Casting a key along a shape equality preserves its expression predicates, transporting compiler
+checks to the protocol key. -/
 private theorem castKey_expressionChecks {G : Type} {source target : CircuitShape}
     (predicate : Expr Fp → Prop) (hshape : source = target) (key : VerifyingKey source Fp G)
     (hgates : ∀ expression ∈ key.gates, predicate expression)

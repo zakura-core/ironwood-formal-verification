@@ -22,6 +22,8 @@ def incompleteSelectorTrace (config : Ecc.MulIncomplete.Config) (offset count : 
   [(config.qMul1.index, offset)] ++ incompleteRoundsSelectorTrace config offset count ++
     [(config.qMul3.index, offset + count + 1)]
 
+/-- One incomplete multiplication round records its configured selectors, supplying the source
+metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem incompleteRound_regionSelectorTrace (bit : ℕ) (config : Ecc.MulIncomplete.Config)
     (offset : ℕ) (input : Var (Unconstrained field) Fp) (region : RegionIndex) :
@@ -30,6 +32,8 @@ theorem incompleteRound_regionSelectorTrace (bit : ℕ) (config : Ecc.MulIncompl
   rw [FormalRegionCircuit.call_operations]
   rfl
 
+/-- Incomplete multiplication rounds retain their successive activation rows, supplying the source
+metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem incompleteLoop_regionSelectorTrace (count bit : ℕ) (config : Ecc.MulIncomplete.Config)
     (offset : ℕ) (input : Var (Unconstrained field) Fp) (region : RegionIndex) :
@@ -40,6 +44,8 @@ theorem incompleteLoop_regionSelectorTrace (count bit : ℕ) (config : Ecc.MulIn
   rw [Ecc.MulIncomplete.loopProgram_operations]
   simp only [selector_trace_norm, Nat.mul_one, incompleteRoundsSelectorTrace]
 
+/-- The incomplete multiplication stage retains its complete activation trace, supplying the source
+metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem incomplete_regionSelectorTrace (count bit : ℕ) (config : Ecc.MulIncomplete.Config)
     (offset : ℕ) (input : Var Ecc.MulIncomplete.Inputs Fp) (region : RegionIndex) :
@@ -58,6 +64,8 @@ def completeRoundsSelectorTrace (config : Ecc.MulComplete.Config) (offset count 
       (config.addConfig.qAdd.index, offset + i.val * 2),
       (config.addConfig.qAdd.index, offset + i.val * 2 + 1)]).flatten
 
+/-- One complete multiplication round records its configured selectors, supplying the source
+metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem completeRound_regionSelectorTrace (bit iteration : ℕ) (config : Ecc.MulComplete.Config)
     (offset : ℕ) (input : Var Ecc.MulComplete.RoundInputs Fp) (region : RegionIndex) :
@@ -69,11 +77,15 @@ theorem completeRound_regionSelectorTrace (bit iteration : ℕ) (config : Ecc.Mu
   simp only [Ecc.MulComplete.roundSynthesize, selector_trace_norm,
     Ecc.MulComplete.decomposeGate_selector, List.cons_append]
 
+/-- Copying the complete-round initial state adds no selector activations, supplying the source
+metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem completeStartCopy_regionSelectorTrace (config : Ecc.MulComplete.Config)
     (input : Var Ecc.MulComplete.Inputs Fp) (offset : ℕ) (region : RegionIndex) :
     regionSelectorTrace ((Ecc.MulComplete.startCopy config input offset).operations region) = [] := rfl
 
+/-- The complete multiplication stage retains its complete activation trace, supplying the source
+metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem complete_regionSelectorTrace (count bit : ℕ) (config : Ecc.MulComplete.Config)
     (offset : ℕ) (input : Var Ecc.MulComplete.Inputs Fp) (region : RegionIndex) :
@@ -92,6 +104,8 @@ def variableBaseMainSelectorTrace (config : Ecc.Mul.Config) : List (ℕ × ℕ) 
     completeRoundsSelectorTrace config.completeConfig 129 3 ++
     [(config.qMulLsb.index, 135), (config.addConfig.qAdd.index, 135)]
 
+/-- The main variable-base multiplication region retains both round schedules, supplying the source
+metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem variableBaseMain_regionSelectorTrace (config : Ecc.Mul.Config)
     (offset : ℕ) (input : Var Ecc.Mul.Inputs Fp) (region : RegionIndex) :

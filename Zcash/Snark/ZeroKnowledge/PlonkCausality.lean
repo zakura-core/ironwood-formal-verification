@@ -15,12 +15,16 @@ namespace Zcash.Snark.ZeroKnowledge
 
 open Zcash.Arithmetic (Fp URS)
 
+/-- The first eleven protocol stages are the pre-IPA messages, connecting the combined schedule to
+its PLONK prefix. -/
 private theorem stage_left {actions k : ℕ} {G : Type*}
     (proof : ProofString (plonkProofShape actions k) Fp G) (i : Fin 11) :
     plonkStageMessages proof (Fin.castAdd k i) = plonkPreIpaStages proof i := by
   unfold plonkStageMessages
   exact Fin.addCases_left i
 
+/-- Each later stage contains its IPA point pair, connecting the combined schedule to the
+round-causality proof. -/
 private theorem stage_right {actions k : ℕ} {G : Type*}
     (proof : ProofString (plonkProofShape actions k) Fp G) (i : Fin k) :
     plonkStageMessages proof (Fin.natAdd 11 i) =
@@ -112,6 +116,8 @@ def plonkReferenceProofFromTape {actions : ℕ} (urs : URS G) (hk : urs.k = 11)
   plonkVerifierProofFromTape (plonkTotalColumnConstructor vk pub witness ch) [] urs vk pub ch
     (tape ∘ Fin.cast (plonkJointSampleCount_eq (plonkTotalColumnConstructor vk pub witness ch) hk))
 
+/-- Reindexing an equal-length sample tape preserves its program, supporting composition across
+equivalent tape shapes. -/
 private theorem sampleFieldsWith_cast {A : Type*} {n m : ℕ} (h : n = m)
     (finish : (Fin n → Fp) → A) :
     sampleFieldsWith m (fun tape => finish (tape ∘ Fin.cast h)) = sampleFieldsWith n finish := by

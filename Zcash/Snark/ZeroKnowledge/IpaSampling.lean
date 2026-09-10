@@ -28,10 +28,14 @@ def roundPairTapeEquiv (k : ℕ) (F : Type*) :
 /-- The IPA stage's exact count, grouped in its consumption order. -/
 def ipaSampleCount (k : ℕ) : ℕ := k + (k * 2 + 1)
 
+/-- The IPA consumes three samples per round and one final sample, supplying its contribution to
+prover randomness accounting. -/
 theorem ipaSampleCount_eq (k : ℕ) : ipaSampleCount k = 3 * k + 1 := by
   unfold ipaSampleCount
   omega
 
+/-- The deployed eleven-round IPA consumes 34 field samples, specializing the generic randomness
+count. -/
 theorem ipaSampleCount_eleven : ipaSampleCount 11 = 34 := rfl
 
 /-- Turn the ordered IPA tape into the sparse coefficients and all independent blinds. -/

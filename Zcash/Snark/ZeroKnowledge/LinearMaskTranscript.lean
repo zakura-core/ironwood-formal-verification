@@ -64,6 +64,8 @@ noncomputable def idealLinearMaskSimulator [Fintype F] [Fintype G] :
     PMF (LinearMaskTranscript F G) :=
   (PMF.uniformOfFintype ((Fin 2 → G) × (F × F))).map LinearMaskTranscript.ofParts
 
+/-- The ideal linear-mask transcript is a public map of the commitment view, allowing commitment
+hiding to imply transcript hiding. -/
 private theorem idealLinearMaskProver_eq_commitmentView [Fintype F]
     (W g0 g1 : G) (x q : F) (offset : F → F) (qPrimeCore : F × F → G) :
     idealLinearMaskProver W g0 g1 x q offset qPrimeCore =

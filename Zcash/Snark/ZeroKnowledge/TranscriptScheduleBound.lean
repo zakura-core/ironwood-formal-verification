@@ -10,7 +10,6 @@ constants cover the complete constructor, even when observation later aborts.
 
 namespace Zcash.Snark.ZeroKnowledge
 open Zcash.Snark
-set_option maxHeartbeats 1000000
 
 /-- Both finite collections and all optional permutation fields are charged. -/
 theorem absorbPermSets2Costed_cost_le {F G : Type*} {rows columns : ℕ}

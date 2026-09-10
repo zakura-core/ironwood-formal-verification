@@ -43,8 +43,11 @@ def placeSelectorTrace (starts : List ℕ) (trace : List (List (ℕ × ℕ)))
 def selectorRowRun (selector offset count : ℕ) : List (ℕ × ℕ) :=
   (List.ofFn fun i : Fin count => [(selector, offset + i.val)]).flatten
 
+/-- An empty region has no activations, supplying the base case for compositional trace proofs. -/
 theorem regionSelectorTrace_nil : regionSelectorTrace ([] : RegionOperations F) = [] := rfl
 
+/-- One operation contributes its selectors before the remaining trace, enabling instruction-wise
+trace reduction. -/
 theorem regionSelectorTrace_cons (operation : RegionOperation F) (rest : RegionOperations F) :
     regionSelectorTrace (operation :: rest) =
       (match operation with
@@ -52,63 +55,92 @@ theorem regionSelectorTrace_cons (operation : RegionOperation F) (rest : RegionO
         | .enableLookup _ enabled row => enabled.map fun selector => (selector.index, row)
         | _ => []) ++ regionSelectorTrace rest := rfl
 
+/-- Concatenating region programs concatenates their activations, allowing separate stages to be
+certified independently. -/
 theorem regionSelectorTrace_append (left right : RegionOperations F) :
     regionSelectorTrace (left ++ right) = regionSelectorTrace left ++ regionSelectorTrace right := by
   simp only [regionSelectorTrace, List.flatMap_append]
 
+/-- Repeated region programs contribute their traces in source order, enabling loop certificates
+without expanding witnesses. -/
 theorem regionSelectorTrace_flatMap {α : Type} (items : List α)
     (body : α → RegionOperations F) :
     regionSelectorTrace (items.flatMap body) = items.flatMap (fun item => regionSelectorTrace (body item)) := by
   simp only [regionSelectorTrace, List.flatMap_assoc]
 
+/-- Enabling a gate records its selector and row, anchoring the trace to the compiler instruction. -/
 theorem regionSelectorTrace_enableGate (gate : Gate F) (row : ℕ) :
     regionSelectorTrace [.enableGate gate row] = [(gate.selector.index, row)] := rfl
 
+/-- A lookup records every enabled selector at its row, preserving shared activation information for
+coverage checks. -/
 theorem regionSelectorTrace_enableLookup (argument : LookupArgument F)
     (enabled : List Selector) (row : ℕ) :
     regionSelectorTrace [.enableLookup argument enabled row] =
       enabled.map (fun selector => (selector.index, row)) := by
   simp only [regionSelectorTrace, List.flatMap_cons, List.flatMap_nil, List.append_nil]
 
+/-- Advice assignment contributes no selector activation, allowing witness computations to be
+removed from the trace. -/
 theorem regionSelectorTrace_assignAdvice (column : Column .advice) (witness : WitgenIR F 1) (row : ℕ) :
     regionSelectorTrace [.assignAdvice column row witness] = [] := rfl
 
+/-- Fixed assignment contributes no selector activation, separating fixed values from activation
+metadata. -/
 theorem regionSelectorTrace_assignFixed (column : Column .fixed) (row : ℕ) (value : F) :
     regionSelectorTrace [.assignFixed column row value] = [] := rfl
 
+/-- A copy constraint contributes no selector activation, keeping copy equations separate from gate
+coverage. -/
 theorem regionSelectorTrace_constrainEqual (left right : Cell) :
     regionSelectorTrace [.constrainEqual left right] (F := F) = [] := rfl
 
+/-- A constant constraint contributes no selector activation, allowing trace reduction to skip it. -/
 theorem regionSelectorTrace_constrainConstant (cell : Cell) (value : F) :
     regionSelectorTrace [.constrainConstant cell value] = [] := rfl
 
+/-- An instance constraint contributes no region selector activation, keeping public-input wiring
+separate from gate coverage. -/
 theorem regionSelectorTrace_constrainInstance (cell : Cell) (column : Column .instance) (row : ℕ) :
     regionSelectorTrace [.constrainInstance cell column row] (F := F) = [] := rfl
 
+/-- An empty synthesis stream has no regions, supplying the base case for source-trace composition. -/
 theorem selectorTrace_nil : selectorTrace ([] : Operations F) = [] := rfl
 
+/-- Only region operations add a trace slot, preserving the compiler region index during
+instruction-wise reduction. -/
 theorem selectorTrace_cons (operation : Operation F) (rest : Operations F) :
     selectorTrace (operation :: rest) = match operation with
       | .region _ body => regionSelectorTrace body :: selectorTrace rest
       | _ => selectorTrace rest := by
   cases operation <;> rfl
 
+/-- Sequential synthesis stages concatenate their region traces, allowing stage certificates to
+compose. -/
 theorem selectorTrace_append (left right : Operations F) :
     selectorTrace (left ++ right) = selectorTrace left ++ selectorTrace right := by
   simp only [selectorTrace, List.filterMap_append]
 
+/-- A synthesis loop retains each iteration's region traces in order, enabling compositional loop
+certificates. -/
 theorem selectorTrace_flatMap {α : Type} (items : List α) (body : α → Operations F) :
     selectorTrace (items.flatMap body) = items.flatMap (fun item => selectorTrace (body item)) := by
   induction items with
   | nil => rfl
   | cons item rest ih => simp only [List.flatMap_cons, selectorTrace_append, ih]
 
+/-- A region occupies one trace slot even when it has no activations, preserving floor-planner
+indices. -/
 theorem selectorTrace_region (name : String) (body : RegionOperations F) :
     selectorTrace [.region name body] = [regionSelectorTrace body] := rfl
 
+/-- A top-level instance constraint adds no region slot, preserving placement indices when it is
+skipped. -/
 theorem selectorTrace_constrainInstance (cell : Cell) (column : Column .instance) (row : ℕ) :
     selectorTrace [.constrainInstance cell column row] (F := F) = [] := rfl
 
+/-- Loading a lookup table adds no region slot, preserving placement indices independently of table
+contents. -/
 theorem selectorTrace_loadTable (table : TableColumn) (values : List F) :
     selectorTrace [.loadTable table values] = [] := rfl
 

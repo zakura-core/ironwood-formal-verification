@@ -1,7 +1,10 @@
 import Zcash.Snark.ZeroKnowledge.ActionSelectorReplacement
 import Zcash.Snark.ZeroKnowledge.ActionSelectorMasking
+import Zcash.Snark.ZeroKnowledge.ActionSourceMasking
+import Zcash.Snark.ZeroKnowledge.ActionQueryMasking
 import Zcash.Snark.ZeroKnowledge.ActionPublicData
 import Zcash.Snark.ZeroKnowledge.KeygenPartialMasking
+import Zcash.Snark.ZeroKnowledge.PlonkKeygenSelectors
 
 /-!
 # Actual Action boundary values in the source masking certificates

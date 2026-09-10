@@ -4,16 +4,17 @@ import Zcash.Snark.ZeroKnowledge.PlonkFreshBounds
 /-!
 # Joint simulation with the concrete reference row algorithms
 
-The remaining row error is now the probability of failed sorting, failed gate
+The remaining row error is the probability of failed sorting, failed gate
 preservation, or failure of the packed copy-product identity. The product denominator
 exceptions are derived from the same complete independent challenge law and contribute
 `42882m/p + 2 × bias`. Together with the earlier challenge and prover-tape terms this
 gives `(42882m + 4113)/p + (148m + 70) × bias`, plus the explicit prerequisite failures.
 
-The experiment still uses the total reference constructor and typed algebraic proof
-view. A valid-witness theorem for the remaining prerequisites, whole-prover failures
-and codecs, the online schedule, Fiat-Shamir, and native Rust correspondence remain
-separate obligations. No failure event is conditioned away.
+The experiment uses the total reference constructor and typed algebraic proof view.
+PlonkOriginalSimulation discharges the prerequisites from original-row validity.
+PlonkFailures, PlonkStageCausality, and ActionFiatShamir supply the corresponding
+failure, schedule, and programmable-oracle results under their stated premises.
+Native Rust correspondence is separate. No failure event is conditioned away.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

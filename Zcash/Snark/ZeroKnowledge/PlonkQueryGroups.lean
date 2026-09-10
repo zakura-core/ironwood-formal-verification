@@ -37,6 +37,8 @@ theorem plonkCommitmentGroup_shift (a : ℕ) (id : CommitmentId) :
     plonkCommitmentGroup (plonkShiftCommitmentId a id) = plonkCommitmentGroup id := by
   cases id <;> rfl
 
+/-- The first Action's commitment IDs have exactly their declared point labels, anchoring the
+grouping-membership proof. -/
 private theorem firstActionPointMembership :
     ∀ id ∈ plonkPerActionCommitmentOrder 0, ∀ point : Fin 4,
       (id, point) ∈ plonkPerActionQuerySpine 0 ↔ point.val ∈ plonkCommitmentPointIndices id := by
@@ -135,6 +137,8 @@ theorem plonkQueryPattern_slotIndices (actions k : ℕ) (hpositive : 0 < actions
     have hentry := (plonkQuerySpine_mem actions id point).mpr ⟨hid, hpoint⟩
     exact ⟨(id, point), ⟨hentry, rfl⟩, rfl⟩
 
+/-- Deduplicating the first Action's point-label sets gives the five opening groups, anchoring the
+generic grouping proof. -/
 private theorem firstActionGroups :
     dedupFold ((plonkPerActionCommitmentOrder 0).map plonkCommitmentPointIndices) =
       List.ofFn plonkGroupPointIndices := by

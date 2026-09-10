@@ -19,6 +19,8 @@ def sinsemillaCommitSelectorTrace (widths : List ℕ)
   [fullWidthInnerSelectorTrace config.1 0, [(config.1.superConfig.addConfig.qAdd.index, 0)],
     sinsemillaHashSelectorTrace config.2.1 0 widths, [(config.2.2.qAdd.index, 0)]]
 
+/-- Sinsemilla commitment retains the hash, fixed-multiplication, and addition region traces,
+supplying the source metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem sinsemillaCommit_selectorTrace (generators : Specs.Sinsemilla.Generators) (widths : List ℕ)
     (base : Ecc.MulFixed.FixedBase) (point : Point Fp) (honCurve : point.OnCurve) (hwidths : widths ≠ [])

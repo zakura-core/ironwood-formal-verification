@@ -12,7 +12,6 @@ equations hold. No successful emission or gate-validity premise is used.
 namespace Zcash.Snark.ZeroKnowledge
 open Halo2 Zcash.Circuits Zcash.Circuits.Action
 set_option maxRecDepth 8192
-set_option maxHeartbeats 600000
 set_option linter.constructorNameAsVariable false
 attribute [local irreducible] Ecc.MulFixed.FullWidth.circuit Ecc.MulFixed.Short.circuit
   ValueCommit.circuit SpendAuthority.circuit Sinsemilla.CommitDomain.commit

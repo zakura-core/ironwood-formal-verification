@@ -31,6 +31,8 @@ def productDenominatorBad {b g : ℕ} (betaOffsets : Fin b → Fp)
   (∃ i, betaOffsets i + tape 0 = 0) ∨
     ∃ j, (gammaForms j).1 + tape 0 * (gammaForms j).2 + tape 1 = 0
 
+/-- A uniform scalar cancels any fixed offset with probability `1/p`, pricing one zero denominator
+factor. -/
 private theorem uniformFp_add_zero (offset : Fp) :
     (PMF.uniformOfFintype Fp).toOuterMeasure {v | offset + v = 0} =
       1 / scalarFieldOrder := by

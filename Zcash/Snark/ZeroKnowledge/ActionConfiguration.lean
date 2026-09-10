@@ -67,6 +67,8 @@ theorem actionCircuit_recordedFixedQueries_eq :
   simp only [Internal.actionCircuitImpl, Circuit.circuit]
   configure_norm
 
+/-- Fixed-column registration depends only on the incoming fixed-column list, allowing other
+query-state fields to be discarded. -/
 private theorem registerFixed_fold_congr (columns : List ℕ) (left right : QueryState)
     (hfixed : left.fixed = right.fixed) :
     (columns.foldl QueryState.registerFixed left).fixed =

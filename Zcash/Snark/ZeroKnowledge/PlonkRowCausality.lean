@@ -10,8 +10,8 @@ uses `y`. Earlier results give the intermediate lookup-permutation prefix's
 dependence on `theta` alone. These pointwise properties include the totalized
 fallbacks and require no valid-witness or nonzero-challenge assumptions.
 
-The complete tape decoder and staged commitments still need to be connected
-to these column facts for the full reference-prover causality theorem.
+PlonkTapeCausality and PlonkStageCausality connect these column facts to the
+complete tape decoder and staged reference-prover commitments.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

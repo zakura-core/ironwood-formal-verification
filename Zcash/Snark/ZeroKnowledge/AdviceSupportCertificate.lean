@@ -6,7 +6,7 @@ import Zcash.Snark.ZeroKnowledge.AdviceSupportMapPlan
 This certificate keeps the annotated instructions and their exact source-erasure
 equation together. Its constructors compose original instructions and source
 chunks without changing either their order or their witness programs. A complete
-circuit certificate still needs a successful read scan and alias scan.
+circuit certificate also includes a successful read scan and alias scan.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

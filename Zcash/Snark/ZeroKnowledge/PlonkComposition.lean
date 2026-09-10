@@ -32,6 +32,8 @@ noncomputable def idealPlonkMaterial {actions : ℕ}
     (Zcash.independentProductPMF (PMF.uniformOfFintype (Fp × Fp))
       (PMF.uniformOfFintype (Fin (22 * actions + 10) → Fp)))
 
+/-- Pointwise-equal continuations on sampled states give the same distribution, allowing simulation
+replacements only where the preceding law can reach. -/
 private theorem bind_eq_on_support {A B : Type*} (law : PMF A) (actual simulated : A → PMF B)
     (h : ∀ a ∈ law.support, actual a = simulated a) : law.bind actual = law.bind simulated := by
   apply PMF.ext

@@ -18,7 +18,6 @@ def storedActionOracleSimulatorCostBudget (fieldCosts : FieldOperationCosts) (ip
   let programming := 22 * ((cached + 22) * (9490 * actions + 14207) + 4) + 2
   initial + view + programming + 4
 
-set_option maxHeartbeats 1000000 in
 set_option maxRecDepth 10000 in
 /-- Every complete stored tape obeys the same total bound, with all proof, query, and failure work retained. -/
 theorem storedActionOracleSimulatorCosted_cost_le_fixed

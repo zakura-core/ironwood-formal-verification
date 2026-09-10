@@ -2,18 +2,24 @@ import Zcash.Snark.ZeroKnowledge.RecordedTestRead
 
 namespace Zcash.Snark.ZeroKnowledge
 
+/-- Reading an attempt history entry has cost linear in its index, supplying the first stage of
+recorded-view access. -/
 theorem recordedTestHistoryCosted_cost_le (read : ℕ) (view : ActionRetryRecordedView) (index : ℕ) :
     (recordedTestHistoryCosted read view index).2 ≤ 2 * index + read + 4 := by
   have h := getOptionListCosted_cost_le read view.1.attempts index
   dsimp only [recordedTestHistoryCosted]
   omega
 
+/-- Reading an attempt output includes history traversal and projection, supplying the output-reader
+budget. -/
 theorem recordedTestOutputCosted_cost_le (read : ℕ) (view : ActionRetryRecordedView) (index : ℕ) :
     (recordedTestOutputCosted read view index).2 ≤ 2 * index + read + 7 := by
   have h := recordedTestHistoryCosted_cost_le read view index
   dsimp only [recordedTestOutputCosted]
   omega
 
+/-- Selecting the initial or retained cache fits the slot-traversal budget, accounting for
+cache-history access. -/
 theorem recordedTestCacheCosted_cost_le (read : ℕ) (view : ActionRetryRecordedView) (slot : RecordedTestCacheSlot) :
     (recordedTestCacheCosted read view slot).2 ≤ 2 * slot.getD 0 + read + 4 := by
   cases slot with
@@ -23,6 +29,8 @@ theorem recordedTestCacheCosted_cost_le (read : ℕ) (view : ActionRetryRecorded
     dsimp only [recordedTestCacheCosted, Option.getD_some]
     omega
 
+/-- A recorded proof-byte read charges both attempt and byte traversal, supplying the Boolean test's
+proof-reader bound. -/
 theorem recordedTestProofCosted_cost_le (read : ℕ) (view : ActionRetryRecordedView) (index byte : ℕ) :
     (recordedTestProofCosted read view index byte).2 ≤ 2 * index + 2 * byte + 2 * read + 11 := by
   have ha := recordedTestOutputCosted_cost_le read view index
@@ -31,6 +39,8 @@ theorem recordedTestProofCosted_cost_le (read : ℕ) (view : ActionRetryRecorded
   dsimp only [recordedTestProofCosted]
   omega
 
+/-- A recorded scalar read charges both attempt and scalar traversal, supplying the scalar-reader
+bound. -/
 theorem recordedTestScalarCosted_cost_le (read : ℕ) (view : ActionRetryRecordedView) (index scalar : ℕ) :
     (recordedTestScalarCosted read view index scalar).2 ≤ 2 * index + 2 * scalar + 2 * read + 11 := by
   have ha := recordedTestOutputCosted_cost_le read view index
@@ -39,6 +49,8 @@ theorem recordedTestScalarCosted_cost_le (read : ℕ) (view : ActionRetryRecorde
   dsimp only [recordedTestScalarCosted]
   omega
 
+/-- A cache-entry read charges cache selection and entry traversal, supplying the nested reader
+bound. -/
 theorem recordedTestCacheEntryCosted_cost_le (read : ℕ) (view : ActionRetryRecordedView)
     (slot : RecordedTestCacheSlot) (entry : ℕ) :
     (recordedTestCacheEntryCosted read view slot entry).2 ≤ 2 * slot.getD 0 + 2 * entry + 2 * read + 8 := by
@@ -47,6 +59,8 @@ theorem recordedTestCacheEntryCosted_cost_le (read : ℕ) (view : ActionRetryRec
   dsimp only [recordedTestCacheEntryCosted]
   omega
 
+/-- A cache-address byte read charges cache, entry, and byte traversal, completing the recorded-view
+input budget. -/
 theorem recordedTestCacheByteCosted_cost_le (read : ℕ) (view : ActionRetryRecordedView)
     (slot : RecordedTestCacheSlot) (entry : ℕ) (second : Bool) (byte : ℕ) :
     (recordedTestCacheByteCosted read view slot entry second byte).2 ≤

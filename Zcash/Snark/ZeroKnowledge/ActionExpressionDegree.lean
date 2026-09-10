@@ -85,6 +85,8 @@ theorem actionCircuit_verifierLookupTable_degree_le (lookup : Fin actionCircuit.
     expression.degreeBound ≤ 1 :=
   topLevel_lookupTable_degree_le actionCircuit 1 actionCircuit_lookupTable_degree_le lookup expression hexpression
 
+/-- Shape casts preserve lookup-expression degree bounds, transporting compiler bounds to the
+reference key. -/
 private theorem castKey_lookupDegrees {G : Type} {source target : CircuitShape}
     (hshape : source = target) (key : VerifyingKey source Fp G) (inputBound tableBound : ℕ)
     (hinputs : ∀ lookup expression, expression ∈ key.lookupInputExprs lookup → expression.degreeBound ≤ inputBound)

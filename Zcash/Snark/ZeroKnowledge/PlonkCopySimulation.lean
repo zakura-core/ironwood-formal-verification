@@ -4,7 +4,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkConstructedSimulation
 /-!
 # Joint simulation with valid original copy equations
 
-The packed product identity is now derived from original witness copies and public
+The packed product identity is derived from original witness copies and public
 sigma coherence for every tape. Only construction and gate failures remain in the
 row prerequisite probability. Their probability is still unbounded; the experiment
 still uses the total reference constructor and the typed algebraic verifier view.

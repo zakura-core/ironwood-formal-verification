@@ -9,7 +9,6 @@ open Zcash.Arithmetic (Fp URS)
 open Zcash.Common
 variable {G : Type*} [AddCommGroup G] [Module Fp G]
 
-set_option maxHeartbeats 600000 in
 set_option maxRecDepth 10000 in
 /-- Every complete input bit tape produces the original commitment, observation, and round dimensions. -/
 theorem storedActionTapeJointCosted_shape

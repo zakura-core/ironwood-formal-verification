@@ -11,7 +11,7 @@ private tape, quotient, multi-opening, and IPA tail. At a usable domain row, the
 unrotated advice query is exactly the original witness cell on every tape.
 
 This concerns the total reference computation. A zero-knowledge impossibility
-claim for the implementation still needs two permitted satisfying witnesses for
+claim for the implementation requires two permitted satisfying witnesses for
 the same public statement and correspondence for execution, failures, and codecs.
 -/
 

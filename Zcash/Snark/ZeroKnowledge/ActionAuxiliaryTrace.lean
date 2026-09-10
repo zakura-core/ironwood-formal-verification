@@ -14,6 +14,8 @@ namespace Zcash.Snark.ZeroKnowledge
 
 open Halo2 Zcash.Circuits
 
+/-- The addition chip enables exactly its addition gate at the requested row, supplying the source
+metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem addChip_regionSelectorTrace (config : AddChip.Config) (offset : ℕ)
     (input : Var AddChip.Inputs Fp) (region : RegionIndex) :
@@ -31,6 +33,8 @@ def valueCommitSelectorTrace
     fullWidthInnerSelectorTrace config.2.1 0, [(config.2.1.superConfig.addConfig.qAdd.index, 0)],
     [(config.2.2.qAdd.index, 0)]]
 
+/-- Value commitment retains the short-multiplication, blinding-multiplication, and addition traces,
+supplying the source metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem valueCommit_selectorTrace (valueBase : Ecc.MulFixed.Short.FixedBase) (blindBase : Ecc.MulFixed.FixedBase)
     (config : Ecc.MulFixed.Short.Config × Ecc.MulFixed.FullWidth.Config × Ecc.Add.Config)
@@ -47,6 +51,8 @@ def spendAuthoritySelectorTrace (config : Ecc.MulFixed.FullWidth.Config × Ecc.A
   [fullWidthInnerSelectorTrace config.1 0, [(config.1.superConfig.addConfig.qAdd.index, 0)],
     [(config.2.qAdd.index, 0)]]
 
+/-- Spend authority retains its fixed-multiplication and point-addition activations, supplying the
+source metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem spendAuthority_selectorTrace (base : Ecc.MulFixed.FixedBase)
     (config : Ecc.MulFixed.FullWidth.Config × Ecc.Add.Config)
@@ -62,6 +68,8 @@ def addressIntegritySelectorTrace (config : Ecc.Mul.Config × Ecc.WitnessPoint.C
     List (List (ℕ × ℕ)) :=
   variableBaseSelectorTrace config.1 ++ [[(config.2.qPointNonId.index, 0)], []]
 
+/-- Address integrity retains its multiplication and nonidentity-point activations, supplying the
+source metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem addressIntegrity_selectorTrace (config : Ecc.Mul.Config × Ecc.WitnessPoint.Config)
     (input : Var Action.AddressIntegrity.Input Fp) (region : RegionIndex) :
@@ -80,6 +88,8 @@ def nullifierSelectorTrace
     [(config.2.2.1.superConfig.addConfig.qAdd.index, 0)], runningSelectorTrace config.2.2.1.lookupConfig 0 13,
     [(config.2.2.1.qMulFixedBaseField.index, 1)], [(config.2.2.2.qAdd.index, 0)]]
 
+/-- Nullifier derivation retains the activations of its hash and point arithmetic, supplying the
+source metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem nullifier_selectorTrace (base : Ecc.MulFixed.FixedBase)
     (config : Poseidon.Config × AddChip.Config × Ecc.MulFixed.BaseFieldElem.Config × Ecc.Add.Config)

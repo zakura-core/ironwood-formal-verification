@@ -21,6 +21,8 @@ theorem plonkScalarFold_reverse {α : Type*} (x1 : Fp) (value : α → Fp) (defa
   have h := foldl_smul_add_powerForm x1 value default entries.reverse (0 : Fp)
   simpa [smul_eq_mul, mul_comm] using h
 
+/-- The five stored opening-node lists follow their public point labels, connecting list access to
+the query grouping specification. -/
 private theorem openingNodes_getD (omega x : Fp) (nodes : List (List Fp))
     (hnodes : nodes = List.ofFn (plonkOpeningPointSets omega x)) (i : Fin 5) :
     nodes.getD i.val [] = (plonkGroupPointLabels i).map (plonkQueryPoint omega x) := by
@@ -76,6 +78,8 @@ theorem plonkVerifierGroup_compressedClaim {actions k : ℕ} {G : Type*}
       simpa only [List.reverse_reverse] using
         (plonkScalarFold_reverse ch.x1 claim .vanishingH ids.reverse).symm
 
+/-- Combining equally sized evaluation vectors preserves their size, ensuring multiopening
+compression retains every point evaluation. -/
 private theorem compressionLength {k : ℕ} {F G : Type*} [Field F] (x1 : F) (numPoints : ℕ)
     (members : List (CommitmentRef k F G × List F)) (hlens : ∀ member ∈ members, member.2.length = numPoints) :
     ∀ state : Msm k F G × List F × F, state.2.1.length = numPoints →

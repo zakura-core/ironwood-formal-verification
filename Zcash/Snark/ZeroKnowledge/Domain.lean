@@ -31,11 +31,14 @@ def maskedRowPolynomial {n : ℕ} (firstMasked : ℕ) (omega : Fp)
     (witness : Fin n → Fp) (mask : RowMask n firstMasked) : CPoly :=
   rowPolynomial omega (maskedRows firstMasked witness mask)
 
+/-- Masking preserves rows before the boundary, retaining the original usable witness data. -/
 @[simp] theorem maskedRows_before {n firstMasked : ℕ} (witness : Fin n → Fp)
     (mask : RowMask n firstMasked) (i : Fin n) (hi : i.val < firstMasked) :
     maskedRows firstMasked witness mask i = witness i := by
   simp [maskedRows, Nat.not_le_of_lt hi]
 
+/-- Rows at or beyond the boundary come from the mask, isolating the randomness used in the
+simulation argument. -/
 @[simp] theorem maskedRows_after {n firstMasked : ℕ} (witness : Fin n → Fp)
     (mask : RowMask n firstMasked) (i : Fin n) (hi : firstMasked ≤ i.val) :
     maskedRows firstMasked witness mask i = mask ⟨i, hi⟩ := by

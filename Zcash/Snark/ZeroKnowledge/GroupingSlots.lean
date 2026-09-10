@@ -14,6 +14,8 @@ section Slots
 
 variable {k : ℕ} {F G : Type*}
 
+/-- Deduplicating commitment records projects to deduplication by commitment ID, preserving slot
+identity independently of group values. -/
 private theorem slotFold (queries : List (VerifierQuery k F G))
     (acc : List (CommitmentId × CommitmentRef k F G)) :
     (queries.foldl (fun acc q => if acc.any (fun c => decide (c.1 = q.commId)) then acc

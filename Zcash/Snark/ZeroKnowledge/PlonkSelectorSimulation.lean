@@ -4,16 +4,15 @@ import Zcash.Snark.ZeroKnowledge.PlonkOriginalSimulation
 /-!
 # Reference simulation from the compiler's initial packed selectors
 
-The public degree bounds come from interpolation. Selector-only expression
-certificates and V1 placement supply the full mask profile once the four initial
-selector zeros are known. No assumption is made about boundary values in the
-fourteen original fixed columns. Zero padding in the compiler's row accessor
-removes the former compiler-domain and fixed-column-count premises for mask safety.
+This named sufficient-condition result applies to circuits whose four designated
+initial packed selectors are zero. Interpolation supplies the public degree bounds;
+selector-only expression certificates and V1 placement supply the mask profile.
+Boundary values in the fourteen original fixed columns are unrestricted. The
+compiler's row accessor pads out-of-range rows and columns with zero.
 
-PlonkCompilerSimulation also derives sigma rows and copies from keygen. Establishing
-the initial selector row for the deployed circuit, matching instance rows and public
-commitments, and refining the complete prover execution remain necessary for the
-exact implementation theorem.
+The theorem takes the instance and sigma rows, original-row validity, copy validity,
+key dimensions, and a bijective blinding map as explicit inputs. The deployed Action
+result in ActionCompilerSimulation uses its checked fixed-value boundary profile.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

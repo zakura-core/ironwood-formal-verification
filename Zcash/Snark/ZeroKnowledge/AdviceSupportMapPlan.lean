@@ -5,7 +5,7 @@ import Zcash.Snark.ZeroKnowledge.AdviceSupportPlan
 # Finite-map checks for certified witness reads
 
 The map records availability at the original source position. Each annotation
-still needs its semantic support proof. Together with the refined alias check,
+requires its semantic support proof. Together with the refined alias check,
 the same compiler witness-equation theorem can use finite-map certificates.
 -/
 

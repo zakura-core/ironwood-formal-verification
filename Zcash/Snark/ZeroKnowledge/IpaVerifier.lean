@@ -16,6 +16,8 @@ open Zcash.Arithmetic (Msm URS)
 
 variable {F G : Type*} [Field F] [AddCommGroup G] [Module F G]
 
+/-- The indexed public-generator fold equals the verifier's list fold, connecting the simulator
+equation to verification. -/
 private theorem publicFold_list (rounds : List F) (g : Fin (2 ^ rounds.length) → G) :
     publicFold rounds.length rounds.get g = foldAll rounds g 0 := by
   induction rounds with
@@ -25,6 +27,8 @@ private theorem publicFold_list (rounds : List F) (g : Fin (2 ^ rounds.length) �
     rw [publicFold, foldAll, foldGens, inv_inv]
     exact ih _
 
+/-- Reindexing equal-length challenge and generator vectors preserves their public fold, supporting
+proof-shape transport. -/
 private theorem publicFold_cast {k m : ℕ} (h : m = k)
     (rounds : Fin k → F) (g : Fin (2 ^ k) → G) :
     publicFold m (fun j => rounds (Fin.cast h j))
@@ -71,6 +75,8 @@ theorem ipaMessageSum_eq_roundSum (k : ℕ) (rounds : Fin k → F)
     rw [roundSum_cons, ← ih]
     simp only [ipaMessageSum, Fin.sum_univ_succ]
 
+/-- The singleton correction contributes only the first generator, recovering the verifier's opening
+adjustment. -/
 private theorem firstGeneratorTerm (k : ℕ) (g : Fin (2 ^ k) → G) (v : F) :
     (∑ i, ([-v].getD i.val 0) • g i) = (-v) • g 0 := by
   rw [Finset.sum_eq_single 0]

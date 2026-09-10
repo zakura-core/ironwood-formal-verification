@@ -47,7 +47,7 @@ theorem plonkVerifierGroup_nodes {actions k : ℕ}
 
 end Routing
 
-/-- The actual verifier computes the reference group commitment, with its ID order now derived. -/
+/-- The actual verifier computes the reference group commitment, with its ID order derived. -/
 theorem plonkVerifierGroup_commitment_from_layout {actions : ℕ} {G : Type*}
     [AddCommGroup G] [Module Fp G] [Inhabited G] [DecidableEq G] (urs : URS G)
     (vk : VerifyingKey (plonkProofShape actions urs.k) Fp G) (hlayout : PlonkQueryLayout vk)

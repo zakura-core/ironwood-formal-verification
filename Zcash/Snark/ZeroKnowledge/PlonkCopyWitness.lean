@@ -9,8 +9,9 @@ replay of an explicit usable-cell copy list. Masking preserves those copy equati
 so the computed product identity holds on every tape, including zero denominators.
 PlonkKeygenCopies supplies this usable-cell list from the compiler's ordered copy
 stream, and PlonkKeygenSigma derives the public-label coherence from key generation.
-Witness values, verifier-key column meanings, and public commitments still need their
-implementation correspondence.
+ActionWitnessSimulation supplies constructed witness values for the Action application;
+ActionDerivedKey and ActionCommitments supply its key layout and public commitments.
+Whole-program Rust correspondence is outside these reference-model results.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

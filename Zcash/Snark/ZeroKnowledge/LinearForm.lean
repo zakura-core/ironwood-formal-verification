@@ -20,10 +20,14 @@ def linearForm (weights values : I → F) : F := ∑ i, weights i * values i
 private def linearRest (weights : I → F) (j : I) (values : I → F) : F :=
   ∑ i ∈ Finset.univ.erase j, weights i * values i
 
+/-- A linear form separates one chosen coordinate from the rest, exposing the coordinate used to
+couple masks. -/
 private theorem linearForm_split (weights values : I → F) (j : I) :
     linearForm weights values = linearRest weights j values + weights j * values j := by
   exact (Finset.sum_erase_add _ _ (Finset.mem_univ j)).symm
 
+/-- Changing the chosen coordinate leaves the remaining linear form unchanged, enabling the
+mask-coupling update. -/
 private theorem linearRest_update (weights values : I → F) (j : I) (value : F) :
     linearRest weights j (Function.update values j value) = linearRest weights j values := by
   apply Finset.sum_congr rfl

@@ -24,6 +24,8 @@ def sinsemillaPieceSelectorTrace (config : Sinsemilla.HashPiece.Config) (offset 
     List (ℕ × ℕ) :=
   sinsemillaRoundsSelectorTrace config offset count ++ [(config.qS1.index, offset + count)]
 
+/-- One Sinsemilla round records its configured selectors, supplying the source metadata for Action
+selector coverage. -/
 @[selector_trace_norm]
 theorem sinsemillaRound_regionSelectorTrace (generators : Specs.Sinsemilla.Generators) (index : ℕ)
     (config : Sinsemilla.HashPiece.Config) (offset : ℕ) (input : AssignedCell Fp) (region : RegionIndex) :
@@ -32,6 +34,8 @@ theorem sinsemillaRound_regionSelectorTrace (generators : Specs.Sinsemilla.Gener
   rw [FormalRegionCircuit.call_operations]
   rfl
 
+/-- Successive Sinsemilla rounds retain their ordered activation rows, supplying the source metadata
+for Action selector coverage. -/
 @[selector_trace_norm]
 theorem sinsemillaLoop_regionSelectorTrace (generators : Specs.Sinsemilla.Generators) (count : ℕ)
     (config : Sinsemilla.HashPiece.Config) (offset : ℕ) (input : AssignedCell Fp) (region : RegionIndex) :
@@ -42,6 +46,8 @@ theorem sinsemillaLoop_regionSelectorTrace (generators : Specs.Sinsemilla.Genera
     Sinsemilla.HashPiece.operations_readState, Sinsemilla.HashPiece.operations_cellVec,
     sinsemillaRoundsSelectorTrace, Nat.mul_one]
 
+/-- A Sinsemilla message piece retains its complete activation trace, supplying the source metadata
+for Action selector coverage. -/
 @[selector_trace_norm]
 theorem sinsemillaPiece_regionSelectorTrace (generators : Specs.Sinsemilla.Generators) (count : ℕ)
     (final : Bool) (initialY : Placed Environment Fp → Fp)
@@ -56,6 +62,8 @@ theorem sinsemillaPiece_regionSelectorTrace (generators : Specs.Sinsemilla.Gener
     Sinsemilla.HashPiece.operations_cellVec, sinsemillaPieceSelectorTrace]
   rfl
 
+/-- A Sinsemilla slot retains the trace of its message piece, supplying the source metadata for
+Action selector coverage. -/
 @[selector_trace_norm]
 theorem sinsemillaSlot_regionSelectorTrace (generators : Specs.Sinsemilla.Generators)
     (widths : List ℕ) (initialY : Placed Environment Fp → Fp) (index : ℕ)
@@ -74,6 +82,8 @@ def sinsemillaChainSelectorTrace (config : Sinsemilla.HashPiece.Config) (offset 
     sinsemillaPieceSelectorTrace config base (widths.getD i.val 0) ++
       [(config.qS1.index, base + widths.getD i.val 0)]).flatten
 
+/-- A chain of Sinsemilla pieces retains their activation order, supplying the source metadata for
+Action selector coverage. -/
 @[selector_trace_norm]
 theorem sinsemillaChain_regionSelectorTrace (generators : Specs.Sinsemilla.Generators)
     (widths : List ℕ) (initialY : Placed Environment Fp → Fp)
@@ -92,6 +102,8 @@ def sinsemillaHashSelectorTrace (config : Sinsemilla.HashPiece.Config) (offset :
     List (ℕ × ℕ) :=
   [(config.qS4.index, offset)] ++ sinsemillaChainSelectorTrace config offset widths
 
+/-- The Sinsemilla hash retains its complete source activation trace, supplying the source metadata
+for Action selector coverage. -/
 @[selector_trace_norm]
 theorem sinsemillaHash_regionSelectorTrace (generators : Specs.Sinsemilla.Generators)
     (widths : List ℕ) (point : Point Fp) (honCurve : point.OnCurve) (hwidths : widths ≠ [])
@@ -106,6 +118,8 @@ theorem sinsemillaHash_regionSelectorTrace (generators : Specs.Sinsemilla.Genera
     Sinsemilla.HashToPoint.z1Cells_operations, sinsemillaHashSelectorTrace]
   rfl
 
+/-- The Sinsemilla hash retains its complete source activation trace, supplying the source metadata
+for Action selector coverage. -/
 @[selector_trace_norm]
 theorem sinsemillaHash_selectorTrace (generators : Specs.Sinsemilla.Generators)
     (widths : List ℕ) (point : Point Fp) (honCurve : point.OnCurve) (hwidths : widths ≠ [])
@@ -115,6 +129,8 @@ theorem sinsemillaHash_selectorTrace (generators : Specs.Sinsemilla.Generators)
       config input).operations region) = [sinsemillaHashSelectorTrace config 0 widths] := by
   simp only [Sinsemilla.HashToPoint.hashCircuit, selector_trace_norm]
 
+/-- Witnessing a Sinsemilla message piece preserves its region slot, supplying the source metadata
+for Action selector coverage. -/
 @[selector_trace_norm]
 theorem witnessMessagePiece_selectorTrace (config : Sinsemilla.HashPiece.Config) (witness : WitgenIR Fp 1)
     (region : RegionIndex) :

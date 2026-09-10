@@ -4,10 +4,10 @@ import Zcash.Snark.ZeroKnowledge.PlonkDegree
 /-!
 # Joint simulation with the quotient capacity derived
 
-The circuit's public degree profile replaces the earlier capacity premise over all
-reachable private row states. Constraint divisibility is now the only remaining
-private-state premise here. The public polynomial, generator, and supplied-challenge
-conditions remain explicit, as do the full-execution limits of the previous endpoint.
+The circuit's public degree profile proves capacity for every reachable private row
+state. Constraint divisibility is this theorem's private-state premise. The public
+polynomial, generator, and supplied-challenge conditions remain explicit. The result
+compares the algebraic proof views supplied by PlonkQuotientSimulation.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

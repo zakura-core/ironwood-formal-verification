@@ -35,7 +35,6 @@ def interactiveRecordedView (view : Challenges 11 Fp × ProverAttemptResult) : A
   let sequence := plonkChallengeSequenceCosted produced.1.1
   (interactiveViewFrames sequence.1 observed.1, produced.2 + observed.2 + sequence.2 + 14)
 
-set_option maxHeartbeats 600000 in
 set_option maxRecDepth 10000 in
 /-- Erasure is the complete original interactive Action computation for every challenge and private tape. -/
 theorem interactiveHistoryViewCosted_result (prices : ActionReductionPrices)

@@ -77,6 +77,8 @@ theorem actionCircuit_verifierGate_degree_le (expression : Expr Fp)
     (hexpression : expression ∈ actionCircuit.verifierCS.gates) : expression.degreeBound ≤ 9 :=
   topLevel_gate_degree_le actionCircuit 9 actionCircuit_substitutedGate_degree_le expression hexpression
 
+/-- Shape casts preserve the gate degree bound of nine, transporting the Action compiler check to
+the reference key. -/
 private theorem castKey_gateDegrees {G : Type} {source target : CircuitShape}
     (hshape : source = target) (key : VerifyingKey source Fp G)
     (hgate : ∀ expression ∈ key.gates, expression.degreeBound ≤ 9) :
@@ -91,7 +93,7 @@ theorem actionReferenceKey_gateDegrees {G : Type} [AddCommGroup G] [Inhabited G]
       expression.degreeBound ≤ 9 :=
   castKey_gateDegrees _ _ actionCircuit_verifierGate_degree_le
 
-/-- All four degree-profile fields now follow from the actual Action configuration and compiler. -/
+/-- All four degree-profile fields follow from the actual Action configuration and compiler. -/
 theorem actionReferenceKey_degreeProfile {G : Type} [AddCommGroup G] [Inhabited G] {actions : ℕ}
     (urs : URS G) (hk : urs.k = 11) (hpacked : actionCircuit.selectorMap.newFixedCols = 15) :
     PlonkDegreeProfile (actions := actions) (actionReferenceKey urs hk hpacked) :=

@@ -16,6 +16,8 @@ section Combine
 
 variable {F G : Type*} [Field F] [AddCommGroup G] [Module F G]
 
+/-- Evaluating the accumulated MSM agrees with folding evaluated commitment pairs, connecting
+multiopening assembly to its group equation. -/
 private theorem combineFold_evaluated (urs : URS G) (x4 : F)
     (pairs : List (Msm urs.k F G × F)) (state : Msm urs.k F G × F) :
     let result := pairs.foldl

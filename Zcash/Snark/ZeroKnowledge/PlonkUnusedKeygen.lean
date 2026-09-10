@@ -4,7 +4,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkKeygenCopies
 /-!
 # Valid alternative reference witnesses with compiler-derived copies
 
-The copy list is now computed from the top-level compiler. Its row bound proves
+The copy list is computed from the top-level compiler. Its row bound proves
 that no copy touches row 2000, removing that separate footprint assumption. The
 public operation-footprint bound also supplies selector placement. Original witness
 validity and sigma coherence still remain explicit; the Rust witness interface and

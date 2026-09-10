@@ -20,10 +20,14 @@ theorem actionCircuit_selectorActivations_eq_trace :
       placeSelectorTrace actionCircuit.regionStarts (selectorTrace actionCircuit.operations) :=
   activations_eq_placeSelectorTrace actionCircuit.regionStarts actionCircuit.operations 0
 
+/-- Incomplete multiplication rounds never activate row zero, discharging their contribution to the
+initial-selector check. -/
 private theorem incompleteRounds_initial (config : Ecc.MulIncomplete.Config) (offset count : ℕ) :
     (incompleteRoundsSelectorTrace config offset count).filter (fun activation => activation.2 = 0) = [] := by
   simp [incompleteRoundsSelectorTrace]
 
+/-- Complete multiplication rounds starting above zero do not activate row zero, discharging the
+corresponding boundary check. -/
 private theorem completeRounds_initial (config : Ecc.MulComplete.Config) (offset count : ℕ)
     (hoffset : 0 < offset) :
     (completeRoundsSelectorTrace config offset count).filter (fun activation => activation.2 = 0) = [] := by

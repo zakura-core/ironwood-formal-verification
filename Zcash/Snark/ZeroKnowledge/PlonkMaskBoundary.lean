@@ -41,6 +41,8 @@ theorem plonkExpressionMaskCheck_interior {actions : ℕ} (pub : PlonkPublicPoly
     plonkExpressionMaskCheck pub row expr = true :=
   exprMaskInvariant_of_retained_all _ _ (plonkAdviceQueryRetained_interior row hlo hhi) expr
 
+/-- Every row outside the usable interior belongs to the explicit mask-boundary list, making the
+finite boundary check exhaustive. -/
 private theorem boundaryRow_exists (row : Fin 2048) (h : ¬ (0 < row.val ∧ row.val < 2041)) :
     ∃ boundary, plonkMaskBoundaryRows boundary = row := by
   rcases row with ⟨row, hrow⟩
@@ -57,6 +59,8 @@ private theorem boundaryRow_exists (row : Fin 2048) (h : ¬ (0 < row.val ∧ row
   · exact ⟨6, rfl⟩
   · exact ⟨7, rfl⟩
 
+/-- Every lookup row outside the usable interior belongs to its boundary list, making the lookup
+boundary check exhaustive. -/
 private theorem lookupBoundaryRow_exists (row : Fin 2042) (h : ¬ (0 < row.val ∧ row.val < 2041)) :
     ∃ boundary, plonkLookupMaskBoundaryRows boundary = row := by
   rcases row with ⟨row, hrow⟩

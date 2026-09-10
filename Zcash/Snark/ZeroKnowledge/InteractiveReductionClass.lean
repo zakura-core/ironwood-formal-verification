@@ -5,6 +5,8 @@ namespace Zcash.Snark.ZeroKnowledge
 /-- A one-instruction ordinary raw-tape program that returns its literal Boolean value. -/
 def InteractiveReductionProgram.constant (value : Bool) : InteractiveReductionProgram := .raw ⟨[.constant value], 0⟩
 
+/-- A constant interactive reduction returns its fixed bit on every tape, witnessing a simple member
+of the operational test class. -/
 theorem InteractiveReductionProgram.kernel_constant (value : Bool) (prices : ActionReductionPrices)
     (data : ActionReductionData) :
     (constant value).kernel prices data = fun _ _ => PMF.pure value := by
@@ -15,6 +17,8 @@ theorem InteractiveReductionProgram.kernel_constant (value : Bool) (prices : Act
   change (PMF.uniformOfFintype (Fin (22 * 512) → Bool)).map (fun _ => value) = PMF.pure value
   exact PMF.map_const _ _
 
+/-- The constant interactive reduction charges auxiliary copying and fixed overhead, establishing
+its admissibility budget. -/
 theorem InteractiveReductionProgram.constant_costBudget (value : Bool) (prices : ActionReductionPrices)
     (data : ActionReductionData) (bitLength privateLength : ℕ) :
     (constant value).costBudget prices data bitLength privateLength =

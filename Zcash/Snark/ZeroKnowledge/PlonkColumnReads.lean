@@ -20,6 +20,8 @@ namespace Zcash.Snark.ZeroKnowledge
 open Zcash.Arithmetic (Fp omegaOf)
 open CompPoly
 
+/-- Truncation preserves reads before its cutoff, allowing column histories to be replaced by their
+available prefixes. -/
 private theorem getD_take_of_lt {A : Type*} (values : List A) (cut i : ℕ) (fallback : A)
     (hi : i < cut) : (values.take cut).getD i fallback = values.getD i fallback := by
   simp only [List.getD_eq_getElem?_getD, List.getElem?_take_of_lt hi]

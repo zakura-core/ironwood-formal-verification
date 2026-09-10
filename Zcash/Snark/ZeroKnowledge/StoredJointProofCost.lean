@@ -37,7 +37,6 @@ def storedJointProofCosted (costs : FieldOperationCosts) (equal read omegaAccess
     (fun index : Fin 5 => getDListCosted read (0 : Fp) groups.1 index.val) tail,
    views.2 + groups.2 + 40)
 
-set_option maxHeartbeats 600000 in
 set_option maxRecDepth 10000 in
 /-- The stored adapter recovers the original full proof for every joint view and challenge value. -/
 theorem storedJointProofCosted_result (costs : FieldOperationCosts) (equal read omegaAccess : ℕ)

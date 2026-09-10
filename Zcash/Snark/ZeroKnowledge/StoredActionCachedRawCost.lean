@@ -25,7 +25,6 @@ attribute [local irreducible] actionReferenceKey plonkReferenceOracleComp cached
     inputs setup key witness fields.1 initial.1 cache replies
   (run.1, fields.2 + initial.2 + run.2 + 3)
 
-set_option maxHeartbeats 600000 in
 set_option maxRecDepth 10000 in
 /-- The actual Action compiler discharges all source conditions of the complete raw cached implementation. -/
 theorem storedActionCachedRawCosted_result (costs : FieldOperationCosts)

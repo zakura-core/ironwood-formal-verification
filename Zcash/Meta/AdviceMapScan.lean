@@ -1,6 +1,7 @@
 import Zcash.Meta.SourceReduction
 import Zcash.Meta.CertificateChunks
 import Zcash.Snark.ZeroKnowledge.AdviceMapScan
+import Zcash.Snark.ZeroKnowledge.AdviceMapScanPiece
 import Zcash.Snark.ZeroKnowledge.AdviceReadAddressScan
 
 /-!
@@ -26,11 +27,11 @@ initialize registerTraceClass `Zcash.adviceMapScan
 private def mapScanTarget (step roots entries : Expr) : MetaM Expr := do
   mkEq (← mkAppM ``adviceMapScan #[step, roots, entries]) (mkConst ``Bool.true)
 
-private def checkedMapState (roots : Expr) : MetaM Expr := do
+private def checkedMapState (roots : Expr) (compile : Bool := false) : MetaM Expr := do
   let normalized ← SourceReduction.reduceConstructorData roots
   let name ← mkAuxDeclName
   withOptions (Elab.async.set · false) do
-    mkAuxDefinition name (← inferType roots) normalized (compile := false)
+    mkAuxDefinition name (← inferType roots) normalized (compile := compile)
 
 -- WHNF can leave a reducible source wrapper in a recursor's major premise.
 -- Expose that premise definitionally before asking for its opaque equation.
@@ -128,6 +129,66 @@ private def reduceSourceTransition (transition : Expr) : MetaM (Expr × Expr) :=
     if let some proof := proof? then equality ← mkEqTrans equality proof
     current := next
   throwError "source transition reduction limit reached"
+
+/-- Check a bounded prefix, preserving the map and every unprocessed entry.
+Each declaration produces a continuation that requires the remaining scan. -/
+elab "check_advice_map_piece " limit:num : tactic =>
+  withOptions (fun options => options.setBool `smartUnfolding false) <| withMainContext do
+    let originalGoal ← getMainGoal
+    let target ← originalGoal.getType
+    unless target.isAppOf ``AdviceMapScanPiece do
+      throwError "expected an AdviceMapScanPiece goal"
+    let arguments := target.getAppArgs
+    let step := arguments[arguments.size - 3]!
+    let mut roots := arguments[arguments.size - 2]!
+    let mut entries := arguments.back!
+    let first ← mkFreshExprMVar (← mapScanTarget step roots entries)
+    let mut goal := first.mvarId!
+    let mut count : Nat := 0
+    let compilePieces := !(← readThe Term.Context).isNoncomputableSection &&
+      !(← Term.getDeclName?).any (Lean.isNoncomputable (← getEnv))
+    for _ in [:limit.getNat] do
+      let reduced ← withTransparency .all (whnf entries)
+      if reduced.isAppOf ``List.nil then
+        entries := reduced
+        break
+      unless reduced.isAppOf ``List.cons do
+        throwError "cannot reduce source entry {count} to a list constructor"
+      let listArguments := reduced.getAppArgs
+      let entry := listArguments[1]!
+      let rest := listArguments[2]!
+      let (result, hstep) ← reduceSourceTransition (mkApp2 step roots entry)
+      unless result.isAppOf ``Option.some do
+        if result.isAppOf ``Option.none then
+          throwError "original advice-map policy rejects entry {count}"
+        else
+          throwError "cannot expose the source transition at entry {count}"
+      let nextRoots := result.getAppArgs.back!
+      let next ← mkFreshExprMVar (← mapScanTarget step nextRoots rest)
+      goal.assign (← withTransparency .all <|
+        mkAppM ``adviceMapScan_cons #[step, roots, nextRoots, entry, rest, hstep, next])
+      goal := next.mvarId!
+      roots := nextRoots
+      entries := rest
+      count := count + 1
+    if count > 0 then roots ← checkedMapState roots compilePieces
+    -- Compiled records must not retain reduction-only list auxiliaries.
+    if compilePieces then entries ← SourceReduction.reduceConstructorData entries
+    let remaining ← mkFreshExprMVar (← mapScanTarget step roots entries)
+    goal.assign remaining
+    let continuation ← checkCertificateChunk first.mvarId! remaining.mvarId! false
+    -- The source and initial map are already fixed by the goal. Store that
+    -- fully indexed record through the kernel without re-inferring its indices
+    -- from a large recursive scan. Local let bindings are closed by expansion.
+    let record := mkAppN (mkConst ``AdviceMapScanPiece.mk)
+      (arguments ++ #[roots, entries, continuation])
+    let stored ← withOptions (Elab.async.set · false) do
+      mkAuxDefinition (← mkAuxDeclName) target record
+        (zetaDelta := true) (compile := compilePieces)
+    originalGoal.assign stored
+    if ← isTracingEnabledFor `Zcash.adviceMapScan then
+      IO.eprintln s!"[advice map piece] {← Term.getDeclName?}: checked {count} entries; remainder empty: {entries.isAppOf ``List.nil}"
+    replaceMainGoal []
 
 /-- Check the exact source-order scan in bounded, kernel-checked continuations. -/
 elab "check_advice_map_scan" : tactic =>

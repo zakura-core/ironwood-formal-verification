@@ -15,6 +15,8 @@ namespace Zcash.Snark.ZeroKnowledge
 
 open Halo2 Zcash.Circuits
 
+/-- Conditional swap enables its configured selector at the requested row, supplying the source
+metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem condSwap_regionSelectorTrace (sibling : WitgenIR Fp 1)
     (swap : Placed ProverEnvironment Fp → Bool) (config : CondSwap.Config)
@@ -24,6 +26,8 @@ theorem condSwap_regionSelectorTrace (sibling : WitgenIR Fp 1)
   rw [FormalRegionCircuit.call_operations]
   rfl
 
+/-- Merkle input decomposition retains its configured activation trace, supplying the source
+metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem merkleDecomposition_regionSelectorTrace (level : Fp) (config : Sinsemilla.Merkle.Gate.Config)
     (offset : ℕ) (input : Var Sinsemilla.Merkle.Gate.Inputs Fp) (region : RegionIndex) :
@@ -40,6 +44,8 @@ def merkleHashSelectorTrace (config : Sinsemilla.Merkle.Config) (lookup : Lookup
     [], [], sinsemillaHashSelectorTrace config.sinsemilla 0 Sinsemilla.Merkle.HashLayer.merkleNs,
     [(config.gate.qDecompose.index, 0)]]
 
+/-- A Merkle hash retains its complete Sinsemilla region trace, supplying the source metadata for
+Action selector coverage. -/
 @[selector_trace_norm]
 theorem merkleHash_selectorTrace (generators : Specs.Sinsemilla.Generators)
     (point : Point Fp) (honCurve : point.OnCurve) (level : ℕ) (hlevel : level < 2 ^ 10)
@@ -59,6 +65,8 @@ def merkleLayerSelectorTrace
     List (List (ℕ × ℕ)) :=
   [(config.1.qSwap.index, 0)] :: merkleHashSelectorTrace config.2.1 config.2.2
 
+/-- A Merkle layer retains the swap, decomposition, and hash region traces, supplying the source
+metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem merkleLayer_selectorTrace (generators : Specs.Sinsemilla.Generators)
     (point : Point Fp) (honCurve : point.OnCurve) (level : ℕ) (hlevel : level < 2 ^ 10)

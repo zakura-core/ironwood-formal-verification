@@ -1,11 +1,8 @@
-import Zcash.Snark.ZeroKnowledge.ActionGateSourceCertificate
-import Zcash.Snark.ZeroKnowledge.GateIndexedCoverage
-import Zcash.Meta.ActivationCoverage
+import Zcash.Snark.ZeroKnowledge.ActionGateCoverageTree
 
 namespace Zcash.Snark.ZeroKnowledge
 open Halo2 Zcash.Circuits Zcash.Circuits.Action
 set_option maxRecDepth 50000
-set_option maxHeartbeats 0
 set_option stderrAsMessages false
 set_option trace.Zcash.activationCoverage true
 
@@ -24,9 +21,11 @@ theorem actionCircuit_gateActivationCoverage_certificate :
   change gateActivationCoverageCheck (Internal.actionCircuitImpl.constraintSystem.gates.map sourceGateLabel)
     (placeSelectorTrace actionRegionStartsCertificate (actionSourceSelectorTrace actionConfig))
     actionGateActivationSourceCertificate.entries = true
-  rw [← gateActivationCoverageScan_eq]
-  rw [← gateIndexedCoverageScan_original]
-  check_activation_coverage
+  rw [← actionGateCoverageRegistry.source_eq]
+  rw [← gateActivationCoverageScan_eq, ← gateIndexedCoverageScan_original]
+  rw [← actionGateCoverageEntries.source_eq, ← actionCoverageActivations.source_eq,
+    ← actionGateCoverageLabels.source_eq]
+  exact actionGateCoverage_check
 
 /-- The gate coverage result is indexed by the original complete Action operations. -/
 theorem actionCircuit_gateActivationCoverage :

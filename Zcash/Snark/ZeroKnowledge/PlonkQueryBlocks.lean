@@ -78,6 +78,8 @@ theorem plonkPerActionCommitmentOrder_shift (a : ℕ) :
       (plonkPerActionCommitmentOrder 0).map (plonkShiftCommitmentId a) := by
   simp [plonkPerActionCommitmentOrder, plonkShiftCommitmentId]
 
+/-- Deduplicating the first Action's query spine gives the stated commitment order, anchoring the
+generic per-Action ordering proof. -/
 private theorem firstActionCommitmentOrder :
     dedupFold ((plonkPerActionQuerySpine 0).map Prod.fst) = plonkPerActionCommitmentOrder 0 := by
   decide +kernel
@@ -162,6 +164,8 @@ theorem plonkQuerySpine_commitments (actions : ℕ) :
   · intro a _ b _ hab
     exact plonkPerActionQuerySpine_disjoint a.val b.val (fun h => hab (Fin.ext h))
 
+/-- The first Action's query spine contains the four point labels in order, anchoring the public
+opening-point list. -/
 private theorem firstActionPoints :
     dedupFold ((plonkPerActionQuerySpine 0).map Prod.snd) = [0, 1, 2, 3] := by
   decide +kernel

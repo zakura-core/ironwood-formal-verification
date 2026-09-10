@@ -55,6 +55,8 @@ theorem plonkSelectors_natDegree_le :
     (omegaOf 11) (by decide) (omegaOf_rows_injective 11 (by decide))
   exact ⟨Nat.le_of_lt_succ h.1, Nat.le_of_lt_succ h.2.1, Nat.le_of_lt_succ h.2.2⟩
 
+/-- Zero-default indexed access preserves a uniform polynomial degree bound, including out-of-range
+queries. -/
 private theorem finFn_natDegree_le {n B : ℕ} (values : Fin n → CPoly)
     (hvalues : ∀ j, (values j).natDegree ≤ B) (i : ℕ) :
     (finFn values i).natDegree ≤ B := by
@@ -62,6 +64,8 @@ private theorem finFn_natDegree_le {n B : ℕ} (values : Fin n → CPoly)
   · simpa only [finFn, dif_pos hi] using hvalues ⟨i, hi⟩
   · simp only [finFn, dif_neg hi, natDegree_zero, Nat.zero_le]
 
+/-- Resolving any column reference preserves the shared degree bound, lifting column bounds to
+verifier expressions. -/
 private theorem resolve_natDegree_le {B : ℕ} (fx av inst : ℕ → CPoly)
     (hfx : ∀ i, (fx i).natDegree ≤ B) (hav : ∀ i, (av i).natDegree ≤ B)
     (hinst : ∀ i, (inst i).natDegree ≤ B) (cr : ColumnRef) :

@@ -12,6 +12,8 @@ namespace Zcash.Snark.ZeroKnowledge
 
 open Halo2 Zcash.Circuits
 
+/-- Point witnessing enables the point selector at its requested row, supplying the source metadata
+for Action selector coverage. -/
 @[selector_trace_norm]
 theorem witnessPoint_regionSelectorTrace (config : Ecc.WitnessPoint.Config) (offset : ℕ)
     (input : Var (Unconstrained Point) Fp) (region : RegionIndex) :
@@ -20,6 +22,8 @@ theorem witnessPoint_regionSelectorTrace (config : Ecc.WitnessPoint.Config) (off
   rw [FormalRegionCircuit.call_operations]
   rfl
 
+/-- Nonidentity point witnessing enables its distinct point selector, supplying the source metadata
+for Action selector coverage. -/
 @[selector_trace_norm]
 theorem witnessNonIdPoint_regionSelectorTrace (config : Ecc.WitnessPoint.Config) (offset : ℕ)
     (input : Var (Unconstrained Point) Fp) (region : RegionIndex) :
@@ -28,6 +32,8 @@ theorem witnessNonIdPoint_regionSelectorTrace (config : Ecc.WitnessPoint.Config)
   rw [FormalRegionCircuit.call_operations]
   rfl
 
+/-- Complete addition enables the addition selector at its requested row, supplying the source
+metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem completeAdd_regionSelectorTrace (config : Ecc.Add.Config) (offset : ℕ)
     (input : Var Ecc.Add.Inputs Fp) (region : RegionIndex) :
@@ -36,11 +42,15 @@ theorem completeAdd_regionSelectorTrace (config : Ecc.Add.Config) (offset : ℕ)
   rw [FormalRegionCircuit.call_operations]
   rfl
 
+/-- Loading Sinsemilla tables creates no region trace, supplying the source metadata for Action
+selector coverage. -/
 @[selector_trace_norm]
 theorem sinsemillaLoad_selectorTrace (generators : Specs.Sinsemilla.Generators)
     (table : Sinsemilla.GeneratorTableConfig) (region : RegionIndex) :
     selectorTrace ((Sinsemilla.load generators table).operations region) = [] := rfl
 
+/-- Loading private data retains one empty region trace, supplying the source metadata for Action
+selector coverage. -/
 @[selector_trace_norm]
 theorem loadPrivate_selectorTrace (column : Column .advice) (witness : WitgenIR Fp 1)
     (region : RegionIndex) :

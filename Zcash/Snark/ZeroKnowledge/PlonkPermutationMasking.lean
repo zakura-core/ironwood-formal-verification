@@ -40,6 +40,8 @@ def plonkPermutationRefUnrotated : ColumnRef → Bool
 def plonkPermutationQueriesUnrotated (chunks : List (List (ColumnRef × ℕ))) : Bool :=
   chunks.flatten.all fun entry => plonkPermutationRefUnrotated entry.1
 
+/-- An unrotated permutation reference has the same evaluation when advice evaluations agree,
+transporting masking agreement to copy-product inputs. -/
 private theorem permutationRef_eval_congr {actions : ℕ}
     (pub : PlonkPublicPolynomials actions) (left right : ColumnHistory 2048)
     (a : Fin actions) (x : Fp)

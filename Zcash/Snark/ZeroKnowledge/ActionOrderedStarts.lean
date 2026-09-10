@@ -45,11 +45,15 @@ theorem actionSortedRegionShapes_summaries :
   kernel_rfl
 
 set_option maxRecDepth 4096 in
+/-- Sorting the certified placement pairs by region index recovers the original-order starts used by
+synthesis. -/
 private theorem restoreIndexOrder :
     (V1.sortPairsByIndex (actionSortedRegionIndices.zip actionSortedPlacementStarts)).map Prod.snd =
       actionRegionStartsCertificate := by
   kernel_rfl
 
+/-- A proved sort order and placement result determine the candidate start list, connecting local
+certificates to the planner. -/
 private theorem planCandidate_starts_of_pairs
     (shapes sorted : List RegionShape) (pairs : List (ℕ × ℕ))
     (hsort : (Pdqsort.quicksort shapes.toArray (fun left right => left.key < right.key)).reverse.toList = sorted)

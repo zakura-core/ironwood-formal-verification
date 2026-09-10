@@ -32,6 +32,8 @@ theorem recordedViewTestCosted_cost_le (program : RecordedTestProgram) (read can
 /-- The exhaustion test required by the unlimited seeded-stream reduction is a one-input circuit. -/
 def recordedExhaustionTest : RecordedTestProgram := ⟨[.input .exhausted], 0⟩
 
+/-- The concrete exhaustion test reads exactly the retained exhaustion flag, identifying the event
+used in the stopping bound. -/
 theorem recordedExhaustionTest_eval (auxiliary : List (Fin challengeDigestCard)) (view : ActionRetryRecordedView) :
     recordedViewTest recordedExhaustionTest auxiliary view = view.1.exhausted := rfl
 
@@ -39,11 +41,15 @@ theorem recordedExhaustionTest_eval (auxiliary : List (Fin challengeDigestCard))
 def copyAuxiliaryWordsCosted (read : ℕ) (words : List (Fin challengeDigestCard)) : List (Fin challengeDigestCard) × ℕ :=
   mapListCosted (fun word => (word, read + 1)) words
 
+/-- Counting auxiliary-word copying preserves the entire list, retaining the adversary's supplied
+data in the reduction. -/
 theorem copyAuxiliaryWordsCosted_result (read : ℕ) (words : List (Fin challengeDigestCard)) :
     (copyAuxiliaryWordsCosted read words).1 = words := by
   simp only [copyAuxiliaryWordsCosted, mapListCosted_result]
   exact List.map_id words
 
+/-- Auxiliary copying has cost linear in its stored length, accounting for preprocessing data in the
+reduction budget. -/
 theorem copyAuxiliaryWordsCosted_cost_le (read : ℕ) (words : List (Fin challengeDigestCard)) :
     (copyAuxiliaryWordsCosted read words).2 ≤ words.length * (read + 2) + 1 :=
   mapListCosted_cost_le _ _ _ (fun _ _ => le_rfl)

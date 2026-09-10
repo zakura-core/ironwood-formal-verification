@@ -32,7 +32,6 @@ attribute [local irreducible] plonkReferenceProofFromTape plonkPublicPolynomials
   let query := protocolQueryAddressCosted read initial produced.1.2 index
   (query.1, produced.2 + query.2 + 2)
 
-set_option maxHeartbeats 600000 in
 set_option maxRecDepth 10000 in
 /-- Every reachable report preserves the original cached-oracle prefix and failure status. -/
 theorem storedActionHistoryReportCosted_result (costs : FieldOperationCosts)

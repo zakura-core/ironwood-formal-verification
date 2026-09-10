@@ -103,10 +103,14 @@ theorem IpaTranscript.eq_complete_of_verifies {k : ℕ} (pub : IpaPublic k F G)
   · rfl
   · rfl
 
+/-- Subtracting coefficient vectors subtracts their inner products, separating the honest opening
+from its simulated adjustment. -/
 private theorem innerProduct_sub {n : ℕ} (a a' b : Fin n → F) :
     innerProduct (a - a') b = innerProduct a b - innerProduct a' b := by
   simp only [innerProduct, Pi.sub_apply, sub_mul, Finset.sum_sub_distrib]
 
+/-- A singleton coefficient commits to one scalar multiple, identifying the first-generator
+correction in the IPA transcript. -/
 private theorem commitGen_single {n : ℕ} (g : Fin n → G) (i : Fin n) (v : F) :
     commitGen g (Pi.single i v) = v • g i := by
   unfold commitGen

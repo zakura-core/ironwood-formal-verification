@@ -13,6 +13,8 @@ namespace Zcash.Snark.ZeroKnowledge
 
 open Equiv (Perm swap)
 
+/-- A cell encoding commuting with one permutation step commutes with every iterate, enabling cycle
+transport. -/
 private theorem permutation_pow_transport {α β : Type*}
     (encode : α → β) (left : Perm α) (right : Perm β)
     (hstep : ∀ cell, encode (left cell) = right (encode cell)) (n : ℕ) :
@@ -23,6 +25,8 @@ private theorem permutation_pow_transport {α β : Type*}
       intro cell
       rw [pow_succ, pow_succ, Equiv.Perm.mul_apply, Equiv.Perm.mul_apply, ih, hstep]
 
+/-- An injective commuting cell encoding preserves and reflects cycles, connecting copy equivalence
+across representations. -/
 private theorem permutation_sameCycle_transport {α β : Type*} [Finite α] [Finite β]
     (encode : α → β) (hinjective : Function.Injective encode) (left : Perm α) (right : Perm β)
     (hstep : ∀ cell, encode (left cell) = right (encode cell)) (a b : α) :
@@ -39,12 +43,15 @@ private theorem permutation_sameCycle_transport {α β : Type*} [Finite α] [Fin
     simpa only [zpow_natCast] using
       hinjective ((permutation_pow_transport encode left right hstep n a).trans hn)
 
+/-- Injective cell encoding commutes with swapping two cells, supplying the copy-construction step. -/
 private theorem permutation_swap_transport {α β : Type*} [DecidableEq α] [DecidableEq β]
     (encode : α → β) (hinjective : Function.Injective encode) (a b cell : α) :
     encode (swap a b cell) = swap (encode a) (encode b) (encode cell) := by
   simp only [Equiv.swap_apply_def, hinjective.eq_iff]
   split_ifs <;> rfl
 
+/-- One copy-union step commutes with injective cell encoding, allowing the source and compiler
+permutations to be compared. -/
 private theorem copy_step_transport {α β : Type*}
     [DecidableEq α] [DecidableEq β] [Fintype α] [Fintype β]
     (encode : α → β) (hinjective : Function.Injective encode) (left : Perm α) (right : Perm β)
@@ -59,6 +66,8 @@ private theorem copy_step_transport {α β : Type*}
     simp only [PermConstruction.step, hcycle, hcycle', ↓reduceIte, Equiv.Perm.mul_apply]
     rw [hstep, permutation_swap_transport encode hinjective]
 
+/-- Replaying the full copy list commutes with injective cell encoding, transporting source copy
+constraints to compiler indices. -/
 private theorem copy_build_transport {α β : Type*}
     [DecidableEq α] [DecidableEq β] [Fintype α] [Fintype β]
     (encode : α → β) (hinjective : Function.Injective encode) (copies : List (α × α)) :

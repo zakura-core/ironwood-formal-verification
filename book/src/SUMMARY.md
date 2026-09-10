@@ -16,6 +16,7 @@
     - [Proof Journey](formal-verification/proof-journey.md)
     - [Proof Map](formal-verification/proof-map.md)
     - [Knowledge-Soundness Contract](formal-verification/knowledge-contract.md)
+    - [Zero Knowledge and Executable Reductions](formal-verification/zero-knowledge.md)
     - [Ledger Security Games](formal-verification/ledger-security-games.md)
     - [Group-Hash Indifferentiability](formal-verification/group-hash-indifferentiability.md)
   - [Reference]()

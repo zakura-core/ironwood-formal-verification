@@ -14,7 +14,6 @@ are separate obligations for the complete PLONK row relation.
 namespace Zcash.Snark.ZeroKnowledge
 open Halo2 Zcash.Circuits Zcash.Circuits.Action
 set_option maxRecDepth 8192
-set_option maxHeartbeats 500000
 
 /-- The original Action completeness theorem accepts the exact application readings. -/
 theorem actionWitnessAssignment_constraints_of_readAgreement

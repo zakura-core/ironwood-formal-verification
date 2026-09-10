@@ -15,24 +15,31 @@ namespace Zcash.Snark.ZeroKnowledge
 open Zcash.Arithmetic (Fp)
 open CompPoly
 
+/-- Coefficient addition becomes polynomial addition, transporting additive mask identities to the
+polynomial model. -/
 private theorem coeffsToPoly_add {n : ℕ} (a b : Fin n → Fp) :
     coeffsToPoly (a + b) = coeffsToPoly a + coeffsToPoly b := by
   apply CPolynomial.toPoly_injective
   simp [coeffsToPoly, CPolynomial.toPoly_sum, CPolynomial.toPoly_pow,
     add_mul, Finset.sum_add_distrib]
 
+/-- Coefficient subtraction becomes polynomial subtraction, transporting witness-mask differences to
+polynomials. -/
 private theorem coeffsToPoly_sub {n : ℕ} (a b : Fin n → Fp) :
     coeffsToPoly (a - b) = coeffsToPoly a - coeffsToPoly b := by
   apply CPolynomial.toPoly_injective
   simp [coeffsToPoly, CPolynomial.toPoly_sum, CPolynomial.toPoly_pow,
     Polynomial.C_sub, sub_mul, Finset.sum_sub_distrib]
 
+/-- Scaling coefficients multiplies the polynomial by a constant, transporting blinding factors to
+polynomial algebra. -/
 private theorem coeffsToPoly_smul {n : ℕ} (r : Fp) (a : Fin n → Fp) :
     coeffsToPoly (r • a) = CPolynomial.C r * coeffsToPoly a := by
   apply CPolynomial.toPoly_injective
   simp [coeffsToPoly, CPolynomial.toPoly_sum, CPolynomial.toPoly_pow,
     Polynomial.C_mul, mul_assoc, Finset.mul_sum]
 
+/-- Finite coefficient sums become polynomial sums, allowing separate mask contributions to compose. -/
 private theorem coeffsToPoly_sum {I : Type*} {n : ℕ} (s : Finset I)
     (a : I → Fin n → Fp) : coeffsToPoly (∑ i ∈ s, a i) = ∑ i ∈ s, coeffsToPoly (a i) := by
   classical
@@ -43,6 +50,7 @@ private theorem coeffsToPoly_sum {I : Type*} {n : ℕ} (s : Finset I)
   | @insert i s hi ih =>
     rw [Finset.sum_insert hi, Finset.sum_insert hi, coeffsToPoly_add, ih]
 
+/-- A singleton coefficient becomes its monomial, identifying the support of sparse IPA masks. -/
 private theorem coeffsToPoly_single {n : ℕ} (i : Fin n) (v : Fp) :
     coeffsToPoly (Pi.single i v) = CPolynomial.C v * CPolynomial.X ^ i.val := by
   unfold coeffsToPoly

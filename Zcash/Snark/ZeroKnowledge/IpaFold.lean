@@ -31,6 +31,8 @@ def foldByRounds : (k : ℕ) → (Fin k → F) → (Fin (2 ^ k) → F) → F
       foldByRounds k (fun j => rounds j.succ)
         (foldVec (loHalf values) (hiHalf values) (rounds 0)⁻¹)
 
+/-- IPA coefficient folding preserves addition, allowing witness and mask contributions to be
+analyzed separately. -/
 theorem coefficientFold_add (k : ℕ) (rounds : Fin k → F)
     (left right : Fin (2 ^ k) → F) :
     coefficientFold k rounds (left + right) =
@@ -45,6 +47,8 @@ theorem coefficientFold_add (k : ℕ) (rounds : Fin k → F)
     rw [ih, ih]
     ring
 
+/-- A scalar factor passes through IPA coefficient folding, allowing blind coefficients to be
+isolated. -/
 theorem coefficientFold_smul (k : ℕ) (rounds : Fin k → F)
     (scalar : F) (values : Fin (2 ^ k) → F) :
     coefficientFold k rounds (scalar • values) = scalar * coefficientFold k rounds values := by
@@ -64,6 +68,8 @@ def coefficientFoldLinear (k : ℕ) (rounds : Fin k → F) : (Fin (2 ^ k) → F)
   map_add' := coefficientFold_add k rounds
   map_smul' := coefficientFold_smul k rounds
 
+/-- A zero coefficient vector folds to zero, supplying the empty contribution in sparse-mask
+calculations. -/
 @[simp] theorem coefficientFold_zero (k : ℕ) (rounds : Fin k → F) :
     coefficientFold k rounds (0 : Fin (2 ^ k) → F) = 0 :=
   (coefficientFoldLinear k rounds).map_zero
@@ -84,16 +90,21 @@ private def lowerIndex (k : ℕ) (i : Fin (2 ^ k)) : Fin (2 ^ (k + 1)) :=
 private def upperIndex (k : ℕ) (i : Fin (2 ^ k)) : Fin (2 ^ (k + 1)) :=
   ⟨2 ^ k + i.val, by have hi := i.isLt; rw [pow_succ, Nat.mul_two]; omega⟩
 
+/-- A lower-half singleton remains a singleton after splitting, supplying the sparse-fold induction
+case. -/
 private theorem loHalf_single_lower (k : ℕ) (i : Fin (2 ^ k)) (value : F) :
     loHalf (Pi.single (lowerIndex k i) value) = Pi.single i value := by
   funext j
   simp [loHalf, lowerIndex, Pi.single_apply, Fin.ext_iff]
 
+/-- An upper-half singleton remains a singleton after splitting, supplying the sparse-fold induction
+case. -/
 private theorem hiHalf_single_upper (k : ℕ) (i : Fin (2 ^ k)) (value : F) :
     hiHalf (Pi.single (upperIndex k i) value) = Pi.single i value := by
   funext j
   simp [hiHalf, upperIndex, Pi.single_apply, Fin.ext_iff]
 
+/-- A lower-half singleton contributes zero to the upper half, isolating its sparse folding path. -/
 private theorem hiHalf_single_lower (k : ℕ) (i : Fin (2 ^ k)) (value : F) :
     hiHalf (Pi.single (lowerIndex k i) value) = 0 := by
   funext j
@@ -105,6 +116,7 @@ private theorem hiHalf_single_lower (k : ℕ) (i : Fin (2 ^ k)) (value : F) :
   change 2 ^ k + j.val = i.val at hv
   omega
 
+/-- An upper-half singleton contributes zero to the lower half, isolating its sparse folding path. -/
 private theorem loHalf_single_upper (k : ℕ) (i : Fin (2 ^ k)) (value : F) :
     loHalf (Pi.single (upperIndex k i) value) = 0 := by
   funext j
@@ -116,6 +128,8 @@ private theorem loHalf_single_upper (k : ℕ) (i : Fin (2 ^ k)) (value : F) :
   change j.val = 2 ^ k + i.val at hv
   omega
 
+/-- A lower-half singleton folds through the remaining rounds without a first-round factor,
+identifying its sparse-mask coefficient. -/
 private theorem coefficientFold_single_lower (k : ℕ) (rounds : Fin (k + 1) → F)
     (i : Fin (2 ^ k)) (value : F) :
     coefficientFold (k + 1) rounds (Pi.single (lowerIndex k i) value) =
@@ -123,6 +137,8 @@ private theorem coefficientFold_single_lower (k : ℕ) (rounds : Fin (k + 1) →
   rw [coefficientFold, loHalf_single_lower, hiHalf_single_lower,
     coefficientFold_zero, mul_zero, add_zero]
 
+/-- An upper-half singleton gains the inverse first challenge before folding, identifying its
+sparse-mask coefficient. -/
 private theorem coefficientFold_single_upper (k : ℕ) (rounds : Fin (k + 1) → F)
     (i : Fin (2 ^ k)) (value : F) :
     coefficientFold (k + 1) rounds (Pi.single (upperIndex k i) value) =

@@ -23,7 +23,6 @@ attribute [local irreducible] rowPolynomial plonkJointSampleCount plonkPublicPol
     (fun action => storedActionWitnessRowCosted read witness action.val) ch tape
 
 set_option maxRecDepth 10000 in
-set_option maxHeartbeats 400000 in
 /-- The stored implementation preserves the complete original Action reference joint view and its tape cast. -/
 theorem storedActionHonestJointCosted_result (costs : FieldOperationCosts)
     (node equal read omegaAccess canonicalRead compare groupAdd groupScale : ℕ)

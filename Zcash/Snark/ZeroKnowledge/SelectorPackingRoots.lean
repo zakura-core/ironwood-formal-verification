@@ -13,6 +13,8 @@ namespace Zcash.Snark.ZeroKnowledge
 
 open Halo2
 
+/-- Equal positions in an indexed list name the same value, preventing distinct selector groups from
+sharing an index accidentally. -/
 private theorem zipIdx_fst_eq {α : Type} (items : List α) {left right : α × ℕ}
     (hleft : left ∈ items.zipIdx) (hright : right ∈ items.zipIdx)
     (hindex : left.2 = right.2) : left.1 = right.1 := by

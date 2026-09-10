@@ -12,7 +12,6 @@ requires witness consistency and applies independently of hash definedness.
 namespace Zcash.Snark.ZeroKnowledge
 open Halo2 Zcash.Circuits Zcash.Circuits.Action
 set_option maxRecDepth 8192
-set_option maxHeartbeats 500000
 set_option linter.constructorNameAsVariable false
 
 /-- Both original Action Merkle halves retain exactly the supplied 32 path readings. -/

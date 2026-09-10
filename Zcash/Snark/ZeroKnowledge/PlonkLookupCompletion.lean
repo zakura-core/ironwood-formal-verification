@@ -15,6 +15,8 @@ namespace Zcash.Snark.ZeroKnowledge
 
 open Zcash.Arithmetic (Fp)
 
+/-- The first occurrence of an indexed list element appears no later than that index, supporting
+lookup completion with repeated values. -/
 private theorem idxOf_getElem_le {A : Type*} [DecidableEq A]
     (values : List A) (i : ℕ) (hi : i < values.length) : values.idxOf values[i] ≤ i := by
   have htake : i < (values.take (i + 1)).length := by simp; omega

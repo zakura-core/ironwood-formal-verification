@@ -4,6 +4,8 @@ import Zcash.Snark.ZeroKnowledge.ActionOracleStream
 namespace Zcash.Snark.ZeroKnowledge
 open MeasureTheory
 
+/-- A Boolean instruction is measurable when its inputs and wires are, supplying the induction step
+for probability-valued tests. -/
 theorem BooleanTestInstruction.eval_measurable {Input Ω : Type*} [MeasurableSpace Ω]
     [MeasurableSpace (List Bool)] [DiscreteMeasurableSpace (List Bool)]
     (instruction : BooleanTestInstruction Input) (input : Ω → Input → Bool)
@@ -31,6 +33,8 @@ theorem runBooleanTest_measurable {Input Ω : Type*} [MeasurableSpace Ω]
       (Measurable.of_discrete : Measurable (fun pair : Bool × List Bool => pair.1 :: pair.2)).comp (hv.prodMk hwires)
     exact ih _ hn
 
+/-- A finite Boolean program defines a measurable event whenever its input reads do, allowing its
+output probabilities to be compared. -/
 theorem BooleanTestProgram.eval_measurable {Input Ω : Type*} [MeasurableSpace Ω]
     (program : BooleanTestProgram Input) (input : Ω → Input → Bool)
     (hinput : ∀ address, Measurable (fun sample => input sample address)) :

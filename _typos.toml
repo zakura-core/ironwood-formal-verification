@@ -26,6 +26,8 @@ extend-ignore-identifiers-re = [
   "^H[A-Za-z0-9]{3}$",
   # Git revisions are opaque hexadecimal identifiers, not prose.
   "^[0-9a-f]{8,40}$",
+  # Proof-map edge identifiers abbreviate reductions, not prose words.
+  "^(KERRtoCDLR|STMTtoKS)$",
 ]
 
 [default.extend-words]

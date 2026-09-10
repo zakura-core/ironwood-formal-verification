@@ -22,7 +22,6 @@ attribute [local irreducible] rowPolynomial plonkJointSampleCount
     inputs setup key witness tapes.1.challenges tapes.1.privateFields
   (⟨tapes.1.raw, tapes.1.challenges, joint.1⟩, tapes.2 + joint.2 + 3)
 
-set_option maxHeartbeats 600000 in
 set_option maxRecDepth 10000 in
 /-- The complete bit-driven real view is the original joint prover on the same wide-reduced private suffix. -/
 theorem storedActionHonestTapeJointCosted_result (costs : FieldOperationCosts)

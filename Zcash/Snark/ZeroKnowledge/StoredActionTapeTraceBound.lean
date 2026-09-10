@@ -20,7 +20,6 @@ def storedActionTapeTraceCostBudget (fieldCosts : FieldOperationCosts) (ipaCosts
   storedActionTapeJointCostBudget fieldCosts ipaCosts node equal read omegaAccess actions bitLength key +
     preparation + 8 * actions * actions + (72 * actions + 85) * access + 1300 * actions + 2200
 
-set_option maxHeartbeats 600000 in
 set_option maxRecDepth 10000 in
 /-- Every complete input bit tape obeys the same concrete polynomial transcript-production envelope. -/
 theorem storedActionTapeTraceCosted_cost_le_fixed

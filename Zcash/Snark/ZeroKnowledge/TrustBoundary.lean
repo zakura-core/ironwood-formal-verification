@@ -483,7 +483,7 @@ quotient-evaluation function that agrees with the actual quotient on every reach
 The full batched prover tape is connected to this joint law, and the joint simulator has a
 field-coin implementation. The verifier-typed construction computes the constraint numerator
 and quotient pieces, and derives quotient agreement using the existing verifier's constraint
-function. A public circuit-degree profile now supplies the numerator capacity, with
+function. A public circuit-degree profile supplies the numerator capacity, with
 kernel-checked certificates for the one- and two-Action captured keys. Row-wise constraint
 satisfaction supplies exact quotient divisibility. The newer consistency bound retains
 the ideal probability of row states that fail division as an explicit error term, so it
@@ -494,25 +494,25 @@ verifier coins, the challenge term is bounded by `4113/p + 22 × bias`. The late
 original-row theorem bounds the remaining row contribution using explicit witness
 and public-key conditions. The later compiler and verifier-grouping connectors derive
 the public commitment and routing matches under explicit shape and query-layout conditions.
-The product-row scan now has checked recurrence and terminal-value lemmas that retain
+The product-row scan has checked recurrence and terminal-value lemmas that retain
 zero-denominator cases. Separate factor-family bounds permit a random private prefix
 independent of the two product challenges. The actual reference factor lists and their
-pre-product challenge independence now apply that bound to the computed denominators;
+pre-product challenge independence apply that bound to the computed denominators;
 their contribution to the joint invalid-row event is derived under the complete
 independent challenge law.
-The computed lookup scan now supplies all five of the existing row constraints from
+The computed lookup scan supplies all five of the existing row constraints from
 the compression, permutation, and run-structure facts outside zero denominators.
 The actual polynomial selectors and rotations carry this result to domain division.
-The specified canonical sorter now supplies the permutation and run-structure facts,
+The specified canonical sorter supplies the permutation and run-structure facts,
 and succeeds for equal-length prefixes whenever each input value occurs in the table.
 Its field-specific adapter feeds those facts directly to the existing lookup constraints.
-The concrete retained-row constructor now evaluates lookup expressions and packed
+The concrete retained-row constructor evaluates lookup expressions and packed
 permutation factors through the existing polynomial query layout, then calls those
 sorts and scans. Its partial schedule preserves sorting failures and the private
 prefix. Completed attempts agree on the same tape with the total constructor used
 by the joint simulation, and every constructed column retains its computed usable
 rows with the actual preceding masked history. Lookup construction uses only theta;
-all row construction uses only theta, beta, and gamma. The phase bounds now identify
+all row construction uses only theta, beta, and gamma. The phase bounds identify
 every construction-time read with the final column state, including rotated queries.
 Completed attempts supply one common lookup-sort result and every product scan through
 the terminal row. These computed rows give all fifteen lookup and seven permutation
@@ -540,7 +540,7 @@ equal the original witness factors. Original copy equations propagate through th
 replayed copy permutation; public sigma coherence then gives the exact packed product
 identity for every challenge and tape. Under these explicit witness and key premises,
 the prerequisite mass equals `gateConstructionFailureMass`, and the joint bound carries
-only that remaining row error. A public expression checker now proves invariance under
+only that remaining row error. A public expression checker proves invariance under
 changes to unretained advice, including products killed by fixed zero selectors.
 The exact modular rotation rules identify every retained query. Original gate validity
 and lookup tuple membership then give masked gate division and compressed lookup
@@ -553,7 +553,7 @@ remaining boundary rows with the stated captured fixed-query values. Matching th
 values to the supplied public polynomials and connecting the concrete key's shape,
 layout, and expression conditions remain explicit obligations. The ordered compiler
 copy-list, sigma-row, and public commitment adapters are checked below. The
-public-row constructor now supplies all public polynomial degree bounds. For fixed
+public-row constructor supplies all public polynomial degree bounds. For fixed
 rows produced by the circuit compiler, a structural proof derives zero throughout
 the masked suffix from the bounds on table, constant, selector, and region writes.
 This connects six boundary rows to actual keygen and leaves a finite mask check that
@@ -566,15 +566,15 @@ Relating the supplied instance/sigma rows and public commitments to the deployed
 also remains open. The
 sampling comparison alone is not a simulator for failed attempts. The proof string's
 terminal rotations use the kernel root certificate.
-The complete typed reference proof now exposes each usable advice cell at its domain
+The complete typed reference proof exposes each usable advice cell at its domain
 challenge on every private tape. The exact mass of this joint challenge/scalar event
 separates the full reference laws of row vectors with different usable cells. Under
 wide-reduced challenges the lower bound is positive. A common exact simulator for
 those two laws is impossible. The inactive-expression certificates for both captured
-keys now allow a second valid reference witness to be constructed from any first one:
+keys allow a second valid reference witness to be constructed from any first one:
 add one to an advice cell in row 2000, assuming placement ends by row 1999 and copies
 avoid the changed row. The gate, lookup, and copy relation is preserved for the same
-public statement. The compiler refinement now computes the complete ordered V1 copy list,
+public statement. The compiler refinement computes the complete ordered V1 copy list,
 including deferred constants, and packs its endpoint coordinates into the prover's cell
 type. Re-encoding is the identity on the source list. With fifteen permutation columns,
 the checked seven/seven/one widths, and an operation footprint ending by row 1999, the
@@ -588,7 +588,7 @@ polynomials and copies from keygen; sigma coherence is derived. Original gate, l
 and copy-value validity, public size bounds, and initial selector zeros for the positive
 theorem remain premises. The Action public-input layout and compiler public-commitment
 correspondence are derived below; concrete key shape and query-layout checks remain.
-The full attempt observer now reuses the existing verifier's message schedule and
+The full attempt observer reuses the existing verifier's message schedule and
 retains encoded prefixes, received challenges, the full verifier tape, and a distinct
 status for completion, retry, or coincident opening queries. Its success criterion is
 exact: every point encodes, x is nonzero, and all round challenges are nonzero. The
@@ -596,13 +596,13 @@ x check is equivalent to distinctness of the actual interpolation node lists. No
 condition on xi or evaluation-domain membership is added. The same numerical joint
 bound holds after this observation, without conditioning on success. The generic
 interpreter also proves that appending messages after a failed prefix changes nothing.
-The full failure bound is now `(22m+45)/p + (148m+68) bias`. The pre-IPA points
+The full failure bound is `(22m+45)/p + (148m+68) bias`. The pre-IPA points
 are jointly uniform with ideal blinds, and the IPA identity bound is applied
 conditionally on the entire private prefix. The actual proof's point slots are
 covered by these families. Wide reduction and the `k+1` actual stopping challenges
 supply the stated bound, even at exceptional challenges and without row-correctness
 premises. Completion means that the emission schedule finishes, not verifier
-acceptance. The successful-view capstone now derives positive normalizers from these
+acceptance. The successful-view capstone derives positive normalizers from these
 failure and simulation bounds and proves the two-sided conditional budget
 `2 epsilon / (1 - B)`, where `B = (42904m+4158)/p + (296m+138) bias`.
 The numerical inequality `B < 1` is kernel-certified for `m <= 65535`, including
@@ -610,7 +610,7 @@ both captured Action counts; the general endpoint takes that inequality explicit
 Support certificates are proofs, not witness inputs to the simulator. Independent
 selection of completed attempts converges to this conditioned law, also for view
 types without a Fintype instance. Separately, every finite independent retry budget
-now retains all earlier failed observations, stopping on either completion or the
+retains all earlier failed observations, stopping on either completion or the
 terminal opening error and continuing only on a retry request. Its two-sided joint
 budget is `epsilon / (1 - F)`, where `F` is the honest single-attempt failure bound.
 The real and simulated exhaustion probabilities are at most `F^n` and `B^n` and
@@ -618,61 +618,62 @@ tend to zero for `B < 1`. The probability recursion is proved equal to the obser
 retry program on an independent attempt tape. The witness and statement stay fixed;
 fresh private and verifier tapes are required for each attempt. No unlimited-run
 history distribution or state-carrying caller equivalence is asserted here.
-The deterministic causality interface now proves that a causal message producer stays
+The deterministic causality interface proves that a causal message producer stays
 causal under the actual observation and failure checks. The checks use only received
 challenges. The IPA mask commitment ignores xi, z, and every round challenge; a round
 pair depends only on strictly earlier rounds. These facts hold on every private tape,
-including zero challenges and invalid openings. The complete staged schedule is now
+including zero challenges and invalid openings. The complete staged schedule is
 proved equal to the existing attempt trace, including empty blocks between consecutive
 receives. Per-stage dependency facts suffice for causality of that complete trace and
 its encoding; the final scalars require no further premise once all challenges agree.
-The complete batched decoder now preserves masks, coefficients, blinds, and the IPA
+The complete batched decoder preserves masks, coefficients, blinds, and the IPA
 suffix independently of retained-row callbacks. The corresponding full-tape proof
 fields satisfy their stage dependencies: advice ignores all challenges, lookup
 permutation points use only theta, product points use theta, beta, gamma, the linear
 mask ignores all challenges, and quotient pieces add only y. These facts establish
 the entire existing attempt prefix before x on the actual complete prover tape.
-The evaluation, multi-opening, and IPA stages now satisfy their dependencies on that
+The evaluation, multi-opening, and IPA stages satisfy their dependencies on that
 same complete tape. The eleven-round adapter uses a challenge-independent `148m+46`
 sample count and has exactly the existing wide-reduced reference-prover law. Its
 entire message schedule is causal, including the encoded prefixes and actual abort
 checks, for every fixed tape and every challenge value. The canonical scalar and point
-codecs now instantiate that observer. Each successful item has 32 bytes, and the complete
+codecs instantiate that observer. Each successful item has 32 bytes, and the complete
 reference attempt has exactly `2720+2272m` bytes. Its fresh encoded tape law is proved
 equal to the existing fresh reference distribution followed by that same observer.
 The abstract blinding lemma reduces the hiding bijection to nonidentity in a field
 module whose group and scalar field have equal finite cardinalities. The concrete
-Vesta instantiation and captured nonidentity checks are pinned separately. Concrete
-circuit and key conditions remain obligations. The readable budget `epsilon(m) < m*2^-238`
+Vesta instantiation and captured nonidentity checks are pinned separately. The generic
+results retain explicit circuit and key conditions. The readable budget `epsilon(m) < m*2^-238`
 for positive Action counts follows from the sampling bound and kernel integer arithmetic.
-The selector-support theorem now covers zero padding outside the compiler's dimensions,
-removing the former compiler-domain and fixed-column-count mask premises. The actual
+The selector-support theorem covers zero padding outside the compiler's dimensions.
+The actual
 Action specialization supplies canonical public-input rows and compiler fixed/sigma
 polynomials and copies. Its prefix, permutation count, and operation-footprint bounds
-follow from the existing Action compilation API. The four initial selector zeros and
-remaining key correspondence conditions are explicit. The actual query assembly, five
-opening groups, and both compression projections now feed the final opening assembly.
+follow from the existing Action compilation API. Its fixed-value boundary profile
+and compiler-derived key supply the masking and correspondence conditions. The actual query assembly, five
+opening groups, and both compression projections feed the final opening assembly.
 Under the stated query layout, distinct rotation points, domain, and public commitment
 conditions, its evaluated commitment and scalar equal the reference reconstruction.
 The dynamic group-count check also succeeds. For compiler-derived keys, public commitment
 agreement follows from the existing FFT and Lagrange commitment theorems, with the
-kernel-checked domain root now shared from the arithmetic layer. Shape and query layout
+kernel-checked domain root shared from the arithmetic layer. Shape and query layout
 supply all fixed and sigma column coverage and the reference domain values. The Action
 specialization derives its instance and sigma commitment equalities from the concrete
-compiler. Its configure program now determines the advice and instance queries,
+compiler. Its configure program determines the advice and instance queries,
 permutation columns, and degree-derived dimensions. Given fifteen compressed selector
 columns, it supplies the full reference key shape, fixed-query order, domain, sigma
 naming, and copy-query conditions to the opening and encoded simulation theorems.
-The full Action degree profile is now derived: the greedy packer preserves each
+The full Action degree profile is derived: the greedy packer preserves each
 selector's source-degree budget, the replacements fit their combination lengths,
 and source expression bounds survive compilation. Structural source certificates
-also survive selector substitution and the complete expression compiler. The
-remaining concrete conditions are the compression count, the routing of nine
-previous-row selectors into the four declared initial zero columns, and those
-four initial values. The full compiled masking check is derived from these facts.
+also survive selector substitution and the complete expression compiler. The checked
+sort, placement, activation trace, and greedy packing establish the compression count.
+Every previous-row guard is inactive at row zero, and its replacement polynomial
+vanishes there even when another selector shares its column. ActionBoundaryProfile
+derives the full compiled masking check from these actual fixed values.
 These equalities do not assert verifier acceptance. The concrete Action results have a
 separate census for their inherited Pallas order dependency.
-Fiat–Shamir ZK needs its own argument;
+ActionFiatShamir supplies the separate programmable classical random-oracle argument;
 Rust execution correspondence is a separate claim, outside the protocol theorem's target.
 -/
 
@@ -1974,7 +1975,7 @@ assert_axioms Zcash.Snark.ZeroKnowledge.plonkQuerySpine_points
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkQueryPattern_points
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkQueryPattern_pointIndex
 
--- The five groups, node order, and compressed commitments now follow from the query layout.
+-- The five groups, node order, and compressed commitments follow from the query layout.
 assert_computable Zcash.Snark.ZeroKnowledge.plonkCommitmentGroup
 assert_computable Zcash.Snark.ZeroKnowledge.plonkGroupPointIndices
 assert_axioms Zcash.Snark.ZeroKnowledge.plonkGroupPointIndices_eq_opening

@@ -38,6 +38,8 @@ theorem actionCircuit_permutationChunks_eq
     actionCircuit_instanceQueryLayout_eq, actionCircuit_chunkLen_eq]
   decide +kernel
 
+/-- Shape-independent key projections survive a shape cast, avoiding repeated dependent-cast proofs
+in key transport. -/
 private theorem castKey_projection {G α : Type} {source target : CircuitShape}
     (hshape : source = target) (vk : VerifyingKey source Fp G)
     (projection : (shape : CircuitShape) → VerifyingKey shape Fp G → α) :
@@ -53,6 +55,8 @@ def actionReferenceKey (urs : URS G) (hk : urs.k = 11)
     VerifyingKey (plonkProofShape actions urs.k) Fp G :=
   actionCircuit_referenceShape actions urs.k hk hpacked ▸ actionCircuit.toVerifierKey urs
 
+/-- Projecting the Action reference key recovers the compiler-derived key data, connecting public
+protocol inputs to synthesis. -/
 private theorem actionReferenceKey_projection (urs : URS G) (hk : urs.k = 11)
     (hpacked : actionCircuit.selectorMap.newFixedCols = 15) {α : Type}
     (projection : (shape : CircuitShape) → VerifyingKey shape Fp G → α) :

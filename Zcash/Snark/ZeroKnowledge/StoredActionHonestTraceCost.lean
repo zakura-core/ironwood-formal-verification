@@ -24,7 +24,6 @@ attribute [local irreducible] plonkReferenceProofFromTape plonkJointViewFromTape
     (joint.1.challenges.x.1, access) (joint.1.challenges.x1.1, access) joint.1.joint
   (⟨joint.1.raw, joint.1.challenges, trace.1⟩, joint.2 + trace.2 + 3)
 
-set_option maxHeartbeats 600000 in
 set_option maxRecDepth 10000 in
 /-- Erasing complete transcript production gives the actual reference proof's original schedule. -/
 theorem storedActionHonestTraceCosted_result (costs : FieldOperationCosts)

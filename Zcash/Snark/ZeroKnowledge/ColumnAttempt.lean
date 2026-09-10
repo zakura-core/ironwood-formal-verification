@@ -10,8 +10,8 @@ row vectors, not a claim that their contents are disclosed to the verifier.
 The supplied tape reserves the full schedule's row masks. A failed attempt leaves
 its unused suffix unread. Totalizing a failed constructor to zero is useful only
 for connecting to the existing joint simulation: successful attempts agree exactly,
-and failed attempts retain exactly a prefix of that totalized computation. Failure
-probabilities and the actual emitted messages still need a separate simulation.
+and failed attempts retain exactly a prefix of that totalized computation. PlonkAttempt
+and PlonkFailures handle the complete attempt observation and its failure probability.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

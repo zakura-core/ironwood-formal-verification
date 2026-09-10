@@ -14,7 +14,6 @@ open Halo2 Zcash.Circuits
 open Zcash.Circuits.Sinsemilla.Merkle
 open Zcash.Circuits.Sinsemilla.Merkle.CalculateRoot
 set_option maxRecDepth 8192
-set_option maxHeartbeats 500000
 set_option linter.constructorNameAsVariable false
 attribute [local irreducible] CondSwap.swap Layer.circuit circuit
 

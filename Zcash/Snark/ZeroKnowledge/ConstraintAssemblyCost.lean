@@ -152,7 +152,10 @@ def subProofConstraintCostBudget {F : Type*} (costs : FieldOperationCosts) (node
     (lookups.length * (subProofLookupCostBudget costs node access lookups + 7) + 1) +
     2 * gates.length + sets.length + chunks.length + 5
 
-set_option maxHeartbeats 1000000 in
+-- Compose the component bounds without expanding their arithmetic implementations.
+attribute [local irreducible] lookupExpressionsCosted permutationExpressionsCosted exprEvalCosted
+  mapListCosted flatMapListCosted appendListCosted subProofLookupCostBudget subProofPermutationCostBudget
+
 /-- The assembled constraint bound covers all input queries, arithmetic, routing, and list construction. -/
 theorem subProofConstraintsCosted_cost_le {F : Type*} [CommRing F] (costs : FieldOperationCosts)
     (node access : ℕ) (fixed advice instanceRead : ℕ → F × ℕ) (gates : List (Expr F))
@@ -185,6 +188,7 @@ theorem subProofConstraintsCosted_cost_le {F : Type*} [CommRing F] (costs : Fiel
       expression access hfixed hadvice hinstance).trans ?_
     exact Nat.mul_le_mul_right _ (listValue_le_map_sum exprNodeCount gates expression hmem)
   have hpermutation : permutation.2 ≤ subProofPermutationCostBudget costs access sets chunks chunkLen := by
+    unfold subProofPermutationCostBudget
     apply permutationExpressionsCosted_cost_le
     · exact hsets
     · intro chunk hmem

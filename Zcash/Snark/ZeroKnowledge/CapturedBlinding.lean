@@ -21,9 +21,13 @@ private def wCoordinates : Fixture.Fq × Fixture.Fq :=
   (Fixture.mkFq 1717098781169229941 9391284368773822048 17460343927465935640 3151557595536469694,
    Fixture.mkFq 12634180106801823127 17616494652077801376 10681407423848128824 588705027306512953)
 
+/-- The captured blinding coordinates lie on Vesta, allowing them to be interpreted as a valid group
+point. -/
 private theorem coordinates_onCurve : OnCurve Vesta.a Vesta.b wCoordinates := by
   decide +kernel
 
+/-- The captured blinding point is nonidentity, discharging the simulator's hiding-generator
+premise. -/
 private theorem point_ne_zero : Fixture.mkVestaPoint wCoordinates ≠ 0 := by
   simp only [Fixture.mkVestaPoint, coordinates_onCurve, ↓reduceDIte]
   intro hzero
@@ -31,6 +35,8 @@ private theorem point_ne_zero : Fixture.mkVestaPoint wCoordinates ≠ 0 := by
   change wCoordinates.1 = (0 : Fixture.Fq) at hx
   exact (by decide +kernel : wCoordinates.1 ≠ (0 : Fixture.Fq)) hx
 
+/-- The captured nonidentity point remains at generator position 2,048 after decoding, connecting
+coordinate data to the blinding premise. -/
 private theorem pointFromCoordinates_ne_zero (coordinates : List (Fixture.Fq × Fixture.Fq))
     (pointOf : Fixture.Fq × Fixture.Fq → Fixture.G)
     (hcoordinates : coordinates[2048]? = some wCoordinates)

@@ -83,6 +83,8 @@ theorem plonkColumnSteps_length {actions : ℕ}
     (plonkColumnSteps construct).length = 22 * actions := by
   simp [plonkColumnSteps, privateColumnOrder_length]
 
+/-- Summing a flattened list equals summing its component totals, assembling per-column randomness
+counts. -/
 private theorem sum_flatMap_nat {A : Type*} (values : List A) (f : A → List ℕ) :
     (values.flatMap f).sum = (values.map fun a => (f a).sum).sum := by
   induction values with

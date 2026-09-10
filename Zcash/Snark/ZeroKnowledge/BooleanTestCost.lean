@@ -39,6 +39,8 @@ def BooleanTestInstruction.evalCosted {Input : Type*} (read : ℕ) (input : Inpu
     let b := getDListCosted read false wires right
     (!(a.1 && b.1), a.2 + b.2 + 3)
 
+/-- Counting one Boolean instruction preserves its output bit, connecting the operational reader to
+the uncounted test. -/
 theorem BooleanTestInstruction.evalCosted_result {Input : Type*} (read : ℕ) (input : Input → Bool × ℕ)
     (wires : List Bool) (instruction : BooleanTestInstruction Input) :
     (instruction.evalCosted read input wires).1 = instruction.eval (fun address => (input address).1) wires := by
@@ -59,6 +61,8 @@ def runBooleanTestCosted {Input : Type*} (read : ℕ) (input : Input → Bool ×
     let rest := runBooleanTestCosted read input later (value.1 :: wires)
     (rest.1, value.2 + rest.2 + 3)
 
+/-- Counting an instruction sequence preserves every resulting wire, allowing the program erasure
+proof to compose. -/
 theorem runBooleanTestCosted_result {Input : Type*} (read : ℕ) (input : Input → Bool × ℕ)
     (instructions : List (BooleanTestInstruction Input)) (wires : List Bool) :
     (runBooleanTestCosted read input instructions wires).1 =
@@ -68,6 +72,8 @@ theorem runBooleanTestCosted_result {Input : Type*} (read : ℕ) (input : Input 
   | cons instruction later ih =>
     simp only [runBooleanTestCosted, runBooleanTest, ih, BooleanTestInstruction.evalCosted_result]
 
+/-- Each Boolean instruction adds one wire, supplying the wire-size invariant used by the cost
+bound. -/
 theorem runBooleanTestCosted_length {Input : Type*} (read : ℕ) (input : Input → Bool × ℕ)
     (instructions : List (BooleanTestInstruction Input)) (wires : List Bool) :
     (runBooleanTestCosted read input instructions wires).1.length = instructions.length + wires.length := by
@@ -88,6 +94,8 @@ def BooleanTestProgram.evalCosted {Input : Type*} (program : BooleanTestProgram 
   let output := getDListCosted read false wires.1 program.output
   (output.1, wires.2 + output.2 + 2)
 
+/-- The counted Boolean program returns the original test bit, connecting resource bounds to the
+PRNG observation. -/
 theorem BooleanTestProgram.evalCosted_result {Input : Type*} (program : BooleanTestProgram Input)
     (read : ℕ) (input : Input → Bool × ℕ) :
     (program.evalCosted read input).1 = program.eval (fun address => (input address).1) := by

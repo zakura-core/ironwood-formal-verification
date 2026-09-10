@@ -11,6 +11,8 @@ also read all lookup permutation columns from their preceding private history.
 
 namespace Zcash.Snark.ZeroKnowledge
 
+/-- A value first appearing in a designated list block has its index inside that block, locating
+column queries within the transcript order. -/
 private theorem idxOf_block_bounds {A : Type*} [DecidableEq A]
     (before block after : List A) (value : A) (hbefore : value ∉ before) (hblock : value ∈ block) :
     before.length ≤ (before ++ block ++ after).idxOf value ∧

@@ -12,7 +12,6 @@ def storedJointProofInputBudget (costs : FieldOperationCosts)
     (read omegaAccess rowRead xAccess points rounds : ℕ) : ℕ :=
   publicRowEvaluationCostBudget costs rowRead omegaAccess xAccess + 2 * points + 2 * rounds + read + 13
 
-set_option maxHeartbeats 600000 in
 /-- The actual stored inputs discharge every complete proof-field reader premise. -/
 theorem storedJointProofCosted_readBound (costs : FieldOperationCosts) (equal read omegaAccess : ℕ)
     {actions k : ℕ} {G : Type*} [Zero G]

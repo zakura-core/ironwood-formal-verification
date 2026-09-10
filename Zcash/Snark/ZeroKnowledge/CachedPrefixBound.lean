@@ -8,7 +8,6 @@ def cachedPrefixRunCostBudget
   (budget + 1) * (2 * historyBound + reportPrice + checkPrice + queryPrice + replyPrice +
     cacheBound * (2 * addressWidth + 5) + 25) + 1
 
-set_option maxHeartbeats 600000 in
 /-- The full online run obeys one polynomial bound on all hit, miss, and stopping branches. -/
 theorem cachedPrefixRunCosted_cost_le {Reply Value : Type}
     (report : List Reply → ℕ → Value × ℕ) (continues : Value → Bool × ℕ)

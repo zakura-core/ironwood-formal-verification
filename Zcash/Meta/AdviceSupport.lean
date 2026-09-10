@@ -24,11 +24,12 @@ callback is rejected; no native evaluator supplies a logical certificate.
 namespace Zcash.Meta
 
 set_option maxRecDepth 8192
-set_option maxHeartbeats 1000000
 
 open Lean Meta Elab Tactic
 open Halo2 Witgen Zcash.Circuits Zcash.Snark.ZeroKnowledge
 
+/-- A scalar builder depends only on its recorded reads, allowing the annotation search to certify
+scalar callbacks. -/
 private theorem scalarSupport (program : MOver Fp (AssignedCell Fp) (FExpr Fp)) :
     WitnessFunctionSupport (valueBuilderReads (value := field) program)
       (fun env => ((program.toIRScalar (Env := Placed ProverEnvironment Fp)).eval env)[0]) := by
@@ -37,12 +38,15 @@ private theorem scalarSupport (program : MOver Fp (AssignedCell Fp) (FExpr Fp)) 
   simp only [MOver.eval_toIRScalar]
   exact valueBuilderReads_eval (value := field) program left right agreement
 
+/-- Structured witness steps and their output supply a complete read set for the annotation search. -/
 private theorem structuredSupport (steps : List (StepOver Fp (AssignedCell Fp)))
     (output : VExprOver Fp (AssignedCell Fp) 1) :
     WitnessFunctionSupport (stepsWitnessReads steps ++ vectorWitnessReads output)
       (fun env => ((.ir steps output : WitgenIR Fp 1).eval env)[0]) :=
   (supportedStructuredAdvice ⟨0⟩ 0 steps output).support
 
+/-- A field-expression callback reads only the cells in its syntax, giving the annotation search its
+expression case. -/
 private theorem fieldExpressionSupport (expression : FExpr Fp) :
     WitnessFunctionSupport (fieldWitnessReads expression)
       (fun env => ((WitgenIROver.ofFExpr expression : WitgenIR Fp 1).eval env)[0]) := by

@@ -58,6 +58,8 @@ theorem plonkChallenges_bad_cover (k : ℕ) :
   · intro i
     exact hnone (.inr (.inr (.inr i)))
 
+/-- One coordinate of a uniform challenge tape hits a fixed value with probability `1/p`, pricing
+exceptional scalar values. -/
 private theorem uniformPlonkTape_atom (k : ℕ) (i : Fin (k + 11)) (value : Fp) :
     (PMF.uniformOfFintype (PlonkChallengeTape k Fp)).toOuterMeasure
       {tape | tape i = value} = 1 / scalarFieldOrder := by
@@ -66,6 +68,8 @@ private theorem uniformPlonkTape_atom (k : ℕ) (i : Fin (k + 11)) (value : Fp) 
   rw [← PMF.toOuterMeasure_map_apply, Zcash.map_eval_uniformOfFintype,
     Zcash.uniformOfFintype_toOuterMeasure_singleton, card_Fp]
 
+/-- Distinct uniform challenge coordinates satisfy a prescribed functional relation with probability
+at most `1/p`, pricing challenge collisions. -/
 private theorem uniformPlonkTape_collision (k : ℕ) (i j : Fin (k + 11)) (hij : i ≠ j)
     (f : Fp → Fp) :
     (PMF.uniformOfFintype (PlonkChallengeTape k Fp)).toOuterMeasure

@@ -6,7 +6,7 @@ import Zcash.Snark.ZeroKnowledge.PlonkProductBounds
 
 Completed sorting, preservation of gates under masking, and the packed copy-product
 identity are the remaining structural premises for numerator division. Nonzero
-denominators are separate: their probability is now bounded for the computed scans.
+denominators are separate: their probability is bounded for the computed scans.
 Keeping these events distinct exposes what is still needed from a valid Orchard
 witness and its public key without assuming that every random execution is valid.
 -/

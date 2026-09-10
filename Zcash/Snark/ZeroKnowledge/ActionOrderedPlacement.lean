@@ -266,372 +266,496 @@ section
 -- The concrete prefix contains up to 181 blocks; keep the larger depth local.
 set_option maxRecDepth 4096
 
+/-- Placement blocks 0 through 2 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk0 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 0) ((actionSortedPlacementTrace.drop 0).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 3 through 5 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk3 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 3) ((actionSortedPlacementTrace.drop 3).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 6 through 8 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk6 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 6) ((actionSortedPlacementTrace.drop 6).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 9 through 11 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk9 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 9) ((actionSortedPlacementTrace.drop 9).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 12 through 14 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk12 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 12) ((actionSortedPlacementTrace.drop 12).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 15 through 17 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk15 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 15) ((actionSortedPlacementTrace.drop 15).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 18 through 20 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk18 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 18) ((actionSortedPlacementTrace.drop 18).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 21 through 23 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk21 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 21) ((actionSortedPlacementTrace.drop 21).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 24 through 26 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk24 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 24) ((actionSortedPlacementTrace.drop 24).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 27 through 29 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk27 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 27) ((actionSortedPlacementTrace.drop 27).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 30 through 32 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk30 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 30) ((actionSortedPlacementTrace.drop 30).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 33 through 35 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk33 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 33) ((actionSortedPlacementTrace.drop 33).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 36 through 38 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk36 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 36) ((actionSortedPlacementTrace.drop 36).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 39 through 41 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk39 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 39) ((actionSortedPlacementTrace.drop 39).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 42 through 44 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk42 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 42) ((actionSortedPlacementTrace.drop 42).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 45 through 47 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk45 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 45) ((actionSortedPlacementTrace.drop 45).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 48 through 50 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk48 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 48) ((actionSortedPlacementTrace.drop 48).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 51 through 53 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk51 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 51) ((actionSortedPlacementTrace.drop 51).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 54 through 56 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk54 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 54) ((actionSortedPlacementTrace.drop 54).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 57 through 59 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk57 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 57) ((actionSortedPlacementTrace.drop 57).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 60 through 62 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk60 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 60) ((actionSortedPlacementTrace.drop 60).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 63 through 65 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk63 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 63) ((actionSortedPlacementTrace.drop 63).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 66 through 68 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk66 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 66) ((actionSortedPlacementTrace.drop 66).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 69 through 71 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk69 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 69) ((actionSortedPlacementTrace.drop 69).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 72 through 74 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk72 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 72) ((actionSortedPlacementTrace.drop 72).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 75 through 77 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk75 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 75) ((actionSortedPlacementTrace.drop 75).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 78 through 80 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk78 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 78) ((actionSortedPlacementTrace.drop 78).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 81 through 83 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk81 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 81) ((actionSortedPlacementTrace.drop 81).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 84 through 86 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk84 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 84) ((actionSortedPlacementTrace.drop 84).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 87 through 89 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk87 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 87) ((actionSortedPlacementTrace.drop 87).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 90 through 92 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk90 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 90) ((actionSortedPlacementTrace.drop 90).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 93 through 95 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk93 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 93) ((actionSortedPlacementTrace.drop 93).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 96 through 98 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk96 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 96) ((actionSortedPlacementTrace.drop 96).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 99 through 101 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk99 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 99) ((actionSortedPlacementTrace.drop 99).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 102 through 104 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk102 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 102) ((actionSortedPlacementTrace.drop 102).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 105 through 107 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk105 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 105) ((actionSortedPlacementTrace.drop 105).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 108 through 110 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk108 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 108) ((actionSortedPlacementTrace.drop 108).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 111 through 113 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk111 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 111) ((actionSortedPlacementTrace.drop 111).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 114 through 116 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk114 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 114) ((actionSortedPlacementTrace.drop 114).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 117 through 119 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk117 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 117) ((actionSortedPlacementTrace.drop 117).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 120 through 122 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk120 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 120) ((actionSortedPlacementTrace.drop 120).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 123 through 125 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk123 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 123) ((actionSortedPlacementTrace.drop 123).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 126 through 128 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk126 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 126) ((actionSortedPlacementTrace.drop 126).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 129 through 131 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk129 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 129) ((actionSortedPlacementTrace.drop 129).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 132 through 134 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk132 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 132) ((actionSortedPlacementTrace.drop 132).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 135 through 137 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk135 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 135) ((actionSortedPlacementTrace.drop 135).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 138 through 140 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk138 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 138) ((actionSortedPlacementTrace.drop 138).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 141 through 143 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk141 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 141) ((actionSortedPlacementTrace.drop 141).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 144 through 146 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk144 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 144) ((actionSortedPlacementTrace.drop 144).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 147 through 149 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk147 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 147) ((actionSortedPlacementTrace.drop 147).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 150 through 152 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk150 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 150) ((actionSortedPlacementTrace.drop 150).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 153 through 155 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk153 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 153) ((actionSortedPlacementTrace.drop 153).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 156 through 158 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk156 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 156) ((actionSortedPlacementTrace.drop 156).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 159 through 161 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk159 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 159) ((actionSortedPlacementTrace.drop 159).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 162 through 164 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk162 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 162) ((actionSortedPlacementTrace.drop 162).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 165 through 167 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk165 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 165) ((actionSortedPlacementTrace.drop 165).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 168 through 170 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk168 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 168) ((actionSortedPlacementTrace.drop 168).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 171 through 173 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk171 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 171) ((actionSortedPlacementTrace.drop 171).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 174 through 176 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk174 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 174) ((actionSortedPlacementTrace.drop 174).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 177 through 179 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk177 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 177) ((actionSortedPlacementTrace.drop 177).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 3 planner_trace_step [block]
   trivial
 
+/-- Placement blocks 180 through 180 fit lawfully after their preceding blocks. This supplies one
+segment of the complete placement certificate. -/
 private theorem traceChunk180 : PlannedSummaryBlock.TraceLawfulAfter
     (actionSortedPlacementTrace.take 180) ((actionSortedPlacementTrace.drop 180).take 3) := by
   unfold actionSortedPlacementTrace
   iterate 1 planner_trace_step [block]
   trivial
 
+/-- Consecutive lawful three-block chunks certify their whole prefix, allowing the placement proof
+to compose small certificates. -/
 private theorem lawful_take_chunks (trace : List PlannedSummaryBlock) :
     ∀ count, (∀ index : Fin count, PlannedSummaryBlock.TraceLawfulAfter
       (trace.take (3 * index.val)) ((trace.drop (3 * index.val)).take 3)) →

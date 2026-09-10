@@ -12,6 +12,8 @@ namespace Zcash.Snark.ZeroKnowledge
 
 open Halo2 Zcash.Circuits
 
+/-- The incoming-viewing-key check enables its selector at the requested row, supplying the source
+metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem commitIvkGate_regionSelectorTrace (first second : WitgenIR Fp 1) (config : CommitIvk.Config)
     (offset : ℕ) (input : Var CommitIvk.Inputs Fp) (region : RegionIndex) :
@@ -20,6 +22,8 @@ theorem commitIvkGate_regionSelectorTrace (first second : WitgenIR Fp 1) (config
   rw [FormalRegionCircuit.call_operations]
   rfl
 
+/-- Incoming-viewing-key canonicity retains both range-check traces and its final gate, supplying
+the source metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem commitIvkCanonicity_selectorTrace (first second : WitgenIR Fp 1)
     (config : CommitIvk.Config × LookupRangeCheck.Config 10)
@@ -37,6 +41,8 @@ def commitIvkPiecesSelectorTrace (config : CommitIvk.Main.Config) : List (List (
   let short := shortSelectorTrace config.lookupConfig
   [[], short, short, [], [], short, []]
 
+/-- Incoming-viewing-key message preparation retains its complete configured trace, supplying the
+source metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem commitIvkPieces_selectorTrace (config : CommitIvk.Main.Config)
     (ak nk : AssignedCell Fp) (region : RegionIndex) :
@@ -52,6 +58,8 @@ def commitIvkSelectorTrace (config : CommitIvk.Main.Config) : List (List (ℕ ×
     [runningSelectorTrace config.lookupConfig 0 13, runningSelectorTrace config.lookupConfig 0 14,
       [(config.gate.qCommitIvk.index, 0)]]
 
+/-- The complete incoming-viewing-key commitment produces its configured source trace, supplying the
+source metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem commitIvk_selectorTrace (generators : Specs.Sinsemilla.Generators) (base : Ecc.MulFixed.FixedBase)
     (point : Point Fp) (honCurve : point.OnCurve) (config : CommitIvk.Main.Config)

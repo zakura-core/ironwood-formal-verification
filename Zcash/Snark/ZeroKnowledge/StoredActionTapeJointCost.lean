@@ -48,7 +48,6 @@ theorem storedActionTapeJointCosted_challenges
     (storedActionTapeJointCosted fieldCosts ipaCosts node equal read omegaAccess inputs setup key bits).1.challenges =
       (storedPlonkSimulatorTapesCosted inputs.length 11 read bits).1.challenges := rfl
 
-set_option maxHeartbeats 400000 in
 set_option maxRecDepth 10000 in
 /-- The bit-driven joint output is exactly the original simulator on the original split tape. -/
 theorem storedActionTapeJointCosted_result

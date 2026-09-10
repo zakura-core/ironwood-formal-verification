@@ -15,9 +15,13 @@ namespace Zcash.Snark.ZeroKnowledge
 open Zcash.Arithmetic (Fp)
 open Zcash.Common
 
+/-- The first explicit index reads the head of a challenge tape, exposing the product-challenge
+prefix. -/
 private theorem cons_mk_zero {n : ℕ} {F : Type*} (first : F) (rest : Fin n → F) (h : 0 < n + 1) :
     Fin.cons (α := fun _ : Fin (n + 1) => F) first rest ⟨0, h⟩ = first := rfl
 
+/-- A successor index reads the remaining challenge tape, exposing the tail after product-challenge
+insertion. -/
 private theorem cons_mk_succ {n : ℕ} {F : Type*} (first : F) (rest : Fin n → F)
     (i : ℕ) (h : i + 1 < n + 1) :
     Fin.cons (α := fun _ : Fin (n + 1) => F) first rest ⟨i + 1, h⟩ = rest ⟨i, Nat.lt_of_succ_lt_succ h⟩ := rfl
@@ -47,12 +51,16 @@ noncomputable def widePlonkOtherChallenges (k : ℕ) : PMF (Challenges k Fp) :=
   fieldSample.bind fun theta =>
     (sampleFieldsWith (k + 8) (plonkOtherChallengesFromTape theta)).runFreshPMF fieldSample
 
+/-- Sampling splits into three independent leading fields and the remaining tape, isolating theta,
+beta, and gamma for the product bound. -/
 private theorem sampleFieldsWith_run_three {A : Type*} (count : ℕ)
     (finish : (Fin (count + 3) → Fp) → A) (law : PMF Fp) :
     (sampleFieldsWith (count + 3) finish).runFreshPMF law =
       law.bind fun first => law.bind fun second => law.bind fun third =>
         (sampleFieldsWith count (fun rest => finish (Fin.cons first (Fin.cons second (Fin.cons third rest))))).runFreshPMF law := rfl
 
+/-- A two-field sampler is exactly two independent draws, identifying the joint product-challenge
+law. -/
 private theorem sampleFieldsWith_run_two {A : Type*} (finish : (Fin 2 → Fp) → A) (law : PMF Fp) :
     (sampleFieldsWith 2 finish).runFreshPMF law =
       law.bind fun first => law.bind fun second => PMF.pure (finish (Fin.cons first (Fin.cons second Fin.elim0))) := rfl

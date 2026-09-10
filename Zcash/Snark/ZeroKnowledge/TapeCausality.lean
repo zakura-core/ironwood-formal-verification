@@ -21,6 +21,8 @@ def TapeAgrees {F : Type*} {m n : ℕ} (left : Fin m → F) (right : Fin n → F
 theorem TapeAgrees.eq {F : Type*} {n : ℕ} {left right : Fin n → F}
     (h : TapeAgrees left right) : left = right := funext fun i => h i i rfl
 
+/-- Splitting tapes with a common prefix length preserves agreement of both pieces, supporting
+staged randomness causality. -/
 private theorem split_agrees {F : Type*} {m n m' n' : ℕ}
     (left : Fin (m + n) → F) (right : Fin (m' + n') → F)
     (hm : m = m') (h : TapeAgrees left right) :
@@ -33,16 +35,22 @@ private theorem split_agrees {F : Type*} {m n m' n' : ℕ}
   · intro i j hij
     exact h _ _ (congrArg (m + ·) hij)
 
+/-- Joining tapes preserves every prefix read, identifying the leading coins in a composed sampling
+program. -/
 private theorem join_left {F : Type*} {m n : ℕ}
     (first : Fin m → F) (rest : Fin n → F) (i : Fin m) :
     (splitTapeEquiv m n F).symm (first, rest) (Fin.castAdd n i) = first i :=
   congrArg (fun parts => parts.1 i) ((splitTapeEquiv m n F).apply_symm_apply (first, rest))
 
+/-- Joining tapes preserves every shifted tail read, identifying later coins in a composed sampling
+program. -/
 private theorem join_right {F : Type*} {m n : ℕ}
     (first : Fin m → F) (rest : Fin n → F) (i : Fin n) :
     (splitTapeEquiv m n F).symm (first, rest) (Fin.natAdd m i) = rest i :=
   congrArg (fun parts => parts.2 i) ((splitTapeEquiv m n F).apply_symm_apply (first, rest))
 
+/-- Joining agreeing tape pieces preserves agreement of the complete tape, allowing stagewise
+causality proofs to compose. -/
 private theorem join_agrees {F : Type*} {m n m' n' : ℕ}
     (first : Fin m → F) (rest : Fin n → F)
     (first' : Fin m' → F) (rest' : Fin n' → F)
@@ -65,6 +73,8 @@ private theorem join_agrees {F : Type*} {m n m' n' : ℕ}
     rw [ha, hb, join_right, join_right]
     exact hrest a b (by dsimp [a, b]; omega)
 
+/-- Prepending equal samples to agreeing tails preserves tape agreement, supplying the sampling
+induction step. -/
 private theorem cons_agrees {F : Type*} {n n' : ℕ} (first first' : F)
     (rest : Fin n → F) (rest' : Fin n' → F)
     (hfirst : first = first') (hrest : TapeAgrees rest rest') :
@@ -118,6 +128,8 @@ theorem columnCoinEquiv_shape_congr {n : ℕ} (left right : List (ColumnStep n))
       exact ⟨join_agrees _ _ _ _ (congrArg (n - ·) hfirst) hsplit.1 hlater.1,
         cons_agrees _ _ _ _ (hnext.1 0 0 rfl) hlater.2⟩
 
+/-- Reassembling column coins separates the first column from the rest, exposing the exact row-mask
+and commitment-blind allocation. -/
 private theorem columnCoinEquiv_cons_symm_apply {n : ℕ}
     (step : ColumnStep n) (rest : List (ColumnStep n))
     (rows : Fin (columnRowSampleCount (step :: rest)) → Fp)
@@ -160,6 +172,8 @@ theorem columnCoinEquiv_symm_shape_congr {n : ℕ} (left right : List (ColumnSte
       exact join_agrees _ _ _ _ (congrArg (n - ·) hfirst) hsplit.1
         (join_agrees _ _ _ _ rfl hhead hlater)
 
+/-- Casting tape lengths preserves indexed agreement, transporting causality across equivalent tape
+shapes. -/
 private theorem casts_agree {F : Type*} {m n m' n' : ℕ}
     (hsize : m = n) (hsize' : m' = n')
     (left : Fin m → F) (right : Fin m' → F) (h : TapeAgrees left right) :

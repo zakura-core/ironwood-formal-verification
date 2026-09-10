@@ -40,7 +40,6 @@ theorem storedActionHistoryTraceCosted_readBound (costs : FieldOperationCosts)
   unfold storedActionHistoryTraceCosted
   exact storedHistoryChallengesCosted_readBound read history
 
-set_option maxHeartbeats 600000 in
 set_option maxRecDepth 10000 in
 /-- Source erasure is the original complete reference proof on the same private tape and raw history. -/
 theorem storedActionHistoryTraceCosted_result (costs : FieldOperationCosts)

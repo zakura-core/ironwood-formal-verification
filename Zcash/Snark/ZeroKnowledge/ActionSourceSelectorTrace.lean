@@ -36,6 +36,8 @@ def actionChecksSelectorTrace (config : Circuit.Config) : List (List (ℕ × ℕ
         mulConfig := config.eccConfig.mulFixedFull, addConfig := config.eccConfig.add } ++
     addressIntegritySelectorTrace (config.eccConfig.mul, config.eccConfig.witnessPoint)
 
+/-- Action checks produce their configured trace independently of witness values, supplying the
+source metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem actionSynthChecks_selectorTrace (generators : Specs.Sinsemilla.Generators) (bases : Circuit.Bases)
     (witness : Circuit.Witnesses Fp) (config : Circuit.Config) (cells : Circuit.WitnessCells) (region : RegionIndex) :
@@ -45,6 +47,8 @@ theorem actionSynthChecks_selectorTrace (generators : Specs.Sinsemilla.Generator
   simp only [Circuit.synthChecksProgram, selector_trace_norm,
     actionChecksSelectorTrace, List.cons_append, List.append_assoc]
 
+/-- The Orchard checks enable the Orchard selector at row zero, supplying the source metadata for
+Action selector coverage. -/
 @[selector_trace_norm]
 theorem actionOrchardChecks_regionSelectorTrace (config : Circuit.Config)
     (cells : Circuit.WitnessCells) (checks : Circuit.CheckCells) (region : RegionIndex) :
@@ -63,6 +67,8 @@ def actionNotesSelectorTrace (config : Circuit.Config) : List (List (ℕ × ℕ)
         mulConfig := config.eccConfig.mulFixedFull, addConfig := config.eccConfig.add } ++
     [[(config.qOrchard.index, 0)]]
 
+/-- The note stages produce their configured traces independently of witness values, supplying the
+source metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem actionSynthNotes_selectorTrace (generators : Specs.Sinsemilla.Generators) (bases : Circuit.Bases)
     (witness : Circuit.Witnesses Fp) (config : Circuit.Config) (cells : Circuit.WitnessCells)
@@ -77,6 +83,8 @@ theorem actionSynthNotes_selectorTrace (generators : Specs.Sinsemilla.Generators
 def actionBaseSelectorTrace (config : Circuit.Config) : List (List (ℕ × ℕ)) :=
   actionWitnessSelectorTrace config ++ actionChecksSelectorTrace config ++ actionNotesSelectorTrace config
 
+/-- Base Action synthesis produces the composed checks-and-notes trace, supplying the source
+metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem actionSynthesizeBase_selectorTrace (generators : Specs.Sinsemilla.Generators) (bases : Circuit.Bases)
     (witness : Circuit.Witnesses Fp) (config : Circuit.Config) (region : RegionIndex) :
@@ -85,6 +93,8 @@ theorem actionSynthesizeBase_selectorTrace (generators : Specs.Sinsemilla.Genera
   simp only [Circuit.synthesizeBase, selector_trace_norm, actionBaseSelectorTrace,
     actionWitnessSelectorTrace, List.append_assoc]
 
+/-- Calling the base Action circuit preserves its complete source trace, supplying the source
+metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem actionBaseCall_selectorTrace (generators : Specs.Sinsemilla.Generators) (bases : Circuit.Bases)
     (config : Circuit.Config) (input : Var unit Fp) (region : RegionIndex) :
@@ -94,12 +104,16 @@ theorem actionBaseCall_selectorTrace (generators : Specs.Sinsemilla.Generators) 
   change selectorTrace ((Circuit.synthesizeBase generators bases Circuit.hintWitnesses config).operations region) = _
   exact actionSynthesizeBase_selectorTrace _ _ _ _ _
 
+/-- A cross-address check enables the Orchard selector at its requested row, supplying the source
+metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem actionCrossAddressRow_regionSelectorTrace (config : Circuit.Config)
     (oldCell newCell : AssignedCell Fp) (row : ℕ) (region : RegionIndex) :
     regionSelectorTrace ((Circuit.synthCrossAddressRow config oldCell newCell row).operations region) =
       [(config.qOrchard.index, row)] := rfl
 
+/-- Cross-address checks retain the four successive Orchard activations, supplying the source
+metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem actionCrossAddress_selectorTrace (config : Circuit.Config)
     (points : Var Circuit.AddressPoints Fp) (region : RegionIndex) :
@@ -111,6 +125,8 @@ theorem actionCrossAddress_selectorTrace (config : Circuit.Config)
 def actionSourceSelectorTrace (config : Circuit.Config) : List (List (ℕ × ℕ)) :=
   actionBaseSelectorTrace config ++ [selectorRowRun config.qOrchard.index 0 4]
 
+/-- The complete Action source produces the composed base and cross-address traces, supplying the
+source metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem actionMainPost_selectorTrace (generators : Specs.Sinsemilla.Generators) (bases : Circuit.Bases)
     (config : Circuit.Config) (input : Var unit Fp) (region : RegionIndex) :

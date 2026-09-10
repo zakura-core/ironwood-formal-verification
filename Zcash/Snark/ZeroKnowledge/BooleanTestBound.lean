@@ -7,6 +7,8 @@ def BooleanTestInstruction.inputCost {Input : Type*} (price : Input → ℕ) : B
   | .input address => price address
   | _ => 0
 
+/-- One Boolean instruction fits its input-read budget plus wire-access overhead, supplying the
+per-instruction program bound. -/
 theorem BooleanTestInstruction.evalCosted_cost_le {Input : Type*} (read : ℕ)
     (input : Input → Bool × ℕ) (price : Input → ℕ) (hinput : ∀ address, (input address).2 ≤ price address)
     (wires : List Bool) (cap : ℕ) (hcap : wires.length ≤ cap) (instruction : BooleanTestInstruction Input) :
@@ -47,6 +49,8 @@ def BooleanTestProgram.costBudget {Input : Type*} (program : BooleanTestProgram 
     program.instructions.length * (4 * program.instructions.length + 2 * read + 8) +
     2 * program.instructions.length + read + 4
 
+/-- The complete Boolean test fits its declared budget when each input reader does, proving the test
+component of reduction admissibility. -/
 theorem BooleanTestProgram.evalCosted_cost_le {Input : Type*} (program : BooleanTestProgram Input)
     (read : ℕ) (input : Input → Bool × ℕ) (price : Input → ℕ)
     (hinput : ∀ address, (input address).2 ≤ price address) :

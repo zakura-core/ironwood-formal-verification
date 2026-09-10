@@ -1,7 +1,5 @@
-import Zcash.Meta.SourceListCertificate
-import Zcash.Snark.ZeroKnowledge.LookupActivationCoverage
-import Zcash.Snark.ZeroKnowledge.ActionOrderedStarts
-import Zcash.Snark.ZeroKnowledge.ActionSourceSelectorTrace
+import Zcash.Snark.ZeroKnowledge.ActionLookupSourceChunks.Chunk081
+import Zcash.Meta.KernelRfl
 
 /-!
 # Lookup activations from the original Action source
@@ -15,30 +13,15 @@ namespace Zcash.Snark.ZeroKnowledge
 open Halo2 Zcash.Circuits Zcash.Circuits.Action
 
 set_option maxRecDepth 50000
-set_option maxHeartbeats 0
-set_option Zcash.sourceCertificate.chunkSteps 64
-set_option stderrAsMessages false
-set_option trace.Zcash.sourceListCertificate true
 
-/-- Original lookup activations at the source-certified Action placement. -/
-def actionLookupSourceLabels : List (ℕ × ℕ) :=
-  operationSourceLookupLabels (fun region => actionRegionStartsCertificate.getD region 0)
-    ((Circuit.mainPost Specs.Sinsemilla.orchardGenerators orchardBases actionConfig ()).operations 0) 0
-
-/-- The normalized source expression retains the actual complete lookup schedule. -/
-theorem actionLookupSourceLabels_eq :
-    actionLookupSourceLabels = sourceLookupActivationLabels actionCircuit.placement actionCircuit.operations 0 := by
-  change actionLookupSourceLabels = sourceLookupActivationLabels
-    (fun region => actionCircuit.regionStarts.getD region 0) actionCircuit.operations 0
-  rw [actionCircuit_regionStarts_eq_certificate, Internal.actionCircuit_eq_impl]
-  unfold actionLookupSourceLabels
-  rw [operationSourceLookupLabels_eq]
-  rfl
+/-- The complete lookup continuation leaves no source operations unchecked. -/
+private theorem lookup_remainder_empty : actionLookupSourceChunk081.remaining = [] := by
+  kernel_rfl
 
 /-- Kernel-checked reflection of all original Action lookup activations. -/
-noncomputable def actionLookupSourceCertificateRaw : SourceListCertificate actionLookupSourceLabels := by
-  unfold actionLookupSourceLabels
-  certify_source_list
+noncomputable def actionLookupSourceCertificateRaw : SourceListCertificate actionLookupSourceLabels :=
+  actionLookupSourceChunk081.finish <|
+    SourceListCertificate.transport lookup_remainder_empty.symm SourceListCertificate.nil
 
 /-- The same normalized metadata explicitly indexed by the actual Action circuit. -/
 noncomputable def actionLookupActivationSourceCertificate :

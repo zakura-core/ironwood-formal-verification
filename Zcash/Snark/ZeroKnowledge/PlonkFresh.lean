@@ -54,8 +54,9 @@ noncomputable def freshPlonkInvalidRowMass {actions : ℕ} (urs : URS G)
 
 /-- Joint simulation with no row-correctness or fixed-good-challenge premise.
 
-The two remaining exceptional probabilities still need bounds for the actual row
-algorithms and selected challenge law. No exceptional execution is conditioned away. -/
+The bound retains the two exceptional probabilities for the supplied row algorithms
+and challenge law. PlonkFreshBounds and PlonkConstructedSimulation bound those terms
+for the reference construction without conditioning away exceptional executions. -/
 theorem freshPlonkVerifier_simulation_error_bound {actions : ℕ} (urs : URS G)
     (law : PMF (Challenges urs.k Fp))
     (construct : Challenges urs.k Fp → PrivateColumnId actions → ColumnHistory 2048 → (Fin 2048 → Fp))

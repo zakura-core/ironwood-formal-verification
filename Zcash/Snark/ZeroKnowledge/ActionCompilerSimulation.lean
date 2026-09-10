@@ -1,6 +1,6 @@
 import Zcash.Snark.ZeroKnowledge.ActionGateDegree
 import Zcash.Snark.ZeroKnowledge.ActionBoundaryProfile
-import Zcash.Snark.ZeroKnowledge.ActionSimulation
+import Zcash.Snark.ZeroKnowledge.VestaSimulation
 import Zcash.Snark.ZeroKnowledge.ActionCommitments
 import Zcash.Snark.ZeroKnowledge.ActionCompressionCertificate
 

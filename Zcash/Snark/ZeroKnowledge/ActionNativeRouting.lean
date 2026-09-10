@@ -19,7 +19,6 @@ namespace Zcash.Snark.ZeroKnowledge
 open Halo2 Zcash.Circuits Zcash.Circuits.Action
 
 set_option maxRecDepth 8192
-set_option maxHeartbeats 800000
 
 /-- The original multiplication call uses the certified main region and unannotated overflow regions. -/
 theorem actionMulCall_nativeCopiesSound (place : RegionIndex → ℕ)

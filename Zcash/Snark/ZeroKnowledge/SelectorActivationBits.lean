@@ -69,6 +69,8 @@ theorem selectorActivationBits_size (rows selectors : ℕ) (activations : List (
         simp
   simpa [selectorActivationBits] using hsize (Array.replicate selectors 0)
 
+/-- Setting a packed selector bit decodes to setting the corresponding Boolean row, connecting
+compact certificates to compiler tables. -/
 private theorem decode_modify {rows : ℕ} (table : Array (BitVec rows)) (selector row : ℕ) :
     (table.modify selector (fun bits => bits ||| ((1 : BitVec rows) <<< row))).map selectorBitsRows =
       (table.map selectorBitsRows).modify selector (fun values => values.set! row true) := by
@@ -81,6 +83,8 @@ private theorem decode_modify {rows : ℕ} (table : Array (BitVec rows)) (select
       exact selectorBitsRows_or_row _ row
     · simp [Array.getElem_modify, heq]
 
+/-- Applying every packed activation and then decoding equals updating the Boolean table directly,
+transporting the complete activation certificate. -/
 private theorem decode_fold {rows : ℕ} (table : Array (BitVec rows))
     (activations : List (ℕ × ℕ)) :
     (activations.foldl (fun current activation =>

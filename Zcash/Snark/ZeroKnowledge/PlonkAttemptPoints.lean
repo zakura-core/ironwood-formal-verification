@@ -15,10 +15,14 @@ open Zcash.Arithmetic (Fp scalarFieldOrder URS)
 open Zcash.Common
 open scoped ENNReal
 
+/-- Permutation evaluations contain no point messages, isolating the point commitment used in
+query-uniqueness arguments. -/
 private theorem point_not_mem_absorbPermSet {F G : Type*} (point : G) (evals : PermSetEval F) :
     TranscriptElt.point point ∉ absorbPermSet evals := by
   cases h : evals.lastEval <;> simp [absorbPermSet, h]
 
+/-- Lookup evaluations contain no point messages, isolating the point commitment used in
+query-uniqueness arguments. -/
 private theorem point_not_mem_absorbLookup {F G : Type*} (point : G) (evals : LookupEval F) :
     TranscriptElt.point point ∉ absorbLookup evals := by
   simp [absorbLookup]

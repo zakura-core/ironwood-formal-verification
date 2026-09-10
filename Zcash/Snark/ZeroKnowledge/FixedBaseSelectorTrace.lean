@@ -12,6 +12,8 @@ namespace Zcash.Snark.ZeroKnowledge
 
 open Halo2 Zcash.Circuits
 
+/-- Incomplete addition enables its selector at the requested row, supplying the source metadata for
+Action selector coverage. -/
 @[selector_trace_norm]
 theorem incompleteAdd_regionSelectorTrace (config : Ecc.AddIncomplete.Config) (offset : ℕ)
     (input : Var Ecc.AddIncomplete.Inputs Fp) (region : RegionIndex) :
@@ -20,6 +22,8 @@ theorem incompleteAdd_regionSelectorTrace (config : Ecc.AddIncomplete.Config) (o
   rw [FormalRegionCircuit.call_operations]
   rfl
 
+/-- Running-sum decomposition enables its range selector on every requested row, supplying the
+source metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem decomposeEnable_regionSelectorTrace (width : ℕ) (config : DecomposeRunningSum.Config)
     (offset count : ℕ) (region : RegionIndex) :
@@ -28,6 +32,8 @@ theorem decomposeEnable_regionSelectorTrace (width : ℕ) (config : DecomposeRun
   simp only [DecomposeRunningSum.enableLoop, selector_trace_norm,
     DecomposeRunningSum.rangeCheckGate_selector, selectorRowRun, Nat.mul_one]
 
+/-- Assigning running-sum witnesses adds no selector activations, supplying the source metadata for
+Action selector coverage. -/
 @[selector_trace_norm]
 theorem decomposeAssign_regionSelectorTrace (width : ℕ) (config : DecomposeRunningSum.Config)
     (input : AssignedCell Fp) (offset count : ℕ) (region : RegionIndex) :
@@ -35,6 +41,8 @@ theorem decomposeAssign_regionSelectorTrace (width : ℕ) (config : DecomposeRun
   simp only [DecomposeRunningSum.assignLoop, selector_trace_norm, List.ofFn_const,
     List.flatten_replicate_nil]
 
+/-- Copy-and-decompose uses the same successive range-selector activations, supplying the source
+metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem copyDecompose_regionSelectorTrace (width count : ℕ) (config : DecomposeRunningSum.Config)
     (offset : ℕ) (input : Var DecomposeRunningSum.Inputs Fp) (region : RegionIndex) :
@@ -44,12 +52,16 @@ theorem copyDecompose_regionSelectorTrace (width count : ℕ) (config : Decompos
   change regionSelectorTrace ((DecomposeRunningSum.body width count config offset input).operations region) = _
   simp only [DecomposeRunningSum.body, selector_trace_norm]
 
+/-- One fixed-base constant window enables the supplied selector at its row, supplying the source
+metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem fixedConstantsWindow_regionSelectorTrace (toggle : Gate Fp) (base : Ecc.MulFixed.FixedBaseData)
     (config : Ecc.MulFixed.Config) (index row : ℕ) (region : RegionIndex) :
     regionSelectorTrace ((Ecc.MulFixed.fixedConstantsWindow toggle base config index row).operations region) =
       [(toggle.selector.index, row)] := rfl
 
+/-- The fixed-base constant loop enables the supplied selector on successive rows, supplying the
+source metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem fixedConstantsLoop_regionSelectorTrace (toggle : Gate Fp) (base : Ecc.MulFixed.FixedBaseData)
     (config : Ecc.MulFixed.Config) (offset count : ℕ) (region : RegionIndex) :
@@ -57,6 +69,8 @@ theorem fixedConstantsLoop_regionSelectorTrace (toggle : Gate Fp) (base : Ecc.Mu
       selectorRowRun toggle.selector.index offset count := by
   simp only [Ecc.MulFixed.fixedConstantsLoop, selector_trace_norm, selectorRowRun, Nat.mul_one]
 
+/-- Computing a fixed-base witness window adds no selector activations, supplying the source
+metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem fixedWindow_regionSelectorTrace (base : Ecc.MulFixed.FixedBaseData)
     (table : ℕ → ℕ → Point Fp) (config : Ecc.MulFixed.Config) (input : AssignedCell Fp)
@@ -77,6 +91,8 @@ theorem fixedWindowChain_regionSelectorTrace (config : Ecc.MulFixed.Config)
   simp only [Ecc.MulFixed.windowChain, Ecc.MulFixed.windowChainStep, selector_trace_norm,
     hprocess, fixedWindowChainSelectorTrace, selectorRowRun, Nat.mul_one]
 
+/-- Computing a hinted full-width window adds no selector activations, supplying the source metadata
+for Action selector coverage. -/
 @[selector_trace_norm]
 theorem fullWidthWindow_regionSelectorTrace (base : Ecc.MulFixed.FixedBaseData)
     (config : Ecc.MulFixed.FullWidth.Config)
@@ -84,6 +100,8 @@ theorem fullWidthWindow_regionSelectorTrace (base : Ecc.MulFixed.FixedBaseData)
     (index row : ℕ) (region : RegionIndex) :
     regionSelectorTrace ((Ecc.MulFixed.FullWidth.processWindowH base config windows index row).operations region) = [] := rfl
 
+/-- Full-width scalar witnessing enables its selector across all 85 windows, supplying the source
+metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem fullWidthScalar_regionSelectorTrace (config : Ecc.MulFixed.FullWidth.Config)
     (windows : Vector (Witgen.MOver Fp (AssignedCell Fp) (FExpr Fp)) 85)
@@ -100,6 +118,8 @@ def fullWidthInnerSelectorTrace (config : Ecc.MulFixed.FullWidth.Config) (offset
     selectorRowRun config.qMulFixedFull.index offset 85 ++
     fixedWindowChainSelectorTrace config.superConfig offset 85
 
+/-- The full-width inner region produces its configured activation trace, supplying the source
+metadata for Action selector coverage. -/
 @[selector_trace_norm]
 theorem fullWidthInner_regionSelectorTrace (base : Ecc.MulFixed.FixedBaseData)
     (config : Ecc.MulFixed.FullWidth.Config) (offset : ℕ)

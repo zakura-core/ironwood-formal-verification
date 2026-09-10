@@ -62,6 +62,9 @@ theorem lookupSortedPrefixes_correct (usable : ℕ) (input table : ℕ → Fp) (
   · intro i hpos hi
     exact lookupSortColumns_run _ _ _ b t 0 hsort i hpos (by omega)
 
+/-- Successful lookup sorting and nonzero denominator factors make the constructed row constraints
+vanish. The supplied expression and neighbor-row equalities connect the sorter to the verifier
+formulas. -/
 theorem lookupExpressions_zero_of_sort
     (usable row : ℕ) (input table : ℕ → Fp) (b t : List Fp)
     (hsort : lookupSortedPrefixes usable input table = some (b, t))

@@ -81,6 +81,8 @@ The default build includes this development and its trust census.
 
 - [REVIEW.md](REVIEW.md): theorem index, exact bounds, assumptions, and review evidence.
 - [PROGRAMS.md](PROGRAMS.md): executable programs and the resource model.
+- [Computability boundary](../../../book/src/formal-verification/zero-knowledge.md):
+  operational reductions and static proof artifacts.
 - [TrustBoundary.lean](TrustBoundary.lean) and [Action/TrustBoundary.lean](Action/TrustBoundary.lean):
   checked axiom dependencies.
 

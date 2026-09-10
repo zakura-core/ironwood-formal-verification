@@ -100,6 +100,8 @@ def observeProtocolTrace {G : Type*} (pointCodec : G → Option (List UInt8))
       let result := observeProtocolTrace pointCodec scalarCodec challenges afterChallenge (next + 1) rest
       ⟨result.proof, challenges next :: result.received, result.status⟩
 
+/-- Checking a consecutive challenge range separates its first check from the rest, enabling
+induction over observed prefixes. -/
 private theorem challenge_checks_succ (check : ℕ → Option ProverAttemptFailure) (next n : ℕ) :
     (∀ j < 1 + n, check (next + j) = none) ↔
       check next = none ∧ ∀ j < n, check (next + 1 + j) = none := by

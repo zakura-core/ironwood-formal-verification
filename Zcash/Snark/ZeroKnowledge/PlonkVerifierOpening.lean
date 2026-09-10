@@ -4,7 +4,7 @@ import Zcash.Snark.ZeroKnowledge.MultiopenAssembly
 /-!
 # The actual verifier opening equals the reference reconstruction
 
-The complete query assembly, grouping, and both compression projections now
+The complete query assembly, grouping, and both compression projections
 feed the existing final multi-opening combination. Equality concerns the
 evaluated commitment and scalar; the two MSM representations may differ.
 -/

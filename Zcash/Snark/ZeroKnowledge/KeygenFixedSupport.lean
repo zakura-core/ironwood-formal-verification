@@ -14,6 +14,8 @@ namespace Zcash.Snark.ZeroKnowledge
 
 open Halo2
 
+/-- A table column fitting the usable rows assigns nothing beyond them, protecting masked boundary
+rows. -/
 private theorem tableColumnAssignment_row_lt {F : Type}
     (usable column : ℕ) (values : List F) (hvalues : values.length ≤ usable)
     {assignment : Layout.FixedAssignment F}
@@ -32,6 +34,8 @@ private theorem tableColumnAssignment_row_lt {F : Type}
       change (first :: rest).length + row < usable
       omega
 
+/-- Table loads fitting the usable rows stay within them, lifting the boundary-support result to
+synthesis operations. -/
 private theorem tableAssignment_row_lt {F : Type}
     (usable : ℕ) (operations : Operations F)
     (hloads : ∀ table values, .loadTable table values ∈ operations → values.length ≤ usable)
@@ -51,6 +55,8 @@ private theorem tableAssignment_row_lt {F : Type}
               (hloads table values (by simp)) hcurrent
           · exact ih (fun table values hload => hloads table values (by simp [hload])) hrest
 
+/-- Every region fixed assignment precedes the placement end, connecting compiler layout to
+fixed-column support. -/
 private theorem regionAssignment_row_lt_placementEnd {F : Type}
     (operations : Operations F) {assignment : Layout.FixedAssignment F}
     (hassignment : assignment ∈

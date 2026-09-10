@@ -28,17 +28,23 @@ def plonkCompilerPublicPolynomials {actions : ℕ}
     (fun a row => (top.publicInputRows (inputs a) ⟨0⟩).getD row.val 0)
     (plonkKeygenSigmaRows top)
 
+/-- A shape cast preserves fixed-query layout, transporting the compiler layout to the reference
+key. -/
 private theorem castKey_fixedLayout {s t : CircuitShape} (h : s = t)
     (vk : VerifyingKey s Fp G) : (h ▸ vk).fixedQueryLayout = vk.fixedQueryLayout := by
   cases h
   rfl
 
+/-- A shape cast preserves each fixed commitment, transporting the compiler commitment equation to
+the reference key. -/
 private theorem castKey_fixedCommitment {s t : CircuitShape} (h : s = t)
     (vk : VerifyingKey s Fp G) (column : ℕ) :
     (h ▸ vk).fixedCommitment column = vk.fixedCommitment column := by
   cases h
   rfl
 
+/-- A shape cast preserves sigma commitments at corresponding indices, transporting permutation
+commitments to the reference key. -/
 private theorem castKey_sigmaCommitment {s t : CircuitShape} (h : s = t)
     (vk : VerifyingKey s Fp G) (column : Fin t.numPermutationColumns) :
     (h ▸ vk).permutationCommonCommitment column =
@@ -47,11 +53,15 @@ private theorem castKey_sigmaCommitment {s t : CircuitShape} (h : s = t)
   cases h
   rfl
 
+/-- A shape cast preserves the evaluation-domain size, transporting the compiler domain fact to the
+reference key. -/
 private theorem castKey_n {s t : CircuitShape} (h : s = t) (vk : VerifyingKey s Fp G) :
     (h ▸ vk).n = vk.n := by
   cases h
   rfl
 
+/-- A shape cast preserves the domain root, transporting the compiler scalar fact to the reference
+key. -/
 private theorem castKey_omega {s t : CircuitShape} (h : s = t) (vk : VerifyingKey s Fp G) :
     (h ▸ vk).omega = vk.omega := by
   cases h

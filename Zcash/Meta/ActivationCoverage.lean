@@ -1,5 +1,7 @@
 import Zcash.Snark.ZeroKnowledge.ActivationCoverageData
 import Zcash.Snark.ZeroKnowledge.GateIndexedCoverage
+import Zcash.Snark.ZeroKnowledge.SourceListCertificate
+import Zcash.Snark.ZeroKnowledge.CoverageTreePiece
 import Zcash.Meta.SourceReduction
 import Zcash.Meta.CertificateChunks
 
@@ -23,11 +25,75 @@ private def checkedCoverageData (original : Expr) : MetaM (Expr × Expr) := do
   if normalized.hasMVar then throwError "unresolved coverage data"
   let name ← mkAuxDeclName
   let stored ← withOptions (Elab.async.set · false) do
-    mkAuxDefinition name (← inferType original) normalized (compile := false)
+    -- Expand local let bindings while closing the value. The synchronous
+    -- kernel checks the exact type and equality without a duplicate meta check
+    -- of the growing tree's constructor proofs.
+    mkAuxDefinition name (← inferType original) normalized
+      (zetaDelta := true) (compile := false)
   let checked ← withOptions (Elab.async.set · false) do
-    mkAuxTheorem (← mkEq original stored) equality
+    mkAuxTheorem (← mkEq original stored) equality (zetaDelta := true)
   resetCache
   return (stored, checked)
+
+/-- Store one complete metadata list with a checked equality to its original source.
+Separate declarations let each normalization use the default elaboration budget. -/
+elab "certify_coverage_data" : tactic => withMainContext do
+  let goal ← getMainGoal
+  let target ← instantiateMVars (← goal.getType)
+  unless target.isAppOf ``SourceListCertificate do
+    throwError "expected a SourceListCertificate goal"
+  let source := target.getAppArgs.back!
+  let (entries, equality) ← checkedCoverageData source
+  goal.assign (← mkAppM ``SourceListCertificate.mk #[entries, ← mkEqSymm equality])
+  replaceMainGoal []
+
+/-- Check a bounded tree-construction prefix and retain its exact remaining fold. -/
+elab "certify_coverage_tree_piece " limit:num : tactic =>
+  withOptions (fun options => options.setBool `smartUnfolding false) <| withMainContext do
+    let goal ← getMainGoal
+    let target ← instantiateMVars (← goal.getType)
+    unless target.isAppOf ``CoverageTreePiece do
+      throwError "expected a CoverageTreePiece goal"
+    let arguments := target.getAppArgs
+    let comparison := arguments[arguments.size - 3]!
+    let source := arguments[arguments.size - 2]!
+    let initial := arguments.back!
+    let elementType := (← inferType source).getAppArgs[0]!
+    let mut entries := source
+    let mut pieceEntries : Array Expr := #[]
+    for _ in [:limit.getNat] do
+      let reduced ← withTransparency .all (whnf entries)
+      if reduced.isAppOf ``List.nil then
+        entries := reduced
+        break
+      unless reduced.isAppOf ``List.cons do
+        throwError "coverage labels do not reduce to a list"
+      let arguments := reduced.getAppArgs
+      pieceEntries := pieceEntries.push arguments[1]!
+      entries := arguments[2]!
+    let piece ← mkListLit elementType pieceEntries.toList
+    let appended ← mkAppM ``List.append #[piece, entries]
+    let hentries ← withOptions (Elab.async.set · false) do
+      mkAuxTheorem (← mkEq source appended) (← mkEqRefl source)
+    let initialData ← SourceReduction.reduceConstructorData initial
+    let (tree, hstep) ← checkedCoverageData
+      (← mkAppM ``coverageTreeFold #[comparison, piece, initialData])
+    let finish ← withLocalDeclD `final (← inferType initial) fun final => do
+      let remaining ← mkEq
+        (mkAppN (mkConst ``coverageTreeFold) #[elementType, comparison, entries, tree]) final
+      withLocalDeclD `remaining remaining fun hrest => do
+        let proof := mkAppN (mkConst ``coverageTreeFold_chunk)
+          #[elementType, comparison, source, piece, entries, initial, tree, final,
+            hentries, hstep, hrest]
+        mkLambdaFVars #[final, hrest] proof
+    let record := mkAppN (mkConst ``CoverageTreePiece.mk)
+      (arguments ++ #[entries, tree, finish])
+    let stored ← withOptions (Elab.async.set · false) do
+      mkAuxDefinition (← mkAuxDeclName) target record (zetaDelta := true) (compile := false)
+    goal.assign stored
+    if ← isTracingEnabledFor `Zcash.activationCoverage then
+      IO.eprintln s!"[coverage tree piece] {← Term.getDeclName?}: checked {pieceEntries.size} entries; remainder empty: {entries.isAppOf ``List.nil}"
+    replaceMainGoal []
 
 private def coverageAllTarget (predicate entries : Expr) : MetaM Expr := do
   mkEq (← mkAppM ``coverageListAll #[predicate, entries]) (mkConst ``Bool.true)
@@ -101,6 +167,17 @@ private def checkedCoverageAll (predicate originalEntries : Expr) : MetaM Expr :
       IO.eprintln s!"[activation coverage] kernel checked configured entry {count + 1}"
   throwError "coverage entry limit reached"
 
+/-- Check every configured predicate against separately certified metadata and tree data. -/
+elab "check_coverage_predicates" : tactic => withMainContext do
+  let goal ← getMainGoal
+  let target ← instantiateMVars (← goal.getType)
+  let some (_, lhs, rhs) := target.eq? | throwError "expected a coverage conjunction equality"
+  unless lhs.isAppOf ``coverageListAll && rhs.isConstOf ``Bool.true do
+    throwError "expected coverageListAll ... = true"
+  let arguments := lhs.getAppArgs
+  goal.assign (← checkedCoverageAll arguments[arguments.size - 2]! arguments.back!)
+  replaceMainGoal []
+
 /-- Certify the full original tree scan through stored data and separately checked configured entries. -/
 elab "check_activation_coverage" : tactic =>
   withOptions (fun options => options.setBool `smartUnfolding false) <| withMainContext do
@@ -116,7 +193,11 @@ elab "check_activation_coverage" : tactic =>
     let originalActivations := arguments[1]!
     let originalLabels := arguments[2]!
     let (entries, hentries) ← checkedCoverageData originalEntries
+    if ← isTracingEnabledFor `Zcash.activationCoverage then
+      IO.eprintln "[activation coverage] kernel checked normalized configured entries"
     let (activations, hactivations) ← checkedCoverageData originalActivations
+    if ← isTracingEnabledFor `Zcash.activationCoverage then
+      IO.eprintln "[activation coverage] kernel checked normalized activations"
     let (labels, hlabels) ← checkedCoverageData originalLabels
     if ← isTracingEnabledFor `Zcash.activationCoverage then
       IO.eprintln "[activation coverage] kernel checked all normalized input lists"

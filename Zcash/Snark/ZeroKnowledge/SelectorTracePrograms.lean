@@ -32,12 +32,16 @@ attribute [selector_trace_norm]
 
 variable {F α β : Type}
 
+/-- Flattening region-program lists preserves their concatenated activation traces, supporting
+generated loop normal forms. -/
 @[selector_trace_norm]
 theorem regionSelectorTrace_flatten (bodies : List (RegionOperations F)) :
     regionSelectorTrace bodies.flatten = (bodies.map regionSelectorTrace).flatten := by
   simp only [List.flatten_eq_flatMap, regionSelectorTrace_flatMap, List.flatMap_map]
   rfl
 
+/-- Flattening synthesis-program lists preserves region order, supporting generated loop normal
+forms. -/
 @[selector_trace_norm]
 theorem selectorTrace_flatten (bodies : List (Operations F)) :
     selectorTrace bodies.flatten = (bodies.map selectorTrace).flatten := by

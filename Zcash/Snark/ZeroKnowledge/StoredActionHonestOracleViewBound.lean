@@ -16,7 +16,6 @@ def storedActionHonestOracleViewCostBudget (costs : FieldOperationCosts)
       (storedPlonkProverTapeReadBudget actions read)
       (2 * (22 + fieldSampleCount actions) + read + 5) + 3
 
-set_option maxHeartbeats 600000 in
 set_option maxRecDepth 10000 in
 /-- The complete raw oracle view has one fixed polynomial envelope for every input tape and stopping branch. -/
 theorem storedActionHonestOracleViewCosted_cost_le_fixed

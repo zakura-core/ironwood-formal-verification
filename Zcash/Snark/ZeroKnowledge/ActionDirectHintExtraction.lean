@@ -12,7 +12,6 @@ Scalar windows and Merkle readings have separate extraction bridges.
 namespace Zcash.Snark.ZeroKnowledge
 open Halo2 Zcash.Circuits Zcash.Circuits.Action
 set_option maxRecDepth 8192
-set_option maxHeartbeats 800000
 set_option linter.constructorNameAsVariable false
 
 /-- Every directly loaded Action field and point retains its original hint value. -/

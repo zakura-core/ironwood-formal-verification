@@ -469,16 +469,22 @@ private def output22 : Array RegionShape := #[r 302 s29, r 346 s29, r 244 s9, r 
     s6, r 158 s10, r 246 s10, r 30 s6, r 62 s6, r 254 s10, r 262 s10, r 118 s6, r 134 s6, r 206 s10, r 280
     s15, r 375 s15, r 328 s15, r 268 s15, r 290 s15, r 275 s21, r 377 s44, r 330 s32, r 297 s27]
 
+/-- The sorting subproblem on `input0` produces `output0`, certifying this node of the source-order
+sorting proof. -/
 private theorem sortNode0 :
     Pdqsort.recurse 394 input0 (fun (left right : RegionShape) => left.key < right.key)
       none 9 true true = output0 := by
   kernel_rfl
 
+/-- The sorting subproblem on `input1` produces `output1`, certifying this node of the source-order
+sorting proof. -/
 private theorem sortNode1 :
     Pdqsort.recurse 393 input1 (fun (left right : RegionShape) => left.key < right.key)
       (some (r 244 s9)) 8 false false = output1 := by
   kernel_rfl
 
+/-- The partition step on `input2` makes the stated recursive calls. Keeping the recursion arbitrary
+lets the sorting proof compose child certificates. -/
 private theorem stepSpec2
     (rec : Array RegionShape → Option RegionShape → Nat → Bool → Bool → Array RegionShape) :
     Pdqsort.recurseStep rec input2 (fun (left right : RegionShape) => left.key < right.key)
@@ -497,12 +503,16 @@ private theorem stepSpec2
     149 s9, r 124 s4, r 125 s4, r 148 s9] ++ rec input1 (some (r 244 s9)) 8 false false := by
   kernel_rfl
 
+/-- The sorting subproblem on `input2` produces `output2`, certifying this node of the source-order
+sorting proof. -/
 private theorem sortNode2 :
     Pdqsort.recurse 394 input2 (fun (left right : RegionShape) => left.key < right.key)
       (some (r 244 s9)) 9 false false = output2 := by
   rw [Pdqsort.recurse, stepSpec2, sortNode1]
   kernel_rfl
 
+/-- The partition step on `input3` makes the stated recursive calls. Keeping the recursion arbitrary
+lets the sorting proof compose child certificates. -/
 private theorem stepSpec3
     (rec : Array RegionShape → Option RegionShape → Nat → Bool → Bool → Array RegionShape) :
     Pdqsort.recurseStep rec input3 (fun (left right : RegionShape) => left.key < right.key)
@@ -510,17 +520,23 @@ private theorem stepSpec3
       rec input0 none 9 true true ++ #[r 244 s9] ++ rec input2 (some (r 244 s9)) 9 false false := by
   kernel_rfl
 
+/-- The sorting subproblem on `input3` produces `output3`, certifying this node of the source-order
+sorting proof. -/
 private theorem sortNode3 :
     Pdqsort.recurse 395 input3 (fun (left right : RegionShape) => left.key < right.key)
       none 9 true true = output3 := by
   rw [Pdqsort.recurse, stepSpec3, sortNode0, sortNode2]
   kernel_rfl
 
+/-- The sorting subproblem on `input4` produces `output4`, certifying this node of the source-order
+sorting proof. -/
 private theorem sortNode4 :
     Pdqsort.recurse 392 input4 (fun (left right : RegionShape) => left.key < right.key)
       (some (r 54 s6)) 9 true true = output4 := by
   kernel_rfl
 
+/-- The partition step on `input5` makes the stated recursive calls. Keeping the recursion arbitrary
+lets the sorting proof compose child certificates. -/
 private theorem stepSpec5
     (rec : Array RegionShape → Option RegionShape → Nat → Bool → Bool → Array RegionShape) :
     Pdqsort.recurseStep rec input5 (fun (left right : RegionShape) => left.key < right.key)
@@ -531,27 +547,37 @@ private theorem stepSpec5
     s10] ++ rec input4 (some (r 54 s6)) 9 true true := by
   kernel_rfl
 
+/-- The sorting subproblem on `input5` produces `output5`, certifying this node of the source-order
+sorting proof. -/
 private theorem sortNode5 :
     Pdqsort.recurse 393 input5 (fun (left right : RegionShape) => left.key < right.key)
       (some (r 54 s6)) 9 true true = output5 := by
   rw [Pdqsort.recurse, stepSpec5, sortNode4]
   kernel_rfl
 
+/-- The sorting subproblem on `input6` produces `output6`, certifying this node of the source-order
+sorting proof. -/
 private theorem sortNode6 :
     Pdqsort.recurse 392 input6 (fun (left right : RegionShape) => left.key < right.key)
       (some (r 55 s7)) 9 true true = output6 := by
   kernel_rfl
 
+/-- The sorting subproblem on `input7` produces `output7`, certifying this node of the source-order
+sorting proof. -/
 private theorem sortNode7 :
     Pdqsort.recurse 390 input7 (fun (left right : RegionShape) => left.key < right.key)
       (some (r 299 s22)) 9 true true = output7 := by
   kernel_rfl
 
+/-- The sorting subproblem on `input8` produces `output8`, certifying this node of the source-order
+sorting proof. -/
 private theorem sortNode8 :
     Pdqsort.recurse 389 input8 (fun (left right : RegionShape) => left.key < right.key)
       (some (r 282 s16)) 9 true false = output8 := by
   kernel_rfl
 
+/-- The partition step on `input9` makes the stated recursive calls. Keeping the recursion arbitrary
+lets the sorting proof compose child certificates. -/
 private theorem stepSpec9
     (rec : Array RegionShape → Option RegionShape → Nat → Bool → Bool → Array RegionShape) :
     Pdqsort.recurseStep rec input9 (fun (left right : RegionShape) => left.key < right.key)
@@ -560,12 +586,16 @@ private theorem stepSpec9
     267 s14, r 291 s16, r 329 s16, r 293 s16] ++ rec input8 (some (r 282 s16)) 9 true false := by
   kernel_rfl
 
+/-- The sorting subproblem on `input9` produces `output9`, certifying this node of the source-order
+sorting proof. -/
 private theorem sortNode9 :
     Pdqsort.recurse 390 input9 (fun (left right : RegionShape) => left.key < right.key)
       (some (r 282 s16)) 9 true false = output9 := by
   rw [Pdqsort.recurse, stepSpec9, sortNode8]
   kernel_rfl
 
+/-- The partition step on `input10` makes the stated recursive calls. Keeping the recursion
+arbitrary lets the sorting proof compose child certificates. -/
 private theorem stepSpec10
     (rec : Array RegionShape → Option RegionShape → Nat → Bool → Bool → Array RegionShape) :
     Pdqsort.recurseStep rec input10 (fun (left right : RegionShape) => left.key < right.key)
@@ -574,12 +604,16 @@ private theorem stepSpec10
     := by
   kernel_rfl
 
+/-- The sorting subproblem on `input10` produces `output10`, certifying this node of the
+source-order sorting proof. -/
 private theorem sortNode10 :
     Pdqsort.recurse 391 input10 (fun (left right : RegionShape) => left.key < right.key)
       (some (r 299 s22)) 9 true false = output10 := by
   rw [Pdqsort.recurse, stepSpec10, sortNode7, sortNode9]
   kernel_rfl
 
+/-- The partition step on `input11` makes the stated recursive calls. Keeping the recursion
+arbitrary lets the sorting proof compose child certificates. -/
 private theorem stepSpec11
     (rec : Array RegionShape → Option RegionShape → Nat → Bool → Bool → Array RegionShape) :
     Pdqsort.recurseStep rec input11 (fun (left right : RegionShape) => left.key < right.key)
@@ -588,12 +622,16 @@ private theorem stepSpec11
     326 s22] ++ rec input10 (some (r 299 s22)) 9 true false := by
   kernel_rfl
 
+/-- The sorting subproblem on `input11` produces `output11`, certifying this node of the
+source-order sorting proof. -/
 private theorem sortNode11 :
     Pdqsort.recurse 392 input11 (fun (left right : RegionShape) => left.key < right.key)
       (some (r 299 s22)) 9 true false = output11 := by
   rw [Pdqsort.recurse, stepSpec11, sortNode10]
   kernel_rfl
 
+/-- The partition step on `input12` makes the stated recursive calls. Keeping the recursion
+arbitrary lets the sorting proof compose child certificates. -/
 private theorem stepSpec12
     (rec : Array RegionShape → Option RegionShape → Nat → Bool → Bool → Array RegionShape) :
     Pdqsort.recurseStep rec input12 (fun (left right : RegionShape) => left.key < right.key)
@@ -602,12 +640,16 @@ private theorem stepSpec12
     := by
   kernel_rfl
 
+/-- The sorting subproblem on `input12` produces `output12`, certifying this node of the
+source-order sorting proof. -/
 private theorem sortNode12 :
     Pdqsort.recurse 393 input12 (fun (left right : RegionShape) => left.key < right.key)
       (some (r 55 s7)) 9 true false = output12 := by
   rw [Pdqsort.recurse, stepSpec12, sortNode6, sortNode11]
   kernel_rfl
 
+/-- The partition step on `input13` makes the stated recursive calls. Keeping the recursion
+arbitrary lets the sorting proof compose child certificates. -/
 private theorem stepSpec13
     (rec : Array RegionShape → Option RegionShape → Nat → Bool → Bool → Array RegionShape) :
     Pdqsort.recurseStep rec input13 (fun (left right : RegionShape) => left.key < right.key)
@@ -615,27 +657,37 @@ private theorem stepSpec13
       rec input12 (some (r 55 s7)) 9 true false ++ #[r 54 s6] ++ rec input5 (some (r 54 s6)) 9 true true := by
   kernel_rfl
 
+/-- The sorting subproblem on `input13` produces `output13`, certifying this node of the
+source-order sorting proof. -/
 private theorem sortNode13 :
     Pdqsort.recurse 394 input13 (fun (left right : RegionShape) => left.key < right.key)
       (some (r 55 s7)) 9 true true = output13 := by
   rw [Pdqsort.recurse, stepSpec13, sortNode5, sortNode12]
   kernel_rfl
 
+/-- The sorting subproblem on `input14` produces `output14`, certifying this node of the
+source-order sorting proof. -/
 private theorem sortNode14 :
     Pdqsort.recurse 392 input14 (fun (left right : RegionShape) => left.key < right.key)
       (some (r 344 s41)) 9 true true = output14 := by
   kernel_rfl
 
+/-- The sorting subproblem on `input15` produces `output15`, certifying this node of the
+source-order sorting proof. -/
 private theorem sortNode15 :
     Pdqsort.recurse 391 input15 (fun (left right : RegionShape) => left.key < right.key)
       (some (r 98 s5)) 9 true true = output15 := by
   kernel_rfl
 
+/-- The sorting subproblem on `input16` produces `output16`, certifying this node of the
+source-order sorting proof. -/
 private theorem sortNode16 :
     Pdqsort.recurse 390 input16 (fun (left right : RegionShape) => left.key < right.key)
       (some (r 248 s8)) 8 false false = output16 := by
   kernel_rfl
 
+/-- The partition step on `input17` makes the stated recursive calls. Keeping the recursion
+arbitrary lets the sorting proof compose child certificates. -/
 private theorem stepSpec17
     (rec : Array RegionShape → Option RegionShape → Nat → Bool → Bool → Array RegionShape) :
     Pdqsort.recurseStep rec input17 (fun (left right : RegionShape) => left.key < right.key)
@@ -646,12 +698,16 @@ private theorem stepSpec17
     (some (r 248 s8)) 8 false false := by
   kernel_rfl
 
+/-- The sorting subproblem on `input17` produces `output17`, certifying this node of the
+source-order sorting proof. -/
 private theorem sortNode17 :
     Pdqsort.recurse 391 input17 (fun (left right : RegionShape) => left.key < right.key)
       (some (r 248 s8)) 9 false false = output17 := by
   rw [Pdqsort.recurse, stepSpec17, sortNode16]
   kernel_rfl
 
+/-- The partition step on `input18` makes the stated recursive calls. Keeping the recursion
+arbitrary lets the sorting proof compose child certificates. -/
 private theorem stepSpec18
     (rec : Array RegionShape → Option RegionShape → Nat → Bool → Bool → Array RegionShape) :
     Pdqsort.recurseStep rec input18 (fun (left right : RegionShape) => left.key < right.key)
@@ -660,12 +716,16 @@ private theorem stepSpec18
     := by
   kernel_rfl
 
+/-- The sorting subproblem on `input18` produces `output18`, certifying this node of the
+source-order sorting proof. -/
 private theorem sortNode18 :
     Pdqsort.recurse 392 input18 (fun (left right : RegionShape) => left.key < right.key)
       (some (r 98 s5)) 9 true false = output18 := by
   rw [Pdqsort.recurse, stepSpec18, sortNode15, sortNode17]
   kernel_rfl
 
+/-- The partition step on `input19` makes the stated recursive calls. Keeping the recursion
+arbitrary lets the sorting proof compose child certificates. -/
 private theorem stepSpec19
     (rec : Array RegionShape → Option RegionShape → Nat → Bool → Bool → Array RegionShape) :
     Pdqsort.recurseStep rec input19 (fun (left right : RegionShape) => left.key < right.key)
@@ -674,12 +734,16 @@ private theorem stepSpec19
     := by
   kernel_rfl
 
+/-- The sorting subproblem on `input19` produces `output19`, certifying this node of the
+source-order sorting proof. -/
 private theorem sortNode19 :
     Pdqsort.recurse 393 input19 (fun (left right : RegionShape) => left.key < right.key)
       (some (r 98 s5)) 9 true false = output19 := by
   rw [Pdqsort.recurse, stepSpec19, sortNode14, sortNode18]
   kernel_rfl
 
+/-- The partition step on `input20` makes the stated recursive calls. Keeping the recursion
+arbitrary lets the sorting proof compose child certificates. -/
 private theorem stepSpec20
     (rec : Array RegionShape → Option RegionShape → Nat → Bool → Bool → Array RegionShape) :
     Pdqsort.recurseStep rec input20 (fun (left right : RegionShape) => left.key < right.key)
@@ -696,12 +760,16 @@ private theorem stepSpec20
     s5)) 9 true false := by
   kernel_rfl
 
+/-- The sorting subproblem on `input20` produces `output20`, certifying this node of the
+source-order sorting proof. -/
 private theorem sortNode20 :
     Pdqsort.recurse 394 input20 (fun (left right : RegionShape) => left.key < right.key)
       (some (r 98 s5)) 9 true false = output20 := by
   rw [Pdqsort.recurse, stepSpec20, sortNode19]
   kernel_rfl
 
+/-- The partition step on `input21` makes the stated recursive calls. Keeping the recursion
+arbitrary lets the sorting proof compose child certificates. -/
 private theorem stepSpec21
     (rec : Array RegionShape → Option RegionShape → Nat → Bool → Bool → Array RegionShape) :
     Pdqsort.recurseStep rec input21 (fun (left right : RegionShape) => left.key < right.key)
@@ -709,12 +777,16 @@ private theorem stepSpec21
       rec input20 (some (r 98 s5)) 9 true false ++ #[r 55 s7] ++ rec input13 (some (r 55 s7)) 9 true true := by
   kernel_rfl
 
+/-- The sorting subproblem on `input21` produces `output21`, certifying this node of the
+source-order sorting proof. -/
 private theorem sortNode21 :
     Pdqsort.recurse 395 input21 (fun (left right : RegionShape) => left.key < right.key)
       (some (r 98 s5)) 9 true false = output21 := by
   rw [Pdqsort.recurse, stepSpec21, sortNode13, sortNode20]
   kernel_rfl
 
+/-- The partition step on `input22` makes the stated recursive calls. Keeping the recursion
+arbitrary lets the sorting proof compose child certificates. -/
 private theorem stepSpec22
     (rec : Array RegionShape → Option RegionShape → Nat → Bool → Bool → Array RegionShape) :
     Pdqsort.recurseStep rec input22 (fun (left right : RegionShape) => left.key < right.key)
@@ -722,6 +794,8 @@ private theorem stepSpec22
       rec input3 none 9 true true ++ #[r 98 s5] ++ rec input21 (some (r 98 s5)) 9 true false := by
   kernel_rfl
 
+/-- The sorting subproblem on `input22` produces `output22`, certifying this node of the
+source-order sorting proof. -/
 private theorem sortNode22 :
     Pdqsort.recurse 396 input22 (fun (left right : RegionShape) => left.key < right.key)
       none 9 true true = output22 := by
@@ -729,10 +803,14 @@ private theorem sortNode22 :
   kernel_rfl
 
 
+/-- The retained sorting input is exactly the indexed source shapes, binding the sorting certificate
+to synthesis. -/
 private theorem input_eq_source :
     (indexRegionSummaries 0 actionOrderedRegionShapes).toArray = input22 := by
   kernel_rfl
 
+/-- The 395-region sort uses the stated recursion budget and initial flags, connecting the concrete
+certificate to the public sorter. -/
 private theorem quicksort_eq_recurse (values : Array RegionShape) (hsize : values.size = 395) :
     Pdqsort.quicksort values (fun left right => left.key < right.key) =
       Pdqsort.recurse 396 values (fun left right => left.key < right.key) none 9 true true := by

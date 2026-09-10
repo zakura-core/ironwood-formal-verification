@@ -31,7 +31,6 @@ def storedActionHonestOracleViewCosted (costs : FieldOperationCosts)
     (storedDigestPrefixCosted 22 read produced.1.raw) produced.1.trace
   (observed.1, produced.2 + observed.2 + 3)
 
-set_option maxHeartbeats 1000000 in
 set_option maxRecDepth 10000 in
 /-- Every stored bit tape gives exactly the original real prover's raw oracle view, including failures. -/
 theorem storedActionHonestOracleViewCosted_result

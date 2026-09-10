@@ -14,6 +14,8 @@ namespace Zcash.Snark.ZeroKnowledge
 
 open Halo2
 
+/-- Multiplying by linear factors increases the degree by at most their count, bounding selector
+replacement polynomials. -/
 private theorem foldl_mul_degree_le {F : Type} (factors : List (Expression F Query))
     (accumulator : Expression F Query) (hlinear : ∀ factor ∈ factors, factor.degree ≤ 1) :
     (factors.foldl (· * ·) accumulator).degree ≤ accumulator.degree + factors.length := by

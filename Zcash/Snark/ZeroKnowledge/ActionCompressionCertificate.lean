@@ -78,15 +78,21 @@ def actionSelectorBitsCertificate : Array (BitVec 2048) :=
 private def certifiedActivations : List (ℕ × ℕ) :=
   placeSelectorTrace actionRegionStartsCertificate (actionSourceSelectorTrace actionConfig)
 
+/-- The ordered source trace equals the retained activation list, connecting the compact certificate
+to synthesis. -/
 private theorem orderedActivations_eq : actionOrderedSelectorActivations = certifiedActivations :=
   congrArg (fun starts => placeSelectorTrace starts (actionSourceSelectorTrace actionConfig))
     actionOrderedRegionStarts_eq_certificate
 
 set_option maxRecDepth 16384 in
+/-- The source certificate contains 6,795 activations, fixing the count consumed by
+selector-compression bounds. -/
 private theorem certifiedActivations_length : certifiedActivations.length = 6795 := by
   kernel_rfl
 
 set_option maxRecDepth 16384 in
+/-- The retained activations produce the certified selector bits, connecting source placement to
+compression. -/
 private theorem certifiedActivations_bits :
     selectorActivationBits 2048 56 certifiedActivations = actionSelectorBitsCertificate := by
   kernel_rfl

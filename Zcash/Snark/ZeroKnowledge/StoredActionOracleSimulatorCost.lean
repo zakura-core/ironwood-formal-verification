@@ -32,7 +32,6 @@ def storedActionOracleSimulatorCosted (fieldCosts : FieldOperationCosts) (ipaCos
   let programmed := programOracleViewCosted cache view.1
   (programmed.1, initial.2 + view.2 + programmed.2 + 4)
 
-set_option maxHeartbeats 1000000 in
 set_option maxRecDepth 10000 in
 /-- Erasing costs gives exactly `actionOracleSimulatorFromBits` with the actual Action compiler and codecs. -/
 theorem storedActionOracleSimulatorCosted_result

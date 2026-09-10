@@ -24,12 +24,16 @@ def getOptionListCosted {α : Type*} (read : ℕ) : List α → ℕ → Option �
     let value := getOptionListCosted read rest index
     (value.1, value.2 + 2)
 
+/-- The counted list reader preserves optional indexing, including missing entries, connecting
+stored input access to its specification. -/
 theorem getOptionListCosted_result {α : Type*} (read : ℕ) (values : List α) (index : ℕ) :
     (getOptionListCosted read values index).1 = values[index]? := by
   induction values generalizing index with
   | nil => rfl
   | cons value later ih => cases index <;> simp only [getOptionListCosted, ih, List.getElem?_cons_zero, List.getElem?_cons_succ]
 
+/-- Optional list access has cost linear in the requested index, supplying the stored-view reader
+budget. -/
 theorem getOptionListCosted_cost_le {α : Type*} (read : ℕ) (values : List α) (index : ℕ) :
     (getOptionListCosted read values index).2 ≤ 2 * index + read + 2 := by
   induction values generalizing index with

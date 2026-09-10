@@ -13,6 +13,8 @@ namespace Zcash.Snark.ZeroKnowledge
 
 open Zcash.Arithmetic (Fp)
 
+/-- The duplicate-query check is equivalent to uniqueness of commitment-ID and point pairs, exposing
+the combinatorial acceptance condition. -/
 private theorem queryPairs_nodup {k : ℕ} {F G : Type*} [DecidableEq F]
     (queries : List (VerifierQuery k F G)) :
     hasDuplicateCommitmentPoint queries = false ↔
@@ -23,6 +25,8 @@ private theorem queryPairs_nodup {k : ℕ} {F G : Type*} [DecidableEq F]
     simp [hasDuplicateCommitmentPoint, List.nodup_cons, ih, List.mem_map,
       Prod.mk.injEq, List.any_eq_false]
 
+/-- The first Action's query spine has no repeated ID-point pair, supplying the base case for
+multi-Action query uniqueness. -/
 private theorem firstActionQueryPairs : (plonkPerActionQuerySpine 0).Nodup := by
   decide +kernel
 

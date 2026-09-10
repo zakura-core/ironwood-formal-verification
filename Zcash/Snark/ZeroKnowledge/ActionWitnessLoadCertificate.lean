@@ -21,7 +21,6 @@ namespace Zcash.Snark.ZeroKnowledge
 open Halo2 Zcash.Circuits Zcash.Circuits.Action
 
 set_option maxRecDepth 50000
-set_option maxHeartbeats 4000000
 
 /-- Certified reads for every original instruction in the initial witness-loading stage. -/
 noncomputable def actionWitnessLoadSourceCertificate : AdviceSourceCertificate (F := Fp)

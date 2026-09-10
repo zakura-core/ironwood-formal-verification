@@ -21,7 +21,6 @@ def storedActionHonestFieldTraceCostBudget (costs : FieldOperationCosts)
     (storedActionHonestInputBudget actions challengeRead read) key ch +
     preparation + 8 * actions * actions + (72 * actions + 85) * access + 1300 * actions + 2199
 
-set_option maxHeartbeats 600000 in
 set_option maxRecDepth 10000 in
 /-- Every stored private field tape obeys the same concrete polynomial transcript-production envelope. -/
 theorem storedActionHonestFieldTraceCosted_cost_le

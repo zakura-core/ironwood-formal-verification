@@ -45,7 +45,6 @@ theorem storedActionTapeTraceCosted_challenge_repricing
   have h := (storedPlonkSimulatorTapesCosted_readBound inputs.length 11 read bits).1
   exact ⟨h.2.2.2.2.1, h.2.2.2.2.2.1⟩
 
-set_option maxHeartbeats 1000000 in
 set_option maxRecDepth 10000 in
 /-- The bit-driven transcript is exactly the original flat-tape simulator's complete schedule. -/
 theorem storedActionTapeTraceCosted_result

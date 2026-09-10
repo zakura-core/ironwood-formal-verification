@@ -12,10 +12,13 @@ def storedActionRecordedRetryCosted (observation : Option ProverAttemptResult ×
   let decision := oracleRetryRequestedCosted observation.1
   (decision.1, decision.2 + 1)
 
+/-- The counted recorded-Action retry check preserves the original stopping decision, connecting the
+stored runner to the retry experiment. -/
 theorem storedActionRecordedRetryCosted_result (observation : Option ProverAttemptResult × ActionRetryOracleState) :
     (storedActionRecordedRetryCosted observation).1 = oracleRetryRequested observation.1 :=
   oracleRetryRequestedCosted_result observation.1
 
+/-- The recorded-Action retry check costs at most six units, supplying the loop's stopping overhead. -/
 theorem storedActionRecordedRetryCosted_cost_le (observation : Option ProverAttemptResult × ActionRetryOracleState) :
     (storedActionRecordedRetryCosted observation).2 ≤ 6 :=
   Nat.add_le_add_right (oracleRetryRequestedCosted_cost_le observation.1) 1

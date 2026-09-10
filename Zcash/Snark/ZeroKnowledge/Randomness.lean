@@ -29,8 +29,12 @@ def fieldSampleCount (actions : ℕ) : ℕ := 148 * actions + 46
 /-- Each field sample consumes eight 64-bit words. -/
 def wordSampleCount (actions : ℕ) : ℕ := 8 * fieldSampleCount actions
 
+/-- One Action consumes 1,552 private 64-bit words, fixing the concrete single-attempt randomness
+example. -/
 theorem wordSampleCount_one : wordSampleCount 1 = 1552 := rfl
 
+/-- Two Actions consume 2,736 private 64-bit words, checking the linear randomness count at a second
+instance. -/
 theorem wordSampleCount_two : wordSampleCount 2 = 2736 := rfl
 
 /-- The implemented field conversion under independent uniform input bits. -/

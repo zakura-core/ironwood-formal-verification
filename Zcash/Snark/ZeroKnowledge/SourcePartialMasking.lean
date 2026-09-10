@@ -19,20 +19,28 @@ def partialProductValue (left right : Option F) : Option F :=
   if left = some 0 then some 0 else if right = some 0 then some 0
   else left.bind fun x => right.map (x * ·)
 
+/-- Two known partial factors produce their ordinary product, supplying the fully available
+expression case. -/
 @[simp]
 theorem partialProductValue_some (left right : F) :
     partialProductValue (some left) (some right) = some (left * right) := by
   by_cases hleft : left = 0 <;> by_cases hright : right = 0 <;>
     simp [partialProductValue, hleft, hright]
 
+/-- A known zero left factor fixes the product even when the other factor is unavailable, justifying
+selector-masked reads. -/
 @[simp]
 theorem partialProductValue_zero_left (right : Option F) :
     partialProductValue (some 0) right = some 0 := by simp [partialProductValue]
 
+/-- A known zero right factor fixes the product even when the other factor is unavailable,
+justifying selector-masked reads. -/
 @[simp]
 theorem partialProductValue_zero_right (left : Option F) :
     partialProductValue left (some 0) = some 0 := by simp [partialProductValue]
 
+/-- A known scalar either annihilates the product or scales the available value, exposing the
+partial evaluator's scalar case. -/
 theorem partialProductValue_scalar_right (left : Option F) (right : F) :
     partialProductValue left (some right) =
       if right = 0 then some 0 else left.map (· * right) := by
@@ -40,6 +48,8 @@ theorem partialProductValue_scalar_right (left : Option F) (right : F) :
   | none => by_cases hright : right = 0 <;> simp [partialProductValue, hright]
   | some left => by_cases hright : right = 0 <;> simp [hright]
 
+/-- Multiplication by negative one preserves availability and negates the value, connecting the
+partial evaluator to expression negation. -/
 theorem partialProductValue_neg_one (right : Option F) :
     partialProductValue (some (-1)) right = right.map Neg.neg := by
   cases right with

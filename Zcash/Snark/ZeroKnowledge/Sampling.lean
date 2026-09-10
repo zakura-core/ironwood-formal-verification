@@ -10,8 +10,8 @@ one-sample reduction bias. The continuation may include commitments, Fiat–Sham
 serialization, and errors. Consequently this comparison does not silently condition on
 successful proving, nor does it idealize the hash function.
 
-The continuation still needs to be instantiated with, and related to, the honest prover.
-The bound below is the sampler-composition lemma, not an assertion that this has happened.
+The bound below is the generic sampler-composition lemma. PlonkSampling instantiates
+the sampling comparison for the complete reference prover.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

@@ -22,7 +22,6 @@ attribute [local irreducible] plonkReferenceProofFromTape plonkJointViewFromTape
     (ch.x.1, challengeRead) (ch.x1.1, challengeRead) joint.1
   (trace.1, joint.2 + trace.2 + 2)
 
-set_option maxHeartbeats 600000 in
 set_option maxRecDepth 10000 in
 /-- The complete stored field computation erases to the original private-tape reference proof. -/
 theorem storedActionHonestFieldTraceCosted_result (costs : FieldOperationCosts)

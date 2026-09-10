@@ -1,5 +1,6 @@
 import Zcash.Snark.ZeroKnowledge.ActionQueryValuation
 import Zcash.Snark.ZeroKnowledge.ActionSelectorMasking
+import Zcash.Snark.ZeroKnowledge.ActionSourceMasking
 import Zcash.Snark.ZeroKnowledge.InactiveGateCompleteness
 
 /-!

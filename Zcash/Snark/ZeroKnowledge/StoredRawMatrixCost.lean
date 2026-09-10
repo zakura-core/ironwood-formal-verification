@@ -10,6 +10,8 @@ def rawMatrixBitsEquiv (rows columns : ℕ) :
     ((Equiv.arrowCongr finProdFinEquiv.symm (Equiv.refl (Fin challengeDigestCard))).trans
       (Equiv.curry (Fin rows) (Fin columns) (Fin challengeDigestCard)))
 
+/-- A raw matrix cell reads the corresponding row-major word, connecting stored bit packing to the
+finite tape model. -/
 theorem rawMatrixBitsEquiv_apply (rows columns : ℕ)
     (bits : Fin ((rows * columns) * 512) → Bool) (row : Fin rows) (column : Fin columns) :
     rawMatrixBitsEquiv rows columns bits row column =
@@ -60,6 +62,8 @@ def storedRawMatrixCostBudget (rows columns read bitLength : ℕ) : ℕ :=
   words * (512 * (2 * bitLength + read + 4) + 264195) + words * words + 1 +
     rows * (columns * (2 * words + read + 5) + columns * columns + 2) + rows * rows + 3
 
+/-- Materializing the raw-word matrix fits the declared bit-traversal budget, accounting for
+complete stored-tape construction. -/
 theorem storedRawMatrixCosted_cost_le (rows columns read : ℕ) (bits : List Bool) :
     (storedRawMatrixCosted rows columns read bits).2 ≤ storedRawMatrixCostBudget rows columns read bits.length := by
   let raw := storedRawTapeCosted (rows * columns) read bits

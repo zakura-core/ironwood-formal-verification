@@ -21,7 +21,6 @@ gate validity, successful proof attempt, or verifier acceptance is assumed.
 namespace Zcash.Snark.ZeroKnowledge
 open Halo2 Zcash.Circuits Zcash.Circuits.Action
 set_option maxRecDepth 8192
-set_option maxHeartbeats 800000
 set_option linter.constructorNameAsVariable false
 
 /-- The complete original Action witness equations include the original base synthesis. -/

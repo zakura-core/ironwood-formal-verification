@@ -21,17 +21,22 @@ noncomputable def reflectedMetadata (row : ℕ) :
     SourceListCertificate (packedMetadata.val row) := by
   certify_source_list
 
+/-- Reflection retains the original labels and row offsets, checking that source certificates
+preserve metadata. -/
 theorem reflectedMetadata_entries (row : ℕ) :
     (reflectedMetadata row).entries =
       [(row, "range"), (row, "coordinates"), (row + 1, "tail")] := by
   kernel_rfl
 
+/-- Changing a reflected label changes the certified list, guarding against metadata substitution. -/
 theorem rejectsChangedLabel (row : ℕ) :
     (reflectedMetadata row).entries ≠
       [(row, "coordinates"), (row, "coordinates"), (row + 1, "tail")] := by
   rw [reflectedMetadata_entries]
   simp
 
+/-- Transporting a source equality preserves its recorded entries, keeping subsequent scans
+independent of equality casts. -/
 theorem transport_retainsEntries (row : ℕ) :
     (SourceListCertificate.transport
       (congrFun packedMetadata.property row) (reflectedMetadata row)).entries =
@@ -50,6 +55,8 @@ noncomputable def reflectedThreadedMetadata (row : ℕ) :
           fun entry => (entry.1, entry.2, (packedStep row).val.1)) := by
   certify_source_list
 
+/-- Reflection preserves row state threaded between source calls, checking metadata from sequential
+composition. -/
 theorem reflectedThreadedMetadata_entries (row : ℕ) :
     (reflectedThreadedMetadata row).entries =
       [(row, "range", row), (row, "coordinates", row),

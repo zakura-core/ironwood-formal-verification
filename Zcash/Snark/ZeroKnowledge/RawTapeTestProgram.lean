@@ -25,6 +25,8 @@ def RawTapeTestAddress.evalCosted (address : RawTapeTestAddress) (read : ℕ)
     (optionalRawWordTest value.1 bit, stored.2 + value.2 + 4)
   | .auxiliary index bit => let value := getOptionListCosted read auxiliary index; (optionalRawWordTest value.1 bit, value.2 + 4)
 
+/-- A counted raw-tape address read returns the specified bit, including fallback behavior for
+missing data. -/
 theorem RawTapeTestAddress.evalCosted_result (address : RawTapeTestAddress) (read : ℕ)
     (auxiliary : List (Fin challengeDigestCard)) (rows : List (List (Fin challengeDigestCard))) :
     (address.evalCosted read auxiliary rows).1 = address.eval auxiliary rows := by
@@ -37,6 +39,8 @@ def RawTapeTestAddress.costBudget (address : RawTapeTestAddress) (read : ℕ) : 
     | .auxiliary index _ => index
   2 * indices + 2 * read + 16
 
+/-- A raw-tape address read fits its declared traversal budget, supplying the input bound for the
+Boolean test. -/
 theorem RawTapeTestAddress.evalCosted_cost_le (address : RawTapeTestAddress) (read : ℕ)
     (auxiliary : List (Fin challengeDigestCard)) (rows : List (List (Fin challengeDigestCard))) :
     (address.evalCosted read auxiliary rows).2 ≤ address.costBudget read := by
@@ -64,6 +68,8 @@ def rawTapeTestCosted (program : RawTapeTestProgram) (read : ℕ) (auxiliary : L
     (rows : List (List (Fin challengeDigestCard))) : Bool × ℕ :=
   program.evalCosted read (fun address => address.evalCosted read auxiliary rows)
 
+/-- The counted raw-tape test returns the original test bit, connecting its operational execution to
+the PRNG game. -/
 theorem rawTapeTestCosted_result (program : RawTapeTestProgram) (read : ℕ) (auxiliary : List (Fin challengeDigestCard))
     (rows : List (List (Fin challengeDigestCard))) :
     (rawTapeTestCosted program read auxiliary rows).1 = rawTapeTest program auxiliary rows := by
@@ -72,6 +78,8 @@ theorem rawTapeTestCosted_result (program : RawTapeTestProgram) (read : ℕ) (au
 def rawTapeTestCostBudget (program : RawTapeTestProgram) (read : ℕ) : ℕ :=
   program.costBudget read (fun address => address.costBudget read)
 
+/-- The complete raw-tape test fits its declared budget, discharging its contribution to reduction
+admissibility. -/
 theorem rawTapeTestCosted_cost_le (program : RawTapeTestProgram) (read : ℕ) (auxiliary : List (Fin challengeDigestCard))
     (rows : List (List (Fin challengeDigestCard))) :
     (rawTapeTestCosted program read auxiliary rows).2 ≤ rawTapeTestCostBudget program read :=

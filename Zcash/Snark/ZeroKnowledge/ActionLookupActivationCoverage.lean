@@ -1,13 +1,8 @@
-import Zcash.Snark.ZeroKnowledge.ActionLookupSourceCertificate
-import Zcash.Snark.ZeroKnowledge.ActivationCoverageScan
-import Zcash.Meta.ActivationCoverage
+import Zcash.Snark.ZeroKnowledge.ActionLookupCoverageTree
 
 namespace Zcash.Snark.ZeroKnowledge
 open Halo2 Zcash.Circuits Zcash.Circuits.Action
 set_option maxRecDepth 50000
-set_option maxHeartbeats 0
-set_option stderrAsMessages false
-set_option trace.Zcash.activationCoverage true
 
 /-- Every configured lookup has its original source entry at every active master row. -/
 theorem actionCircuit_lookupActivationCoverage_certificate :
@@ -29,7 +24,9 @@ theorem actionCircuit_lookupActivationCoverage_certificate :
     (placeSelectorTrace actionRegionStartsCertificate (actionSourceSelectorTrace actionConfig))
     actionLookupActivationSourceCertificate.entries = true
   rw [← lookupActivationCoverageScan_eq]
-  check_activation_coverage
+  rw [← actionLookupCoverageMasters.source_eq, ← actionCoverageActivations.source_eq,
+    ← actionLookupCoverageLabels.source_eq]
+  exact actionLookupCoverage_check
 
 /-- The lookup coverage result is indexed by the original complete Action operations. -/
 theorem actionCircuit_lookupActivationCoverage :
