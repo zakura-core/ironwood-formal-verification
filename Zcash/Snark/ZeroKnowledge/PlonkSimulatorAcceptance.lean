@@ -52,6 +52,7 @@ theorem idealPlonkVerifierSimulator_deployedAccepts {actions : ℕ}
     (mask, tail) hpositive hgood hpublic hn homega
     (idealIpaSimulator_verifies_of_mem_support _ tail hgood.1 htail)
 
+omit [Inhabited G] [DecidableEq G] in
 /-- The simulated proof retains precisely the supplied public challenge law. -/
 theorem freshPlonkVerifierSimulator_challenges {actions : ℕ}
     (urs : URS G) (law : PMF (Challenges urs.k Fp))

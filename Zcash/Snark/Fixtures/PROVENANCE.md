@@ -11,7 +11,7 @@ These captures check the verifier model on the captured inputs. They do not
 establish the Rust prover's masking distribution or universal Rust-to-Lean
 correspondence. The zero-knowledge theorem concerns its Lean prover model;
 its implementation assumption is described in
-[the Zakura source review](../ZeroKnowledge/Zakura/OPTIMIZATIONS.md).
+[the Zakura release provenance](../ZeroKnowledge/Zakura/PROVENANCE.md#lean-connection).
 
 ## Release target and recorded origin
 

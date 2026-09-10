@@ -23,6 +23,10 @@ open Zcash.Circuits.Action
 open Zcash.Common
 open scoped ENNReal
 
+-- Keep the concrete oracle implementation folded in proofs about its public wrapper.
+attribute [local irreducible] actionOracleInitial actionOracleRunTape
+  actionOracleProver actionOracleTapeLaw
+
 /-- The public oracle cache remains observable after a failed proof call. -/
 abbrev OracleObservation :=
   Option (AttemptOutcome × OracleCache TranscriptHashAddress (Fin challengeDigestCard))
@@ -67,11 +71,17 @@ theorem actionRunTape_law {actions : ℕ} (urs : URS VestaG) (hk : urs.k = 11)
     (actionOracleTapeLaw actions urs.k).map (actionRunTape urs hk inputs witness vkTranscriptRepr cache) =
       actionProver urs hk inputs witness vkTranscriptRepr cache := by
   by_cases haccept : acceptsPublicPrefix (actionOracleInitial urs vkTranscriptRepr inputs) = true
-  · simp only [actionRunTape, actionProver, haccept, ↓reduceIte]
-    change (actionOracleTapeLaw actions urs.k).map
-        (observeOracleResult ∘ actionOracleRunTape urs hk inputs witness vkTranscriptRepr cache) = _
-    rw [← PMF.map_comp, actionOracleRunTape_law]
-  · simp only [actionRunTape, actionProver, haccept, ↓reduceIte]
+  · have hrun : actionRunTape urs hk inputs witness vkTranscriptRepr cache =
+        observeOracleResult ∘ actionOracleRunTape urs hk inputs witness vkTranscriptRepr cache := by
+      funext tapes
+      exact if_pos haccept
+    rw [hrun, ← PMF.map_comp, actionOracleRunTape_law]
+    exact (if_pos haccept).symm
+  · have hrun : actionRunTape urs hk inputs witness vkTranscriptRepr cache =
+        fun _ => some (.error .transcript, cache) := by
+      funext tapes
+      exact if_neg haccept
+    rw [hrun, actionProver, if_neg haccept]
     exact PMF.map_const _ _
 
 /-- The fixed-tape rejection branch leaves the cache unchanged and does not inspect either tape. -/
@@ -110,7 +120,7 @@ theorem action_simulation_error_bound [Fintype VestaG] {actions : ℕ}
     have h := actionFiatShamir_program_simulation_error_bound urs hk inputs witness
       hvalid hpositive hW vkTranscriptRepr cache
     exact ⟨eventBias_map h.1 observeOracleResult, eventBias_map h.2 observeOracleResult⟩
-  · simp only [actionProver, actionSimulator, haccept, ↓reduceIte]
+  · simp only [actionProver, actionSimulator, haccept]
     constructor <;> intro event <;> exact le_self_add
 
 end Zcash.Snark.ZeroKnowledge.Zakura

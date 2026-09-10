@@ -72,8 +72,8 @@ opening nodes and a later point away from them. The
 [collision regression](MultiopenRegression.lean) separates the values `1`
 and `0` for the polynomial `1 + X` at the colliding point `0`.
 The costed implementation evaluates its stored coefficients by Horner's rule.
-These proof changes await elaboration. Rust correspondence remains the existing
-[implementation trust boundary](OPTIMIZATIONS.md). Verifier captures anchor
+These proof changes await elaboration. Rust-to-Lean correspondence remains an
+implementation assumption. Verifier captures anchor
 sampled executions; the Lean prover model supplies the zero-knowledge argument.
 
 The scope assumes matching circuit/key versions, matching instance counts,
