@@ -1,7 +1,6 @@
 import Zcash.Meta.SourceReduction
 import Zcash.Meta.CertificateChunks
 import Zcash.Snark.ZeroKnowledge.AdviceSourceCertificate
-import Zcash.Snark.ZeroKnowledge.SourceCertificatePiece
 
 /-!
 # Source-preserving annotation certificates
@@ -33,54 +32,6 @@ private def transportCertificateSource (goal : MVarId) (source equality : Expr) 
   let reverse ← mkEqSymm equality
   goal.assign (← mkAppM ``AdviceSourceCertificate.transport #[reverse, next])
   return next.mvarId!
-
-/-- Certify a bounded source prefix while retaining the exact suffix as an obligation.
-Each use belongs to its own declaration, so the kernel checks small proof constants
-that the final certificate composes. -/
-elab "certify_source_advice_piece " steps:num entries:num : tactic =>
-  withOptions (fun options => options.setBool `smartUnfolding false) <| withMainContext do
-    let originalGoal ← getMainGoal
-    let target ← originalGoal.getType
-    unless target.isAppOf ``SourceCertificatePiece do
-      throwError "expected a SourceCertificatePiece goal"
-    let arguments := target.getAppArgs
-    let family := arguments[arguments.size - 2]!
-    let source := arguments.back!
-    let first ← mkFreshExprMVar (mkApp family source)
-    let mut goal := first.mvarId!
-    let mut currentSource := source
-    let mut count := 0
-    let compilePieces := !(← readThe Term.Context).isNoncomputableSection &&
-      !(← Term.getDeclName?).any (Lean.isNoncomputable (← getEnv))
-    for _ in [:steps.getNat] do
-      if count == entries.getNat then break
-      let reduced ← withTransparency .all (whnf currentSource)
-      if reduced.isAppOf ``List.nil then
-        currentSource := reduced
-        break
-      if reduced.isAppOf ``List.cons then
-        let arguments := reduced.getAppArgs
-        let instruction := arguments[1]!
-        let rest := arguments[2]!
-        let (reads, support) ← annotateAdviceInstruction (← mkAppM ``Prod.fst #[instruction])
-        let data ← mkAppM ``adviceSourceEntryData #[instruction, reads]
-        let (normalized, equality) ← normalizeSourceData data
-        let tail ← mkFreshExprMVar (← mkAppM ``AdviceSourceCertificate #[rest])
-        let value ← withTransparency .all <| mkAppM ``AdviceSourceCertificate.consWithData
-          #[instruction, reads, support, normalized, ← mkEqSymm equality, tail]
-        goal.assign value
-        goal := tail.mvarId!
-        currentSource := rest
-        count := count + 1
-      else
-        let (newSource, equality?) ← sourceReductionStep reduced
-        if let some equality := equality? then
-          goal ← transportCertificateSource goal newSource equality
-        currentSource := newSource
-    let continuation ← checkCertificateChunk first.mvarId! goal compilePieces
-    originalGoal.assign (← mkAppM ``SourceCertificatePiece.mk #[currentSource, continuation])
-    sourceCertificateProgress s!"{← Term.getDeclName?}: checked {count} instructions; remainder empty: {currentSource.isAppOf ``List.nil}"
-    replaceMainGoal []
 
 /-- Annotate the original source, opening opaque source barriers only by their proved equations. -/
 elab "certify_source_advice" : tactic =>

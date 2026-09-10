@@ -46,12 +46,21 @@ All Rust references below use the Common revision pinned above.
 
 | Trigger | Released observation | Source |
 | --- | --- | --- |
-| Identity public instance commitment | `Error::Transcript`, before the first prover oracle query or private masking draw | [instance initialization](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/plonk/prover.rs#L1152), [identity rejection](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/transcript.rs#L207) |
+| Identity public instance commitment | `Error::Transcript`, before the first prover oracle query | [instance initialization](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/plonk/prover.rs#L1152), [identity rejection](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/transcript.rs#L207) |
 | Identity proof point before multi-opening | `Error::Transcript`; the Orchard caller receives no partial proof buffer | [transcript writer](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/transcript.rs#L207) |
 | Duplicate opening queries at `x = 0` | Returned error after receiving `x1,x2`, mapped to `Error::Opening` | [query check](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/poly/multiopen/prover.rs#L607), [error mapping](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/plonk/prover.rs#L1941) |
 | Identity proof point in multi-opening or IPA | `Error::Opening`, through that same mapping | [error mapping](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/plonk/prover.rs#L1941) |
 | Zero IPA round challenge | Panic at inverse `unwrap`, after writing both round points | [IPA round](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/poly/commitment/prover.rs#L397) |
 | All stages finish | Return the completed proof buffer; completion alone is not verifier acceptance | [Orchard proof call](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/orchard/src/circuit.rs#L1600) |
+
+With multiple workers, Rust prepares advice and draws its blinding randomness
+before absorbing the instance commitments. An identity commitment can therefore
+be rejected after those draws; the single-worker path rejects it before
+synthesis and blinding. See the
+[preparation order](https://github.com/zakura-core/common/blob/50f712ee22ca95e2dd5230c6f331ce2e433d70ee/crates/halo2_proofs/src/plonk/prover.rs#L1273).
+The one-call observation records the returned outcome and oracle cache, without
+the caller's RNG state or synthesis side effects. Its public guard does not
+assert that Rust leaves the RNG untouched.
 
 Other exceptional values need not stop the call. In particular, the release
 uses an algebraic fallback to evaluate the quotient when `x3` is an opening

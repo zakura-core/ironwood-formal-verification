@@ -109,86 +109,19 @@ theorem opaqueScalarBuilder_rejectsCollision : True := by
       check_advice_map_scan
   trivial
 
-section Population
-set_option maxRecDepth 10000
+/-- A pre-existing map exercises normalization after many unrelated assignments. -/
+def populatedRoots : AdviceAliasMap :=
+  (List.range 512).foldl (fun roots row =>
+    let address : AdviceAddress := ((⟨7⟩ : Column .advice).toAny, row)
+    adviceAliasMapInsert roots address address) ∅
 
-private def populationSource : List (AdviceAddress × Option AdviceAddress) :=
-  (List.range 512).map fun row => (((⟨7⟩ : Column .advice).toAny, row), none)
-
-private def populationPiece00 : AdviceMapScanPiece adviceAliasMapStep
-    ∅ populationSource := by
-  check_advice_map_piece 32
-
-private def populationPiece01 : AdviceMapScanPiece adviceAliasMapStep
-    populationPiece00.remainingRoots populationPiece00.remainingEntries := by
-  check_advice_map_piece 32
-
-private def populationPiece02 : AdviceMapScanPiece adviceAliasMapStep
-    populationPiece01.remainingRoots populationPiece01.remainingEntries := by
-  check_advice_map_piece 32
-
-private def populationPiece03 : AdviceMapScanPiece adviceAliasMapStep
-    populationPiece02.remainingRoots populationPiece02.remainingEntries := by
-  check_advice_map_piece 32
-
-private def populationPiece04 : AdviceMapScanPiece adviceAliasMapStep
-    populationPiece03.remainingRoots populationPiece03.remainingEntries := by
-  check_advice_map_piece 32
-
-private def populationPiece05 : AdviceMapScanPiece adviceAliasMapStep
-    populationPiece04.remainingRoots populationPiece04.remainingEntries := by
-  check_advice_map_piece 32
-
-private def populationPiece06 : AdviceMapScanPiece adviceAliasMapStep
-    populationPiece05.remainingRoots populationPiece05.remainingEntries := by
-  check_advice_map_piece 32
-
-private def populationPiece07 : AdviceMapScanPiece adviceAliasMapStep
-    populationPiece06.remainingRoots populationPiece06.remainingEntries := by
-  check_advice_map_piece 32
-
-private def populationPiece08 : AdviceMapScanPiece adviceAliasMapStep
-    populationPiece07.remainingRoots populationPiece07.remainingEntries := by
-  check_advice_map_piece 32
-
-private def populationPiece09 : AdviceMapScanPiece adviceAliasMapStep
-    populationPiece08.remainingRoots populationPiece08.remainingEntries := by
-  check_advice_map_piece 32
-
-private def populationPiece10 : AdviceMapScanPiece adviceAliasMapStep
-    populationPiece09.remainingRoots populationPiece09.remainingEntries := by
-  check_advice_map_piece 32
-
-private def populationPiece11 : AdviceMapScanPiece adviceAliasMapStep
-    populationPiece10.remainingRoots populationPiece10.remainingEntries := by
-  check_advice_map_piece 32
-
-private def populationPiece12 : AdviceMapScanPiece adviceAliasMapStep
-    populationPiece11.remainingRoots populationPiece11.remainingEntries := by
-  check_advice_map_piece 32
-
-private def populationPiece13 : AdviceMapScanPiece adviceAliasMapStep
-    populationPiece12.remainingRoots populationPiece12.remainingEntries := by
-  check_advice_map_piece 32
-
-private def populationPiece14 : AdviceMapScanPiece adviceAliasMapStep
-    populationPiece13.remainingRoots populationPiece13.remainingEntries := by
-  check_advice_map_piece 32
-
-private def populationPiece15 : AdviceMapScanPiece adviceAliasMapStep
-    populationPiece14.remainingRoots populationPiece14.remainingEntries := by
-  check_advice_map_piece 32
-
-/-- A stored map with 512 unrelated assignments exercises populated-map scans.
-The setup is constructed separately so policy checks use their budget on the scan. -/
-def populatedRoots : AdviceAliasMap := populationPiece15.remainingRoots
-
-end Population
-
-/-- The separately constructed map retains all 512 entries required by the stress cases. -/
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 10000 in
+/-- The populated map retains all 512 entries required by the stress cases. -/
 theorem populatedRoots_size : populatedRoots.size = 512 := by
   kernel_rfl
 
+set_option maxHeartbeats 2000000 in
 set_option maxRecDepth 10000 in
 /-- Every original row remains mapped to itself, guarding the populated-map setup against data loss. -/
 theorem populatedRoots_containsRows :
@@ -197,6 +130,7 @@ theorem populatedRoots_containsRows :
       adviceAliasMapLookup populatedRoots address == some address) = true := by
   kernel_rfl
 
+set_option maxHeartbeats 2000000 in
 set_option maxRecDepth 10000 in
 /-- A scalar builder can add a fresh address to an existing map, exercising the populated-map path. -/
 theorem opaqueScalarBuilder_afterPopulatedMap :
@@ -204,6 +138,7 @@ theorem opaqueScalarBuilder_afterPopulatedMap :
   rw [adviceAliasMapPlan_eq_scan]
   check_advice_map_scan
 
+set_option maxHeartbeats 2000000 in
 set_option maxRecDepth 10000 in
 /-- A scalar builder cannot overwrite a populated-map entry, guarding the nonempty-map collision
 case. -/
@@ -215,6 +150,7 @@ theorem opaqueScalarBuilder_rejectsPopulatedCollision : True := by
       check_advice_map_scan
   trivial
 
+set_option maxHeartbeats 2000000 in
 set_option maxRecDepth 10000 in
 /-- Established equal-root copies remain valid in a populated map, exercising alias reuse with prior
 state. -/
@@ -224,6 +160,7 @@ theorem equalRootCopy_afterPopulatedMap :
   rw [adviceAliasMapPlan_eq_scan]
   check_advice_map_scan
 
+set_option maxHeartbeats 2000000 in
 set_option maxRecDepth 10000 in
 /-- Prior map entries do not permit conflicting roots, exercising rejection after unrelated writes. -/
 theorem rejectsPopulatedConflictingRoot : True := by

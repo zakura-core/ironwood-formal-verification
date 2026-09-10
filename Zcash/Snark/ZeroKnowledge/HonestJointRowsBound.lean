@@ -60,9 +60,9 @@ theorem honestJointRowsCosted_cost_le (costs : FieldOperationCosts)
     (fun group hgroup => (hw group hgroup).2.2)
   have hdata : data.2 ≤ storedMultiopenDataCostBudget costs equal read omegaAccess ch.x2.2 ch.x4.2 ch.x3.2
       (access + 1) := by
-    change data.2 ≤ storedMultiopenDataCostBudget costs equal read omegaAccess ch.x2.2 ch.x4.2 ch.x3.2 (qb.2 + 1) at hd
-    unfold storedMultiopenDataCostBudget storedMultiopenBlindCostBudget at *
-    omega
+    apply hd.trans
+    dsimp only [storedMultiopenDataCostBudget, storedMultiopenBlindCostBudget]
+    gcongr
   have hm := honestPlonkMaskCosted_cost_le costs equal read omegaAccess groupAdd groupScale generators W
     rows pieces (data.1.quotientPrime, read + 1) first entries ch.x ch.x3 constant slope rowRead access access
     hrows hpieces hdw.1 hfirst hg hentries

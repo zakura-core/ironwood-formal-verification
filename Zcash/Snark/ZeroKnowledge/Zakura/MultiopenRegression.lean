@@ -28,7 +28,7 @@ theorem linearCollisionGroup_quotient : linearCollisionGroup.toPolynomialOpening
   apply CPolynomial.toPoly_injective
   rw [PolynomialOpeningGroup.quotient, hinterp, sub_zero, CPolynomial.div_toPoly_eq_div]
   simp [linearCollisionGroup, PolynomialOpeningGroup.vanishing, vanishingProd,
-    CPolynomial.toPoly_sub, CPolynomial.C_toPoly, CPolynomial.X_toPoly]
+    CPolynomial.X_toPoly]
 
 /-- At the colliding point, the prover's IPA value is `1` and the verifier's reconstructed value is `0`. -/
 theorem openingNodeCollision_usesPolynomialValue {G : Type*} [AddCommGroup G] [Module Fp G]
@@ -40,7 +40,8 @@ theorem openingNodeCollision_usesPolynomialValue {G : Type*} [AddCommGroup G] [M
       List.foldl_cons, List.foldl_nil, zero_mul, zero_add] using linearCollisionGroup_quotient
   constructor
   · change (multiopenFinalPolynomial 1 1 [linearCollisionGroup]).eval 0 = 1
-    simp [multiopenFinalPolynomial, hquot, plonkPolynomialFold, linearCollisionGroup]
+    simp only [multiopenFinalPolynomial, List.map_cons, List.map_nil, hquot]
+    simp [plonkPolynomialFold, linearCollisionGroup]
   · simp [computedMultiopenOpening, multiopenCombine_eq_pair, linearCollisionGroup,
       PolynomialOpeningGroup.forVerifier, PolynomialOpeningGroup.values, multiopenEval, lagrangeEval]
 
