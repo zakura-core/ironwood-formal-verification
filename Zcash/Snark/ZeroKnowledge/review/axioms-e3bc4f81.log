@@ -1,6 +1,0 @@
-'Zcash.Snark.ZeroKnowledge.adviceMapScan' depends on axioms: [propext, Classical.choice, Quot.sound]
-'Zcash.Snark.ZeroKnowledge.adviceMapScan_cons' depends on axioms: [propext, Classical.choice, Quot.sound]
-'Zcash.Snark.ZeroKnowledge.adviceReadMapStep' depends on axioms: [propext, Classical.choice, Quot.sound]
-'Zcash.Snark.ZeroKnowledge.adviceSupportMapPlan_eq_scan' depends on axioms: [propext, Classical.choice, Quot.sound]
-'Zcash.Snark.ZeroKnowledge.adviceAliasMapStep' depends on axioms: [propext, Classical.choice, Quot.sound]
-'Zcash.Snark.ZeroKnowledge.adviceAliasMapPlan_eq_scan' depends on axioms: [propext, Classical.choice, Quot.sound]

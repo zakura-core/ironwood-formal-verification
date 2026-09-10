@@ -1,9 +1,0 @@
-Complete stored private-column construction resource milestone
-Proof baseline: a3d5091685b73e01158535339fde888b74d83bdd.
-The focused warning-as-error build passed for PlonkStoredColumnsCostBound (3084 jobs), covering all seventeen new modules. The ZeroKnowledge trust boundary passed separately (3871 jobs).
-All 51 declarations passed a separate warning-as-error transitive axiom inventory and have exactly one direct pin. Dependencies are limited to propext, Classical.choice, and Quot.sound. No admitted lemma or new native certificate was introduced.
-The counted algorithm constructs all 22 private columns per Action in the original order. Each complete 2048-row column is materialized and masked before being added to the stored history. The next constructor reads exactly that retained history, including all prior masks. Exact-result theorems preserve every tape offset, constructor result, and totalized lookup failure.
-The combined polynomial bound includes schedule construction, lookup and permutation preparation, every row provider, materialization and fallback arrays, history traversal and indexed reads, masks, and sequence composition. The tape input is the already selected row-mask subsequence; decoding it from the complete batched private tape remains surrounding prover work.
-Working and staged whitespace checks, direct-pin uniqueness, and documentation links passed. No endpoint, fixture, default target, csimp declaration, or group callback was changed. This is focused validation. The last full workspace build remains the successful 4629-job run at 2872c72f.
-The proof commit was pushed only to TalDerei/ironwood-private refs/heads/establish-zk, with its exact remote SHA verified.
-The complete real-prover/retry/test resource composition and independent review remain open; these component theorems do not alone discharge PRNG test-class membership.
