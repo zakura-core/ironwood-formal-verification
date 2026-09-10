@@ -13,8 +13,10 @@ the tested output advantage `eta`; it does not assume statistical distance
 | Complete continuing-generator stream | `costedGeneratedUnlimitedActionOracle_simulation_capstone` in [CostedActionGeneratorStream.lean](CostedActionGeneratorStream.lean) | `2 * (C(m,q) + b(m)^n + eta)` |
 
 Here `m` is the Action count, `q` the initial cache length, and `n` the finite
-cutoff used in the stream reduction. The definitions of `epsilon`, `C`, and `b`
-are unchanged; see the [review packet](REVIEW.md). The actual generated finite
+cutoff used in the stream reduction. The bounds `epsilon`, `C`, and `b` are
+defined by [plonkSimulationErrorBound](PlonkSuccessBounds.lean),
+[oracleRetryPotential](OracleRetryPotential.lean), and
+[actionOracleRetryRate](ActionOracleRetryTail.lean), respectively. The actual generated finite
 exhaustion probability is at most `b(m)^n + C(m,q) + eta`. No independence of
 generated private blocks or almost-sure seeded termination is assumed.
 

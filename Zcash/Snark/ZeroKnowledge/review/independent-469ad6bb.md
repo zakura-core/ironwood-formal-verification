@@ -3,8 +3,7 @@
 Three separate AI review agents completed the review on 2026-09-10 UTC. Each
 reported no blocking finding within its assigned scope and no required source
 change. This completes the checklist's final review item. The completed checklist
-has been removed; the [review packet](../REVIEW.md) retains the theorem map,
-assumptions, bounds, and validation history.
+has been removed; the [README](../README.md) links the current theorem statements.
 
 Reviewed HEAD: `469ad6bb782329f632713f25b814f515b53f89ba`.
 Proof-source baseline: `4a87136b23e7b25eb079a19e7f1289838f138dc1`.

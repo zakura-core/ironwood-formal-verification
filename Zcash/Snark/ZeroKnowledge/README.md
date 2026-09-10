@@ -25,9 +25,9 @@ witness. The reference is the [pinned prover description][protocol]
 | **Executable simulator:** a fixed-bit implementation with a proved distribution and structural resource bounds. | [ActionOracleBits.lean](ActionOracleBits.lean), [program model](PROGRAMS.md) |
 | **PRNG reductions:** computational simulation bounds under explicit generator-security assumptions. | [Interactive](CostedInteractivePrng.lean), [retry streams](CostedActionGeneratorStream.lean) |
 
-The [review packet](REVIEW.md) lists the exact theorem names, compared
-experiments, and bounds for every result. Both masking optimizations, the sparse
-IPA mask and linear multi-opening mask, are covered jointly with PLONK.
+Both masking optimizations, the sparse IPA mask and linear multi-opening mask,
+are covered jointly with PLONK. The linked theorem statements give the exact
+experiments and premises.
 
 ## Error bounds
 
@@ -46,7 +46,9 @@ between the real prover and simulator.
 
 The one-attempt Fiat–Shamir bound adds `q_pre/p`, where `q_pre` counts prior
 oracle queries. The fixed-bit simulator adds a further `(132m + 36)δ`.
-See the [full bounds](REVIEW.md) for retries and PRNG reductions.
+Retry bounds are in [ActionRetryLimit.lean](ActionRetryLimit.lean) and
+[ActionOracleStreamSimulation.lean](ActionOracleStreamSimulation.lean).
+[PROGRAMS.md](PROGRAMS.md) describes the PRNG reductions.
 
 Each real attempt uses `148m + 46` private field samples; `148m + 70` counts
 sampling-bias costs in the comparison, not the private tape length.
@@ -93,7 +95,6 @@ lake build --wfail
 
 The default build includes this development and its trust census.
 
-- [REVIEW.md](REVIEW.md): theorem index, exact bounds, assumptions, and review evidence.
 - [PROGRAMS.md](PROGRAMS.md): executable programs and the resource model.
 - [TrustBoundary.lean](TrustBoundary.lean) and [Action/TrustBoundary.lean](Action/TrustBoundary.lean):
   checked axiom dependencies.
