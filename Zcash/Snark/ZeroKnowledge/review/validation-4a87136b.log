@@ -1,0 +1,46 @@
+Proof head: 4a87136b23e7b25eb079a19e7f1289838f138dc1
+Proof tree: 6148a2912bdf6e66d14c43cc898e55b21bc0c356
+Validated staged tree equals the committed tree; private establish-zk head verified equal.
+
+Full workspace validation:
+lake build --wfail
+Build completed successfully (4858 jobs).
+Includes both ZK trust boundaries, all default targets, and the compiled CensusCheck.
+Raw full-build output: build-4a87136b.log.
+
+Focused combined validation:
+lake build --wfail Zcash.Snark.ZeroKnowledge.CostedInteractivePrng Zcash.Snark.ZeroKnowledge.InteractiveReductionClass Zcash.Snark.ZeroKnowledge.InteractiveViewEncoding Zcash.Snark.ZeroKnowledge.CostedActionGeneratorStream Zcash.Snark.ZeroKnowledge.RecordedTestRegression
+Build completed successfully (3952 jobs).
+
+Declaration inventory: 164 declarations across 29 new modules.
+Every declaration has exactly one direct pin; every module has exactly one direct import across the three ZK boundaries.
+Generic boundary: 103 direct pins from 14 modules, with no native exemption, including continuation lines.
+Action boundary: 61 direct pins from 15 modules.
+Two separate warning-as-error Lean invocations print the transitive axioms of 163 declarations and the final interactive capstone.
+The combined inventory contains each expected declaration exactly once.
+Only propext, Classical.choice, Quot.sound, and these existing native owners occur:
+  CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt
+  CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt
+No new native certificate or admitted lemma.
+Raw axioms: axioms-4a87136b.log.
+Source/module/pin mapping: declarations-4a87136b.json.
+
+Guards on the exact staged source archive, except the tracked-file import guard on the staged checkout:
+endpoint census: 334 endpoint declarations, all pinned.
+build surface: 6 matching default and CI targets; 1321 modules, all covered.
+no umbrella imports: passed.
+csimp census: 1 declaration, all covered.
+costed group-work census: 2 production modules, 20 host callbacks pinned.
+fixture manifest: 6 artifacts, digests and provenance entries match.
+All local README.md, REVIEW.md, CHECKLIST.md, and PROGRAMS.md links resolve.
+Staged diff whitespace check passed; all staged files match the source archive.
+Validated Lean source and trust-boundary hashes were unchanged at commit.
+
+Scope: complete stored-input real-prover-and-test execution for the interactive attempt, recorded cached retries, and both finite reductions used for a continuing-generator stream.
+The actual source laws and operational class membership are proved for concrete finite Boolean circuits, including auxiliary copying, full-view reads, histories, caches, and exhaustion.
+PRNG security against the derived bounded program class remains an external assumption. Generic arbitrary-callback/adaptive-processing reductions retain their explicit admissibility premises.
+This is a structural primitive-cost model, not a machine-time or Rust correspondence theorem.
+The uniform-bit statistical simulation statements and existing numerical losses are unchanged.
+
+Independent review remains open; no independent review was recorded on private PR #1 when checked on 2026-09-10 UTC.
+The checklist is retained pending that review. This record establishes local validation, not hosted CI or independent review.

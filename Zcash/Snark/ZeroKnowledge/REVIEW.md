@@ -1,6 +1,6 @@
 # ZK review packet
 
-Recorded validation baseline: `3b8f04a7b2f136095aae3b349f770813bd905f40` on `establish-zk` in
+Proof baseline: `4a87136b23e7b25eb079a19e7f1289838f138dc1` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -624,6 +624,17 @@ do not discharge the PRNG test-class resource premise.
 
 **Validation and review status**
 
+The current operational PRNG milestone passes the [complete 4,858-job workspace
+build and repository guards](review/validation-4a87136b.log); the
+[raw build output](review/build-4a87136b.log) is retained. Its
+[164-declaration axiom inventory](review/axioms-4a87136b.log) and
+[source/module/pin mapping](review/declarations-4a87136b.json) cover all 29 new
+modules. All 334 endpoints are pinned and all 1,321 modules are covered by the
+six default targets. The generic boundary has no native exemption. This closes
+the operational PRNG resource item; independent review remains pending.
+
+The following records preserve validation of the earlier component checkpoints.
+
 The [validation record](review/validation-915317a1.log) contains the successful
 full default-target build (`lake build --wfail`, 4,454 jobs), repository guards,
 and the [32-declaration dependency inventory](review/axioms-915317a1.log) for the
@@ -721,14 +732,14 @@ CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt
 CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt
 ```
 
-This is local validation of the recorded proof tree, not a claim about hosted CI,
-an independent audit, historical priority, or a theorem with all runtime obligations
-discharged. The full [checklist](CHECKLIST.md) tracks the remaining extensions.
+This is local validation of the recorded proof tree. It does not establish hosted
+CI, an independent audit, historical priority, concrete PRNG security, or machine
+time. The [checklist](CHECKLIST.md) retains the independent-review item.
 
 | Review activity | Status at the proof baseline |
 | --- | --- |
 | Map claims to experiments, premises, failure observations, and resource scope | Locally checked in this packet |
-| Check transitive declarations and named native dependencies | Passed the complete 4,629-job build, repository guards, and separate direct-pin inventories |
+| Check transitive declarations and named native dependencies | Passed the complete 4,858-job build, repository guards, and separate direct-pin inventories |
 | Independent reviewer, reviewed commit, findings, and resolutions | Pending; no independent assessment recorded |
 
 An independent review should focus on whether each advertised claim matches its

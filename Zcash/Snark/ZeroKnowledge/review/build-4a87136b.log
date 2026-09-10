@@ -1,0 +1,1101 @@
+ℹ [4594/4800] Replayed Zcash.Snark.ZeroKnowledge.ActionGateSourceCertificate
+info: stderr:
+[source list] step 0: 0 entries
+[source list] step 1000: 7 entries
+[source list] step 2000: 64 entries
+[source list] step 3000: 64 entries
+[source list] step 4000: 121 entries
+[source list] step 5000: 178 entries
+[source list] step 6000: 178 entries
+[source list] step 7000: 235 entries
+[source list] step 8000: 292 entries
+[source list] step 9000: 292 entries
+[source list] step 10000: 349 entries
+[source list] step 11000: 406 entries
+[source list] step 12000: 406 entries
+[source list] step 13000: 463 entries
+[source list] step 14000: 520 entries
+[source list] step 15000: 520 entries
+[source list] step 16000: 577 entries
+[source list] step 17000: 634 entries
+[source list] step 18000: 634 entries
+[source list] step 19000: 691 entries
+[source list] step 20000: 748 entries
+[source list] step 21000: 775 entries
+[source list] step 22000: 805 entries
+[source list] step 23000: 862 entries
+[source list] step 24000: 915 entries
+[source list] step 25000: 919 entries
+[source list] step 26000: 976 entries
+[source list] step 27000: 976 entries
+[source list] step 28000: 1033 entries
+[source list] step 29000: 1090 entries
+[source list] step 30000: 1090 entries
+[source list] step 31000: 1147 entries
+[source list] step 32000: 1204 entries
+[source list] step 33000: 1204 entries
+[source list] step 34000: 1261 entries
+[source list] step 35000: 1318 entries
+[source list] step 36000: 1318 entries
+[source list] step 37000: 1375 entries
+[source list] step 38000: 1432 entries
+[source list] step 39000: 1432 entries
+[source list] step 40000: 1489 entries
+[source list] step 41000: 1546 entries
+[source list] step 42000: 1575 entries
+[source list] step 43000: 1603 entries
+[source list] step 44000: 1660 entries
+[source list] step 45000: 1717 entries
+[source list] step 46000: 1717 entries
+[source list] step 47000: 1774 entries
+[source list] step 48000: 1827 entries
+[source list] step 49000: 2110 entries
+[source list] step 50000: 2153 entries
+[source list] step 51000: 2615 entries
+[source list] step 52000: 2923 entries
+[source list] step 53000: 2955 entries
+[source list] step 54000: 3008 entries
+[source list] step 55000: 3008 entries
+[source list] step 56000: 3008 entries
+[source list] step 57000: 3008 entries
+[source list] step 58000: 3008 entries
+[source list] step 59000: 3010 entries
+[source list] step 60000: 3010 entries
+[source list] step 61000: 3462 entries
+[source list] step 62000: 3543 entries
+[source list] step 63000: 3543 entries
+[source list] step 64000: 3543 entries
+[source list] step 65000: 3543 entries
+[source list] step 66000: 3580 entries
+[source list] step 67000: 3933 entries
+[source list] step 68000: 3933 entries
+[source list] step 69000: 3933 entries
+[source list] step 70000: 3933 entries
+[source list] kernel checked 4058 source entries
+ℹ [4645/4800] Replayed Zcash.Snark.ZeroKnowledge.ActionAdviceSourceData
+info: stderr:
+[advice certificate] step 0: 0 annotated instructions
+[advice certificate] step 1000: 26 annotated instructions
+[advice certificate] step 2000: 232 annotated instructions
+[advice certificate] step 3000: 314 annotated instructions
+[advice certificate] step 4000: 602 annotated instructions
+[advice certificate] step 5000: 606 annotated instructions
+[advice certificate] step 6000: 890 annotated instructions
+[advice certificate] step 7000: 963 annotated instructions
+[advice certificate] step 8000: 1178 annotated instructions
+[advice certificate] step 9000: 1466 annotated instructions
+[advice certificate] step 10000: 1470 annotated instructions
+[advice certificate] step 11000: 1754 annotated instructions
+[advice certificate] step 12000: 1758 annotated instructions
+[advice certificate] step 13000: 2042 annotated instructions
+[advice certificate] step 14000: 2271 annotated instructions
+[advice certificate] step 15000: 2330 annotated instructions
+[advice certificate] step 16000: 2618 annotated instructions
+[advice certificate] step 17000: 2622 annotated instructions
+[advice certificate] step 18000: 2906 annotated instructions
+[advice certificate] step 19000: 3002 annotated instructions
+[advice certificate] step 20000: 3194 annotated instructions
+[advice certificate] step 21000: 3482 annotated instructions
+[advice certificate] step 22000: 3486 annotated instructions
+[advice certificate] step 23000: 3770 annotated instructions
+[advice certificate] step 24000: 3774 annotated instructions
+[advice certificate] step 25000: 4058 annotated instructions
+[advice certificate] step 26000: 4310 annotated instructions
+[advice certificate] step 27000: 4350 annotated instructions
+[advice certificate] step 28000: 4619 annotated instructions
+[advice certificate] step 29000: 4634 annotated instructions
+[advice certificate] step 30000: 4922 annotated instructions
+[advice certificate] step 31000: 4926 annotated instructions
+[advice certificate] step 32000: 5210 annotated instructions
+[advice certificate] step 33000: 5298 annotated instructions
+[advice certificate] step 34000: 5498 annotated instructions
+[advice certificate] step 35000: 5786 annotated instructions
+[advice certificate] step 36000: 5790 annotated instructions
+[advice certificate] step 37000: 6074 annotated instructions
+[advice certificate] step 38000: 6078 annotated instructions
+[advice certificate] step 39000: 6362 annotated instructions
+[advice certificate] step 40000: 6606 annotated instructions
+[advice certificate] step 41000: 6650 annotated instructions
+[advice certificate] step 42000: 6938 annotated instructions
+[advice certificate] step 43000: 6942 annotated instructions
+[advice certificate] step 44000: 7226 annotated instructions
+[advice certificate] step 45000: 7337 annotated instructions
+[advice certificate] step 46000: 7514 annotated instructions
+[advice certificate] step 47000: 7802 annotated instructions
+[advice certificate] step 48000: 7806 annotated instructions
+[advice certificate] step 49000: 8090 annotated instructions
+[advice certificate] step 50000: 8094 annotated instructions
+[advice certificate] step 51000: 8378 annotated instructions
+[advice certificate] step 52000: 8643 annotated instructions
+[advice certificate] step 53000: 8670 annotated instructions
+[advice certificate] step 54000: 8954 annotated instructions
+[advice certificate] step 55000: 8958 annotated instructions
+[advice certificate] step 56000: 9255 annotated instructions
+[advice certificate] step 57000: 10029 annotated instructions
+[advice certificate] step 58000: 10338 annotated instructions
+[advice certificate] step 59000: 10904 annotated instructions
+[advice certificate] step 60000: 11627 annotated instructions
+[advice certificate] step 61000: 12338 annotated instructions
+[advice certificate] step 62000: 13030 annotated instructions
+[advice certificate] step 63000: 13075 annotated instructions
+[advice certificate] step 64000: 13386 annotated instructions
+[advice certificate] step 65000: 13386 annotated instructions
+[advice certificate] step 66000: 13386 annotated instructions
+[advice certificate] step 67000: 13386 annotated instructions
+[advice certificate] step 68000: 13386 annotated instructions
+[advice certificate] step 69000: 13405 annotated instructions
+[advice certificate] step 70000: 13405 annotated instructions
+[advice certificate] step 71000: 13863 annotated instructions
+[advice certificate] step 72000: 14863 annotated instructions
+[advice certificate] step 73000: 15560 annotated instructions
+[advice certificate] step 74000: 16019 annotated instructions
+[advice certificate] step 75000: 16019 annotated instructions
+[advice certificate] step 76000: 16019 annotated instructions
+[advice certificate] step 77000: 16019 annotated instructions
+[advice certificate] step 78000: 16023 annotated instructions
+[advice certificate] step 79000: 16723 annotated instructions
+[advice certificate] step 80000: 17429 annotated instructions
+[advice certificate] step 81000: 17685 annotated instructions
+[advice certificate] step 82000: 17685 annotated instructions
+[advice certificate] step 83000: 17685 annotated instructions
+[advice certificate] step 84000: 17925 annotated instructions
+[advice certificate] kernel checked 18403 original instructions
+ℹ [4649/4800] Replayed Zcash.Snark.ZeroKnowledge.ActionAdviceReadPlan
+info: stderr:
+[advice map scan] kernel checked 64 entries
+[advice map scan] kernel checked 128 entries
+[advice map scan] kernel checked 192 entries
+[advice map scan] kernel checked 256 entries
+[advice map scan] kernel checked 320 entries
+[advice map scan] kernel checked 384 entries
+[advice map scan] kernel checked 448 entries
+[advice map scan] kernel checked 512 entries
+[advice map scan] kernel checked 576 entries
+[advice map scan] kernel checked 640 entries
+[advice map scan] kernel checked 704 entries
+[advice map scan] kernel checked 768 entries
+[advice map scan] kernel checked 832 entries
+[advice map scan] kernel checked 896 entries
+[advice map scan] kernel checked 960 entries
+[advice map scan] kernel checked 1024 entries
+[advice map scan] kernel checked 1088 entries
+[advice map scan] kernel checked 1152 entries
+[advice map scan] kernel checked 1216 entries
+[advice map scan] kernel checked 1280 entries
+[advice map scan] kernel checked 1344 entries
+[advice map scan] kernel checked 1408 entries
+[advice map scan] kernel checked 1472 entries
+[advice map scan] kernel checked 1536 entries
+[advice map scan] kernel checked 1600 entries
+[advice map scan] kernel checked 1664 entries
+[advice map scan] kernel checked 1728 entries
+[advice map scan] kernel checked 1792 entries
+[advice map scan] kernel checked 1856 entries
+[advice map scan] kernel checked 1920 entries
+[advice map scan] kernel checked 1984 entries
+[advice map scan] kernel checked 2048 entries
+[advice map scan] kernel checked 2112 entries
+[advice map scan] kernel checked 2176 entries
+[advice map scan] kernel checked 2240 entries
+[advice map scan] kernel checked 2304 entries
+[advice map scan] kernel checked 2368 entries
+[advice map scan] kernel checked 2432 entries
+[advice map scan] kernel checked 2496 entries
+[advice map scan] kernel checked 2560 entries
+[advice map scan] kernel checked 2624 entries
+[advice map scan] kernel checked 2688 entries
+[advice map scan] kernel checked 2752 entries
+[advice map scan] kernel checked 2816 entries
+[advice map scan] kernel checked 2880 entries
+[advice map scan] kernel checked 2944 entries
+[advice map scan] kernel checked 3008 entries
+[advice map scan] kernel checked 3072 entries
+[advice map scan] kernel checked 3136 entries
+[advice map scan] kernel checked 3200 entries
+[advice map scan] kernel checked 3264 entries
+[advice map scan] kernel checked 3328 entries
+[advice map scan] kernel checked 3392 entries
+[advice map scan] kernel checked 3456 entries
+[advice map scan] kernel checked 3520 entries
+[advice map scan] kernel checked 3584 entries
+[advice map scan] kernel checked 3648 entries
+[advice map scan] kernel checked 3712 entries
+[advice map scan] kernel checked 3776 entries
+[advice map scan] kernel checked 3840 entries
+[advice map scan] kernel checked 3904 entries
+[advice map scan] kernel checked 3968 entries
+[advice map scan] kernel checked 4032 entries
+[advice map scan] kernel checked 4096 entries
+[advice map scan] kernel checked 4160 entries
+[advice map scan] kernel checked 4224 entries
+[advice map scan] kernel checked 4288 entries
+[advice map scan] kernel checked 4352 entries
+[advice map scan] kernel checked 4416 entries
+[advice map scan] kernel checked 4480 entries
+[advice map scan] kernel checked 4544 entries
+[advice map scan] kernel checked 4608 entries
+[advice map scan] kernel checked 4672 entries
+[advice map scan] kernel checked 4736 entries
+[advice map scan] kernel checked 4800 entries
+[advice map scan] kernel checked 4864 entries
+[advice map scan] kernel checked 4928 entries
+[advice map scan] kernel checked 4992 entries
+[advice map scan] kernel checked 5056 entries
+[advice map scan] kernel checked 5120 entries
+[advice map scan] kernel checked 5184 entries
+[advice map scan] kernel checked 5248 entries
+[advice map scan] kernel checked 5312 entries
+[advice map scan] kernel checked 5376 entries
+[advice map scan] kernel checked 5440 entries
+[advice map scan] kernel checked 5504 entries
+[advice map scan] kernel checked 5568 entries
+[advice map scan] kernel checked 5632 entries
+[advice map scan] kernel checked 5696 entries
+[advice map scan] kernel checked 5760 entries
+[advice map scan] kernel checked 5824 entries
+[advice map scan] kernel checked 5888 entries
+[advice map scan] kernel checked 5952 entries
+[advice map scan] kernel checked 6016 entries
+[advice map scan] kernel checked 6080 entries
+[advice map scan] kernel checked 6144 entries
+[advice map scan] kernel checked 6208 entries
+[advice map scan] kernel checked 6272 entries
+[advice map scan] kernel checked 6336 entries
+[advice map scan] kernel checked 6400 entries
+[advice map scan] kernel checked 6464 entries
+[advice map scan] kernel checked 6528 entries
+[advice map scan] kernel checked 6592 entries
+[advice map scan] kernel checked 6656 entries
+[advice map scan] kernel checked 6720 entries
+[advice map scan] kernel checked 6784 entries
+[advice map scan] kernel checked 6848 entries
+[advice map scan] kernel checked 6912 entries
+[advice map scan] kernel checked 6976 entries
+[advice map scan] kernel checked 7040 entries
+[advice map scan] kernel checked 7104 entries
+[advice map scan] kernel checked 7168 entries
+[advice map scan] kernel checked 7232 entries
+[advice map scan] kernel checked 7296 entries
+[advice map scan] kernel checked 7360 entries
+[advice map scan] kernel checked 7424 entries
+[advice map scan] kernel checked 7488 entries
+[advice map scan] kernel checked 7552 entries
+[advice map scan] kernel checked 7616 entries
+[advice map scan] kernel checked 7680 entries
+[advice map scan] kernel checked 7744 entries
+[advice map scan] kernel checked 7808 entries
+[advice map scan] kernel checked 7872 entries
+[advice map scan] kernel checked 7936 entries
+[advice map scan] kernel checked 8000 entries
+[advice map scan] kernel checked 8064 entries
+[advice map scan] kernel checked 8128 entries
+[advice map scan] kernel checked 8192 entries
+[advice map scan] kernel checked 8256 entries
+[advice map scan] kernel checked 8320 entries
+[advice map scan] kernel checked 8384 entries
+[advice map scan] kernel checked 8448 entries
+[advice map scan] kernel checked 8512 entries
+[advice map scan] kernel checked 8576 entries
+[advice map scan] kernel checked 8640 entries
+[advice map scan] kernel checked 8704 entries
+[advice map scan] kernel checked 8768 entries
+[advice map scan] kernel checked 8832 entries
+[advice map scan] kernel checked 8896 entries
+[advice map scan] kernel checked 8960 entries
+[advice map scan] kernel checked 9024 entries
+[advice map scan] kernel checked 9088 entries
+[advice map scan] kernel checked 9152 entries
+[advice map scan] kernel checked 9216 entries
+[advice map scan] kernel checked 9280 entries
+[advice map scan] kernel checked 9344 entries
+[advice map scan] kernel checked 9408 entries
+[advice map scan] kernel checked 9472 entries
+[advice map scan] kernel checked 9536 entries
+[advice map scan] kernel checked 9600 entries
+[advice map scan] kernel checked 9664 entries
+[advice map scan] kernel checked 9728 entries
+[advice map scan] kernel checked 9792 entries
+[advice map scan] kernel checked 9856 entries
+[advice map scan] kernel checked 9920 entries
+[advice map scan] kernel checked 9984 entries
+[advice map scan] kernel checked 10048 entries
+[advice map scan] kernel checked 10112 entries
+[advice map scan] kernel checked 10176 entries
+[advice map scan] kernel checked 10240 entries
+[advice map scan] kernel checked 10304 entries
+[advice map scan] kernel checked 10368 entries
+[advice map scan] kernel checked 10432 entries
+[advice map scan] kernel checked 10496 entries
+[advice map scan] kernel checked 10560 entries
+[advice map scan] kernel checked 10624 entries
+[advice map scan] kernel checked 10688 entries
+[advice map scan] kernel checked 10752 entries
+[advice map scan] kernel checked 10816 entries
+[advice map scan] kernel checked 10880 entries
+[advice map scan] kernel checked 10944 entries
+[advice map scan] kernel checked 11008 entries
+[advice map scan] kernel checked 11072 entries
+[advice map scan] kernel checked 11136 entries
+[advice map scan] kernel checked 11200 entries
+[advice map scan] kernel checked 11264 entries
+[advice map scan] kernel checked 11328 entries
+[advice map scan] kernel checked 11392 entries
+[advice map scan] kernel checked 11456 entries
+[advice map scan] kernel checked 11520 entries
+[advice map scan] kernel checked 11584 entries
+[advice map scan] kernel checked 11648 entries
+[advice map scan] kernel checked 11712 entries
+[advice map scan] kernel checked 11776 entries
+[advice map scan] kernel checked 11840 entries
+[advice map scan] kernel checked 11904 entries
+[advice map scan] kernel checked 11968 entries
+[advice map scan] kernel checked 12032 entries
+[advice map scan] kernel checked 12096 entries
+[advice map scan] kernel checked 12160 entries
+[advice map scan] kernel checked 12224 entries
+[advice map scan] kernel checked 12288 entries
+[advice map scan] kernel checked 12352 entries
+[advice map scan] kernel checked 12416 entries
+[advice map scan] kernel checked 12480 entries
+[advice map scan] kernel checked 12544 entries
+[advice map scan] kernel checked 12608 entries
+[advice map scan] kernel checked 12672 entries
+[advice map scan] kernel checked 12736 entries
+[advice map scan] kernel checked 12800 entries
+[advice map scan] kernel checked 12864 entries
+[advice map scan] kernel checked 12928 entries
+[advice map scan] kernel checked 12992 entries
+[advice map scan] kernel checked 13056 entries
+[advice map scan] kernel checked 13120 entries
+[advice map scan] kernel checked 13184 entries
+[advice map scan] kernel checked 13248 entries
+[advice map scan] kernel checked 13312 entries
+[advice map scan] kernel checked 13376 entries
+[advice map scan] kernel checked 13440 entries
+[advice map scan] kernel checked 13504 entries
+[advice map scan] kernel checked 13568 entries
+[advice map scan] kernel checked 13632 entries
+[advice map scan] kernel checked 13696 entries
+[advice map scan] kernel checked 13760 entries
+[advice map scan] kernel checked 13824 entries
+[advice map scan] kernel checked 13888 entries
+[advice map scan] kernel checked 13952 entries
+[advice map scan] kernel checked 14016 entries
+[advice map scan] kernel checked 14080 entries
+[advice map scan] kernel checked 14144 entries
+[advice map scan] kernel checked 14208 entries
+[advice map scan] kernel checked 14272 entries
+[advice map scan] kernel checked 14336 entries
+[advice map scan] kernel checked 14400 entries
+[advice map scan] kernel checked 14464 entries
+[advice map scan] kernel checked 14528 entries
+[advice map scan] kernel checked 14592 entries
+[advice map scan] kernel checked 14656 entries
+[advice map scan] kernel checked 14720 entries
+[advice map scan] kernel checked 14784 entries
+[advice map scan] kernel checked 14848 entries
+[advice map scan] kernel checked 14912 entries
+[advice map scan] kernel checked 14976 entries
+[advice map scan] kernel checked 15040 entries
+[advice map scan] kernel checked 15104 entries
+[advice map scan] kernel checked 15168 entries
+[advice map scan] kernel checked 15232 entries
+[advice map scan] kernel checked 15296 entries
+[advice map scan] kernel checked 15360 entries
+[advice map scan] kernel checked 15424 entries
+[advice map scan] kernel checked 15488 entries
+[advice map scan] kernel checked 15552 entries
+[advice map scan] kernel checked 15616 entries
+[advice map scan] kernel checked 15680 entries
+[advice map scan] kernel checked 15744 entries
+[advice map scan] kernel checked 15808 entries
+[advice map scan] kernel checked 15872 entries
+[advice map scan] kernel checked 15936 entries
+[advice map scan] kernel checked 16000 entries
+[advice map scan] kernel checked 16064 entries
+[advice map scan] kernel checked 16128 entries
+[advice map scan] kernel checked 16192 entries
+[advice map scan] kernel checked 16256 entries
+[advice map scan] kernel checked 16320 entries
+[advice map scan] kernel checked 16384 entries
+[advice map scan] kernel checked 16448 entries
+[advice map scan] kernel checked 16512 entries
+[advice map scan] kernel checked 16576 entries
+[advice map scan] kernel checked 16640 entries
+[advice map scan] kernel checked 16704 entries
+[advice map scan] kernel checked 16768 entries
+[advice map scan] kernel checked 16832 entries
+[advice map scan] kernel checked 16896 entries
+[advice map scan] kernel checked 16960 entries
+[advice map scan] kernel checked 17024 entries
+[advice map scan] kernel checked 17088 entries
+[advice map scan] kernel checked 17152 entries
+[advice map scan] kernel checked 17216 entries
+[advice map scan] kernel checked 17280 entries
+[advice map scan] kernel checked 17344 entries
+[advice map scan] kernel checked 17408 entries
+[advice map scan] kernel checked 17472 entries
+[advice map scan] kernel checked 17536 entries
+[advice map scan] kernel checked 17600 entries
+[advice map scan] kernel checked 17664 entries
+[advice map scan] kernel checked 17728 entries
+[advice map scan] kernel checked 17792 entries
+[advice map scan] kernel checked 17856 entries
+[advice map scan] kernel checked 17920 entries
+[advice map scan] kernel checked 17984 entries
+[advice map scan] kernel checked 18048 entries
+[advice map scan] kernel checked 18112 entries
+[advice map scan] kernel checked 18176 entries
+[advice map scan] kernel checked 18240 entries
+[advice map scan] kernel checked 18304 entries
+[advice map scan] kernel checked 18368 entries
+[advice map scan] complete: 18403 entries
+ℹ [4650/4800] Replayed Zcash.Snark.ZeroKnowledge.ActionAdviceSourceAliasCheck
+info: stderr:
+[advice map scan] kernel checked 64 entries
+[advice map scan] kernel checked 128 entries
+[advice map scan] kernel checked 192 entries
+[advice map scan] kernel checked 256 entries
+[advice map scan] kernel checked 320 entries
+[advice map scan] kernel checked 384 entries
+[advice map scan] kernel checked 448 entries
+[advice map scan] kernel checked 512 entries
+[advice map scan] kernel checked 576 entries
+[advice map scan] kernel checked 640 entries
+[advice map scan] kernel checked 704 entries
+[advice map scan] kernel checked 768 entries
+[advice map scan] kernel checked 832 entries
+[advice map scan] kernel checked 896 entries
+[advice map scan] kernel checked 960 entries
+[advice map scan] kernel checked 1024 entries
+[advice map scan] kernel checked 1088 entries
+[advice map scan] kernel checked 1152 entries
+[advice map scan] kernel checked 1216 entries
+[advice map scan] kernel checked 1280 entries
+[advice map scan] kernel checked 1344 entries
+[advice map scan] kernel checked 1408 entries
+[advice map scan] kernel checked 1472 entries
+[advice map scan] kernel checked 1536 entries
+[advice map scan] kernel checked 1600 entries
+[advice map scan] kernel checked 1664 entries
+[advice map scan] kernel checked 1728 entries
+[advice map scan] kernel checked 1792 entries
+[advice map scan] kernel checked 1856 entries
+[advice map scan] kernel checked 1920 entries
+[advice map scan] kernel checked 1984 entries
+[advice map scan] kernel checked 2048 entries
+[advice map scan] kernel checked 2112 entries
+[advice map scan] kernel checked 2176 entries
+[advice map scan] kernel checked 2240 entries
+[advice map scan] kernel checked 2304 entries
+[advice map scan] kernel checked 2368 entries
+[advice map scan] kernel checked 2432 entries
+[advice map scan] kernel checked 2496 entries
+[advice map scan] kernel checked 2560 entries
+[advice map scan] kernel checked 2624 entries
+[advice map scan] kernel checked 2688 entries
+[advice map scan] kernel checked 2752 entries
+[advice map scan] kernel checked 2816 entries
+[advice map scan] kernel checked 2880 entries
+[advice map scan] kernel checked 2944 entries
+[advice map scan] kernel checked 3008 entries
+[advice map scan] kernel checked 3072 entries
+[advice map scan] kernel checked 3136 entries
+[advice map scan] kernel checked 3200 entries
+[advice map scan] kernel checked 3264 entries
+[advice map scan] kernel checked 3328 entries
+[advice map scan] kernel checked 3392 entries
+[advice map scan] kernel checked 3456 entries
+[advice map scan] kernel checked 3520 entries
+[advice map scan] kernel checked 3584 entries
+[advice map scan] kernel checked 3648 entries
+[advice map scan] kernel checked 3712 entries
+[advice map scan] kernel checked 3776 entries
+[advice map scan] kernel checked 3840 entries
+[advice map scan] kernel checked 3904 entries
+[advice map scan] kernel checked 3968 entries
+[advice map scan] kernel checked 4032 entries
+[advice map scan] kernel checked 4096 entries
+[advice map scan] kernel checked 4160 entries
+[advice map scan] kernel checked 4224 entries
+[advice map scan] kernel checked 4288 entries
+[advice map scan] kernel checked 4352 entries
+[advice map scan] kernel checked 4416 entries
+[advice map scan] kernel checked 4480 entries
+[advice map scan] kernel checked 4544 entries
+[advice map scan] kernel checked 4608 entries
+[advice map scan] kernel checked 4672 entries
+[advice map scan] kernel checked 4736 entries
+[advice map scan] kernel checked 4800 entries
+[advice map scan] kernel checked 4864 entries
+[advice map scan] kernel checked 4928 entries
+[advice map scan] kernel checked 4992 entries
+[advice map scan] kernel checked 5056 entries
+[advice map scan] kernel checked 5120 entries
+[advice map scan] kernel checked 5184 entries
+[advice map scan] kernel checked 5248 entries
+[advice map scan] kernel checked 5312 entries
+[advice map scan] kernel checked 5376 entries
+[advice map scan] kernel checked 5440 entries
+[advice map scan] kernel checked 5504 entries
+[advice map scan] kernel checked 5568 entries
+[advice map scan] kernel checked 5632 entries
+[advice map scan] kernel checked 5696 entries
+[advice map scan] kernel checked 5760 entries
+[advice map scan] kernel checked 5824 entries
+[advice map scan] kernel checked 5888 entries
+[advice map scan] kernel checked 5952 entries
+[advice map scan] kernel checked 6016 entries
+[advice map scan] kernel checked 6080 entries
+[advice map scan] kernel checked 6144 entries
+[advice map scan] kernel checked 6208 entries
+[advice map scan] kernel checked 6272 entries
+[advice map scan] kernel checked 6336 entries
+[advice map scan] kernel checked 6400 entries
+[advice map scan] kernel checked 6464 entries
+[advice map scan] kernel checked 6528 entries
+[advice map scan] kernel checked 6592 entries
+[advice map scan] kernel checked 6656 entries
+[advice map scan] kernel checked 6720 entries
+[advice map scan] kernel checked 6784 entries
+[advice map scan] kernel checked 6848 entries
+[advice map scan] kernel checked 6912 entries
+[advice map scan] kernel checked 6976 entries
+[advice map scan] kernel checked 7040 entries
+[advice map scan] kernel checked 7104 entries
+[advice map scan] kernel checked 7168 entries
+[advice map scan] kernel checked 7232 entries
+[advice map scan] kernel checked 7296 entries
+[advice map scan] kernel checked 7360 entries
+[advice map scan] kernel checked 7424 entries
+[advice map scan] kernel checked 7488 entries
+[advice map scan] kernel checked 7552 entries
+[advice map scan] kernel checked 7616 entries
+[advice map scan] kernel checked 7680 entries
+[advice map scan] kernel checked 7744 entries
+[advice map scan] kernel checked 7808 entries
+[advice map scan] kernel checked 7872 entries
+[advice map scan] kernel checked 7936 entries
+[advice map scan] kernel checked 8000 entries
+[advice map scan] kernel checked 8064 entries
+[advice map scan] kernel checked 8128 entries
+[advice map scan] kernel checked 8192 entries
+[advice map scan] kernel checked 8256 entries
+[advice map scan] kernel checked 8320 entries
+[advice map scan] kernel checked 8384 entries
+[advice map scan] kernel checked 8448 entries
+[advice map scan] kernel checked 8512 entries
+[advice map scan] kernel checked 8576 entries
+[advice map scan] kernel checked 8640 entries
+[advice map scan] kernel checked 8704 entries
+[advice map scan] kernel checked 8768 entries
+[advice map scan] kernel checked 8832 entries
+[advice map scan] kernel checked 8896 entries
+[advice map scan] kernel checked 8960 entries
+[advice map scan] kernel checked 9024 entries
+[advice map scan] kernel checked 9088 entries
+[advice map scan] kernel checked 9152 entries
+[advice map scan] kernel checked 9216 entries
+[advice map scan] kernel checked 9280 entries
+[advice map scan] kernel checked 9344 entries
+[advice map scan] kernel checked 9408 entries
+[advice map scan] kernel checked 9472 entries
+[advice map scan] kernel checked 9536 entries
+[advice map scan] kernel checked 9600 entries
+[advice map scan] kernel checked 9664 entries
+[advice map scan] kernel checked 9728 entries
+[advice map scan] kernel checked 9792 entries
+[advice map scan] kernel checked 9856 entries
+[advice map scan] kernel checked 9920 entries
+[advice map scan] kernel checked 9984 entries
+[advice map scan] kernel checked 10048 entries
+[advice map scan] kernel checked 10112 entries
+[advice map scan] kernel checked 10176 entries
+[advice map scan] kernel checked 10240 entries
+[advice map scan] kernel checked 10304 entries
+[advice map scan] kernel checked 10368 entries
+[advice map scan] kernel checked 10432 entries
+[advice map scan] kernel checked 10496 entries
+[advice map scan] kernel checked 10560 entries
+[advice map scan] kernel checked 10624 entries
+[advice map scan] kernel checked 10688 entries
+[advice map scan] kernel checked 10752 entries
+[advice map scan] kernel checked 10816 entries
+[advice map scan] kernel checked 10880 entries
+[advice map scan] kernel checked 10944 entries
+[advice map scan] kernel checked 11008 entries
+[advice map scan] kernel checked 11072 entries
+[advice map scan] kernel checked 11136 entries
+[advice map scan] kernel checked 11200 entries
+[advice map scan] kernel checked 11264 entries
+[advice map scan] kernel checked 11328 entries
+[advice map scan] kernel checked 11392 entries
+[advice map scan] kernel checked 11456 entries
+[advice map scan] kernel checked 11520 entries
+[advice map scan] kernel checked 11584 entries
+[advice map scan] kernel checked 11648 entries
+[advice map scan] kernel checked 11712 entries
+[advice map scan] kernel checked 11776 entries
+[advice map scan] kernel checked 11840 entries
+[advice map scan] kernel checked 11904 entries
+[advice map scan] kernel checked 11968 entries
+[advice map scan] kernel checked 12032 entries
+[advice map scan] kernel checked 12096 entries
+[advice map scan] kernel checked 12160 entries
+[advice map scan] kernel checked 12224 entries
+[advice map scan] kernel checked 12288 entries
+[advice map scan] kernel checked 12352 entries
+[advice map scan] kernel checked 12416 entries
+[advice map scan] kernel checked 12480 entries
+[advice map scan] kernel checked 12544 entries
+[advice map scan] kernel checked 12608 entries
+[advice map scan] kernel checked 12672 entries
+[advice map scan] kernel checked 12736 entries
+[advice map scan] kernel checked 12800 entries
+[advice map scan] kernel checked 12864 entries
+[advice map scan] kernel checked 12928 entries
+[advice map scan] kernel checked 12992 entries
+[advice map scan] kernel checked 13056 entries
+[advice map scan] kernel checked 13120 entries
+[advice map scan] kernel checked 13184 entries
+[advice map scan] kernel checked 13248 entries
+[advice map scan] kernel checked 13312 entries
+[advice map scan] kernel checked 13376 entries
+[advice map scan] kernel checked 13440 entries
+[advice map scan] kernel checked 13504 entries
+[advice map scan] kernel checked 13568 entries
+[advice map scan] kernel checked 13632 entries
+[advice map scan] kernel checked 13696 entries
+[advice map scan] kernel checked 13760 entries
+[advice map scan] kernel checked 13824 entries
+[advice map scan] kernel checked 13888 entries
+[advice map scan] kernel checked 13952 entries
+[advice map scan] kernel checked 14016 entries
+[advice map scan] kernel checked 14080 entries
+[advice map scan] kernel checked 14144 entries
+[advice map scan] kernel checked 14208 entries
+[advice map scan] kernel checked 14272 entries
+[advice map scan] kernel checked 14336 entries
+[advice map scan] kernel checked 14400 entries
+[advice map scan] kernel checked 14464 entries
+[advice map scan] kernel checked 14528 entries
+[advice map scan] kernel checked 14592 entries
+[advice map scan] kernel checked 14656 entries
+[advice map scan] kernel checked 14720 entries
+[advice map scan] kernel checked 14784 entries
+[advice map scan] kernel checked 14848 entries
+[advice map scan] kernel checked 14912 entries
+[advice map scan] kernel checked 14976 entries
+[advice map scan] kernel checked 15040 entries
+[advice map scan] kernel checked 15104 entries
+[advice map scan] kernel checked 15168 entries
+[advice map scan] kernel checked 15232 entries
+[advice map scan] kernel checked 15296 entries
+[advice map scan] kernel checked 15360 entries
+[advice map scan] kernel checked 15424 entries
+[advice map scan] kernel checked 15488 entries
+[advice map scan] kernel checked 15552 entries
+[advice map scan] kernel checked 15616 entries
+[advice map scan] kernel checked 15680 entries
+[advice map scan] kernel checked 15744 entries
+[advice map scan] kernel checked 15808 entries
+[advice map scan] kernel checked 15872 entries
+[advice map scan] kernel checked 15936 entries
+[advice map scan] kernel checked 16000 entries
+[advice map scan] kernel checked 16064 entries
+[advice map scan] kernel checked 16128 entries
+[advice map scan] kernel checked 16192 entries
+[advice map scan] kernel checked 16256 entries
+[advice map scan] kernel checked 16320 entries
+[advice map scan] kernel checked 16384 entries
+[advice map scan] kernel checked 16448 entries
+[advice map scan] kernel checked 16512 entries
+[advice map scan] kernel checked 16576 entries
+[advice map scan] kernel checked 16640 entries
+[advice map scan] kernel checked 16704 entries
+[advice map scan] kernel checked 16768 entries
+[advice map scan] kernel checked 16832 entries
+[advice map scan] kernel checked 16896 entries
+[advice map scan] kernel checked 16960 entries
+[advice map scan] kernel checked 17024 entries
+[advice map scan] kernel checked 17088 entries
+[advice map scan] kernel checked 17152 entries
+[advice map scan] kernel checked 17216 entries
+[advice map scan] kernel checked 17280 entries
+[advice map scan] kernel checked 17344 entries
+[advice map scan] kernel checked 17408 entries
+[advice map scan] kernel checked 17472 entries
+[advice map scan] kernel checked 17536 entries
+[advice map scan] kernel checked 17600 entries
+[advice map scan] kernel checked 17664 entries
+[advice map scan] kernel checked 17728 entries
+[advice map scan] kernel checked 17792 entries
+[advice map scan] kernel checked 17856 entries
+[advice map scan] kernel checked 17920 entries
+[advice map scan] kernel checked 17984 entries
+[advice map scan] kernel checked 18048 entries
+[advice map scan] kernel checked 18112 entries
+[advice map scan] kernel checked 18176 entries
+[advice map scan] kernel checked 18240 entries
+[advice map scan] kernel checked 18304 entries
+[advice map scan] kernel checked 18368 entries
+[advice map scan] complete: 18403 entries
+ℹ [4686/4800] Replayed Zcash.Snark.ZeroKnowledge.ActionGateActivationCoverage
+info: stderr:
+[activation coverage] kernel checked all normalized input lists
+[activation coverage] kernel checked tree piece 1
+[activation coverage] kernel checked tree piece 2
+[activation coverage] kernel checked tree piece 3
+[activation coverage] kernel checked tree piece 4
+[activation coverage] kernel checked tree piece 5
+[activation coverage] kernel checked tree piece 6
+[activation coverage] kernel checked tree piece 7
+[activation coverage] kernel checked tree piece 8
+[activation coverage] kernel checked tree piece 9
+[activation coverage] kernel checked tree piece 10
+[activation coverage] kernel checked tree piece 11
+[activation coverage] kernel checked tree piece 12
+[activation coverage] kernel checked tree piece 13
+[activation coverage] kernel checked tree piece 14
+[activation coverage] kernel checked tree piece 15
+[activation coverage] kernel checked tree piece 16
+[activation coverage] kernel checked tree piece 17
+[activation coverage] kernel checked tree piece 18
+[activation coverage] kernel checked tree piece 19
+[activation coverage] kernel checked tree piece 20
+[activation coverage] kernel checked tree piece 21
+[activation coverage] kernel checked tree piece 22
+[activation coverage] kernel checked tree piece 23
+[activation coverage] kernel checked tree piece 24
+[activation coverage] kernel checked tree piece 25
+[activation coverage] kernel checked tree piece 26
+[activation coverage] kernel checked tree piece 27
+[activation coverage] kernel checked tree piece 28
+[activation coverage] kernel checked tree piece 29
+[activation coverage] kernel checked tree piece 30
+[activation coverage] kernel checked tree piece 31
+[activation coverage] kernel checked tree piece 32
+[activation coverage] kernel checked tree piece 33
+[activation coverage] kernel checked tree piece 34
+[activation coverage] kernel checked tree piece 35
+[activation coverage] kernel checked tree piece 36
+[activation coverage] kernel checked tree piece 37
+[activation coverage] kernel checked tree piece 38
+[activation coverage] kernel checked tree piece 39
+[activation coverage] kernel checked tree piece 40
+[activation coverage] kernel checked tree piece 41
+[activation coverage] kernel checked tree piece 42
+[activation coverage] kernel checked tree piece 43
+[activation coverage] kernel checked tree piece 44
+[activation coverage] kernel checked tree piece 45
+[activation coverage] kernel checked tree piece 46
+[activation coverage] kernel checked tree piece 47
+[activation coverage] kernel checked tree piece 48
+[activation coverage] kernel checked tree piece 49
+[activation coverage] kernel checked tree piece 50
+[activation coverage] kernel checked tree piece 51
+[activation coverage] kernel checked tree piece 52
+[activation coverage] kernel checked tree piece 53
+[activation coverage] kernel checked tree piece 54
+[activation coverage] kernel checked tree piece 55
+[activation coverage] kernel checked tree piece 56
+[activation coverage] kernel checked tree piece 57
+[activation coverage] kernel checked tree piece 58
+[activation coverage] kernel checked tree piece 59
+[activation coverage] kernel checked tree piece 60
+[activation coverage] kernel checked tree piece 61
+[activation coverage] kernel checked tree piece 62
+[activation coverage] kernel checked tree piece 63
+[activation coverage] kernel checked tree piece 64
+[activation coverage] kernel checked tree piece 65
+[activation coverage] kernel checked tree piece 66
+[activation coverage] kernel checked tree piece 67
+[activation coverage] kernel checked tree piece 68
+[activation coverage] kernel checked tree piece 69
+[activation coverage] kernel checked tree piece 70
+[activation coverage] kernel checked tree piece 71
+[activation coverage] kernel checked tree piece 72
+[activation coverage] kernel checked tree piece 73
+[activation coverage] kernel checked tree piece 74
+[activation coverage] kernel checked tree piece 75
+[activation coverage] kernel checked tree piece 76
+[activation coverage] kernel checked tree piece 77
+[activation coverage] kernel checked tree piece 78
+[activation coverage] kernel checked tree piece 79
+[activation coverage] kernel checked tree piece 80
+[activation coverage] kernel checked tree piece 81
+[activation coverage] kernel checked tree piece 82
+[activation coverage] kernel checked tree piece 83
+[activation coverage] kernel checked tree piece 84
+[activation coverage] kernel checked tree piece 85
+[activation coverage] kernel checked tree piece 86
+[activation coverage] kernel checked tree piece 87
+[activation coverage] kernel checked tree piece 88
+[activation coverage] kernel checked tree piece 89
+[activation coverage] kernel checked tree piece 90
+[activation coverage] kernel checked tree piece 91
+[activation coverage] kernel checked tree piece 92
+[activation coverage] kernel checked tree piece 93
+[activation coverage] kernel checked tree piece 94
+[activation coverage] kernel checked tree piece 95
+[activation coverage] kernel checked tree piece 96
+[activation coverage] kernel checked tree piece 97
+[activation coverage] kernel checked tree piece 98
+[activation coverage] kernel checked tree piece 99
+[activation coverage] kernel checked tree piece 100
+[activation coverage] kernel checked tree piece 101
+[activation coverage] kernel checked tree piece 102
+[activation coverage] kernel checked tree piece 103
+[activation coverage] kernel checked tree piece 104
+[activation coverage] kernel checked tree piece 105
+[activation coverage] kernel checked tree piece 106
+[activation coverage] kernel checked tree piece 107
+[activation coverage] kernel checked tree piece 108
+[activation coverage] kernel checked tree piece 109
+[activation coverage] kernel checked tree piece 110
+[activation coverage] kernel checked tree piece 111
+[activation coverage] kernel checked tree piece 112
+[activation coverage] kernel checked tree piece 113
+[activation coverage] kernel checked tree piece 114
+[activation coverage] kernel checked tree piece 115
+[activation coverage] kernel checked tree piece 116
+[activation coverage] kernel checked tree piece 117
+[activation coverage] kernel checked tree piece 118
+[activation coverage] kernel checked tree piece 119
+[activation coverage] kernel checked tree piece 120
+[activation coverage] kernel checked tree piece 121
+[activation coverage] kernel checked tree piece 122
+[activation coverage] kernel checked tree piece 123
+[activation coverage] kernel checked tree piece 124
+[activation coverage] kernel checked tree piece 125
+[activation coverage] kernel checked tree piece 126
+[activation coverage] kernel checked tree piece 127
+[activation coverage] kernel checked stored comparison tree
+[activation coverage] kernel checked configured entry 1
+[activation coverage] kernel checked configured entry 2
+[activation coverage] kernel checked configured entry 3
+[activation coverage] kernel checked configured entry 4
+[activation coverage] kernel checked configured entry 5
+[activation coverage] kernel checked configured entry 6
+[activation coverage] kernel checked configured entry 7
+[activation coverage] kernel checked configured entry 8
+[activation coverage] kernel checked configured entry 9
+[activation coverage] kernel checked configured entry 10
+[activation coverage] kernel checked configured entry 11
+[activation coverage] kernel checked configured entry 12
+[activation coverage] kernel checked configured entry 13
+[activation coverage] kernel checked configured entry 14
+[activation coverage] kernel checked configured entry 15
+[activation coverage] kernel checked configured entry 16
+[activation coverage] kernel checked configured entry 17
+[activation coverage] kernel checked configured entry 18
+[activation coverage] kernel checked configured entry 19
+[activation coverage] kernel checked configured entry 20
+[activation coverage] kernel checked configured entry 21
+[activation coverage] kernel checked configured entry 22
+[activation coverage] kernel checked configured entry 23
+[activation coverage] kernel checked configured entry 24
+[activation coverage] kernel checked configured entry 25
+[activation coverage] kernel checked configured entry 26
+[activation coverage] kernel checked configured entry 27
+[activation coverage] kernel checked configured entry 28
+[activation coverage] kernel checked configured entry 29
+[activation coverage] kernel checked configured entry 30
+[activation coverage] kernel checked configured entry 31
+[activation coverage] kernel checked configured entry 32
+[activation coverage] kernel checked configured entry 33
+[activation coverage] kernel checked configured entry 34
+[activation coverage] kernel checked configured entry 35
+[activation coverage] kernel checked configured entry 36
+[activation coverage] kernel checked configured entry 37
+[activation coverage] kernel checked configured entry 38
+[activation coverage] kernel checked configured entry 39
+[activation coverage] kernel checked configured entry 40
+[activation coverage] kernel checked configured entry 41
+[activation coverage] kernel checked configured entry 42
+[activation coverage] kernel checked configured entry 43
+[activation coverage] kernel checked configured entry 44
+[activation coverage] kernel checked configured entry 45
+[activation coverage] kernel checked configured entry 46
+[activation coverage] kernel checked configured entry 47
+[activation coverage] kernel checked configured entry 48
+[activation coverage] kernel checked configured entry 49
+[activation coverage] kernel checked configured entry 50
+[activation coverage] kernel checked configured entry 51
+[activation coverage] kernel checked configured entry 52
+[activation coverage] kernel checked configured entry 53
+[activation coverage] kernel checked configured entry 54
+[activation coverage] kernel checked configured entry 55
+ℹ [4695/4800] Replayed Zcash.Snark.ZeroKnowledge.ActionLookupSourceCertificate
+info: stderr:
+[source list] step 0: 0 entries
+[source list] step 1000: 4 entries
+[source list] step 2000: 60 entries
+[source list] step 3000: 60 entries
+[source list] step 4000: 116 entries
+[source list] step 5000: 172 entries
+[source list] step 6000: 172 entries
+[source list] step 7000: 228 entries
+[source list] step 8000: 284 entries
+[source list] step 9000: 284 entries
+[source list] step 10000: 340 entries
+[source list] step 11000: 396 entries
+[source list] step 12000: 396 entries
+[source list] step 13000: 452 entries
+[source list] step 14000: 508 entries
+[source list] step 15000: 508 entries
+[source list] step 16000: 564 entries
+[source list] step 17000: 620 entries
+[source list] step 18000: 620 entries
+[source list] step 19000: 676 entries
+[source list] step 20000: 732 entries
+[source list] step 21000: 732 entries
+[source list] step 22000: 788 entries
+[source list] step 23000: 844 entries
+[source list] step 24000: 846 entries
+[source list] step 25000: 900 entries
+[source list] step 26000: 956 entries
+[source list] step 27000: 956 entries
+[source list] step 28000: 1012 entries
+[source list] step 29000: 1068 entries
+[source list] step 30000: 1068 entries
+[source list] step 31000: 1124 entries
+[source list] step 32000: 1180 entries
+[source list] step 33000: 1180 entries
+[source list] step 34000: 1236 entries
+[source list] step 35000: 1292 entries
+[source list] step 36000: 1292 entries
+[source list] step 37000: 1348 entries
+[source list] step 38000: 1404 entries
+[source list] step 39000: 1404 entries
+[source list] step 40000: 1460 entries
+[source list] step 41000: 1516 entries
+[source list] step 42000: 1516 entries
+[source list] step 43000: 1572 entries
+[source list] step 44000: 1628 entries
+[source list] step 45000: 1628 entries
+[source list] step 46000: 1684 entries
+[source list] step 47000: 1740 entries
+[source list] step 48000: 1740 entries
+[source list] step 49000: 1792 entries
+[source list] step 50000: 1792 entries
+[source list] step 51000: 1792 entries
+[source list] step 52000: 1792 entries
+[source list] step 53000: 1792 entries
+[source list] step 54000: 1792 entries
+[source list] step 55000: 1792 entries
+[source list] step 56000: 1792 entries
+[source list] step 57000: 1792 entries
+[source list] step 58000: 1805 entries
+[source list] step 59000: 1805 entries
+[source list] step 60000: 1811 entries
+[source list] step 61000: 1811 entries
+[source list] step 62000: 1811 entries
+[source list] step 63000: 1889 entries
+[source list] step 64000: 1889 entries
+[source list] step 65000: 1889 entries
+[source list] step 66000: 1889 entries
+[source list] step 67000: 1889 entries
+[source list] step 68000: 1889 entries
+[source list] step 69000: 1889 entries
+[source list] step 70000: 2000 entries
+[source list] step 71000: 2000 entries
+[source list] step 72000: 2000 entries
+[source list] step 73000: 2000 entries
+[source list] step 74000: 2000 entries
+[source list] step 75000: 2000 entries
+[source list] step 76000: 2000 entries
+[source list] step 77000: 2261 entries
+[source list] step 78000: 2261 entries
+[source list] step 79000: 2261 entries
+[source list] step 80000: 2261 entries
+[source list] step 81000: 2261 entries
+[source list] step 82000: 2261 entries
+[source list] kernel checked 2424 source entries
+ℹ [4696/4800] Replayed Zcash.Snark.ZeroKnowledge.ActionLookupActivationCoverage
+info: stderr:
+[activation coverage] kernel checked all normalized input lists
+[activation coverage] kernel checked tree piece 1
+[activation coverage] kernel checked tree piece 2
+[activation coverage] kernel checked tree piece 3
+[activation coverage] kernel checked tree piece 4
+[activation coverage] kernel checked tree piece 5
+[activation coverage] kernel checked tree piece 6
+[activation coverage] kernel checked tree piece 7
+[activation coverage] kernel checked tree piece 8
+[activation coverage] kernel checked tree piece 9
+[activation coverage] kernel checked tree piece 10
+[activation coverage] kernel checked tree piece 11
+[activation coverage] kernel checked tree piece 12
+[activation coverage] kernel checked tree piece 13
+[activation coverage] kernel checked tree piece 14
+[activation coverage] kernel checked tree piece 15
+[activation coverage] kernel checked tree piece 16
+[activation coverage] kernel checked tree piece 17
+[activation coverage] kernel checked tree piece 18
+[activation coverage] kernel checked tree piece 19
+[activation coverage] kernel checked tree piece 20
+[activation coverage] kernel checked tree piece 21
+[activation coverage] kernel checked tree piece 22
+[activation coverage] kernel checked tree piece 23
+[activation coverage] kernel checked tree piece 24
+[activation coverage] kernel checked tree piece 25
+[activation coverage] kernel checked tree piece 26
+[activation coverage] kernel checked tree piece 27
+[activation coverage] kernel checked tree piece 28
+[activation coverage] kernel checked tree piece 29
+[activation coverage] kernel checked tree piece 30
+[activation coverage] kernel checked tree piece 31
+[activation coverage] kernel checked tree piece 32
+[activation coverage] kernel checked tree piece 33
+[activation coverage] kernel checked tree piece 34
+[activation coverage] kernel checked tree piece 35
+[activation coverage] kernel checked tree piece 36
+[activation coverage] kernel checked tree piece 37
+[activation coverage] kernel checked tree piece 38
+[activation coverage] kernel checked tree piece 39
+[activation coverage] kernel checked tree piece 40
+[activation coverage] kernel checked tree piece 41
+[activation coverage] kernel checked tree piece 42
+[activation coverage] kernel checked tree piece 43
+[activation coverage] kernel checked tree piece 44
+[activation coverage] kernel checked tree piece 45
+[activation coverage] kernel checked tree piece 46
+[activation coverage] kernel checked tree piece 47
+[activation coverage] kernel checked tree piece 48
+[activation coverage] kernel checked tree piece 49
+[activation coverage] kernel checked tree piece 50
+[activation coverage] kernel checked tree piece 51
+[activation coverage] kernel checked tree piece 52
+[activation coverage] kernel checked tree piece 53
+[activation coverage] kernel checked tree piece 54
+[activation coverage] kernel checked tree piece 55
+[activation coverage] kernel checked tree piece 56
+[activation coverage] kernel checked tree piece 57
+[activation coverage] kernel checked tree piece 58
+[activation coverage] kernel checked tree piece 59
+[activation coverage] kernel checked tree piece 60
+[activation coverage] kernel checked tree piece 61
+[activation coverage] kernel checked tree piece 62
+[activation coverage] kernel checked tree piece 63
+[activation coverage] kernel checked tree piece 64
+[activation coverage] kernel checked tree piece 65
+[activation coverage] kernel checked tree piece 66
+[activation coverage] kernel checked tree piece 67
+[activation coverage] kernel checked tree piece 68
+[activation coverage] kernel checked tree piece 69
+[activation coverage] kernel checked tree piece 70
+[activation coverage] kernel checked tree piece 71
+[activation coverage] kernel checked tree piece 72
+[activation coverage] kernel checked tree piece 73
+[activation coverage] kernel checked tree piece 74
+[activation coverage] kernel checked tree piece 75
+[activation coverage] kernel checked tree piece 76
+[activation coverage] kernel checked stored comparison tree
+[activation coverage] kernel checked configured entry 1
+[activation coverage] kernel checked configured entry 2
+[activation coverage] kernel checked configured entry 3
+✔ [4854/4858] Built Zcash.Snark.ZeroKnowledge.Action.TrustBoundary (65s)
+✔ [4855/4858] Built Zcash.Snark.ZeroKnowledge.TrustBoundary (66s)
+✔ [4857/4858] Built Zcash.CensusCheck (83s)
+Build completed successfully (4858 jobs).

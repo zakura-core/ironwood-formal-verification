@@ -865,8 +865,8 @@ explicit admissibility premises; they do not assert a bound for an opaque callba
   pinned and separately inventoried. Both original stage certificates and all
   certificate regressions pass with the bounded checking pieces. The later
   application closure completes both full Action source scans and directly pins
-  all nine new source and application theorems. The endpoint census now passes
-  with 331 declarations.
+  all nine new source and application theorems. That checkpoint passed the
+  endpoint census with 331 declarations.
 - [x] Run the full `lake build --wfail` before declaring an extension complete.
   The byte-cache cost milestone passes locally with 4,428
   jobs; all 891 modules were covered by the default targets. The application
@@ -876,10 +876,18 @@ explicit admissibility premises; they do not assert a bound for an opaque callba
   identifies the exact proof baseline. The complete application and simulator
   runtime closure passes the full build with 4,629 jobs, including both trust
   boundaries and the regression certificates; all 1,092 workspace modules are
-  covered by the default targets. Future theorem commits require their own
-  validation; these local results do not assert hosted CI success.
+  covered by the default targets. The operational PRNG milestone at
+  `4a87136b23e7b25eb079a19e7f1289838f138dc1` passes the
+  [complete 4,858-job build and all repository guards](review/validation-4a87136b.log),
+  with [164 separately inventoried declarations](review/axioms-4a87136b.log) across
+  29 new modules. All 334 endpoints are pinned and all 1,321 modules are covered.
+  The [raw build output](review/build-4a87136b.log) and
+  [source/module/pin mapping](review/declarations-4a87136b.json) identify the exact
+  validated revision. Future theorem commits require their own validation;
+  these local results do not assert hosted CI success.
 
-The application witness bridge and complete simulator runtime are now proved.
-Remaining extensions are resource admissibility for a concrete PRNG reduction and
-independent review. Update the review packet when its proof baseline changes;
-completed theorems remain usable with their stated assumptions throughout.
+The application witness bridge, complete simulator runtime, and operational PRNG
+reduction resource conditions are proved. Independent review is the only unchecked
+item. Retain this checklist until that assessment and any required resolutions
+are recorded, then remove it and repair incoming links. The proved theorems remain
+usable with their stated assumptions throughout.
