@@ -246,8 +246,9 @@ and structural operation prices. Setup/key generation is outside this model of
 supplied inputs. The [distribution theorem](StoredActionOracleRuntime.lean) proves
 that this counted implementation has the existing fixed-bit simulator's law and
 two-sided statistical error bound. These are structural execution costs;
-compiler and machine-code correspondence and the real-prover-and-test PRNG
-resource bound remain separate.
+compiler and machine-code correspondence are outside that result. The complete
+real-prover-and-test resource bounds have their own
+[operational PRNG instantiations](PROGRAMS.md).
 
 The [counted IPA simulator](IpaSimulatorCost.lean) now constructs and materializes
 every round point, the mask commitment, and both scalar responses. Its erasure
@@ -380,9 +381,12 @@ admitted retry-and-postprocessing test, the simulation error is at most
 whole generated prefix, with [exact capacity](ActionPrivateRetryBits.lean)
 `512 * n * (148m + 46)` bits. The proof assumes no independence of generated
 blocks. It proves equality of the actual execution and security-game observation,
-including retained failures, exhaustion, and the final oracle cache. Concrete
-generator security, reduction-class membership, and a running-time proof remain
-explicit obligations. This allocation policy makes no Rust cursor-parity claim.
+including retained failures, exhaustion, and the final oracle cache. This generic
+reduction takes an explicit admissibility premise for arbitrary supplied
+preprocessing and postprocessing. The [executable fixed-request corollaries](PROGRAMS.md)
+prove membership and complete runtime bounds for concrete finite view circuits;
+generator security remains an assumption. This allocation policy makes no Rust
+cursor-parity claim.
 
 The [complete seeded stream](ActionGeneratorStream.lean) now initializes that
 generator once and runs with an independent infinite public reply tape. Every
@@ -406,8 +410,11 @@ execution. The comparison charges `eta` twice, once per reduction. For
 [Nontermination has the same tail bound](ActionGeneratorStreamTermination.lean)
 and remains part of the observed experiment. Neither independent PRNG blocks nor
 almost-sure seeded termination is assumed. The theorem fixes the request and
-initial cache; concrete PRNG security, resource-class membership, and runtime
-remain explicit premises or separate work.
+initial cache. Its [operational specialization](CostedActionGeneratorStream.lean)
+discharges membership and complete runtime bounds for both finite reductions,
+using a concrete stream circuit and a common derived time limit. PRNG security
+against that bounded program class remains the external assumption; see
+[the program model](PROGRAMS.md).
 
 The current [Action compiler reference theorem](ActionCompilerSimulation.lean) gives a
 numerical statistical honest-verifier simulation bound for a complete encoded reference

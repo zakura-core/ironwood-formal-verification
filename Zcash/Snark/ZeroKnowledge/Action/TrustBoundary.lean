@@ -1,3 +1,18 @@
+import Zcash.Snark.ZeroKnowledge.ActionReductionClass
+import Zcash.Snark.ZeroKnowledge.ActionReductionData
+import Zcash.Snark.ZeroKnowledge.ActionReductionProgram
+import Zcash.Snark.ZeroKnowledge.ActionReductionSource
+import Zcash.Snark.ZeroKnowledge.CostedActionGeneratorStream
+import Zcash.Snark.ZeroKnowledge.CostedActionPrng
+import Zcash.Snark.ZeroKnowledge.CostedInteractivePrng
+import Zcash.Snark.ZeroKnowledge.InteractiveBitsView
+import Zcash.Snark.ZeroKnowledge.InteractiveReductionClass
+import Zcash.Snark.ZeroKnowledge.InteractiveReductionProgram
+import Zcash.Snark.ZeroKnowledge.InteractiveReductionSource
+import Zcash.Snark.ZeroKnowledge.InteractiveTestCost
+import Zcash.Snark.ZeroKnowledge.InteractiveViewBound
+import Zcash.Snark.ZeroKnowledge.InteractiveViewCost
+import Zcash.Snark.ZeroKnowledge.ObservedReductionCost
 import Zcash.Snark.ZeroKnowledge.StoredActionRawStepCost
 import Zcash.Snark.ZeroKnowledge.StoredActionRawStepBound
 import Zcash.Snark.ZeroKnowledge.StoredActionRecordedCost
@@ -1577,3 +1592,66 @@ assert_axioms Zcash.Snark.ZeroKnowledge.storedActionRecordedBitsCosted_result +n
 assert_computable Zcash.Snark.ZeroKnowledge.storedActionRecordedBitsCostBudget +choice
 assert_axioms Zcash.Snark.ZeroKnowledge.storedActionRecordedBitsCosted_cost_le +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
 assert_axioms Zcash.Snark.ZeroKnowledge.storedActionRecordedBitsCosted_law +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+
+/- Complete executable PRNG reductions, full-view tests, and resource admissibility. -/
+assert_computable Zcash.Snark.ZeroKnowledge.ActionReductionProgram.constant
+assert_axioms Zcash.Snark.ZeroKnowledge.ActionReductionProgram.kernel_constant +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.ActionReductionProgram.constant_costBudget
+assert_axioms Zcash.Snark.ZeroKnowledge.actionReductionAdmissible_constants +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.ActionReductionProgram.kernel_negate +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.ActionReductionPrices
+assert_axioms Zcash.Snark.ZeroKnowledge.ActionReductionData
+assert_computable Zcash.Snark.ZeroKnowledge.ActionReductionData.ofReference +choice +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.ActionReductionData.WellFormed +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.ActionReductionData.ofReference_wellFormed +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.ActionReductionProgram
+assert_computable Zcash.Snark.ZeroKnowledge.ActionReductionProgram.evalCosted +choice +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.ActionReductionProgram.costBudget +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.ActionReductionProgram.evalCosted_cost_le +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.ActionReductionProgram.kernel +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionReductionAdmissible +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionReductionAdmissible_runtime +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionReductionAdmissible_mono +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.recordedPrngTimeBound +choice
+assert_computable Zcash.Snark.ZeroKnowledge.recordedPrngViewAndTailTimeBound +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.ActionReductionProgram.kernel_observed +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleRecordPrngReduction_mem_costed +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionOracleRecordPrngReduction_mem_ownBudget +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.costedGeneratedUnlimitedActionOracle_simulation_capstone +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.costedActionOracleRecordPrng_test_error_bound +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.costedActionOracleRecordPrng_exhaustion_le +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.costedUniformSeedActionZk_test_error_bound +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.interactiveBitsViewCosted +choice +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.interactiveBitsViewCostBudget +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.interactiveBitsViewCosted_cost_le +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.interactiveBitsViewCosted_result +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.InteractiveReductionProgram.constant
+assert_axioms Zcash.Snark.ZeroKnowledge.InteractiveReductionProgram.kernel_constant +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.InteractiveReductionProgram.constant_costBudget
+assert_axioms Zcash.Snark.ZeroKnowledge.interactiveReductionAdmissible_constants +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.InteractiveReductionProgram.kernel_negate +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.InteractiveReductionProgram
+assert_computable Zcash.Snark.ZeroKnowledge.InteractiveReductionProgram.evalCosted +choice +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.InteractiveReductionProgram.costBudget +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.InteractiveReductionProgram.evalCosted_cost_le +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.InteractiveReductionProgram.kernel +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.interactiveReductionAdmissible +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.interactiveReductionAdmissible_runtime +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.interactivePrngTimeBound +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.InteractiveReductionProgram.kernel_observed +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.actionPrngReduction_mem_costed +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.interactiveViewTest
+assert_computable Zcash.Snark.ZeroKnowledge.interactiveTestCosted +choice +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.interactiveTestCostBudget +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.interactiveTestCosted_cost_le +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.interactiveTestCosted_result +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.interactiveHistoryViewCostBudget +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.interactiveHistoryViewCosted_cost_le +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.interactiveViewFrames
+assert_computable Zcash.Snark.ZeroKnowledge.interactiveRecordedView
+assert_computable Zcash.Snark.ZeroKnowledge.interactiveHistoryViewCosted +choice +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.interactiveHistoryViewCosted_result +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.observedReductionCosted +choice +native(CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_computable Zcash.Snark.ZeroKnowledge.observedReductionCostBudget +choice
+assert_axioms Zcash.Snark.ZeroKnowledge.observedReductionCosted_cost_le +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)
+assert_axioms Zcash.Snark.ZeroKnowledge.observedReductionCosted_result +native(CompElliptic.Curves.Pasta.Pallas.q_nsmul_Gpt, CompElliptic.Curves.Pasta.Vesta.p_nsmul_Gpt)

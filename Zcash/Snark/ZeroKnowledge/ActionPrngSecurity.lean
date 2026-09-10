@@ -10,8 +10,10 @@ The tested view includes the full challenge tape, emitted prefix, and status.
 
 The PRNG security premise ranges over a supplied admissible class. The theorem
 requires membership of the actual reference-prover reduction, including its
-view test. Discharging that membership with a concrete cost model, choosing a
-secure generator, and repeated generator state remain separate obligations.
+view test. `CostedInteractivePrng` discharges membership for finite executable
+view circuits with complete structural runtime bounds. Generator security is
+still an external assumption; this one-attempt template does not address
+repeated generator state.
 -/
 
 namespace Zcash.Snark.ZeroKnowledge

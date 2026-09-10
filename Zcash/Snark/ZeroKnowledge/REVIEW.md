@@ -1,6 +1,6 @@
 # ZK review packet
 
-Proof baseline: `3b8f04a7b2f136095aae3b349f770813bd905f40` on `establish-zk` in
+Recorded validation baseline: `3b8f04a7b2f136095aae3b349f770813bd905f40` on `establish-zk` in
 [the private PR](https://github.com/TalDerei/ironwood-private/pull/1).
 The claims below concern that checked Lean development and its specified
 experiments. Independent review is pending.
@@ -17,6 +17,8 @@ All theorem names in this packet are in `Zcash.Snark.ZeroKnowledge`.
 `MeasureEventBiasLE` does so for measurable events of complete stream laws.
 The simulation results provide both directions. The PRNG results instead bound
 the Boolean output of an admitted test under an explicit security assumption.
+The [operational program model](PROGRAMS.md) specifies the concrete finite tests
+and complete real-prover reductions whose resource conditions are discharged.
 
 | Claim | Theorem and source | Compared laws |
 | --- | --- | --- |
@@ -30,6 +32,9 @@ the Boolean output of an admitted test under an explicit security assumption.
 | One seeded interactive attempt, test error `epsilon(m)+eta` | `uniformSeedActionZk_test_error_bound` in [ActionPrngSecurity.lean](ActionPrngSecurity.lean) | Auxiliary-data mixtures of tested `actionZkProverFromSource` and `actionZkSimulator` |
 | Finite retries from one continuing generator, test error `R(m,q_pre,n)+eta` | `generatedActionFiatShamirRetry_test_error_bound` in [ActionGeneratorPrng.lean](ActionGeneratorPrng.lean) | Tested `actionGeneratedOracleRetryExperiment` and `actionOracleRetrySimulatedExperiment` |
 | Complete seeded retry stream for a fixed request, test error `2(C(m,q)+b(m)^n+eta)` | `generatedUnlimitedActionOracle_simulation_capstone` in [ActionGeneratorStreamPrng.lean](ActionGeneratorStreamPrng.lean) | Tested `actionGeneratedOracleRetryStream` and `actionOracleBitRetryStream` |
+| Seeded interactive attempt with a derived resource limit | `costedUniformSeedActionZk_test_error_bound` in [CostedInteractivePrng.lean](CostedInteractivePrng.lean) | The original seeded interactive prover and public simulator under an executable full-view circuit; error `epsilon(m)+eta` |
+| Recorded seeded retries with a derived resource limit | `costedActionOracleRecordPrng_test_error_bound` in [CostedActionPrng.lean](CostedActionPrng.lean) | The complete recorded real history and fixed-bit simulator under an executable circuit; error `C(m,q)+eta` |
+| Complete seeded stream with both finite reductions costed | `costedGeneratedUnlimitedActionOracle_simulation_capstone` in [CostedActionGeneratorStream.lean](CostedActionGeneratorStream.lean) | The original complete stream laws under a concrete finite stream circuit; error `2(C(m,q)+b(m)^n+eta)` |
 
 The one-attempt ideal-field simulator has an explicit computable tape program;
 `actionOracleSimulatorProgram_law` in [ActionOracleSimulator.lean](ActionOracleSimulator.lean)
@@ -86,9 +91,12 @@ its own additional sampling term and [exact bit-tape law](ActionOracleBits.lean)
   continuing-generator extension has its own PRNG reduction below.
 - The [PRNG game](PrngSecurity.lean) samples a uniform bit seed independently of
   preprocessing and retained auxiliary data. Security is relative to an explicit
-  admissible test class. Membership of the entire prover/retry/postprocessing
-  reduction is a premise. No statistical closeness of a seeded tape, concrete
-  generator security, or efficient-test membership is inferred from wide reduction.
+  admissible test class. The generic arbitrary-callback templates take membership
+  as a premise. The operational corollaries prove membership and complete costs
+  for concrete finite circuits and fixed materialized inputs. Auxiliary copying,
+  real proving, caches, retained retries, and test execution are charged. PRNG
+  security against that bounded family remains an assumption. No statistical
+  closeness of a seeded tape or concrete generator security follows from wide reduction.
 - The [continuing-generator runner](ActionGeneratorRetry.lean) initializes once
   per experiment. Each started attempt consumes a whole private block and discards
   unused words in that block. Terminal output stops before the next block.
@@ -107,7 +115,9 @@ its own additional sampling term and [exact bit-tape law](ActionOracleBits.lean)
   assumption is introduced, and the infinite nontermination event need not itself
   belong to the PRNG test class. The tested comparison requires a measurable view
   test. This theorem does not instantiate adaptive preprocessing/postprocessing
-  on the infinite stream or prove either reduction's machine running time.
+  on the infinite stream. The [operational specialization](CostedActionGeneratorStream.lean)
+  proves measurability and both reductions' membership at a common derived
+  structural time limit. It does not claim machine running time.
 
 **Bounds and resource accounting**
 
@@ -165,7 +175,28 @@ proof, canonical codecs and observation, query replay, and cache programming are
 included, with all failure branches retained. Inputs are materialized public
 inputs, setup vectors, key trees/layout, bits, and the initial cache; setup/key
 generation is outside the supplied-input model. The budget records explicit
-primitive operation prices. The real prover's [lookup-prefix construction](LookupSortRowsCost.lean)
+primitive operation prices.
+
+The complete real prover now also has [interactive](InteractiveTestCost.lean)
+and [recorded-retry](ObservedReductionCost.lean) execution bounds. Both include
+the actual original private tape, PLONK/IPA computation, canonical observation,
+auxiliary copying, and every instruction and input access in the finite view
+circuit. The [interactive](InteractiveReductionSource.lean) and
+[recorded](ActionReductionSource.lean) source bridges identify the old PRNG-game
+reductions and prove their membership without supplied cost certificates.
+The stream corollary uses the maximum of the complete view-test and
+exhaustion-test budgets. [PROGRAMS.md](PROGRAMS.md) records the exact syntax,
+input representation, primitive prices, and scope. Generic arbitrary-callback
+reduction templates retain their explicit admissibility premises.
+
+**Component evidence from preceding checkpoints**
+
+The following construction notes record what each component established when
+it was added. Statements about remaining composition work in these historical
+notes are superseded by the complete operational results above. Their individual
+validation records still refer to their named commits.
+
+The real prover's [lookup-prefix construction](LookupSortRowsCost.lean)
 now has a complete input-size bound covering sorting, reservations, reverse filling,
 and failures. The [lookup and permutation ratio scans](RunningProductCost.lean)
 retain every row-provider cost and inherited chunk, including zero denominators.

@@ -10,9 +10,10 @@ The one-attempt programmable-random-oracle distribution theorem is also complete
 including its fixed-bit simulator. Finite shared-oracle retries, the complete
 fixed-request shared-oracle stream, and the finite and unlimited reductions for
 a continuing private generator are also checked. The application witness constructor
-now supplies valid Action rows under its stated input conditions, and the complete
-fixed-bit simulator has a checked structural runtime bound. Concrete PRNG reduction
-resource admissibility and independent review remain open.
+now supplies valid Action rows under its stated input conditions. Complete structural
+runtime bounds cover the simulator and the actual real-prover reductions with
+concrete finite view tests; the operational PRNG corollaries discharge their
+resource-class membership. Independent review remains open.
 
 Checked items have the cited proof or validation evidence. Unchecked items are
 future work; adding this checklist does not prove them.
@@ -782,14 +783,44 @@ unlimited seeded reduction in item 3. Runtime analysis remains separate.
   Its [exact law](StoredActionRecordedBitsLaw.lean) recovers the existing
   recorded experiment for every candidate private prefix, including correlated
   PRNG output. Generated state-size and tape-shape conditions are discharged.
-- [ ] Discharge the PRNG reduction's resource conditions wherever that
-  computational instantiation is claimed. This requires bounds for the actual
-  real-prover-and-test reduction, including retained auxiliary data and any retry
-  or postprocessing work; the simulator's runtime bound alone does not supply them.
+- [x] Implement and bound [finite Boolean test circuits](BooleanTestBound.lean),
+  with actual indexed reads of the [complete public recorded view](RecordedTestReadBound.lean),
+  raw candidate words, and retained auxiliary data. Presence tests distinguish
+  missing data, zero values, programming failures, and stopped suffixes. Regression
+  proofs cover cache routing, address components, raw input dependence, and wires.
+- [x] Define the [recorded](ActionReductionProgram.lean) and
+  [interactive](InteractiveReductionProgram.lean) operational PRNG program classes.
+  Every member has executable code and a proved complete counter bound. The
+  constructors admit ordinary raw-tape circuits, full real-prover-and-view-test
+  runs, and Boolean composition; they contain no arbitrary host-predicate callback.
+- [x] Identify the complete interactive view in a
+  [lossless stored representation](InteractiveViewEncoding.lean), including the
+  full verifier challenge tape and the observed prefix/status. Its
+  [source and costed implementation](InteractiveBitsView.lean) uses the actual
+  Action prover, all original private words, fair verifier bits, canonical codecs,
+  and the original failure checks.
+- [x] Prove equality with the existing [interactive](InteractiveReductionSource.lean)
+  and [recorded-retry](ActionReductionSource.lean) PRNG-game reductions. Their
+  actual code supplies class membership at a derived time bound, including
+  complete real proving, auxiliary copying, retries, cache growth, and tests.
+  The [stream circuit translation](StreamTestProgram.lean) supplies measurability
+  and the exact clipped-view test; the exhaustion detector is a concrete circuit
+  in the same bounded class.
+- [x] Discharge the actual reduction's resource conditions in the
+  [interactive](CostedInteractivePrng.lean), [recorded-retry](CostedActionPrng.lean),
+  and [complete-stream](CostedActionGeneratorStream.lean) operational PRNG corollaries.
+  These prove membership at explicit derived time limits for concrete finite
+  circuits, including retained auxiliary data, complete real proving, all retries
+  and caches, and the test itself. The stream result admits both its actual clipped
+  view and exhaustion reductions. [PROGRAMS.md](PROGRAMS.md) specifies the model
+  and the distinction from generic arbitrary-callback reduction templates.
 
 Closure: the same fixed-bit simulator now has a checked complete execution-cost
-bound in the stated structural model with explicit primitive prices. The real
-prover/reduction cost required by the PRNG instantiation remains a separate item.
+bound in the stated structural model with explicit primitive prices. The complete
+real-prover-and-test reductions have proved bounds and resource-class membership
+in that model. PRNG security remains an assumption. Generic theorems for arbitrary
+supplied probabilistic tests or adaptive preprocessing/postprocessing retain their
+explicit admissibility premises; they do not assert a bound for an opaque callback.
 
 **7. Review: prepare the evidence and obtain independent assessment**
 
