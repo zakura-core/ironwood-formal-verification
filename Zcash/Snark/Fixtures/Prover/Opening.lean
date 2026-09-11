@@ -1,3 +1,4 @@
+import Zcash.Snark.Fixtures.Prover.Division
 import Zcash.Snark.Fixtures.Prover.Numerator
 import Zcash.Snark.ZeroKnowledge.DenseCollapsedQuotientCost
 import Zcash.Snark.ZeroKnowledge.DenseOpeningPolynomialCost
@@ -8,9 +9,9 @@ import Zcash.Snark.ZeroKnowledge.StoredMultiopenDataCost
 /-!
 # Replaying the quotient and multi-opening
 
-The cached numerator feeds the existing proved dense division and opening
-algorithms. The five groups retain their original membership, order, point sets,
-and inherited blinds. No captured output is used in these computations.
+The cached numerator feeds iterative division proved equal to the existing dense
+algorithm. The five opening groups retain their original membership, order,
+point sets, and inherited blinds. No captured output is used in these computations.
 -/
 
 namespace Zcash.Snark.Fixtures.Prover
@@ -22,7 +23,7 @@ open Zcash.Snark Zcash.Snark.ZeroKnowledge CompPoly
 def quotientPieces {actions k : ℕ} {G : Type*} [Zero G]
     (vk : VerifyingKey (plonkProofShape actions k) Fp G) (pub : PlonkPublicPolynomials actions)
     (ch : Challenges k Fp) (columns : List (List Fp)) : List (List Fp) :=
-  (densePlonkQuotientPiecesCosted 0 0 0 0 (numerator vk pub ch columns).val.toList).1
+  splitQuotient (numerator vk pub ch columns).val.toList
 
 /-- Stored division yields the reference quotient pieces for the exact cached numerator. -/
 theorem quotientPieces_result {actions k : ℕ} {G : Type*} [Zero G]
@@ -30,7 +31,8 @@ theorem quotientPieces_result {actions k : ℕ} {G : Type*} [Zero G]
     (ch : Challenges k Fp) (rows : ColumnHistory 2048) :
     (quotientPieces vk pub ch (columnCoefficients rows)).map densePolynomial =
       List.ofFn (plonkQuotientPieces (plonkConstraintNumerator vk pub ch rows)) := by
-  rw [quotientPieces, densePlonkQuotientPiecesCosted_result, storedCoefficients_result, numerator_result]
+  rw [quotientPieces, splitQuotient_result, densePlonkQuotientPiecesCosted_result,
+    storedCoefficients_result, numerator_result]
 
 /-- Prepare the five original opening polynomials with stored public and private coefficients. -/
 def openingPolynomials {actions : ℕ} (pub : PlonkPublicPolynomials actions)

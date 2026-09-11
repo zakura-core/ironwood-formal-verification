@@ -1,3 +1,4 @@
+import Zcash.Snark.Fixtures.Prover.Division
 import Zcash.Snark.Fixtures.Prover.Replay
 import Zcash.Snark.Fixtures.Prover.SingleAction
 import Zcash.Snark.Fixtures.Prover.MultiAction
@@ -26,6 +27,22 @@ open Zcash.Snark Zcash.Snark.ZeroKnowledge
 /-- A failed fixture comparison fails the check. -/
 private def ensure (label : String) (condition : Bool) : IO Unit :=
   unless condition do throw (IO.userError ("prover capture mismatch: " ++ label))
+
+/-- A polynomial wider than the constraint numerator exercises the interpreter's normal stack.
+For `g = 1 + X + ... + X^19998`, the input is `(X - 7) * g + 3`. -/
+private def checkWideSyntheticDivision : IO Unit := do
+  let values : List Fp := -4 :: (List.replicate 19998 (-6) ++ [1])
+  let result := syntheticDivision 7 values
+  ensure "wide synthetic quotient" (result.1 == List.replicate 19999 1 ++ [0])
+  ensure "wide synthetic remainder" (result.2 == 3)
+
+/-- The last block crosses the former recursive-read limit and excludes the next coefficient. -/
+private def checkWideCoefficientBlocks : IO Unit := do
+  let values : List Fp := List.replicate 16383 0 ++ [7, 9]
+  let expected := List.replicate 7 (List.replicate 2048 (0 : Fp)) ++
+    [List.replicate 2047 0 ++ [7]]
+  ensure "wide coefficient blocks" (coefficientBlocks 2048 8 values == expected)
+  ensure "coefficient block padding" (coefficientBlocks 4 2 [1] == [[1, 0, 0, 0], [0, 0, 0, 0]])
 
 /-- Identify the first differing emitted message without dumping the private fixture inputs. -/
 private def checkMessages (label : String) (actual expected : List (TranscriptElt Fp VestaG)) : IO Unit := do
@@ -116,6 +133,8 @@ private def checkCase {actions : ℕ} (name : String) (fixture : ProverFixture)
 
 /-- Check the complete one- and two-Action executions imported from Rust-generated Lean modules. -/
 def checkCaptures : IO Unit := do
+  checkWideSyntheticDivision
+  checkWideCoefficientBlocks
   checkCase "single-honest" SingleAction.captured
     Fixture.vk Fixture.capturedURS.g Fixture.capturedURS.w Fixture.capturedURS.u
     Fixture.capturedPublicInstances Fixture.capturedInit Fixture.ch Fixture.ps true
