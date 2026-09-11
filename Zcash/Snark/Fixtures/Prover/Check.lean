@@ -131,15 +131,23 @@ private def checkCase {actions : ℕ} (name : String) (fixture : ProverFixture)
   IO.println (name ++ ": all messages, proof bytes, public anchors, outcome, and negative checks passed")
   (← IO.getStdout).flush
 
-/-- Check the complete one- and two-Action executions imported from Rust-generated Lean modules. -/
-def checkCaptures : IO Unit := do
+/-- Check the one-Action execution and the large-coefficient regressions. -/
+def checkSingleCapture : IO Unit := do
   checkWideSyntheticDivision
   checkWideCoefficientBlocks
   checkCase "single-honest" SingleAction.captured
     Fixture.vk Fixture.capturedURS.g Fixture.capturedURS.w Fixture.capturedURS.u
     Fixture.capturedPublicInstances Fixture.capturedInit Fixture.ch Fixture.ps true
+
+/-- Check the complete two-Action execution. -/
+def checkMultiCapture : IO Unit :=
   checkCase "multi-honest" MultiAction.captured
     Fixture2.vk Fixture2.capturedURS.g Fixture2.capturedURS.w Fixture2.capturedURS.u
     Fixture2.capturedPublicInstances Fixture2.capturedInit Fixture2.ch Fixture2.ps false
+
+/-- Check the complete one- and two-Action executions imported from Rust-generated Lean modules. -/
+def checkCaptures : IO Unit := do
+  checkSingleCapture
+  checkMultiCapture
 
 end Zcash.Snark.Fixtures.Prover

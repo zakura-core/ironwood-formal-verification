@@ -254,7 +254,16 @@ jobs:
           key: lake-deps-${{ runner.os }}-${{ hashFiles('lean-toolchain') }}-${{ hashFiles('lake-manifest.json') }}
       # Save completed compilation before the separate, potentially long execution check.
       - name: Compare complete Rust and Lean prover executions
-        run: lake env lean --run Zcash/Snark/Fixtures/Prover/Main.lean
+        # The captures are independent. Wait for both, and propagate either failure.
+        run: |
+          lake env lean --run Zcash/Snark/Fixtures/Prover/Main.lean single &
+          single_replay_pid=$!
+          lake env lean --run Zcash/Snark/Fixtures/Prover/Main.lean multi &
+          multi_replay_pid=$!
+          prover_replay_status=0
+          wait "$single_replay_pid" || prover_replay_status=1
+          wait "$multi_replay_pid" || prover_replay_status=1
+          exit "$prover_replay_status"
 
   lean-ci:
     # The single stable check to mark as a required status check. It always
