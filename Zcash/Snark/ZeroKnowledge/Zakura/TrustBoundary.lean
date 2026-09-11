@@ -50,7 +50,8 @@ assert_axioms Zcash.Snark.ZeroKnowledge.Zakura.firstZeroIpa_panics
 assert_axioms Zcash.Snark.ZeroKnowledge.Zakura.duplicateQueries_stopBeforeQuotient
 assert_axioms Zcash.Snark.ZeroKnowledge.Zakura.rightIdentity_precedesZeroChallenge
 assert_axioms Zcash.Snark.ZeroKnowledge.Zakura.publicIdentity_rejected
-assert_computable Zcash.Snark.ZeroKnowledge.Zakura.linearCollisionGroup
+-- `CPolynomial.X` inherits choice through its erased canonicity proof.
+assert_computable Zcash.Snark.ZeroKnowledge.Zakura.linearCollisionGroup +choice
 assert_axioms Zcash.Snark.ZeroKnowledge.Zakura.linearCollisionGroup_quotient
 assert_axioms Zcash.Snark.ZeroKnowledge.Zakura.openingNodeCollision_usesPolynomialValue
 
