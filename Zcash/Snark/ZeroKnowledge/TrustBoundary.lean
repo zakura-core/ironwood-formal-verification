@@ -978,6 +978,8 @@ assert_computable Zcash.Snark.ZeroKnowledge.plonkScalarFold +choice
 assert_computable Zcash.Snark.ZeroKnowledge.plonkPolynomialFold +choice
 assert_computable Zcash.Snark.ZeroKnowledge.plonkFixedQueryOrder
 assert_computable Zcash.Snark.ZeroKnowledge.plonkAdviceQueryOrder
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkFixedQueryOrder_eq_vecCons
+assert_axioms Zcash.Snark.ZeroKnowledge.plonkAdviceQueryOrder_eq_vecCons
 assert_computable Zcash.Snark.ZeroKnowledge.plonkCollapsedQuotient +choice
 assert_computable Zcash.Snark.ZeroKnowledge.plonkFirstGroupPrefix +choice
 assert_computable Zcash.Snark.ZeroKnowledge.plonkPrivateGroupMembers

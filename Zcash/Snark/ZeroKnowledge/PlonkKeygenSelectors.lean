@@ -1,5 +1,6 @@
 import Zcash.Snark.ZeroKnowledge.KeygenSelectorSupport
 import Zcash.Snark.ZeroKnowledge.PlonkKeygenFixed
+import Zcash.Snark.ZeroKnowledge.PlonkQueryOrderLiterals
 import Zcash.Snark.ZeroKnowledge.PlonkSelectorCertificate
 
 /-!
@@ -24,7 +25,7 @@ variable {Config : Type} {PublicInput : TypeMap} [ProvableType PublicInput]
 /-- Packed selector columns retain their column indices in the fixed-query order. -/
 theorem plonkFixedQueryOrder_selector (query : Fin 29) (hquery : 14 ≤ query.val) :
     plonkFixedQueryOrder query = query := by
-  fin_cases query <;> simp [plonkFixedQueryOrder] at *
+  fin_cases query <;> simp [plonkFixedQueryOrder_eq_vecCons] at *
 
 /-- Every noninitial mask boundary is at or after row 2041. -/
 theorem plonkMaskBoundaryRows_after_zero (boundary : Fin 8) (hboundary : boundary.val ≠ 0) :

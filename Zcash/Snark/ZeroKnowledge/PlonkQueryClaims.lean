@@ -1,5 +1,6 @@
 import Zcash.Snark.ZeroKnowledge.PlonkVerifierGrouping
 import Zcash.Snark.ZeroKnowledge.PlonkOpeningNodes
+import Zcash.Snark.ZeroKnowledge.PlonkQueryOrderLiterals
 
 /-!
 # Scalar claims in the reference proof's verifier queries
@@ -68,8 +69,8 @@ theorem plonkProofFromJointView_queryClaims {actions k : ℕ} {G : Type*} [Inhab
     columnQueries, permutationQueries, lookupQueries, permutationCommonQueries, vanishingQueries,
     plonkProofFromJointView, plonkProofString, plonkProofShape, FixtureMax.shape,
     plonkQuerySpine, plonkPerActionQuerySpine, plonkQueryPoint, plonkQueryRotation, plonkQueryClaim,
-    plonkAdviceQueryOrder, plonkFixedQueryOrder, List.map_append, List.map_flatten,
-    List.range_succ, Function.comp_def, rotateOmega]
+    plonkAdviceQueryOrder_eq_vecCons, plonkFixedQueryOrder_eq_vecCons, List.map_append,
+    List.map_flatten, List.range_succ, Function.comp_def, rotateOmega]
 
 /-- Every pattern entry is realized by an actual verifier query with the specified scalar claim. -/
 theorem plonkProofFromJointView_queryClaim_exists {actions k : ℕ} {G : Type*}
