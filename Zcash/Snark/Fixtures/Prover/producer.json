@@ -1,19 +1,19 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/zakura-core/common",
-  "commit": "51a7364f3d1b86fd5a0be4653e8f412d1a90c453",
+  "commit": "6375401ede16ce7ddaf3188b1e89d155657553b4",
   "pull_request": "https://github.com/zakura-core/common/pull/415",
   "archive": {
-    "url": "https://codeload.github.com/zakura-core/common/tar.gz/51a7364f3d1b86fd5a0be4653e8f412d1a90c453",
+    "url": "https://codeload.github.com/zakura-core/common/tar.gz/6375401ede16ce7ddaf3188b1e89d155657553b4",
     "file": "common-prover-source.tar.gz",
-    "prefix": "common-51a7364f3d1b86fd5a0be4653e8f412d1a90c453",
-    "sha256": "1b58787ff0dfedb944422d3748edbee8ef56aac172a3818eef52e50dad6b2c55"
+    "prefix": "common-6375401ede16ce7ddaf3188b1e89d155657553b4",
+    "sha256": "2459f4b1f5989297e8520f107547fc3ac31b2744dfec4f0fdb37ac02affb7e7a"
   },
   "release_commit": "50f712ee22ca95e2dd5230c6f331ce2e433d70ee",
   "release_delta": {
     ".github/workflows/ci.yml": {
       "release_sha256": "5d4f292c87e0ea4ea54df7315d47eeb6ea27342306fde7c3346477537e8dca86",
-      "producer_sha256": "43fd58c8e4bcc1edd4931501cf76a13c46b2f4a787a4a2f5e37489803538b155"
+      "producer_sha256": "1f4b9bd7d4e9c68f9c6eff80a6523579fada301603dd1a12347fdeb9a67b12c5"
     },
     ".github/workflows/semver.yml": {
       "release_sha256": "c4f7dae4a91fdad842a00321661ee91b348decd1b546e3c83b0158385a24427d",
@@ -73,11 +73,31 @@
     },
     "crates/orchard/src/circuit/prover_fingerprint.rs": {
       "release_sha256": null,
-      "producer_sha256": "288d9db077b4e61e9eeae1f4efbd479d3fd9b3ed205b119ef0dc2daec5a1de00"
+      "producer_sha256": "5aa0e7f0ab5b09d07aaf83f53bb61c634a2d38ae67ad8ede5a8666a88d7e0816"
+    },
+    "crates/orchard/src/circuit/prover_fingerprint/README.md": {
+      "release_sha256": null,
+      "producer_sha256": "3682c80fd03b11825a1e301bd930508bfcce5a1b77b651ba69a06fa3c51311e9"
+    },
+    "crates/orchard/src/circuit/prover_fingerprint/multi-action.proof": {
+      "release_sha256": null,
+      "producer_sha256": "59745111f3ebc30dea46bb13047cb6291b8da080f1ccf2dae85a31ba66bb09fc"
+    },
+    "crates/orchard/src/circuit/prover_fingerprint/multi-action.rng-u64s-le": {
+      "release_sha256": null,
+      "producer_sha256": "1c31f604870ce31b7ffda03bfec7f226c5c0d497d971fc5a08274e55efdeca9e"
+    },
+    "crates/orchard/src/circuit/prover_fingerprint/single-action.proof": {
+      "release_sha256": null,
+      "producer_sha256": "054f00b51aea329dbe94262add01c7875a2ec0e639628ddd52931bde8ea90ffb"
+    },
+    "crates/orchard/src/circuit/prover_fingerprint/single-action.rng-u64s-le": {
+      "release_sha256": null,
+      "producer_sha256": "b79d840813103b2bcaf9ec7a840af56dfb073bcbb6823763e311f9231dbdfc6c"
     },
     "docs/changelog/unreleased/415.md": {
       "release_sha256": null,
-      "producer_sha256": "e9fbe25115506b98dd1d4b682c573b0a10480cfc921181a476a6581ed3e0d953"
+      "producer_sha256": "fa560887ee0b232cd6d38357b6d502d8968884c66e85b6e6ee5cbfe20a801a49"
     }
   }
 }

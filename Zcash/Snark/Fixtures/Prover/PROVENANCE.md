@@ -9,7 +9,7 @@ proofs, challenges, setup, and public inputs.
 ## Producer and release
 
 [producer.json](producer.json) pins Common commit
-[`51a7364f3d1b86fd5a0be4653e8f412d1a90c453`](https://github.com/zakura-core/common/tree/51a7364f3d1b86fd5a0be4653e8f412d1a90c453)
+[`6375401ede16ce7ddaf3188b1e89d155657553b4`](https://github.com/zakura-core/common/tree/6375401ede16ce7ddaf3188b1e89d155657553b4)
 and its source archive. It records the complete file delta from the
 [released Common source](../../ZeroKnowledge/Zakura/PROVENANCE.md#source-and-build-profile).
 The generator authenticates both archives and rejects any unrecorded difference.
@@ -18,11 +18,14 @@ It builds the producer without editing Rust sources or the release lockfile.
 The exporter lives in Common:
 
 - Orchard's `prover-fingerprint` feature enables the
-  [capture drivers](https://github.com/zakura-core/common/blob/51a7364f3d1b86fd5a0be4653e8f412d1a90c453/crates/orchard/src/circuit/prover_fingerprint.rs).
+  [capture drivers](https://github.com/zakura-core/common/blob/6375401ede16ce7ddaf3188b1e89d155657553b4/crates/orchard/src/circuit/prover_fingerprint.rs).
 - Halo2's `unstable-prover-fingerprint` feature enables the
-  [recorder and wrappers](https://github.com/zakura-core/common/blob/51a7364f3d1b86fd5a0be4653e8f412d1a90c453/crates/halo2_proofs/src/plonk/prover_fingerprint.rs).
+  [recorder and wrappers](https://github.com/zakura-core/common/blob/6375401ede16ce7ddaf3188b1e89d155657553b4/crates/halo2_proofs/src/plonk/prover_fingerprint.rs).
 - The verifier capture features remain separate. The drivers compare recorded
   and unrecorded proof bytes and RNG positions, and verify the generated proofs.
+  Orchard also commits the expected proof bytes and RNG tapes extracted from
+  these Lean fixtures. Common CI checks its current prover against those fixed
+  expectations, including exact RNG-tape consumption, before any fixture export.
 
 The profile uses `PostNu6_3`, eleven IPA rounds, default release features, and
 `RAYON_NUM_THREADS=1`. Seeds are `[0x53; 32]` and `[0x4d; 32]`, matching the existing
