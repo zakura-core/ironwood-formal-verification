@@ -1,19 +1,19 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/zakura-core/common",
-  "commit": "29beabc8ced6a063abe6ac34cd7b16f0f4907829",
+  "commit": "0b9371b6211780a2e25b140e7a1494759cf077ed",
   "pull_request": "https://github.com/zakura-core/common/pull/415",
   "archive": {
-    "url": "https://codeload.github.com/zakura-core/common/tar.gz/29beabc8ced6a063abe6ac34cd7b16f0f4907829",
+    "url": "https://codeload.github.com/zakura-core/common/tar.gz/0b9371b6211780a2e25b140e7a1494759cf077ed",
     "file": "common-prover-source.tar.gz",
-    "prefix": "common-29beabc8ced6a063abe6ac34cd7b16f0f4907829",
-    "sha256": "4ec0a3aa72e607839f64af875407d5fa72d3018251ba6ee664a81dd82f8922d7"
+    "prefix": "common-0b9371b6211780a2e25b140e7a1494759cf077ed",
+    "sha256": "02c184330cd8aec780eff0d82cdc4877a2b880c242e6eb70e2588b98450ca831"
   },
   "release_commit": "50f712ee22ca95e2dd5230c6f331ce2e433d70ee",
   "release_delta": {
     ".github/workflows/ci.yml": {
       "release_sha256": "5d4f292c87e0ea4ea54df7315d47eeb6ea27342306fde7c3346477537e8dca86",
-      "producer_sha256": "313eb5b15ec3432c6eaa52b7f03f00004d3955fd1c76d7e9fa50d8d78dac346e"
+      "producer_sha256": "deb63387ab283c5abe240757e8486148d2012368f281b72ee6baae411ac8022f"
     },
     ".github/workflows/semver.yml": {
       "release_sha256": "c4f7dae4a91fdad842a00321661ee91b348decd1b546e3c83b0158385a24427d",
@@ -45,7 +45,11 @@
     },
     "crates/halo2_proofs/src/plonk/prover_fingerprint.rs": {
       "release_sha256": null,
-      "producer_sha256": "a7d02adffeba3d5568e95396ae1bb696a46f5069c43d6e2031b51f7465f6e11d"
+      "producer_sha256": "11bbb1b8068ece266233f4b6400b9202e626e890e6746b4b8150e79337cd84b3"
+    },
+    "crates/halo2_proofs/src/plonk/prover_fingerprint/vesta_lean.rs": {
+      "release_sha256": null,
+      "producer_sha256": "0811442177aed041b2070fd37a6b987c57335074f5bb1c98ed4b3fceb56fbd30"
     },
     "crates/orchard/Cargo.toml": {
       "release_sha256": "3c06b4c8cb92f87806eb57531d41a7c160adb22d2b6d4634d314327e87497a22",
@@ -65,11 +69,11 @@
     },
     "crates/orchard/src/circuit/prover_fingerprint.rs": {
       "release_sha256": null,
-      "producer_sha256": "6c4a0350807bf9f21d6d6ebd32eb64ae4ad00f6bc89e3f816843c044bec36279"
+      "producer_sha256": "ce1b16a517c92f510ba2f77f91118005d40e2abd773aeff4b44f6c7b15264562"
     },
     "docs/changelog/unreleased/415.md": {
       "release_sha256": null,
-      "producer_sha256": "881becc071e3f75db309cf5778202b6ab3e3540d03e780f7ef427b90379c54bd"
+      "producer_sha256": "2b408341fdddb42f48dc954c27ad443bc3e0c85df0882aaeff38a0a3f6ff6cc0"
     }
   }
 }

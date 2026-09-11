@@ -1,5 +1,6 @@
 import Zcash.Snark.Fixtures.Prover.Replay
-import Zcash.Snark.Fixtures.Prover.Pins
+import Zcash.Snark.Fixtures.Prover.SingleAction
+import Zcash.Snark.Fixtures.Prover.MultiAction
 import Zcash.Snark.Fixtures.SingleAction.Honest.Fixture
 import Zcash.Snark.Fixtures.MultiAction.Honest.Fixture
 import Zcash.Snark.ZeroKnowledge.Zakura.Attempt
@@ -12,9 +13,9 @@ Lean CI. This module is compiled by `FixtureCheck`, outside the production impor
 root. The generic replay equality is proved in `Replay`; the runner compares
 external captured data and introduces no native-decision axioms.
 
-The Python step authenticates the compressed artifacts before unpacking them into
-the ignored build directory. The independent Lean decoder then checks their wire
-format. Expected Rust outputs are supplied only to the comparisons after replay.
+The generated Lean modules come directly from Common's Rust exporter. CI checks
+their hashes and regenerates them through the same pipeline as the verifier
+fixtures. Expected Rust outputs are supplied only to comparisons after replay.
 -/
 
 namespace Zcash.Snark.Fixtures.Prover
@@ -32,6 +33,10 @@ private def checkMessages (label : String) (actual expected : List (TranscriptEl
   for i in [:actual.length] do
     unless decide (actual[i]? = expected[i]?) do
       throw (IO.userError s!"prover capture mismatch: {label}, message {i}")
+
+/-- Compare the complete encoded buffer with the original Rust output, including its length. -/
+private def checkProofBytes (label : String) (actual expected : List UInt8) : IO Unit :=
+  ensure (label ++ " proof bytes") (actual == expected)
 
 /-- Exercise the actual comparison routine and require it to reject a tampered transcript. -/
 private def expectMismatch (label : String) (check : IO Unit) : IO Unit := do
@@ -55,13 +60,12 @@ private def checkKeyRows {actions : ℕ}
       (decide (commitPolynomial generators inputs.w coefficients 1 = vk.permutationCommonCommitment i))
 
 /-- Check a real proof call against both its own captured outputs and the existing verifier anchor. -/
-private def checkCase {actions : ℕ} (name : String)
+private def checkCase {actions : ℕ} (name : String) (fixture : ProverFixture)
     (vk : VerifyingKey (plonkProofShape actions 11) Fp VestaG)
     (generators : Fin 2048 → VestaG) (W U : VestaG) (publicInputs : List (List Fp))
     (initial : List (TranscriptElt Fp VestaG)) (ch : Challenges 11 Fp)
     (expected : ProofString (plonkProofShape actions 11) Fp VestaG) (mutate : Bool) : IO Unit := do
-  let bytes ← IO.FS.readBinFile (".lake/build/prover-captures/" ++ name ++ ".bin")
-  let capture ← match decodeCapture actions bytes with
+  let capture ← match decodeCapture actions fixture with
     | .ok capture => pure capture
     | .error error => throw (IO.userError error)
   let inputs := capture.inputs
@@ -72,6 +76,15 @@ private def checkCase {actions : ℕ} (name : String)
   ensure (name ++ " public acceptance") (Zakura.acceptsPublicPrefix capture.initialization)
   ensure (name ++ " challenges") (decide (inputs.challenges.toList = plonkChallengeSequence ch))
   checkMessages (name ++ " verifier anchor") capture.messages (plonkAttemptTrace expected)
+  checkProofBytes (name ++ " verifier anchor encoding") (encodedPlonkAttempt (ch, expected)).2.proof
+    capture.proof
+  expectMismatch (name ++ " empty proof buffer") (checkProofBytes name [] capture.proof)
+  expectMismatch (name ++ " changed proof byte")
+    (checkProofBytes name (capture.proof.modify 0 (· + 1)) capture.proof)
+  expectMismatch (name ++ " truncated proof buffer")
+    (checkProofBytes name capture.proof.dropLast capture.proof)
+  expectMismatch (name ++ " extra proof byte")
+    (checkProofBytes name (capture.proof ++ [0]) capture.proof)
   IO.println (name ++ ": checking public-row commitments")
   (← IO.getStdout).flush
   checkKeyRows vk inputs
@@ -81,8 +94,9 @@ private def checkCase {actions : ℕ} (name : String)
   let trace := plonkAttemptTrace proof
   checkMessages name trace capture.messages
   let attempt := (encodedPlonkAttempt (inputChallenges inputs, proof)).2
+  checkProofBytes name attempt.proof capture.proof
   ensure (name ++ " terminal result") (decide (attempt.status = .complete))
-  ensure (name ++ " released outcome") (decide (Zakura.observeAttempt attempt = .proof attempt.proof))
+  ensure (name ++ " released outcome") (decide (Zakura.observeAttempt attempt = .proof capture.proof))
   expectMismatch (name ++ " changed scalar") (checkMessages name
     (trace.set (trace.length - 1) (.scalar (proof.ipaF + 1))) capture.messages)
   expectMismatch (name ++ " reordered messages") (checkMessages name trace.reverse capture.messages)
@@ -94,21 +108,19 @@ private def checkCase {actions : ℕ} (name : String)
     let changed := { inputs with rawTape := inputs.rawTape.modify (inputs.rawTape.length - 1) (· + 1) }
     let changedTrace := plonkAttemptTrace (replayProof vk changed)
     expectMismatch (name ++ " changed raw draw") (checkMessages name changedTrace capture.messages)
-  ensure (name ++ " truncated bytes rejected")
-    (match decodeCapture actions (bytes.extract 0 (bytes.size - 1)) with | .error _ => true | .ok _ => false)
-  IO.println (name ++ ": all messages, public anchors, outcome, and negative checks passed")
+  ensure (name ++ " truncated events rejected")
+    (match decodeCapture actions { fixture with events := fixture.events.pop } with
+      | .error _ => true | .ok _ => false)
+  IO.println (name ++ ": all messages, proof bytes, public anchors, outcome, and negative checks passed")
   (← IO.getStdout).flush
 
-/-- Authenticate the pinned artifacts, then check the complete one- and two-Action executions. -/
+/-- Check the complete one- and two-Action executions imported from Rust-generated Lean modules. -/
 def checkCaptures : IO Unit := do
-  let checked ← IO.Process.output {
-    cmd := "python3"
-    args := #["scripts/generate_prover_fixtures.py", "--check", "--extract", ".lake/build/prover-captures"] }
-  unless checked.exitCode == 0 do throw (IO.userError (checked.stdout ++ checked.stderr))
-  ensure "capture pin inventory" (capturePins.length == 2)
-  checkCase "single-honest" Fixture.vk Fixture.capturedURS.g Fixture.capturedURS.w Fixture.capturedURS.u
+  checkCase "single-honest" SingleAction.captured
+    Fixture.vk Fixture.capturedURS.g Fixture.capturedURS.w Fixture.capturedURS.u
     Fixture.capturedPublicInstances Fixture.capturedInit Fixture.ch Fixture.ps true
-  checkCase "multi-honest" Fixture2.vk Fixture2.capturedURS.g Fixture2.capturedURS.w Fixture2.capturedURS.u
+  checkCase "multi-honest" MultiAction.captured
+    Fixture2.vk Fixture2.capturedURS.g Fixture2.capturedURS.w Fixture2.capturedURS.u
     Fixture2.capturedPublicInstances Fixture2.capturedInit Fixture2.ch Fixture2.ps false
 
 end Zcash.Snark.Fixtures.Prover

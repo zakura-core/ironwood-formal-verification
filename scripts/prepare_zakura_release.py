@@ -14,9 +14,10 @@ from pathlib import Path
 import posixpath
 import re
 import tarfile
+import tempfile
 
 from check_zakura_release import (
-    MANIFEST, PinnedArchive, VerificationError, read_manifest, relative_path,
+    MANIFEST, REPO, PinnedArchive, VerificationError, read_manifest, relative_path,
     require, sha256, verify_sources,
 )
 
@@ -97,6 +98,54 @@ FIXTURE_DESTINATIONS = {
     "multi-random": "Zcash/Snark/Fixtures/MultiAction/Random",
 }
 
+PROVER_DESTINATIONS = {
+    "single-prover": "Zcash/Snark/Fixtures/Prover/SingleAction.lean",
+    "multi-prover": "Zcash/Snark/Fixtures/Prover/MultiAction.lean",
+}
+PROVER_PIN = REPO / "Zcash/Snark/Fixtures/Prover/producer.json"
+
+
+def fixture_source(manifest: dict, suite: str) -> dict:
+    """Select the released verifier exporter or Common's pinned prover exporter."""
+    if suite != "prover-fixtures":
+        return manifest["common"]
+    source = json.loads(PROVER_PIN.read_text())
+    require(source["schema_version"] == 1 and
+            source["repository"] == "https://github.com/zakura-core/common", "invalid prover source")
+    commit, archive = source["commit"], source["archive"]
+    require(re.fullmatch(r"[0-9a-f]{40}", commit) is not None, "prover source needs a full commit")
+    require(archive["url"] == f"https://codeload.github.com/zakura-core/common/tar.gz/{commit}" and
+            archive["prefix"] == f"common-{commit}" and
+            archive["file"] == "common-prover-source.tar.gz" and
+            re.fullmatch(r"[0-9a-f]{64}", archive["sha256"]) is not None,
+            "prover archive must use its canonical commit and checksum")
+    require(source["release_commit"] == manifest["common"]["commit"], "prover release changed")
+    require(isinstance(source["release_delta"], dict) and source["release_delta"], "missing release delta")
+    return source
+
+
+def extract_fixture_source(manifest: dict, suite: str, cache: Path, destination: Path) -> tuple[dict, dict]:
+    """Authenticate the exporter and its complete delta from the released implementation."""
+    source = fixture_source(manifest, suite)
+    archive = PinnedArchive(source["archive"], cache)
+    try:
+        hashes, links = extract_source(archive, destination)
+    finally:
+        archive.close()
+    if suite == "prover-fixtures":
+        archive = PinnedArchive(manifest["common"]["archive"], cache)
+        try:
+            with tempfile.TemporaryDirectory(prefix="prover-release-") as directory:
+                released, _ = extract_source(archive, Path(directory) / "common")
+        finally:
+            archive.close()
+        delta = {path: {"release_sha256": released.get(path), "producer_sha256": hashes.get(path)}
+                 for path in sorted(set(released) | set(hashes)) if released.get(path) != hashes.get(path)}
+        require(delta == source["release_delta"], "prover/release source differences changed")
+        require(all(hashes[path] == released[path] for path in ["Cargo.lock", "rust-toolchain.toml"]),
+                "prover exporter changed release dependencies")
+    return hashes, links
+
 
 RUNNER = '''#!/usr/bin/env python3
 """Execute this prepared native test plan. This command DOES build Rust."""
@@ -135,7 +184,7 @@ def main():
     env = os.environ.copy()
     for key in ("RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"):
         env.pop(key, None)
-    env.update(CARGO_TARGET_DIR=str(root / "target"), CARGO_TERM_COLOR="never")
+    env.update(CARGO_TARGET_DIR=env.get("CARGO_TARGET_DIR", str(root / "target")), CARGO_TERM_COLOR="never")
     report = {"status": "running", "plan_sha256": digest(plan_path), "commands": [],
               "captures": [], "started_unix": time.time(), "lean_built": False,
               "rust_correspondence_proved": False}
@@ -243,7 +292,27 @@ def extract_source(archive: PinnedArchive, destination: Path) -> tuple[dict, dic
 
 def build_commands(manifest: dict, target: str, source: Path, *, suite: str = "fixtures") -> list[dict]:
     """Capture the existing families; backend/profile regressions are an optional suite."""
-    require(suite in {"fixtures", "regressions"}, "unknown release validation suite")
+    require(suite in {"fixtures", "prover-fixtures", "regressions"}, "unknown release validation suite")
+    if suite == "prover-fixtures":
+        package = ["--locked", "--target", target, "-p", "zakura-orchard", "--features", "prover-fingerprint"]
+        prefix = ["cargo", "+" + manifest["common"]["toolchain"]]
+        commands = [{"kind": "features", "label": "prover/features",
+                     "argv": prefix + ["tree"] + package + ["-e", "features"],
+                     "environment": {"RAYON_NUM_THREADS": "1"}, "outputs": [], "output_variables": []}]
+        rust = (source / "crates/orchard/src/circuit/prover_fingerprint.rs").read_text()
+        for name, test, variable, seed in [
+                ("single-prover", "prover_capture", "SINGLE", "0x53"),
+                ("multi-prover", "prover_capture_two_actions", "MULTI", "0x4d")]:
+            require(re.search(rf"\bfn {test}\s*\(", rust) is not None, "missing prover export driver")
+            output = f"captures/{name}.lean"
+            key = f"ORCHARD_LEAN_{variable}_PROVER_OUT"
+            commands.append({"kind": "test", "label": "prover/" + name,
+                "argv": prefix + ["test"] + package + ["--release", "--lib",
+                    "circuit::prover_fingerprint::" + test, "--", "--exact", "--nocapture", "--test-threads=1"],
+                "environment": {"RAYON_NUM_THREADS": "1", key: output}, "output_variables": [key],
+                "outputs": [{"path": output, "comparison": name + "/fixture", "seed_byte": seed,
+                             "destination": PROVER_DESTINATIONS[name]}]})
+        return commands
     profiles = manifest["profiles"]
     if suite == "fixtures":
         defaults = [profile for profile in profiles if profile["id"] == "default"]
@@ -320,8 +389,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--cache-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
-    parser.add_argument("--suite", choices=["fixtures", "regressions"], default="fixtures",
-                        help="fixtures captures the four existing families; regressions adds optional tests")
+    parser.add_argument("--suite", choices=["fixtures", "prover-fixtures", "regressions"], default="fixtures",
+                        help="select verifier fixtures, prover fixtures, or optional backend regressions")
     parser.add_argument("--target", required=True, choices=[
         "x86_64-unknown-linux-gnu", "aarch64-apple-darwin", "aarch64-unknown-linux-gnu"])
     args = parser.parse_args()
@@ -330,11 +399,7 @@ def main() -> None:
         evidence = verify_sources(manifest, args.cache_dir)
         require(not args.output_dir.exists(), "output directory must be new")
         args.output_dir.mkdir(parents=True)
-        archive = PinnedArchive(manifest["common"]["archive"], args.cache_dir)
-        try:
-            hashes, links = extract_source(archive, args.output_dir / "common")
-        finally:
-            archive.close()
+        hashes, links = extract_fixture_source(manifest, args.suite, args.cache_dir, args.output_dir / "common")
         commands = build_commands(manifest, args.target, args.output_dir / "common", suite=args.suite)
         plan = {"status": "prepared_not_executed", "target": args.target,
                 "suite": args.suite,
@@ -342,6 +407,8 @@ def main() -> None:
                 "manifest_sha256": sha256(MANIFEST.read_bytes()),
                 "source_evidence": evidence, "source_files": hashes,
                 "materialized_source_links": links, "commands": commands}
+        if args.suite == "prover-fixtures":
+            plan["producer_sha256"] = sha256(PROVER_PIN.read_bytes())
         (args.output_dir / "plan.json").write_text(json.dumps(plan, indent=2) + "\n")
         (args.output_dir / "release.json").write_bytes(MANIFEST.read_bytes())
         (args.output_dir / "run.py").write_text(RUNNER)

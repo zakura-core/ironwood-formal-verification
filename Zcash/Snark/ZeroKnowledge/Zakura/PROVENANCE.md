@@ -7,7 +7,7 @@ exceptional-challenge resampling in this call.
 
 The existing verifier fixtures retain their role as implementation anchors.
 The [prover execution captures](../../Fixtures/Prover/PROVENANCE.md) additionally
-record witness rows, raw randomness, and every transcript message through separate
+record witness rows, raw randomness, every transcript message, and the original proof buffer through separate
 opt-in Common features. Lean replays those selected executions; this is not a
 universal Rust-to-Lean proof.
 

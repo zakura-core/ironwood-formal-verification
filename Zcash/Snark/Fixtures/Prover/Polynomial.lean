@@ -44,11 +44,6 @@ def domain (k : ℕ) (hk : k ≤ 32) : Domain Fp where
 def rowCoefficients (k : ℕ) (hk : k ≤ 32) (rows : Fin (2 ^ k) → Fp) : List Fp :=
   (Inverse.inverseImpl (domain k hk) (Array.ofFn rows)).toList
 
-/-- NTT interpolation preserves the declared domain size, including trailing zeros. -/
-theorem rowCoefficients_length (k : ℕ) (hk : k ≤ 32) (rows : Fin (2 ^ k) → Fp) :
-    (rowCoefficients k hk rows).length = 2 ^ k := by
-  simp [rowCoefficients, Inverse.inverseImpl_correct, domain]
-
 /-- The executable inverse transform denotes the reference prover's canonical row polynomial. -/
 theorem rowCoefficients_result (k : ℕ) (hk : k ≤ 32) (rows : Fin (2 ^ k) → Fp) :
     densePolynomial (rowCoefficients k hk rows) = rowPolynomial (omegaOf k) rows := by

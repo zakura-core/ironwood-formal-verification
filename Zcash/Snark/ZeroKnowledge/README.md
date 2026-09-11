@@ -111,7 +111,7 @@ and validation limits, including the
 [identity-product shortcut and invalid-witness lookup behavior](Zakura/PROVENANCE.md#reference-model-exceptions).
 The release refresh uses the existing verifier fixtures and unchanged circuit
 dumps. The [prover execution fixtures](../Fixtures/Prover/PROVENANCE.md) additionally
-check every message on captured one-Action and two-Action Rust proof calls,
+check every message and the encoded proof bytes on captured one-Action and two-Action Rust proof calls,
 replaying their witness rows and raw randomness through the Lean reference model.
 These finite checks do not establish equality of the full message distributions.
 Auxiliary caller-composition theorems
