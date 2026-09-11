@@ -71,16 +71,17 @@ structure PlonkPublicPolynomials (actions : ℕ) where
   fixed : Fin 29 → CPoly
   sigma : Fin 15 → CPoly
 
-/-- The pinned fixed-query order, also used in the suffix of opening group zero. -/
+/-- The pinned fixed-query order, also used in the suffix of opening group zero.
+Array storage avoids repeated evaluation of nested function readers. -/
 def plonkFixedQueryOrder : Fin 29 → Fin 29 :=
-  ![3, 0, 11, 4, 5, 6, 7, 8, 9, 10, 12, 1, 2, 13, 14, 15, 16, 17, 18, 19, 20,
-    21, 22, 23, 24, 25, 26, 27, 28]
+  (⟨#[3, 0, 11, 4, 5, 6, 7, 8, 9, 10, 12, 1, 2, 13, 14, 15, 16, 17, 18, 19, 20,
+    21, 22, 23, 24, 25, 26, 27, 28], rfl⟩ : Vector (Fin 29) 29).get
 
 /-- Advice query order; point indices zero, one, two denote `x`, `xω`, `xω⁻¹`. -/
 def plonkAdviceQueryOrder : Fin 25 → Fin 10 × Fin 3 :=
-  ![(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0), (8, 0), (9, 0),
+  (⟨#[(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0), (8, 0), (9, 0),
     (9, 1), (9, 2), (2, 1), (3, 1), (4, 1), (5, 1), (0, 1), (1, 1), (7, 1), (8, 1),
-    (6, 2), (1, 2), (6, 1), (7, 2), (8, 2)]
+    (6, 2), (1, 2), (6, 1), (7, 2), (8, 2)], rfl⟩ : Vector (Fin 10 × Fin 3) 25).get
 
 /-- Collapse the eight quotient pieces at `x`, retaining a degree-less-than-2048 polynomial. -/
 def plonkCollapsedQuotient (x : Fp) (pieces : Fin 8 → CPoly) : CPoly :=
