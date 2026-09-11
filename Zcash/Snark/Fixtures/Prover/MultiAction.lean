@@ -3,7 +3,7 @@ import Zcash.Snark.Fixtures.Prover.FixtureData
 
 set_option maxRecDepth 1000000
 
-namespace Zcash.Snark.Fixtures.Prover.MultiAction
+namespace «Zcash».«Snark».«Fixtures».«Prover».«MultiAction»
 
 open Zcash.Snark.Fixtures.Prover
 
@@ -227,4 +227,4 @@ def captured : ProverFixture := {
   proof := capturedProof
 }
 
-end Zcash.Snark.Fixtures.Prover.MultiAction
+end «Zcash».«Snark».«Fixtures».«Prover».«MultiAction»

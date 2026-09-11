@@ -9,7 +9,7 @@ proofs, challenges, setup, and public inputs.
 ## Producer and release
 
 [producer.json](producer.json) pins Common commit
-[`4a0c2822259b0018defd43aaa72e720922ca4c60`](https://github.com/zakura-core/common/tree/4a0c2822259b0018defd43aaa72e720922ca4c60)
+[`c9282976edc7b925f446825343d03fb4f614ab14`](https://github.com/zakura-core/common/tree/c9282976edc7b925f446825343d03fb4f614ab14)
 and its source archive. It records the complete file delta from the
 [released Common source](../../ZeroKnowledge/Zakura/PROVENANCE.md#source-and-build-profile).
 The generator authenticates both archives and rejects any unrecorded difference.
@@ -18,9 +18,9 @@ It builds the producer without editing Rust sources or the release lockfile.
 The exporter lives in Common:
 
 - Orchard's `prover-fingerprint` feature enables the
-  [capture drivers](https://github.com/zakura-core/common/blob/4a0c2822259b0018defd43aaa72e720922ca4c60/crates/orchard/src/circuit/prover_fingerprint.rs).
+  [capture drivers](https://github.com/zakura-core/common/blob/c9282976edc7b925f446825343d03fb4f614ab14/crates/orchard/src/circuit/prover_fingerprint.rs).
 - Halo2's `unstable-prover-fingerprint` feature enables the
-  [recorder and wrappers](https://github.com/zakura-core/common/blob/4a0c2822259b0018defd43aaa72e720922ca4c60/crates/halo2_proofs/src/plonk/prover_fingerprint.rs).
+  [recorder and wrappers](https://github.com/zakura-core/common/blob/c9282976edc7b925f446825343d03fb4f614ab14/crates/halo2_proofs/src/plonk/prover_fingerprint.rs).
 - The verifier capture features remain separate. The drivers compare recorded
   and unrecorded proof bytes and RNG positions, and verify the generated proofs.
 
