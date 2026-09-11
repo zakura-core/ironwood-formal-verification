@@ -17,7 +17,10 @@ open Zcash.Arithmetic (Fp)
 def firstTapeEquiv (length : ℕ) :
     (Fin (length + 1) → Fp) ≃ ((Fin 1 → Fp) × (Fin length → Fp)) where
   toFun tape := ((fun _ => tape 0), fun i => tape i.succ)
-  invFun parts := Fin.cons (parts.1 0) parts.2
+  -- Direct cases avoid evaluating earlier entries in nested tape readers.
+  invFun parts := fun
+    | ⟨0, _⟩ => parts.1 0
+    | ⟨i + 1, h⟩ => parts.2 ⟨i, Nat.lt_of_succ_lt_succ h⟩
   left_inv tape := by funext i; exact Fin.cases rfl (fun _ => rfl) i
   right_inv parts := by
     apply Prod.ext
@@ -69,7 +72,11 @@ theorem columnCoinEquiv_cons_apply {n : ℕ} (step : ColumnStep n) (rest : List 
       let next := splitTapeEquiv 1 (columnFullSampleCount rest) Fp first.2
       let later := columnCoinEquiv rest next.2
       ((splitTapeEquiv (n - step.firstMasked) (columnRowSampleCount rest) Fp).symm (first.1, later.1),
-        Fin.cons (next.1 0) later.2) := rfl
+        Fin.cons (next.1 0) later.2) := by
+  apply Prod.ext
+  · rfl
+  · funext i
+    refine Fin.cases ?_ (fun _ => ?_) i <;> rfl
 
 /-- Execute the canonical order: suffix, blind, then the next private construction. -/
 def columnMaterialFromTape {n : ℕ} : (steps : List (ColumnStep n)) → ColumnHistory n →
