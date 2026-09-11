@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/zakura-core/common",
-  "commit": "0b9371b6211780a2e25b140e7a1494759cf077ed",
+  "commit": "4a0c2822259b0018defd43aaa72e720922ca4c60",
   "pull_request": "https://github.com/zakura-core/common/pull/415",
   "archive": {
-    "url": "https://codeload.github.com/zakura-core/common/tar.gz/0b9371b6211780a2e25b140e7a1494759cf077ed",
+    "url": "https://codeload.github.com/zakura-core/common/tar.gz/4a0c2822259b0018defd43aaa72e720922ca4c60",
     "file": "common-prover-source.tar.gz",
-    "prefix": "common-0b9371b6211780a2e25b140e7a1494759cf077ed",
-    "sha256": "02c184330cd8aec780eff0d82cdc4877a2b880c242e6eb70e2588b98450ca831"
+    "prefix": "common-4a0c2822259b0018defd43aaa72e720922ca4c60",
+    "sha256": "b956dbf996e1b9f6cbbdef0ac68bc9014a8adb62a4598acc326ae6055bde92ee"
   },
   "release_commit": "50f712ee22ca95e2dd5230c6f331ce2e433d70ee",
   "release_delta": {
