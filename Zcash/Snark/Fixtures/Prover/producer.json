@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
   "repository": "https://github.com/zakura-core/common",
-  "commit": "c9282976edc7b925f446825343d03fb4f614ab14",
+  "commit": "ea8db623b6700f0719a1f078fc4be9df6e3da87a",
   "pull_request": "https://github.com/zakura-core/common/pull/415",
   "archive": {
-    "url": "https://codeload.github.com/zakura-core/common/tar.gz/c9282976edc7b925f446825343d03fb4f614ab14",
+    "url": "https://codeload.github.com/zakura-core/common/tar.gz/ea8db623b6700f0719a1f078fc4be9df6e3da87a",
     "file": "common-prover-source.tar.gz",
-    "prefix": "common-c9282976edc7b925f446825343d03fb4f614ab14",
-    "sha256": "aafa2ce8c347485afe96e75dba21fa18ed8523d6c837758485be877039b74cbb"
+    "prefix": "common-ea8db623b6700f0719a1f078fc4be9df6e3da87a",
+    "sha256": "5770ea0a787d7a4782125a02c8db17b4e5c9c4016db1a46d881dc8ea6c2b0fcc"
   },
   "release_commit": "50f712ee22ca95e2dd5230c6f331ce2e433d70ee",
   "release_delta": {
@@ -49,7 +49,7 @@
     },
     "crates/halo2_proofs/src/plonk/prover_fingerprint/vesta_lean.rs": {
       "release_sha256": null,
-      "producer_sha256": "a34fbc1cf05796a490a3fc039e7cfd84d039b13209bed305c479af5814475531"
+      "producer_sha256": "ee5cc6067866273f58cc47cddefe33a92ae080a99ae168ecfcdfa56b0e2cc0db"
     },
     "crates/orchard/Cargo.toml": {
       "release_sha256": "3c06b4c8cb92f87806eb57531d41a7c160adb22d2b6d4634d314327e87497a22",
