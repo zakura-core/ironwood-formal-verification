@@ -2,6 +2,7 @@ import Zcash.Snark.ZeroKnowledge.Zakura.Action
 import Zcash.Snark.ZeroKnowledge.Zakura.Completeness
 import Zcash.Snark.ZeroKnowledge.Zakura.Regression
 import Zcash.Snark.ZeroKnowledge.Zakura.MultiopenRegression
+import Zcash.Meta.AxiomCheck
 
 /-!
 # Trust census for the Zakura release observation
