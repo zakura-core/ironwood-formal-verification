@@ -44,6 +44,15 @@ private def checkWideCoefficientBlocks : IO Unit := do
   ensure "wide coefficient blocks" (coefficientBlocks 2048 8 values == expected)
   ensure "coefficient block padding" (coefficientBlocks 4 2 [1] == [[1, 0, 0, 0], [0, 0, 0, 0]])
 
+/-- The largest collapse exponent, `2048 * 7`, fits the interpreter's normal stack for both the
+coefficients and the blinds. The domain root `ω` has `ω ^ 2048 = 1`, so collapsing the constant
+pieces `1, …, 8` returns their sum, and eight unit blinds collapse to `8`. -/
+private def checkWideQuotientCollapse : IO Unit := do
+  ensure "wide quotient collapse" (collapsedQuotient (Zcash.Arithmetic.omegaOf 11)
+    (List.ofFn fun j : Fin 8 => [((j.val + 1 : ℕ) : Fp)]) == [36])
+  ensure "wide quotient blind collapse"
+    ((collapsedQuotientBlind (actions := 1) (Zcash.Arithmetic.omegaOf 11) fun _ => (1, 0)).1 == 8)
+
 /-- Identify the first differing emitted message without dumping the private fixture inputs. -/
 private def checkMessages (label : String) (actual expected : List (TranscriptElt Fp VestaG)) : IO Unit := do
   ensure (label ++ " message count") (actual.length == expected.length)
@@ -131,10 +140,11 @@ private def checkCase {actions : ℕ} (name : String) (fixture : ProverFixture)
   IO.println (name ++ ": all messages, proof bytes, public anchors, outcome, and negative checks passed")
   (← IO.getStdout).flush
 
-/-- Check the one-Action execution and the large-coefficient regressions. -/
+/-- Check the one-Action execution and the wide-input regressions. -/
 def checkSingleCapture : IO Unit := do
   checkWideSyntheticDivision
   checkWideCoefficientBlocks
+  checkWideQuotientCollapse
   checkCase "single-honest" SingleAction.captured
     Fixture.vk Fixture.capturedURS.g Fixture.capturedURS.w Fixture.capturedURS.u
     Fixture.capturedPublicInstances Fixture.capturedInit Fixture.ch Fixture.ps true
