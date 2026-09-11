@@ -71,6 +71,41 @@ theorem actionAcceptedCallSet_returns_proof {actions : ℕ}
   obtain ⟨digests, proof, cache, houtput, _⟩ := haccepted
   exact ⟨_, cache, houtput⟩
 
+/-- Programming an accepted typed proof installs every answer required by the call predicate. -/
+private theorem programmedAttempt_mem_acceptedCallSet {actions : ℕ}
+    (urs : URS VestaG) (hk : urs.k = 11) (inputs : Fin actions → PublicInputs Fp)
+    (vkTranscriptRepr : Fp) (digests : PlonkChallengeTape urs.k (Fin challengeDigestCard))
+    (proof : ProofString (plonkProofShape actions urs.k) Fp VestaG)
+    (haccepted : (plonkChallengesFromTape (fun i => ((digests i).val : Fp)), proof) ∈
+      actionAcceptedAttemptSet urs hk inputs) :
+    observeOracleResult (programOracleView []
+      (plonkRawOracleView (actionOracleInitial urs vkTranscriptRepr inputs) digests proof)) ∈
+      actionAcceptedCallSet urs hk inputs vkTranscriptRepr := by
+  let view := (plonkChallengesFromTape (fun i => ((digests i).val : Fp)), proof)
+  let raw := plonkRawOracleView (actionOracleInitial urs vkTranscriptRepr inputs) digests proof
+  have hgood : programOracleTrace [] raw.2 ≠ none :=
+    programOracleTrace_ne_none_of_fresh raw.2 []
+      (plonkRawOracleView_queries_nodup _ _ _) (by intro query hquery; simp)
+  cases hcache : programOracleTrace [] raw.2 with
+  | none => exact False.elim (hgood hcache)
+  | some cache =>
+    have hrun : observeOracleResult (programOracleView [] raw) =
+        some (observeAttempt raw.1, cache) := by
+      simp only [programOracleView, hcache, observeOracleResult, Option.map_some]
+    have hresult : raw.1 = (encodedPlonkAttempt view).2 := by
+      simpa only [raw, view, encodedPlonkAttempt, plonkAttemptObservation] using
+        plonkRawOracleView_result (actionOracleInitial urs vkTranscriptRepr inputs) digests proof
+    have hcomplete := ((actionAcceptedAttemptSet_mem_iff urs hk inputs view).mp haccepted).1
+    rw [hrun, hresult]
+    simp only [observeAttempt, hcomplete]
+    refine ⟨digests, proof, cache, rfl, haccepted, ?_⟩
+    intro i
+    exact programOracleTrace_answers raw.2 [] cache hcache
+      (protocolQueryAddress (actionOracleInitial urs vkTranscriptRepr inputs)
+        (plonkAttemptTrace proof) i.val, digests i)
+      (plonkRawOracleView_query_mem_of_complete
+        (actionOracleInitial urs vkTranscriptRepr inputs) digests proof hcomplete i)
+
 /-- An initialized fresh-oracle call preserves every successful typed acceptance certificate. -/
 theorem actionRunTape_mem_acceptedCallSet {actions : ℕ}
     (urs : URS VestaG) (hk : urs.k = 11) (inputs : Fin actions → PublicInputs Fp)
@@ -81,32 +116,9 @@ theorem actionRunTape_mem_acceptedCallSet {actions : ℕ}
       actionAcceptedAttemptSet urs hk inputs) :
     actionRunTape urs hk inputs witness vkTranscriptRepr [] tapes ∈
       actionAcceptedCallSet urs hk inputs vkTranscriptRepr := by
-  let view := actionOracleDigestView urs hk inputs witness tapes
-  let raw := plonkRawOracleView (actionOracleInitial urs vkTranscriptRepr inputs) view.1 view.2.2
-  have hgood : programOracleTrace [] raw.2 ≠ none :=
-    programOracleTrace_ne_none_of_fresh raw.2 []
-      (plonkRawOracleView_queries_nodup _ _ _) (by intro query hquery; simp)
-  cases hcache : programOracleTrace [] raw.2 with
-  | none => exact False.elim (hgood hcache)
-  | some cache =>
-    have hrun : actionRunTape urs hk inputs witness vkTranscriptRepr [] tapes =
-        some (observeAttempt raw.1, cache) := by
-      rw [actionRunTape_empty_eq_programmed urs hk inputs witness vkTranscriptRepr tapes hinit]
-      change observeOracleResult ((programOracleTrace [] raw.2).map (Prod.mk raw.1)) = _
-      rw [hcache]
-      rfl
-    have hresult : raw.1 = (encodedPlonkAttempt view.2).2 :=
-      plonkRawOracleView_result (actionOracleInitial urs vkTranscriptRepr inputs) view.1 view.2.2
-    have hcomplete := ((actionAcceptedAttemptSet_mem_iff urs hk inputs view.2).mp haccepted).1
-    rw [hrun, hresult]
-    simp only [observeAttempt, hcomplete]
-    refine ⟨view.1, view.2.2, cache, rfl, haccepted, ?_⟩
-    intro i
-    exact programOracleTrace_answers raw.2 [] cache hcache
-      (protocolQueryAddress (actionOracleInitial urs vkTranscriptRepr inputs)
-        (plonkAttemptTrace view.2.2) i.val, view.1 i)
-      (plonkRawOracleView_query_mem_of_complete
-        (actionOracleInitial urs vkTranscriptRepr inputs) view.1 view.2.2 hcomplete i)
+  rw [actionRunTape_empty_eq_programmed urs hk inputs witness vkTranscriptRepr tapes hinit]
+  exact programmedAttempt_mem_acceptedCallSet urs hk inputs vkTranscriptRepr tapes.1
+    (actionOracleDigestView urs hk inputs witness tapes).2.2 haccepted
 
 /-- **Initialized released-call model.** The same completeness bound holds with a fresh random oracle. -/
 theorem action_completeness_error_bound [Fintype VestaG] {actions : ℕ}
