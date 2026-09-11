@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "repository": "https://github.com/zakura-core/common",
+  "commit": "29beabc8ced6a063abe6ac34cd7b16f0f4907829",
+  "pull_request": "https://github.com/zakura-core/common/pull/415",
+  "archive": {
+    "url": "https://codeload.github.com/zakura-core/common/tar.gz/29beabc8ced6a063abe6ac34cd7b16f0f4907829",
+    "file": "common-prover-source.tar.gz",
+    "prefix": "common-29beabc8ced6a063abe6ac34cd7b16f0f4907829",
+    "sha256": "4ec0a3aa72e607839f64af875407d5fa72d3018251ba6ee664a81dd82f8922d7"
+  },
+  "release_commit": "50f712ee22ca95e2dd5230c6f331ce2e433d70ee",
+  "release_delta": {
+    ".github/workflows/ci.yml": {
+      "release_sha256": "5d4f292c87e0ea4ea54df7315d47eeb6ea27342306fde7c3346477537e8dca86",
+      "producer_sha256": "313eb5b15ec3432c6eaa52b7f03f00004d3955fd1c76d7e9fa50d8d78dac346e"
+    },
+    ".github/workflows/semver.yml": {
+      "release_sha256": "c4f7dae4a91fdad842a00321661ee91b348decd1b546e3c83b0158385a24427d",
+      "producer_sha256": "8465f3f90b23d4b630baea27bdd6c95e1455586de30f5819cc72520a9e3afb6b"
+    },
+    ".github/workflows/supply-chain.yml": {
+      "release_sha256": "b95f40332505114b5dcfa5d51c27ab61f4750607136395316d3251ad1887937e",
+      "producer_sha256": "4be2b995d6bae81fcb38d943de2d986276be4ff0123527e49cd965b3a44cbce4"
+    },
+    ".github/workflows/workflow-security.yml": {
+      "release_sha256": "be3db9dd8b5ef98202e92e39d7d894f296c199f737426618bd05562f287e9a21",
+      "producer_sha256": "9fb2cd13b23689769515af5bb93fae5394464c0b955281ced470d8dd83e0bb86"
+    },
+    "crates/halo2_proofs/Cargo.toml": {
+      "release_sha256": "9b55665f8eacb7e2cfcad677beda96680b427a9d680b4b6f5adc2a2fb560ea5e",
+      "producer_sha256": "270a449ab073e3161f55c05e6e1eb3fd87e06b971e973ccf9cecd97aab8b81e8"
+    },
+    "crates/halo2_proofs/src/plonk.rs": {
+      "release_sha256": "069108a8bfbcbfccd75d00b251377a51928bb42562aaf2cb3e52bc4d12cc6b2a",
+      "producer_sha256": "dd3ae74148e8d93565a9b88e668884a30a323a69d882f2bf2bfe9928afc93bdf"
+    },
+    "crates/halo2_proofs/src/plonk/permutation.rs": {
+      "release_sha256": "33aee7f6383573838540813f03438695d93dd48e24ed12ab9b8f40ae132e2bf8",
+      "producer_sha256": "7759d15c07ddd1caea903057e786cb580d4f36393310b261cdc5572cb75f9360"
+    },
+    "crates/halo2_proofs/src/plonk/prover.rs": {
+      "release_sha256": "dc2b18e805bf5a5383eb3796e5cedd2cf9346048e6ca2ed4b33c0555ccef81d0",
+      "producer_sha256": "6237a04e3b47b98da98be4e39c4a40c7b322a955d2add1d7f344b2a22af210e6"
+    },
+    "crates/halo2_proofs/src/plonk/prover_fingerprint.rs": {
+      "release_sha256": null,
+      "producer_sha256": "a7d02adffeba3d5568e95396ae1bb696a46f5069c43d6e2031b51f7465f6e11d"
+    },
+    "crates/orchard/Cargo.toml": {
+      "release_sha256": "3c06b4c8cb92f87806eb57531d41a7c160adb22d2b6d4634d314327e87497a22",
+      "producer_sha256": "f30a0c44a47addb12b585a9f4ce8d96fe0c95433e1470b80567889dfdadeed05"
+    },
+    "crates/orchard/src/circuit.rs": {
+      "release_sha256": "93d5fa5b1d56954dbd9824bce2a99cb92097a7cb26a11ebd1d115ef8944b21b1",
+      "producer_sha256": "a3c43b1bf120be38c5c43653e18d70c7b0b5718f13274876f8ea492be77dbeb6"
+    },
+    "crates/orchard/src/circuit/fingerprint/mod.rs": {
+      "release_sha256": "49c3f396eeaae93bc1b23a5403c79deb03862a6ff6d9ab1f9b04efcd4ffed65d",
+      "producer_sha256": "fb0bc2631f0122b6bfc9e0b794f43bfd5c9ad27e5a8b3db0e99d8a754e34e5e9"
+    },
+    "crates/orchard/src/circuit/fixtures.rs": {
+      "release_sha256": null,
+      "producer_sha256": "d8d712bac14ec10818bb8f6b9779a0a1e4f4c1158623dae98aa1fc82e2058911"
+    },
+    "crates/orchard/src/circuit/prover_fingerprint.rs": {
+      "release_sha256": null,
+      "producer_sha256": "6c4a0350807bf9f21d6d6ebd32eb64ae4ad00f6bc89e3f816843c044bec36279"
+    },
+    "docs/changelog/unreleased/415.md": {
+      "release_sha256": null,
+      "producer_sha256": "881becc071e3f75db309cf5778202b6ab3e3540d03e780f7ef427b90379c54bd"
+    }
+  }
+}

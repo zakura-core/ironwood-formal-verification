@@ -1,5 +1,9 @@
 # Verifier-fingerprint capture provenance
 
+The separate [prover execution fixtures](Prover/PROVENANCE.md) reconstruct the
+messages of the same two honest proofs from captured witness rows and randomness.
+This document describes the existing verifier captures.
+
 The four fixture families under this directory record concrete Rust verifier
 executions and are consumed by Lean's `FixtureCheck` target. Their statement
 of record is each family's `Boundary.lean` theorem

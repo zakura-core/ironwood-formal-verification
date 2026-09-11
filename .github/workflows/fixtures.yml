@@ -4,8 +4,9 @@ name: Fixtures
 # fixture families and their proof-byte siblings from Zakura's released exporters.
 # The four exact capture tests and release/package checksums are selected from
 # Zcash/Snark/ZeroKnowledge/Zakura/release.json by the regeneration tooling.
-# No Rust source instrumentation is added. FixtureCheck validates the exported
-# Lean artifacts separately; these captures do not prove Rust-prover zero knowledge.
+# The separate prover captures use Common's pinned Rust-hosted exporter under
+# prover-fingerprint / unstable-prover-fingerprint. Lean CI independently
+# replays their complete selected executions; this is not universal Rust/Lean parity.
 #
 # This workflow always reports its required status. Local inventory/provenance
 # guards run on every event; actual regeneration runs when its inputs change or
@@ -53,6 +54,10 @@ jobs:
       # recorded provenance on every run, not only when a full regeneration executes.
       - name: Check the fixture provenance manifest
         run: ./scripts/check_fixture_manifest.sh
+      - name: Check prover capture provenance and malformed-input rejection
+        run: |
+          python3 scripts/generate_prover_fixtures.py --check
+          PYTHONPATH=scripts python3 -m unittest prover_fixture.test_format
       # Regeneration is expensive (real k=11 Orchard proofs + verifier runs), so only run
       # it when a committed capture artifact or the pins change.
       #
@@ -78,11 +83,16 @@ jobs:
               - 'Zcash/Snark/Fixtures/MultiAction/Random/Fixture.lean'
               - 'Zcash/Snark/Fixtures/MultiAction/Random/proof-bytes.hex'
               - 'Zcash/Snark/Fixtures/MANIFEST.tsv'
+              - 'Zcash/Snark/Fixtures/Prover/*.bin.gz'
+              - 'Zcash/Snark/Fixtures/Prover/manifest.json'
+              - 'Zcash/Snark/Fixtures/Prover/producer.json'
               - 'Zcash/Snark/ZeroKnowledge/Zakura/release.json'
               - 'scripts/regenerate-fingerprint-fixtures.sh'
               - 'scripts/regenerate_fingerprint_fixtures.py'
               - 'scripts/prepare_zakura_release.py'
               - 'scripts/check_zakura_release.py'
+              - 'scripts/generate_prover_fixtures.py'
+              - 'scripts/prover_fixture/**'
               - '.github/workflows/fixtures.yml'
 
   verify:
@@ -104,6 +114,10 @@ jobs:
         env:
           REGEN_WORK_DIR: ${{ runner.temp }}/zakura-fixtures
         run: ./scripts/regenerate-fingerprint-fixtures.sh
+      - name: Regenerate complete prover executions from the pinned Common exporter
+        env:
+          REGEN_WORK_DIR: ${{ runner.temp }}/zakura-prover-fixtures
+        run: python3 scripts/generate_prover_fixtures.py --fetch
 
   fixtures-ci:
     # The single stable check to mark as a required status check. It always runs, so it

@@ -5,10 +5,11 @@ Orchard circuit in Zakura 1.4.0. The prover has eleven IPA rounds, 2,048 rows,
 and ten public instance rows per Action. There is no automatic retry or
 exceptional-challenge resampling in this call.
 
-The existing fixture formats retain their role as implementation anchors.
-Release alignment refreshes the verifier captures from pinned Zakura Rust and
-updates the Lean prover model. It does not require new RNG/trace instrumentation
-or a universal Rust-to-Lean proof.
+The existing verifier fixtures retain their role as implementation anchors.
+The [prover execution captures](../../Fixtures/Prover/PROVENANCE.md) additionally
+record witness rows, raw randomness, and every transcript message through separate
+opt-in Common features. Lean replays those selected executions; this is not a
+universal Rust-to-Lean proof.
 
 ## Source and build profile
 
@@ -38,7 +39,8 @@ guarantee unpredictability or independent uniform words. The statistical
 theorems assume independent uniform raw bits; a concrete seeded generator
 requires a separate computational security premise. Each complete private
 schedule has `148m + 46` field samples, each formed from eight 64-bit words.
-This is a tape-law statement, not a Rust RNG-cursor correspondence theorem.
+The prover fixtures check the RNG method, width, and position at each challenge
+boundary for their selected calls. They do not establish the RNG's distribution.
 
 ## Terminal behavior
 
@@ -72,8 +74,7 @@ opening nodes and a later point away from them. The
 [collision regression](MultiopenRegression.lean) separates the values `1`
 and `0` for the polynomial `1 + X` at the colliding point `0`.
 The costed implementation evaluates its stored coefficients by Horner's rule.
-These proof changes await elaboration. Rust-to-Lean correspondence remains an
-implementation assumption. Verifier captures anchor
+Rust-to-Lean correspondence remains an implementation assumption. Verifier captures anchor
 sampled executions; the Lean prover model supplies the zero-knowledge argument.
 
 The scope assumes matching circuit/key versions, matching instance counts,
@@ -136,12 +137,13 @@ the shared public guard and deterministic observation. The simulator uses
 ideal uniform private field elements; the real law uses wide reduction.
 The two public-rejection laws are identical without querying the oracle.
 
-The new modules and their [direct census](TrustBoundary.lean) await Lean
-elaboration. The theorem is about the specified model. As in the earlier
+The [direct census](TrustBoundary.lean) checks the theorem's dependencies.
+The theorem is about the specified model. As in the earlier
 fixture-anchored result, its connection to optimized Rust rests on fixture
 checks and source review, with implementation correspondence an explicit
-trust boundary. Refreshing the existing verifier captures updates the release
-anchor; the changed masking and failure behavior must also match the Lean model.
+trust boundary. The prover fixtures compare complete selected executions with
+the reference model, including its masking schedule. This strengthens the
+execution evidence without proving equality of all possible Rust and Lean runs.
 Existing auxiliary caller-composition theorems are outside this release
 claim. Neither this endpoint nor its runner invokes their retry policy.
 

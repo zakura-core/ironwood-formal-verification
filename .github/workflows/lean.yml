@@ -196,6 +196,8 @@ jobs:
           # Caching is handled by the explicit layered restore/save steps
           # around this action; see the caching comment above.
           use-github-cache: "false"
+      - name: Compare complete Rust and Lean prover executions
+        run: lake env lean --run Zcash/Snark/Fixtures/Prover/Main.lean
       # Both layers are saved explicitly rather than through the actions/cache
       # post hook, because the post hook is gated on job *success*
       # (`post-if: success()`): a failed build saved nothing, and — worse for
