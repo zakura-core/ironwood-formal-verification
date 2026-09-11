@@ -9,7 +9,7 @@ proofs, challenges, setup, and public inputs.
 ## Producer and release
 
 [producer.json](producer.json) pins Common commit
-[`ea8db623b6700f0719a1f078fc4be9df6e3da87a`](https://github.com/zakura-core/common/tree/ea8db623b6700f0719a1f078fc4be9df6e3da87a)
+[`51a7364f3d1b86fd5a0be4653e8f412d1a90c453`](https://github.com/zakura-core/common/tree/51a7364f3d1b86fd5a0be4653e8f412d1a90c453)
 and its source archive. It records the complete file delta from the
 [released Common source](../../ZeroKnowledge/Zakura/PROVENANCE.md#source-and-build-profile).
 The generator authenticates both archives and rejects any unrecorded difference.
@@ -18,9 +18,9 @@ It builds the producer without editing Rust sources or the release lockfile.
 The exporter lives in Common:
 
 - Orchard's `prover-fingerprint` feature enables the
-  [capture drivers](https://github.com/zakura-core/common/blob/ea8db623b6700f0719a1f078fc4be9df6e3da87a/crates/orchard/src/circuit/prover_fingerprint.rs).
+  [capture drivers](https://github.com/zakura-core/common/blob/51a7364f3d1b86fd5a0be4653e8f412d1a90c453/crates/orchard/src/circuit/prover_fingerprint.rs).
 - Halo2's `unstable-prover-fingerprint` feature enables the
-  [recorder and wrappers](https://github.com/zakura-core/common/blob/ea8db623b6700f0719a1f078fc4be9df6e3da87a/crates/halo2_proofs/src/plonk/prover_fingerprint.rs).
+  [recorder and wrappers](https://github.com/zakura-core/common/blob/51a7364f3d1b86fd5a0be4653e8f412d1a90c453/crates/halo2_proofs/src/plonk/prover_fingerprint.rs).
 - The verifier capture features remain separate. The drivers compare recorded
   and unrecorded proof bytes and RNG positions, and verify the generated proofs.
 
@@ -118,3 +118,9 @@ build, including when artifacts are restored from cache. The interpreter avoids
 eagerly initializing unused finite enumerations in the arithmetic dependencies.
 The fixture workflow separately reproduces the Rust captures. These evaluations
 are explicit fixture checks, and their results are not added as theorem axioms.
+
+The fixture workflow watches both prover files, `producer.json`, and the shared
+manifest. Editing a capture fails its manifest digest check. Editing both the
+capture and its digest still fails regeneration against the pinned producer.
+Regeneration authenticates the producer's complete recorded delta from the
+released implementation before building it.
