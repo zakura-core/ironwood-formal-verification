@@ -133,7 +133,7 @@ pins=$(echo "$census" | xargs awk '
 # `pipefail` the SIGPIPE it sends a still-writing `echo` would turn a MATCH into a
 # failed pipeline, silently skipping this guard.
 if grep -q '^PARSE_ERROR$' <<< "$pins"; then
-  echo "VIOLATION: unparseable assert_axioms/assert_computable entry layout in census files" >&2
+  echo "VIOLATION: unparsable assert_axioms/assert_computable entry layout in census files" >&2
   exit 1
 fi
 

@@ -24,6 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      pull-requests: read # paths-filter lists changed files through the pull request API
     outputs:
       lean: ${{ steps.filter.outputs.lean }}
     steps:
@@ -54,6 +55,10 @@ jobs:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           persist-credentials: false
+      - name: Check release provenance and fixture preparation failures
+        run: python3 -m unittest discover -s scripts -p 'test_zakura_*.py'
+      - name: Verify Zakura release sources and stored public artifacts
+        run: python3 scripts/check_zakura_release.py --cache-dir "${{ runner.temp }}/zakura-release-sources" --fetch
       # Content-pins the checked-in circuit VK fixtures (the `.json` CS/layout dumps
       # consumed by `CircuitCheck`). The Lean build does not recompute a hash — there
       # is no fast SHA-256 in the toolchain — so this OS `sha256sum -c` is the
@@ -247,6 +252,18 @@ jobs:
         with:
           path: .lake/packages
           key: lake-deps-${{ runner.os }}-${{ hashFiles('lean-toolchain') }}-${{ hashFiles('lake-manifest.json') }}
+      # Save completed compilation before the separate, potentially long execution check.
+      - name: Compare complete Rust and Lean prover executions
+        # The captures are independent. Wait for both, and propagate either failure.
+        run: |
+          lake env lean --run Zcash/Snark/Fixtures/Prover/Main.lean single &
+          single_replay_pid=$!
+          lake env lean --run Zcash/Snark/Fixtures/Prover/Main.lean multi &
+          multi_replay_pid=$!
+          prover_replay_status=0
+          wait "$single_replay_pid" || prover_replay_status=1
+          wait "$multi_replay_pid" || prover_replay_status=1
+          exit "$prover_replay_status"
 
   lean-ci:
     # The single stable check to mark as a required status check. It always

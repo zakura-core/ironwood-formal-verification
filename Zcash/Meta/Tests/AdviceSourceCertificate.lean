@@ -1,0 +1,156 @@
+import Zcash.Meta.AdviceSourceCertificate
+import Zcash.Meta.KernelRfl
+import Zcash.Meta.AxiomCheck
+
+/-!
+# Adversarial checks for source-preserving read certificates
+
+These checks cover omitted reads, unavailable reads, changed source addresses,
+and a nested native callback. Generated annotations are proof-carrying data;
+successful generation alone must not make either source equality or a finite
+availability check succeed.
+-/
+
+namespace Zcash.Meta.Tests.AdviceSourceCertificate
+
+open Halo2 Witgen Zcash.Circuits Zcash.Snark.ZeroKnowledge
+
+-- Force piece boundaries so rejection and computability checks cover composition.
+set_option Zcash.sourceCertificate.chunkSteps 1
+
+/-- The actual nested initial-slope callback can retain a constant virtual y. -/
+def nestedInitialSlope (generators : Specs.Sinsemilla.Generators)
+    (piece x : AssignedCell Fp) (point : Point Fp)
+    (last : Ecc.DoubleAndAddRow (AssignedCell Fp)) (next : AssignedCell Fp) :
+    SupportedAdviceProgram Fp :=
+  annotate_advice ⟨⟨0⟩, 0, Sinsemilla.HashPiece.initLWit generators piece x
+    (if (0 : ℕ) = 0 then (fun _ => point.y) else Sinsemilla.Chain.boundaryYA last next)
+    (fun row => row.1)⟩
+
+/-- The native callback retains its two genuine reads despite its unused conditional branch. -/
+theorem nestedInitialSlope_reads (generators : Specs.Sinsemilla.Generators)
+    (piece x : AssignedCell Fp) (point : Point Fp)
+    (last : Ecc.DoubleAndAddRow (AssignedCell Fp)) (next : AssignedCell Fp) :
+    (nestedInitialSlope generators piece x point last next).reads = [piece, x] := by
+  kernel_rfl
+
+/-- An actual piece-cell read cannot be silently certified with an empty dependency list. -/
+theorem rejectsOmittedRead (_piece : AssignedCell Fp) : True := by
+  fail_if_success
+    have _invalid : WitnessFunctionSupport []
+        (fun env => ((Sinsemilla.HashPiece.zWit _piece 1).eval env)[0]) := by
+      witness_read_support
+  trivial
+
+/-- A source can be annotated even when a later availability check must reject it. -/
+def futureRead : AdviceSourceCertificate (F := Fp)
+    [(⟨⟨0⟩, 0, .ofFExpr (.expr (.of 0 1 (⟨0⟩ : Column .advice)))⟩, none)] := by
+  certify_source_advice
+
+/-- The original row-one read is unavailable before the first row-zero write. -/
+theorem futureRead_rejected :
+    adviceSupportMapPlan id ∅ futureRead.readCertificate.annotations = false := by
+  kernel_rfl
+
+/-- Named structured wrappers inherit the full IR support certificate. -/
+def shiftedFutureRead : AdviceSourceCertificate (F := Fp)
+    [(⟨⟨0⟩, 0, DecomposeRunningSum.zWitness 3 1
+      (.of 0 1 (⟨0⟩ : Column .advice))⟩, none)] := by
+  certify_source_advice
+
+/-- Reducing to structured IR retains the wrapper's unavailable source read. -/
+theorem shiftedFutureRead_rejected :
+    adviceSupportMapPlan id ∅ shiftedFutureRead.readCertificate.annotations = false := by
+  kernel_rfl
+
+/-- Like the complete Action certificate, expanded source metadata is kernel-only.
+An unreduced bit-family builder still retains its complete running-sum reads. -/
+noncomputable def completeRunningSumWrapper (z : AssignedCell Fp)
+    (ebits : MOver Fp (AssignedCell Fp) (ℕ → BExpr Fp)) (iter : ℕ) :
+    AdviceSourceCertificate (F := Fp) [(⟨⟨0⟩, 0, Ecc.MulComplete.zWit z ebits iter⟩, none)] := by
+  certify_source_advice
+
+/-- The signed-y wrapper likewise retains the original, potentially unreduced builder. -/
+noncomputable def completeSignedYWrapper (y : AssignedCell Fp)
+    (ebits : MOver Fp (AssignedCell Fp) (ℕ → BExpr Fp)) (iter : ℕ) :
+    AdviceSourceCertificate (F := Fp) [(⟨⟨0⟩, 0, Ecc.MulComplete.yPWit y ebits iter⟩, none)] := by
+  certify_source_advice
+
+/-- The complete running-sum wrapper cannot omit its entering advice-cell read. -/
+theorem rejectsCompleteRunningSumOmittedRead (_z : AssignedCell Fp) : True := by
+  let program : WitgenIR Fp 1 := Ecc.MulComplete.zWit _z (pure (fun _ => .false)) 1
+  fail_if_success
+    have _invalid : WitnessFunctionSupport []
+        (fun env => (program.eval env)[0]) := by
+      witness_read_support
+  trivial
+
+/-- An unrecognized native closure cannot use the structured-IR fallback. -/
+theorem rejectsUnknownNative : True := by
+  fail_if_success
+    have _invalid : AdviceSourceCertificate (F := Fp)
+        [(⟨⟨0⟩, 0, .native (fun env => #v[(env.env.advice ⟨0⟩ 1) ^ 2])⟩, none)] := by
+      certify_source_advice
+  trivial
+
+/-- Changing a target row does not preserve a certificate's source equation. -/
+theorem rejectsChangedSource : True := by
+  fail_if_success
+    have _invalid : AdviceSourceCertificate (F := Fp)
+        [(⟨⟨0⟩, 1, .ofFExpr (.expr (.of 0 1 (⟨0⟩ : Column .advice)))⟩, none)] := futureRead
+  trivial
+
+/-- Transport changes proof metadata while retaining directly evaluable annotation data. -/
+theorem transport_retainsData
+    {source target : List (PlacedAdviceProgram Fp × Option AdviceAddress)}
+    (equality : source = target) (certificate : AdviceSourceCertificate source) :
+    (certificate.transport equality).annotations = certificate.annotations := by
+  kernel_rfl
+
+/-- Absolute public reads are available independently of the advice placement. -/
+def absolutePublicRead : AdviceSourceCertificate (F := Fp)
+    [(⟨⟨5⟩, 100, instanceGet ⟨0⟩ 9⟩, none)] := by
+  certify_source_advice
+
+/-- Public input is immutable even when the first region starts above row zero. -/
+theorem absolutePublicRead_available :
+    adviceSupportMapPlan (fun region => 23 + region) ∅
+      absolutePublicRead.readCertificate.annotations = true := by
+  kernel_rfl
+
+/-- A pair of environments differing only in their public instance values. -/
+def publicReadTestEnvironment (value : Fp) : Placed ProverEnvironment Fp where
+  place := fun region => 23 + region
+  env := { get := fun column _ => if column.kind = .instance then value else 0
+           usableRows := 2042
+           hint := ProverHint.empty Fp }
+
+/-- A changed public input cannot satisfy the native-callback agreement premise. -/
+theorem changedPublicInput_rejected :
+    ¬ WitnessFunctionAgreement ([] : List (AssignedCell Fp))
+      (publicReadTestEnvironment 0) (publicReadTestEnvironment 1) := by
+  intro agreement
+  have same := agreement.nonAdvice ((⟨0⟩ : Column .instance).toAny) 9 (by decide)
+  change (0 : Fp) = 1 at same
+  exact zero_ne_one same
+
+assert_computable Zcash.Meta.Tests.AdviceSourceCertificate.nestedInitialSlope +choice
+assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.nestedInitialSlope_reads
+assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.rejectsOmittedRead
+assert_computable Zcash.Meta.Tests.AdviceSourceCertificate.futureRead +choice
+assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.futureRead_rejected
+assert_computable Zcash.Meta.Tests.AdviceSourceCertificate.shiftedFutureRead +choice
+assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.shiftedFutureRead_rejected
+assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.completeRunningSumWrapper
+assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.completeSignedYWrapper
+assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.rejectsCompleteRunningSumOmittedRead
+assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.rejectsUnknownNative
+assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.rejectsChangedSource
+assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.transport_retainsData
+
+assert_computable Zcash.Meta.Tests.AdviceSourceCertificate.absolutePublicRead +choice
+assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.absolutePublicRead_available
+assert_computable Zcash.Meta.Tests.AdviceSourceCertificate.publicReadTestEnvironment +choice
+assert_axioms Zcash.Meta.Tests.AdviceSourceCertificate.changedPublicInput_rejected
+
+end Zcash.Meta.Tests.AdviceSourceCertificate

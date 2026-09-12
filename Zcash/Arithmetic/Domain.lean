@@ -6,9 +6,9 @@ import Zcash.Arithmetic.Field
 # Evaluation-domain scalars (pasta `Fp` constants and facts)
 
 halo2's domain data as pure functions: binary exponentiation (`powFast`), the size-`2^k`
-domain root of unity `omegaOf` (CompElliptic's certified Pasta `ROOT_OF_UNITY` squared
-down, `EvaluationDomain::new`), `Fp::DELTA`, and the domain facts (primitive-root, power
-injectivity, size nonvanishing) derived from the certificate's order fact.
+domain root of unity `omegaOf` (Pasta's `ROOT_OF_UNITY` squared down,
+`EvaluationDomain::new`), `Fp::DELTA`, and the domain facts (primitive-root, power
+injectivity, size nonvanishing). The root's order is checked by Lean's kernel.
 Moved out of `Zcash/Bridge` per the Clean-boundary architecture
 (`book/src/formal-verification/clean-boundary.md`): these are verifier-native arithmetic
 facts, not bridge plumbing.
@@ -65,25 +65,30 @@ def rootOfUnityFp : Fp :=
 theorem rootOfUnityFp_eq_certified :
     rootOfUnityFp = CompElliptic.Fields.Pasta.pallasBase.rootOfUnity := rfl
 
+set_option maxRecDepth 8192 in
+/-- The deployed root literal has exact order `2^32`, by kernel-checked field arithmetic. -/
+theorem rootOfUnityFp_primitiveRoot : IsPrimitiveRoot rootOfUnityFp (2 ^ 32) := by
+  rw [IsPrimitiveRoot.iff_orderOf]
+  haveI : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
+  apply orderOf_eq_prime_pow (p := 2) (n := 31)
+  · rw [← powFast_eq_pow]
+    decide +kernel
+  · rw [← powFast_eq_pow]
+    decide +kernel
+
 /-- The size-`2^k` domain's root of unity: the Pasta root (`ROOT_OF_UNITY = 5^((p−1)/2^32)`,
 pasta `Fp::GENERATOR = 5`) squared down `32 − k` times, exactly as `EvaluationDomain::new`
-does — so `omega = 5^((p−1)/2^k)`. Its order is a theorem of CompElliptic's certificate via
-`rootOfUnityFp_eq_certified`; agreement with the deployed key's omega is pinned by `VkMatch`
-against the captured VK. -/
+does — so `omega = 5^((p−1)/2^k)`. Its order follows from the kernel-checked root theorem;
+agreement with the deployed key's omega is pinned by `VkMatch` against the captured VK. -/
 def omegaOf (k : ℕ) : Fp :=
   powFast rootOfUnityFp (2 ^ (32 - k))
 
 /-- `omegaOf k` is a primitive size-`2^k` domain root for every supported exponent. -/
 theorem omegaOf_isPrimitiveRoot (k : ℕ) (hk : k ≤ 32) :
     IsPrimitiveRoot (omegaOf k) (2 ^ k) := by
-  have hroot :
-      IsPrimitiveRoot
-        CompElliptic.Fields.Pasta.pallasBase.rootOfUnity (2 ^ 32) :=
-    IsPrimitiveRoot.iff_orderOf.mpr
-      CompElliptic.Fields.Pasta.pallasBase.valid.rootOfUnity_order
   unfold omegaOf
-  rw [rootOfUnityFp_eq_certified, powFast_eq_pow]
-  apply IsPrimitiveRoot.pow (by positivity) hroot
+  rw [powFast_eq_pow]
+  apply IsPrimitiveRoot.pow (by positivity) rootOfUnityFp_primitiveRoot
   rw [← pow_add, Nat.sub_add_cancel hk]
 
 /-- Every point `omegaOf k ^ row` lies in the size-`2^k` evaluation domain. -/

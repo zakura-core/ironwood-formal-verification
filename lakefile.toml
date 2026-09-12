@@ -10,7 +10,7 @@ autoImplicit = false
 [[require]]
 name = "Clean"
 git = "https://github.com/Verified-zkEVM/clean"
-rev = "960a761a"
+rev = "960a761a09a7e7c764a793ecd277a5f41ac086a3"
 
 [[require]]
 name = "CompElliptic"
@@ -23,7 +23,7 @@ rev = "2c0444035a84db957f27f06433715058d1e890ad"
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
-rev = "v4.30.0"
+rev = "c5ea00351c28e24afc9f0f84379aa41082b1188f"
 
 # `Zcash.lean` is this library's only import root, so the root glob alone builds exactly its
 # transitive closure. Since `Zcash/Snark.lean` stopped re-exporting `Soundness/` (the
@@ -53,7 +53,8 @@ rev = "v4.30.0"
 # the incidental coverage described above.
 [[lean_lib]]
 name = "Zcash"
-globs = ["Zcash", "Zcash.Snark.Soundness.+", "Zcash.Snark.Contract.+"]
+globs = ["Zcash", "Zcash.Snark.Soundness.+", "Zcash.Snark.Contract.+",
+  "Zcash.Snark.ZeroKnowledge.+"]
 
 # Test-only adversarial declarations for `Zcash.Meta.AxiomCheck`. This is a separate library so
 # forged axioms used to exercise the rejection paths never enter the production `Zcash` import

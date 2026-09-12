@@ -23,6 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      pull-requests: read # paths-filter lists changed files through the pull request API
     outputs:
       book: ${{ steps.filter.outputs.book }}
     steps:

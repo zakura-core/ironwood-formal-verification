@@ -1,0 +1,295 @@
+{
+  "schema_version": 1,
+  "target": "zakura-v1.4.0-orchard-post-nu6_3",
+  "zakura": {
+    "repository": "https://github.com/zakura-core/zakura",
+    "tag": "v1.4.0",
+    "commit": "1e36d1bb6a8a9778a1bd316704b9c8cb75182de6",
+    "archive": {
+      "file": "zakura-source.tar.gz",
+      "url": "https://codeload.github.com/zakura-core/zakura/tar.gz/1e36d1bb6a8a9778a1bd316704b9c8cb75182de6",
+      "sha256": "75c85e6271308847c2f9ab9bfb7865829c599536f6b54fcd2d4641509e2bc80a",
+      "prefix": "zakura-1e36d1bb6a8a9778a1bd316704b9c8cb75182de6"
+    },
+    "lockfile_sha256": "a233861c852ea005cd8137997cb62f9141dee9549433e87252a27a838251860b"
+  },
+  "common": {
+    "repository": "https://github.com/zakura-core/common",
+    "tag": "v1.2.0",
+    "commit": "50f712ee22ca95e2dd5230c6f331ce2e433d70ee",
+    "archive": {
+      "file": "common-source.tar.gz",
+      "url": "https://codeload.github.com/zakura-core/common/tar.gz/50f712ee22ca95e2dd5230c6f331ce2e433d70ee",
+      "sha256": "8755c5c1736737f62986ae113fd42bb6113d58fd9bf8b2c512cf5d83ba5ccdf1",
+      "prefix": "common-50f712ee22ca95e2dd5230c6f331ce2e433d70ee"
+    },
+    "lockfile_sha256": "165b28da74d25f847ce78dac62e6e72b0083d63b38d7017fe30d49e5e9f2e517",
+    "toolchain": "1.97.1",
+    "workspace_rust_version": "1.91"
+  },
+  "packages": [
+    {
+      "name": "zakura-halo2-gadgets",
+      "version": "1.2.0",
+      "path": "crates/halo2_gadgets",
+      "archive": {
+        "file": "zakura-halo2-gadgets-1.2.0.crate",
+        "url": "https://static.crates.io/crates/zakura-halo2-gadgets/zakura-halo2-gadgets-1.2.0.crate",
+        "sha256": "f5d24d27771c16598da80f900efcf8051282221b035931e0b61dd465e70c7e3f",
+        "prefix": "zakura-halo2-gadgets-1.2.0"
+      }
+    },
+    {
+      "name": "zakura-halo2-legacy-pdqsort",
+      "version": "1.2.0",
+      "path": "crates/halo2_legacy_pdqsort",
+      "archive": {
+        "file": "zakura-halo2-legacy-pdqsort-1.2.0.crate",
+        "url": "https://static.crates.io/crates/zakura-halo2-legacy-pdqsort/zakura-halo2-legacy-pdqsort-1.2.0.crate",
+        "sha256": "3ab38fc11181f44ad3158e16e9a247c8a76a1bcf73adfa08b9ea29d3d9f68be6",
+        "prefix": "zakura-halo2-legacy-pdqsort-1.2.0"
+      }
+    },
+    {
+      "name": "zakura-halo2-proofs",
+      "version": "1.2.0",
+      "path": "crates/halo2_proofs",
+      "archive": {
+        "file": "zakura-halo2-proofs-1.2.0.crate",
+        "url": "https://static.crates.io/crates/zakura-halo2-proofs/zakura-halo2-proofs-1.2.0.crate",
+        "sha256": "dfa509d1ddcec871a2508ae4d90c89c57a55bd49dc0ddb6456adfaad08069222",
+        "prefix": "zakura-halo2-proofs-1.2.0"
+      }
+    },
+    {
+      "name": "zakura-orchard",
+      "version": "1.2.0",
+      "path": "crates/orchard",
+      "archive": {
+        "file": "zakura-orchard-1.2.0.crate",
+        "url": "https://static.crates.io/crates/zakura-orchard/zakura-orchard-1.2.0.crate",
+        "sha256": "6ff7912c408024e03ec9c731e62cf848231fcbd0b7385e9032540d53ebc9a665",
+        "prefix": "zakura-orchard-1.2.0"
+      }
+    },
+    {
+      "name": "zakura-pasta-curves",
+      "version": "1.2.0",
+      "path": "crates/pasta_curves",
+      "archive": {
+        "file": "zakura-pasta-curves-1.2.0.crate",
+        "url": "https://static.crates.io/crates/zakura-pasta-curves/zakura-pasta-curves-1.2.0.crate",
+        "sha256": "33817e907eaf89e5871ab0cdfc1054907ec0b3a86759c7a9d41875690f6fd9f4",
+        "prefix": "zakura-pasta-curves-1.2.0"
+      }
+    }
+  ],
+  "shared_dependencies": [
+    {
+      "name": "blake2b_simd",
+      "version": "1.0.4",
+      "checksum": "b79834656f71332577234b50bfc009996f7449e0c056884e6a02492ded0ca2f3"
+    },
+    {
+      "name": "ff",
+      "version": "0.14.0",
+      "checksum": "a1f686ab92a9fb0eaf188f6c6c87b89490baa6fdb0db4544ba4dc47f7942489f"
+    },
+    {
+      "name": "group",
+      "version": "0.14.0",
+      "checksum": "7fd1a1c7a5206c5b7a3f5a0d7ccd3ff85d0c8f5133d62a02680255b0004af5f4"
+    },
+    {
+      "name": "rand",
+      "version": "0.10.2",
+      "checksum": "c7f5fa3a058cd35567ef9bfa5e75732bee0f9e4c55fa90477bef2dfcdbc4be80"
+    },
+    {
+      "name": "rand_core",
+      "version": "0.10.1",
+      "checksum": "63b8176103e19a2643978565ca18b50549f6101881c443590420e4dc998a3c69"
+    }
+  ],
+  "protocol": {
+    "circuit": "PostNu6_3",
+    "k": 11,
+    "instance_rows": 10,
+    "private_field_samples": {
+      "per_action": 148,
+      "constant": 46
+    },
+    "words_per_field_sample": 8,
+    "transcript": "Blake2bWrite / Challenge255",
+    "hash_personalization": "Halo2-Transcript",
+    "automatic_retries": false,
+    "rng_boundary": "Caller-supplied rand_core::Rng; no concrete seed source or PRNG is fixed by Proof::create.",
+    "api_scope": "Matching post-NU6.3 key/circuit versions, matching instance counts and satisfying witness rows; one call.",
+    "excluded_observations": [
+      "timing and cache accesses",
+      "allocation failures and process resource exhaustion",
+      "arbitrary malformed Rust requests"
+    ]
+  },
+  "reference_description": {
+    "sensei_commit": "56a7de7474da3b86fa475f01400edadfd8af4cb6",
+    "url": "https://gist.githubusercontent.com/ebfull/bf25819afa697e39b54bd5f1a1992a2c/raw/589528c0f752112fd83c42aeeea91b6958e67605/zk.md",
+    "sha256": "39616021627711c763c8305ea4f949e6776ab5b7ee0ed81616ce671641e04b39"
+  },
+  "sources": [
+    {
+      "path": "Cargo.toml",
+      "sha256": "fcf56a1ba02b571f2036db4c1a7319389e58beb971cd66377507fd4439173d84"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "165b28da74d25f847ce78dac62e6e72b0083d63b38d7017fe30d49e5e9f2e517"
+    },
+    {
+      "path": "rust-toolchain.toml",
+      "sha256": "3b84630ac27f1a376d1998c057b605c32929512dada2e357fd26b0ed156efd4e"
+    },
+    {
+      "path": "crates/halo2_proofs/Cargo.toml",
+      "sha256": "9b55665f8eacb7e2cfcad677beda96680b427a9d680b4b6f5adc2a2fb560ea5e"
+    },
+    {
+      "path": "crates/orchard/Cargo.toml",
+      "sha256": "3c06b4c8cb92f87806eb57531d41a7c160adb22d2b6d4634d314327e87497a22"
+    },
+    {
+      "path": "crates/pasta_curves/Cargo.toml",
+      "sha256": "0693270a1c90ad04574e64c486d8e43e2cfc17eeeed513a3cdb0778c9b634b36"
+    },
+    {
+      "path": "crates/halo2_proofs/src/plonk.rs",
+      "sha256": "069108a8bfbcbfccd75d00b251377a51928bb42562aaf2cb3e52bc4d12cc6b2a"
+    },
+    {
+      "path": "crates/halo2_proofs/src/plonk/error.rs",
+      "sha256": "fc5dda1c6be6b2c040fdb3a72fb600edeafd70c1dd10eb4b90fba654057b9dc4"
+    },
+    {
+      "path": "crates/halo2_proofs/src/plonk/prover.rs",
+      "sha256": "dc2b18e805bf5a5383eb3796e5cedd2cf9346048e6ca2ed4b33c0555ccef81d0"
+    },
+    {
+      "path": "crates/halo2_proofs/src/plonk/lookup/prover.rs",
+      "sha256": "e9cf55f9e0f2f01c8ab4f8c50ac3ae93e69309d4b7ee9098e37fb80d23865248"
+    },
+    {
+      "path": "crates/halo2_proofs/src/plonk/permutation/prover.rs",
+      "sha256": "00395b9bdf424e74125bb1733d9e52557b6ab6c8bda7121fe2642b1f528e6970"
+    },
+    {
+      "path": "crates/halo2_proofs/src/plonk/vanishing/prover.rs",
+      "sha256": "7b059b724996535bcf81f5014974f8c40290312a6f1cf507662074c51555d3d1"
+    },
+    {
+      "path": "crates/halo2_proofs/src/poly/multiopen/prover.rs",
+      "sha256": "9312a1117bc5c905e661dc67ced5ee9cadfa8d2cfe48ef87b4ad5d186e2a152c"
+    },
+    {
+      "path": "crates/halo2_proofs/src/poly/commitment/prover.rs",
+      "sha256": "71559e870573242057e032b5e1b365c9816b47566d153bb95c11d4af16f2a441"
+    },
+    {
+      "path": "crates/halo2_proofs/src/poly/commitment.rs",
+      "sha256": "f0119a46e52bead8e76d66999c248129e6697f5cb87a99087fe2c1cc1466708f"
+    },
+    {
+      "path": "crates/halo2_proofs/src/transcript.rs",
+      "sha256": "1c027b2fcbe03e2846133c6fc4d26bac3d395318d3d0c0854fe3540ea989e455"
+    },
+    {
+      "path": "crates/pasta_curves/src/fields/fp.rs",
+      "sha256": "2a120fd9dcf47596898d35eed17aff80ee70b2b36945331e834619815bcfd9d2"
+    },
+    {
+      "path": "crates/pasta_curves/src/fields/fq.rs",
+      "sha256": "a4a1f6b058c9ef21d53eeab0f19b4ffcb1de4de2532735962a3ee232e42fd9ca"
+    },
+    {
+      "path": "crates/pasta_curves/src/curves.rs",
+      "sha256": "d14aa8486b10f78bce281e3014d4e4a85da12057e27534dd9b1f3b0a02cd07cb"
+    },
+    {
+      "path": "crates/orchard/src/circuit.rs",
+      "sha256": "93d5fa5b1d56954dbd9824bce2a99cb92097a7cb26a11ebd1d115ef8944b21b1"
+    },
+    {
+      "path": "crates/orchard/src/circuit/fingerprint/mod.rs",
+      "sha256": "49c3f396eeaae93bc1b23a5403c79deb03862a6ff6d9ab1f9b04efcd4ffed65d"
+    },
+    {
+      "path": "crates/orchard/src/circuit/fingerprint/random.rs",
+      "sha256": "474803918362486a7cdfeff06681823a2f54c779e242b1a778c4c72d17a7b6a3"
+    },
+    {
+      "path": "crates/orchard/src/circuit_data/orchard_k11_params.bin",
+      "sha256": "1eab6f93a080ce41b908d935c04bd2e3ed1ac23f277c15d11c499d56d28fa0f7"
+    },
+    {
+      "path": "crates/orchard/src/circuit_data/circuit_description_post_nu6_3",
+      "sha256": "8d325ee6753c8effb7d5184bdd729255d2697dd1730c0278084cd91192020e90"
+    }
+  ],
+  "existing_capture": {
+    "path": "Zcash/Snark/Fixtures/SingleAction/Honest/Fixture.lean",
+    "sha256": "3094df6696b7e9bc606b25a9e6d16ab079a57f81f1784028149a1945254c756a",
+    "provenance": "Zcash/Snark/Fixtures/PROVENANCE.md",
+    "comparison": {
+      "coefficient_generators": 2048,
+      "blinding_generator_w": true,
+      "ipa_generator_u": true,
+      "fixed_commitments": 29,
+      "permutation_commitments": 15
+    },
+    "limitations": [
+      "The verifier capture was regenerated from the pinned Zakura Common release.",
+      "Verifier captures check the sampled executions, not the prover's randomness distribution.",
+      "The separate circuit/layout dumps retain their original provenance."
+    ]
+  },
+  "profiles": [
+    {
+      "id": "default",
+      "no_default_features": false,
+      "features": [],
+      "threads": [
+        1,
+        4
+      ],
+      "scope": "Default Orchard circuit/std/multicore and Halo2 batch/multicore; orbits disabled."
+    },
+    {
+      "id": "serial",
+      "no_default_features": true,
+      "features_by_package": {
+        "zakura-orchard": [
+          "circuit",
+          "std"
+        ],
+        "zakura-halo2-proofs": [
+          "batch",
+          "floor-planner-v1-legacy-pdqsort"
+        ]
+      },
+      "threads": [
+        1
+      ],
+      "scope": "Explicit serial comparison profile; not a claim that release binaries disable multicore."
+    }
+  ],
+  "platforms": {
+    "portable": "x86_64-unknown-linux-gnu",
+    "assembly": [
+      "aarch64-apple-darwin",
+      "aarch64-unknown-linux-gnu"
+    ],
+    "assembly_condition": "Halo2 enables pasta_curves/aarch64-asm on aarch64 Unix targets.",
+    "optional_orbits": "Outside the default release profile; requires a separate correspondence and regression run."
+  },
+  "model_endpoint": "Zcash.Snark.ZeroKnowledge.Zakura.action_simulation_error_bound",
+  "validation_boundary": "Verifier fixtures were regenerated from pinned Zakura Rust and their provenance updated. Lean elaboration remains required. Rust-to-Lean correspondence is an implementation assumption."
+}
