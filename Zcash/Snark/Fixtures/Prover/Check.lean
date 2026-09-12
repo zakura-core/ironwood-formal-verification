@@ -28,6 +28,12 @@ open Zcash.Snark Zcash.Snark.ZeroKnowledge
 private def ensure (label : String) (condition : Bool) : IO Unit :=
   unless condition do throw (IO.userError ("prover capture mismatch: " ++ label))
 
+/-- A bounded read beyond every two-Action commitment slot retains its value and traversal cost. -/
+private def checkWideBoundedListRead : IO Unit := do
+  let values := List.range 64
+  let result := getFinListCosted 7 values ⟨63, by decide⟩
+  ensure "wide bounded list read" (result == (63, 134))
+
 /-- A polynomial wider than the constraint numerator exercises the interpreter's normal stack.
 For `g = 1 + X + ... + X^19998`, the input is `(X - 7) * g + 3`. -/
 private def checkWideSyntheticDivision : IO Unit := do
@@ -142,6 +148,7 @@ private def checkCase {actions : ℕ} (name : String) (fixture : ProverFixture)
 
 /-- Check the one-Action execution and the wide-input regressions. -/
 def checkSingleCapture : IO Unit := do
+  checkWideBoundedListRead
   checkWideSyntheticDivision
   checkWideCoefficientBlocks
   checkWideQuotientCollapse
