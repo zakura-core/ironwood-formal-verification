@@ -1,0 +1,306 @@
+<!DOCTYPE HTML>
+<html lang="en" class="rust sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Zero Knowledge and Executable Reductions - The Ironwood Book</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-3865ffda.css">
+        <link rel="stylesheet" href="../css/general-4c35105a.css">
+        <link rel="stylesheet" href="../css/chrome-c0e702bf.css">
+        <link rel="stylesheet" href="../css/print-ad67d350.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome-799aeb25.css">
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight-56612340.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../custom-a8328095.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "rust";
+            const default_dark_theme = "rust";
+            window.path_to_searchindex_js = "../searchindex-c19d88bf.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-feba6894.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Ironwood Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="zero-knowledge-and-executable-reductions"><a class="header" href="#zero-knowledge-and-executable-reductions">Zero knowledge and executable reductions</a></h1>
+<p>The zero-knowledge release target is one post-NU6.3 Orchard proof call in
+Zakura 1.4.0, using Common <code>50f712ee22ca95e2dd5230c6f331ce2e433d70ee</code>.
+The model compares that call's observation with a simulator that receives
+public inputs and setup parameters. The Action
+application theorem constructs the prover's rows from
+<code>ActionWitnessConstructionConditions</code>, which includes <code>ActionSpec</code>, defined
+hashes and canonical encodings. The five scalar hints use two 128-bit limbs and
+decode over the full <code>Fq</code> range. The one-attempt interactive
+comparison uses independent uniform input bits and a nonidentity blinding point.</p>
+<p>Fiat–Shamir comparisons use a programmable classical random oracle. The
+release model returns proof bytes or an error, or records the zero-IPA-challenge
+panic. It rejects public identity commitments before the first prover oracle
+query and never requests or starts a retry. Its observation hides a failed
+call's private proof buffer while retaining the oracle cache.
+At an opening-node collision, the IPA receives the actual polynomial
+evaluation and the call continues.</p>
+<p><code>Zcash.Snark.ZeroKnowledge.Zakura.action_simulation_error_bound</code> transports the
+one-attempt reference comparison through this observation. Its new proof terms
+and census entries await elaboration. Authenticated source hashes and stored
+setup/key comparisons in <code>Zcash/Snark/ZeroKnowledge/Zakura/release.json</code> identify
+the release; they do not establish universal Rust-to-Lean correspondence.
+The existing verifier fixtures were regenerated from pinned Rust and are
+consumed by the Lean fixture checks. The unchanged circuit dumps retain their provenance. New
+RNG/trace instrumentation is outside this task.</p>
+<p>Auxiliary retry and continuing-generator theorems concern additional external
+caller policies and are outside the release claim. Concrete BLAKE2b security,
+security of a particular PRNG, and whole-program Rust correspondence remain
+separate claims. The
+<a href="https://github.com/zakura-core/ironwood-formal-verification/blob/establish-zk/Zcash/Snark/ZeroKnowledge/ActionWitnessSimulation.lean">Action witness theorem statements</a>
+give the precise application contract.</p>
+<h2 id="computability-boundary"><a class="header" href="#computability-boundary">Computability boundary</a></h2>
+<p>The operational reduction programs are ordinary Lean definitions with
+<code>assert_computable</code> pins. <code>ActionReductionProgram.evalCosted</code> and
+<code>InteractiveReductionProgram.evalCosted</code> consume stored inputs and random bits,
+produce a Boolean observation, and retain execution counters. Their erasure and
+cost theorems connect those computations to the security games; an abstract
+probability kernel alone does not supply an executable reduction. See the
+<a href="https://github.com/zakura-core/ironwood-formal-verification/blob/859e54eac7c973238ec25c0b50b42264747aadce/Zcash/Snark/ZeroKnowledge/PROGRAMS.md">program interfaces and resource model</a>.</p>
+<p>The following proof-side objects retain <code>noncomputable</code> declarations:</p>
+<div class="table-wrapper"><table><thead><tr><th>Objects</th><th>Why the marker remains</th><th>Where they are used</th></tr></thead><tbody>
+<tr><td>Sampling laws, event masses, error bounds, retry measures, and PRNG kernels</td><td><code>PMF</code>, measure, and extended-real operations describe mathematical probabilities. In particular, <code>ActionReductionProgram.kernel</code>, <code>InteractiveReductionProgram.kernel</code>, and <code>tapeReduction</code> are laws of computations, not implementations of a random-bit source.</td><td>Distribution equalities, probability bounds, and admissibility predicates.</td></tr>
+<tr><td>Masking equivalences, linear maps, and finite enumerations</td><td>The algebraic proofs use inverse maps and finite-type constructions supplied through choice. The <code>CommitmentMask</code>, <code>IpaSimulation</code>, <code>RowMaskRank</code>, and <code>PlonkFiniteView</code> modules own these objects.</td><td>Coupling, rank, and finite-distribution proofs; the operational programs do not execute these choice-based constructions.</td></tr>
+<tr><td>Action source certificates</td><td>Normalized source programs can contain auxiliary definitions intended only for kernel reduction. Code generation is disabled for these static certificate values.</td><td>Proofs of source erasure, read availability, alias validity, and activation coverage.</td></tr>
+</tbody></table>
+</div>
+<p>The static Action values are <code>actionAdviceSourceCertificateRaw</code>,
+<code>actionAdviceSourceCertificate</code>, <code>actionGateSourceCertificateRaw</code>,
+<code>actionGateActivationSourceCertificate</code>, <code>actionLookupSourceCertificateRaw</code>,
+<code>actionLookupActivationSourceCertificate</code>, <code>actionWitnessLoadSourceCertificate</code>,
+and <code>actionValueSourceCertificate</code>. Their retained data are checked against the
+original programs. The noncomputable source-certificate values in
+<code>Zcash.Meta.Tests</code> serve the same purpose in positive and negative regression cases.</p>
+<p><code>ActionAdviceSourceData</code>, <code>ActionGateSourceCertificate</code>, and
+<code>ActionLookupSourceCertificate</code> each certify their complete original source.
+<code>ActionAdviceSourceAliasCheck</code> and <code>ActionAdviceReadPlan</code> check the full alias
+and read scans. <code>ActionGateActivationCoverage</code> and
+<code>ActionLookupActivationCoverage</code> establish coverage of the original Action
+circuit metadata.</p>
+<p>These large static checks raise the recursion limit and use larger or unlimited
+heartbeat budgets during elaboration. The tactics construct intermediate
+proofs internally and submit them to the kernel. The final source equalities,
+read and alias checks, and activation coverage retain their axiom assertions.
+The resource overrides affect elaboration; they do not add logical assumptions
+or change the cost model for the prover and simulator.</p>
+<p><code>ActionWitnessRows</code> owns the executable application witness constructor.
+<code>ActionWitnessSimulation</code> uses the static certificates only to prove that its
+output satisfies the relation required by the simulation theorems. Executable
+finite-tape simulators and their probability laws are likewise separate
+declarations. Replacing a proof-side object with an operational producer requires
+a computability pin and an update to this boundary.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../formal-verification/knowledge-contract.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../formal-verification/ledger-security-games.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../formal-verification/knowledge-contract.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../formal-verification/ledger-security-games.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-9aeb6ddf.js"></script>
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-9576a2db.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../mermaid-eefea253.min.js"></script>
+        <script src="../mermaid-init-d0d5e6a7.js"></script>
+        <script src="../todo-e74d2c27.js"></script>
+
+
+
+    </div>
+    </body>
+</html>
